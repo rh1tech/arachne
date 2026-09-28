@@ -1,4 +1,5 @@
 import { join } from "node:path";
+import { createServer, html } from "@arachne/server";
 
 const root = import.meta.dir;
 const port = Number(process.env["PORT"] ?? 3920);
@@ -22,40 +23,41 @@ async function bundleClient(): Promise<Uint8Array> {
 
 let clientJs = await bundleClient();
 
-const server = Bun.serve({
+const app = createServer({
 	port,
-	async fetch(req) {
-		const url = new URL(req.url);
-
-		if (url.pathname === "/" || url.pathname === "/index.html") {
-			return new Response(Bun.file(join(root, "index.html")), {
-				headers: { "content-type": "text/html; charset=utf-8" },
-			});
-		}
-
-		if (url.pathname === "/styles.css") {
-			return new Response(Bun.file(join(root, "styles.css")), {
-				headers: { "content-type": "text/css; charset=utf-8" },
-			});
-		}
-
-		if (url.pathname === "/client.js") {
-			if (url.searchParams.has("rebuild")) {
-				clientJs = await bundleClient();
-			}
-			return new Response(clientJs, {
-				headers: {
-					"content-type": "application/javascript; charset=utf-8",
-					"cache-control": "no-store",
-				},
-			});
-		}
-
-		// SPA fallback so browserHistory deep links keep working on refresh.
-		return new Response(Bun.file(join(root, "index.html")), {
-			headers: { "content-type": "text/html; charset=utf-8" },
-		});
+	routes: [
+		{
+			method: "GET",
+			path: "/styles.css",
+			handler: () =>
+				new Response(Bun.file(join(root, "styles.css")), {
+					headers: { "content-type": "text/css; charset=utf-8" },
+				}),
+		},
+		{
+			method: "GET",
+			path: "/client.js",
+			handler: async (ctx) => {
+				if (ctx.query.has("rebuild")) clientJs = await bundleClient();
+				return new Response(clientJs, {
+					headers: {
+						"content-type": "application/javascript; charset=utf-8",
+						"cache-control": "no-store",
+					},
+				});
+			},
+		},
+		{
+			method: "GET",
+			path: "/api/health",
+			handler: () => Response.json({ ok: true, package: "@arachne/server" }),
+		},
+	],
+	fallback: async () => {
+		const body = await Bun.file(join(root, "index.html")).text();
+		return html(body);
 	},
 });
 
-console.log(`Arachne playground → http://localhost:${server.port}`);
+const { url } = app.listen();
+console.log(`Arachne playground → ${url}`);

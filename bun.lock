@@ -18,6 +18,7 @@
       "dependencies": {
         "@arachne/render": "workspace:*",
         "@arachne/router": "workspace:*",
+        "@arachne/server": "workspace:*",
         "@arachne/signals": "workspace:*",
       },
     },
@@ -109,6 +110,18 @@
         "typescript": "^5.9.2",
       },
     },
+    "packages/server": {
+      "name": "@arachne/server",
+      "version": "0.0.1",
+      "dependencies": {
+        "@arachne/mcp": "workspace:*",
+        "@arachne/router": "workspace:*",
+        "zod": "3.25.76",
+      },
+      "devDependencies": {
+        "typescript": "^5.9.2",
+      },
+    },
     "packages/signals": {
       "name": "@arachne/signals",
       "version": "0.0.1",
@@ -150,6 +163,8 @@
     "@arachne/router": ["@arachne/router@workspace:packages/router"],
 
     "@arachne/schema": ["@arachne/schema@workspace:packages/schema"],
+
+    "@arachne/server": ["@arachne/server@workspace:packages/server"],
 
     "@arachne/signals": ["@arachne/signals@workspace:packages/signals"],
 
