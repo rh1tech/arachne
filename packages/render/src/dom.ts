@@ -9,7 +9,16 @@ function eventHandler(e: Event): void {
 	while (node) {
 		const handler = (node as unknown as Record<string, unknown>)[key];
 		if (typeof handler === "function") {
-			(handler as (ev: Event) => void).call(node, e);
+			const current = node;
+			try {
+				Object.defineProperty(e, "currentTarget", {
+					configurable: true,
+					get: () => current,
+				});
+			} catch {
+				// Some environments expose a non-configurable currentTarget.
+			}
+			(handler as (ev: Event) => void).call(current, e);
 			if (e.cancelBubble) return;
 		}
 		node = (node.host && node !== node.host ? node.host : node.parentNode) as

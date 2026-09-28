@@ -152,6 +152,20 @@ describe("dom", () => {
 		expect(root.textContent).toBe("grace");
 	});
 
+	test("delegated handlers see node as this", () => {
+		const root = document.createElement("div");
+		document.body.appendChild(root);
+		const input = document.createElement("input");
+		root.appendChild(input);
+		let seen: EventTarget | null = null;
+		(input as unknown as { $$input: (e: Event) => void }).$$input = function (this: EventTarget) {
+			seen = this;
+		};
+		delegateEvents(["input"]);
+		input.dispatchEvent(new window.Event("input", { bubbles: true }));
+		expect(seen).toBe(input);
+	});
+
 	test("setAttribute removes on false", () => {
 		const el = document.createElement("button");
 		setAttribute(el, "disabled", true);

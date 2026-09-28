@@ -18,7 +18,7 @@ async function refreshNotes(): Promise<void> {
 }
 
 async function addNote(): Promise<void> {
-	const body = draft().trim();
+	const body = (draft() ?? "").trim();
 	if (!body) return;
 	notesError.set("");
 	const res = await fetch("/api/notes", {
@@ -125,7 +125,7 @@ function App() {
 						type="text"
 						value={draft()}
 						placeholder="Write a note"
-						onInput={(e: InputEvent) => draft.set((e.currentTarget as HTMLInputElement).value)}
+						onInput={(e: InputEvent) => draft.set((e.target as HTMLInputElement).value)}
 						onKeyDown={(e: KeyboardEvent) => {
 							if (e.key === "Enter") void addNote();
 						}}
