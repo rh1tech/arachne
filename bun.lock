@@ -20,6 +20,7 @@
         "@arachne/router": "workspace:*",
         "@arachne/server": "workspace:*",
         "@arachne/signals": "workspace:*",
+        "@arachne/vite": "workspace:*",
       },
     },
     "packages/config": {
@@ -146,6 +147,21 @@
         "typescript": "^5.9.2",
       },
     },
+    "packages/vite": {
+      "name": "@arachne/vite",
+      "version": "0.0.1",
+      "dependencies": {
+        "@arachne/jsx": "workspace:*",
+        "@arachne/mcp": "workspace:*",
+        "zod": "3.25.76",
+      },
+      "devDependencies": {
+        "@arachne/render": "workspace:*",
+        "@arachne/signals": "workspace:*",
+        "happy-dom": "^18.0.1",
+        "typescript": "^5.9.2",
+      },
+    },
   },
   "packages": {
     "@arachne/config": ["@arachne/config@workspace:packages/config"],
@@ -169,6 +185,8 @@
     "@arachne/signals": ["@arachne/signals@workspace:packages/signals"],
 
     "@arachne/testing": ["@arachne/testing@workspace:packages/testing"],
+
+    "@arachne/vite": ["@arachne/vite@workspace:packages/vite"],
 
     "@babel/runtime": ["@babel/runtime@7.29.7", "", {}, "sha512-Nq8OhGWiZIZGV6hLHoyAKLLcJihP/xFeBMGJoUrxTX2psI8dCifzLhZISFb+VWS3wFMRDmCGw5R+dOySCqPLhw=="],
 

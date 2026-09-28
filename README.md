@@ -28,6 +28,7 @@ exports `./mcp` ([ADR 0007](docs/adr/0007-mcp-everywhere.md)).
 Domain schemas: [`@arachne/schema`](packages/schema) ([ADR 0008](docs/adr/0008-schema-dsl.md)).
 Boot config stays on [`@arachne/config`](packages/config).
 HTTP: [`@arachne/server`](packages/server) + [`@arachne/router`](packages/router).
+JSX bundling: [`@arachne/vite`](packages/vite) (Bun + Vite plugins).
 
 See [`docs/adr/`](docs/adr/) for architecture decisions.
 

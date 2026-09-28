@@ -12,6 +12,7 @@ const KNOWN_MODULES = [
 	"schema",
 	"router",
 	"server",
+	"vite",
 	"db",
 	"auth",
 	"acl",

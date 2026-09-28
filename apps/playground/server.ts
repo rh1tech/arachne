@@ -1,16 +1,18 @@
 import { join } from "node:path";
 import { createServer, html } from "@arachne/server";
+import { bunPlugin } from "@arachne/vite";
 
 const root = import.meta.dir;
 const port = Number(process.env["PORT"] ?? 3920);
 
 async function bundleClient(): Promise<Uint8Array> {
 	const result = await Bun.build({
-		entrypoints: [join(root, "client.ts")],
+		entrypoints: [join(root, "client.tsx")],
 		target: "browser",
 		format: "esm",
 		minify: false,
 		sourcemap: "inline",
+		plugins: [bunPlugin({ hydratable: false })],
 	});
 	if (!result.success) {
 		const message = result.logs.map(String).join("\n");

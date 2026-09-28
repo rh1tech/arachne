@@ -10,6 +10,7 @@
 		"@arachne/render": "workspace:*",
 		"@arachne/router": "workspace:*",
 		"@arachne/server": "workspace:*",
-		"@arachne/signals": "workspace:*"
+		"@arachne/signals": "workspace:*",
+		"@arachne/vite": "workspace:*"
 	}
 }
