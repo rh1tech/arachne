@@ -39,14 +39,14 @@ export function compilePath(pattern: string): CompiledPath {
 			}
 			const name = segment.slice(1) || "rest";
 			keys.push({ name, rest: true });
-			parts.push("(?<" + name + ">.*)");
+			parts.push(`(?<${name}>.*)`);
 			continue;
 		}
 		if (segment.startsWith(":")) {
 			const name = segment.slice(1);
 			if (!name) throw new Error("empty param name");
 			keys.push({ name, rest: false });
-			parts.push("(?<" + name + ">[^/]+)");
+			parts.push(`(?<${name}>[^/]+)`);
 			continue;
 		}
 		parts.push(segment.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));

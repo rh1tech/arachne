@@ -51,7 +51,10 @@ const server = Bun.serve({
 			});
 		}
 
-		return new Response("Not found", { status: 404 });
+		// SPA fallback so browserHistory deep links keep working on refresh.
+		return new Response(Bun.file(join(root, "index.html")), {
+			headers: { "content-type": "text/html; charset=utf-8" },
+		});
 	},
 });
 

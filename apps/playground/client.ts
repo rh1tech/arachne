@@ -1,14 +1,13 @@
 import { createComponent, For, insert, render, Show } from "@arachne/render";
-import { createRouter, memoryHistory } from "@arachne/router";
+import { browserHistory, createRouter } from "@arachne/router";
 import { signal } from "@arachne/signals";
 
 const count = signal(0);
 const showList = signal(true);
 const items = signal(["silk", "thread", "anchor", "orbit"]);
 
-const history = memoryHistory("/");
 const router = createRouter({
-	history,
+	history: browserHistory(),
 	routes: [
 		{
 			path: "/",
