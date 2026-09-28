@@ -108,7 +108,6 @@ function isNode(value: unknown): value is Node {
 function normalizeChild(value: unknown): Node | Node[] | null {
 	if (value == null || typeof value === "boolean") return null;
 	if (isNode(value)) return value;
-	if (typeof value === "function") return normalizeChild((value as () => unknown)());
 	if (Array.isArray(value)) {
 		const nodes: Node[] = [];
 		for (const item of value) {
@@ -120,6 +119,14 @@ function normalizeChild(value: unknown): Node | Node[] | null {
 		return nodes;
 	}
 	return document.createTextNode(String(value));
+}
+
+function readAccessor(accessor: () => unknown): unknown {
+	let value: unknown = accessor();
+	while (typeof value === "function") {
+		value = (value as () => unknown)();
+	}
+	return value;
 }
 
 function replaceNodes(
@@ -155,7 +162,7 @@ export function insert(
 	}
 	let prev: Node | Node[] | null = null;
 	trackEffect(() => {
-		const value = (accessor as () => unknown)();
+		const value = readAccessor(accessor as () => unknown);
 		untrack(() => {
 			prev = replaceNodes(parent, marker, prev, normalizeChild(value));
 		});

@@ -1,9 +1,29 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import { signal } from "@arachne/signals";
 import { Window } from "happy-dom";
-import { delegateEvents, insert, render, setAttribute, template } from "../src/dom.ts";
+import { For, Show, Suspense } from "../src/control-flow.ts";
+import {
+	For as ForSSR,
+	Show as ShowSSR,
+	Suspense as SuspenseSSR,
+} from "../src/control-flow-ssr.ts";
+import {
+	createComponent,
+	delegateEvents,
+	insert,
+	render,
+	setAttribute,
+	template,
+} from "../src/dom.ts";
 import { island } from "../src/islands.ts";
-import { escape, renderToString, ssr, ssrAttribute, wrapIsland } from "../src/ssr.ts";
+import {
+	escape,
+	renderToString,
+	resolveSSRNode,
+	ssr,
+	ssrAttribute,
+	wrapIsland,
+} from "../src/ssr.ts";
 
 describe("ssr", () => {
 	test("escapes text and attributes", () => {
@@ -11,13 +31,19 @@ describe("ssr", () => {
 		expect(escape(`a"b`, true)).toBe("a&quot;b");
 	});
 
+	test("passes through SSR nodes without double-escaping", () => {
+		const node = ssr(["<p>", "</p>"], escape("hi") as string);
+		expect(escape(node)).toEqual(node);
+		expect(resolveSSRNode(escape(node))).toBe("<p>hi</p>");
+	});
+
 	test("ssr template holes", () => {
-		const html = ssr(["<p", ">", "</p>"], ssrAttribute("class", "x"), escape("hi"));
-		expect(html).toBe('<p class="x">hi</p>');
+		const html = ssr(["<p", ">", "</p>"], ssrAttribute("class", "x"), escape("hi") as string);
+		expect(html.t).toBe('<p class="x">hi</p>');
 	});
 
 	test("renderToString", () => {
-		const html = renderToString(() => ssr(["<h1>", "</h1>"], escape("Title")));
+		const html = renderToString(() => ssr(["<h1>", "</h1>"], escape("Title") as string));
 		expect(html).toBe("<h1>Title</h1>");
 	});
 
@@ -30,6 +56,48 @@ describe("ssr", () => {
 		expect(out).toContain("<a-island");
 		expect(out).toContain('data-c="Comments"');
 		expect(out).toContain("<div>c</div>");
+	});
+});
+
+describe("ssr control flow", () => {
+	test("Show renders children or fallback", () => {
+		expect(
+			resolveSSRNode(
+				ShowSSR({
+					when: true,
+					fallback: ssr(["<span>", "</span>"], "off"),
+					children: ssr(["<span>", "</span>"], "on"),
+				}),
+			),
+		).toBe("<span>on</span>");
+		expect(
+			resolveSSRNode(
+				ShowSSR({
+					when: false,
+					fallback: ssr(["<span>", "</span>"], "off"),
+					children: ssr(["<span>", "</span>"], "on"),
+				}),
+			),
+		).toBe("<span>off</span>");
+	});
+
+	test("For maps items", () => {
+		const out = ForSSR({
+			each: [1, 2],
+			children: (n) => ssr(["<li>", "</li>"], escape(n) as string),
+		});
+		expect(resolveSSRNode(escape(out))).toBe("<li>1</li><li>2</li>");
+	});
+
+	test("Suspense passes children through", () => {
+		expect(
+			resolveSSRNode(
+				SuspenseSSR({
+					fallback: "loading",
+					children: ssr(["<em>", "</em>"], "ready"),
+				}),
+			),
+		).toBe("<em>ready</em>");
 	});
 });
 
@@ -90,6 +158,90 @@ describe("dom", () => {
 		expect(el.hasAttribute("disabled")).toBe(true);
 		setAttribute(el, "disabled", false);
 		expect(el.hasAttribute("disabled")).toBe(false);
+	});
+
+	test("Show toggles with signal", () => {
+		const visible = signal(true);
+		const root = document.createElement("div");
+		document.body.appendChild(root);
+
+		render(
+			() =>
+				createComponent(Show, {
+					get when() {
+						return visible();
+					},
+					get fallback() {
+						const el = document.createElement("span");
+						el.textContent = "off";
+						return el;
+					},
+					get children() {
+						const el = document.createElement("span");
+						el.textContent = "on";
+						return el;
+					},
+				}),
+			root,
+		);
+
+		expect(root.textContent).toBe("on");
+		visible.set(false);
+		expect(root.textContent).toBe("off");
+		visible.set(true);
+		expect(root.textContent).toBe("on");
+	});
+
+	test("For adds removes and reorders", () => {
+		const items = signal(["a", "b"]);
+		const root = document.createElement("div");
+		document.body.appendChild(root);
+
+		render(() => {
+			const ul = document.createElement("ul");
+			insert(
+				ul,
+				createComponent(For<string>, {
+					get each() {
+						return items();
+					},
+					children: (item) => {
+						const li = document.createElement("li");
+						li.textContent = item;
+						return li;
+					},
+				}),
+			);
+			return ul;
+		}, root);
+
+		expect([...root.querySelectorAll("li")].map((el) => el.textContent)).toEqual(["a", "b"]);
+
+		items.set(["a", "b", "c"]);
+		expect([...root.querySelectorAll("li")].map((el) => el.textContent)).toEqual(["a", "b", "c"]);
+
+		items.set(["c", "a"]);
+		expect([...root.querySelectorAll("li")].map((el) => el.textContent)).toEqual(["c", "a"]);
+
+		items.set([]);
+		expect(root.querySelectorAll("li").length).toBe(0);
+	});
+
+	test("Suspense renders children", () => {
+		const root = document.createElement("div");
+		document.body.appendChild(root);
+		const tmpl = template(`<span>ready`);
+		render(
+			() =>
+				createComponent(Suspense, {
+					fallback: "loading",
+					get children() {
+						return tmpl();
+					},
+				}),
+			root,
+		);
+		expect(root.textContent).toBe("ready");
 	});
 });
 

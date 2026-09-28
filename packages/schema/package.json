@@ -1,7 +1,7 @@
 {
-	"name": "@arachne/render",
+	"name": "@arachne/schema",
 	"version": "0.0.1",
-	"description": "SSR/DOM render runtime and islands for Arachne",
+	"description": "Standard Schema DSL for Arachne (one schema, many outputs)",
 	"license": "MIT OR Apache-2.0",
 	"type": "module",
 	"exports": {
@@ -9,21 +9,6 @@
 			"types": "./src/index.ts",
 			"import": "./src/index.ts",
 			"default": "./src/index.ts"
-		},
-		"./ssr": {
-			"types": "./src/ssr.ts",
-			"import": "./src/ssr.ts",
-			"default": "./src/ssr.ts"
-		},
-		"./dom": {
-			"types": "./src/dom.ts",
-			"import": "./src/dom.ts",
-			"default": "./src/dom.ts"
-		},
-		"./islands": {
-			"types": "./src/islands.ts",
-			"import": "./src/islands.ts",
-			"default": "./src/islands.ts"
 		},
 		"./mcp": {
 			"types": "./src/mcp.ts",
@@ -33,8 +18,7 @@
 	},
 	"files": [
 		"src",
-		"README.md",
-		"NOTICE"
+		"README.md"
 	],
 	"scripts": {
 		"test": "bun test",
@@ -42,13 +26,10 @@
 		"build": "bun run typecheck"
 	},
 	"dependencies": {
-		"@arachne/signals": "workspace:*",
 		"@arachne/mcp": "workspace:*",
 		"zod": "3.25.76"
 	},
 	"devDependencies": {
-		"@arachne/jsx": "workspace:*",
-		"happy-dom": "^18.0.1",
 		"typescript": "^5.9.2"
 	},
 	"publishConfig": {

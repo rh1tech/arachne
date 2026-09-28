@@ -1,3 +1,4 @@
-Portions of the DOM/SSR helpers are adapted from dom-expressions
-(https://github.com/ryansolid/dom-expressions), Copyright (c) Ryan Carniato,
-licensed under the MIT License.
+Portions of the DOM/SSR helpers and control-flow builtins (Show / For / mapArray)
+are adapted from dom-expressions and Solid
+(https://github.com/ryansolid/dom-expressions, https://github.com/solidjs/solid),
+Copyright (c) Ryan Carniato, licensed under the MIT License.

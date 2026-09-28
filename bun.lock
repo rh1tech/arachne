@@ -12,6 +12,14 @@
         "typescript": "^5.9.2",
       },
     },
+    "apps/playground": {
+      "name": "@arachne/playground",
+      "version": "0.0.0",
+      "dependencies": {
+        "@arachne/render": "workspace:*",
+        "@arachne/signals": "workspace:*",
+      },
+    },
     "packages/config": {
       "name": "@arachne/config",
       "version": "0.0.1",
@@ -70,7 +78,19 @@
         "zod": "3.25.76",
       },
       "devDependencies": {
+        "@arachne/jsx": "workspace:*",
         "happy-dom": "^18.0.1",
+        "typescript": "^5.9.2",
+      },
+    },
+    "packages/schema": {
+      "name": "@arachne/schema",
+      "version": "0.0.1",
+      "dependencies": {
+        "@arachne/mcp": "workspace:*",
+        "zod": "3.25.76",
+      },
+      "devDependencies": {
         "typescript": "^5.9.2",
       },
     },
@@ -108,7 +128,11 @@
 
     "@arachne/mcp": ["@arachne/mcp@workspace:packages/mcp"],
 
+    "@arachne/playground": ["@arachne/playground@workspace:apps/playground"],
+
     "@arachne/render": ["@arachne/render@workspace:packages/render"],
+
+    "@arachne/schema": ["@arachne/schema@workspace:packages/schema"],
 
     "@arachne/signals": ["@arachne/signals@workspace:packages/signals"],
 

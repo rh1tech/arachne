@@ -6,7 +6,8 @@
 	"license": "MIT OR Apache-2.0",
 	"type": "module",
 	"workspaces": [
-		"packages/*"
+		"packages/*",
+		"apps/*"
 	],
 	"scripts": {
 		"prepare": "git config core.hooksPath .githooks",
@@ -20,6 +21,7 @@
 		"mcp": "bun run packages/mcp/bin/arachne-mcp.ts",
 		"mcp:http": "bun run packages/mcp/bin/arachne-mcp.ts --http",
 		"mcp:check": "bun run scripts/check-mcp.ts",
+		"playground": "bun run apps/playground/server.ts",
 		"changeset": "changeset",
 		"version-packages": "changeset version",
 		"ci": "bun run lint && bun run boundaries && bun run mcp:check && bun run typecheck && bun run test"

@@ -1,4 +1,4 @@
-import { effect as trackEffect, untrack } from "@arachne/signals";
+import { computed, effect as trackEffect, untrack } from "@arachne/signals";
 
 /** Shared hydration / SSR config (dom-expressions compatible subset). */
 export const sharedConfig: {
@@ -29,15 +29,8 @@ export function mergeProps<T extends object>(...sources: Array<Partial<T> | unde
 }
 
 export function memo<T>(fn: () => T, _equal?: boolean): () => T {
-	let value: T | undefined;
-	let ran = false;
-	return () => {
-		if (!ran) {
-			value = fn();
-			ran = true;
-		}
-		return value as T;
-	};
+	const c = computed(fn);
+	return () => c();
 }
 
 /**

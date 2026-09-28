@@ -1,3 +1,6 @@
+export type { ForProps, ShowProps, SuspenseProps } from "./control-flow.ts";
+
+export { For, mapArray, Show, Suspense } from "./control-flow.ts";
 export {
 	clearDelegatedEvents,
 	createComponent,

@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   check:
-    name: lint · boundaries · typecheck · test
+    name: lint · boundaries · mcp · typecheck · test
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -29,6 +29,9 @@ jobs:
 
       - name: Boundaries
         run: bun run boundaries
+
+      - name: MCP contract
+        run: bun run mcp:check
 
       - name: Typecheck
         run: bun run typecheck

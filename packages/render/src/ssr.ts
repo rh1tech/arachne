@@ -1,26 +1,64 @@
 import { createComponent, effect, memo, mergeProps, sharedConfig } from "./core.ts";
 
 export { untrack } from "@arachne/signals";
+export { For, Show, Suspense } from "./control-flow-ssr.ts";
 export { createComponent, effect, memo, mergeProps, sharedConfig };
 
-type SSRPayload = string | (() => SSRPayload) | SSRPayload[] | undefined | null | false;
+/** Trusted SSR fragment — passed through `escape` without re-escaping (dom-expressions). */
+export type SSRNode = { t: string };
+
+export type SSRPayload =
+	| string
+	| number
+	| boolean
+	| SSRNode
+	| (() => SSRPayload)
+	| SSRPayload[]
+	| undefined
+	| null;
 
 export function scope<T extends () => unknown>(fn: T): T {
 	return fn;
 }
 
-export function escape(value: unknown, attr = false): string {
-	if (value == null || value === false) return "";
-	if (typeof value === "function") return escape((value as () => unknown)(), attr);
-	const s = String(value);
+export function resolveSSRNode(node: unknown): string {
+	const t = typeof node;
+	if (t === "string") return node as string;
+	if (node == null || t === "boolean") return "";
+	if (Array.isArray(node)) {
+		let mapped = "";
+		for (const child of node) mapped += resolveSSRNode(child);
+		return mapped;
+	}
+	if (t === "object" && node !== null && "t" in (node as object)) {
+		return String((node as SSRNode).t);
+	}
+	if (t === "function") return resolveSSRNode((node as () => unknown)());
+	return String(node);
+}
+
+export function escape(s: unknown, attr = false): unknown {
+	const t = typeof s;
+	if (t === "string") return escapeString(s as string, attr);
+	if (!attr && t === "function") return escape((s as () => unknown)());
+	if (!attr && Array.isArray(s)) return (s as unknown[]).map((item) => escape(item));
 	if (attr) {
-		return s
+		if (t === "boolean") return String(s);
+		if (s == null || t === "number") return s;
+		return escape(String(s), attr);
+	}
+	return s;
+}
+
+function escapeString(str: string, attr: boolean): string {
+	if (attr) {
+		return str
 			.replace(/&/g, "&amp;")
 			.replace(/"/g, "&quot;")
 			.replace(/</g, "&lt;")
 			.replace(/>/g, "&gt;");
 	}
-	return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+	return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 export function ssrHydrationKey(): string {
@@ -37,27 +75,20 @@ export function getHydrationKey(): string {
 export function ssrAttribute(key: string, value: unknown, isBoolean = false): string {
 	if (value == null || value === false) return "";
 	if (isBoolean || value === true) return ` ${key}`;
-	return ` ${key}="${escape(value, true)}"`;
-}
-
-function resolve(value: SSRPayload): string {
-	if (value == null || value === false) return "";
-	if (typeof value === "function") return resolve(value());
-	if (Array.isArray(value)) return value.map(resolve).join("");
-	return value;
+	return ` ${key}="${escape(value, true) as string}"`;
 }
 
 /** Template + hole interpolations (dom-expressions `ssr` helper). */
-export function ssr(templates: string[] | string, ...values: SSRPayload[]): string {
+export function ssr(templates: string[] | string, ...values: SSRPayload[]): SSRNode {
 	if (typeof templates === "string") {
-		return templates + values.map(resolve).join("");
+		return { t: templates + values.map(resolveSSRNode).join("") };
 	}
 	let out = templates[0] ?? "";
 	for (let i = 0; i < values.length; i += 1) {
-		out += resolve(values[i]);
+		out += resolveSSRNode(escape(values[i]));
 		out += templates[i + 1] ?? "";
 	}
-	return out;
+	return { t: out };
 }
 
 export function ssrElement(
@@ -65,7 +96,7 @@ export function ssrElement(
 	props: Record<string, unknown> | (() => Record<string, unknown>) | null | undefined,
 	children?: SSRPayload,
 	needsId = false,
-): string {
+): SSRNode {
 	const p = typeof props === "function" ? props() : (props ?? {});
 	let attrs = needsId ? ssrHydrationKey() : "";
 	for (const [key, value] of Object.entries(p)) {
@@ -80,14 +111,14 @@ export function ssrElement(
 		}
 		attrs += ssrAttribute(key, value);
 	}
-	const child = children === undefined ? "" : resolve(children);
-	return `<${tag}${attrs}>${child}</${tag}>`;
+	const child = children === undefined ? "" : resolveSSRNode(escape(children));
+	return { t: `<${tag}${attrs}>${child}</${tag}>` };
 }
 
 export function renderToString(code: () => SSRPayload, options?: { renderId?: string }): string {
 	sharedConfig.context = { id: options?.renderId ?? "", count: 0 };
 	try {
-		return resolve(code());
+		return resolveSSRNode(escape(code()));
 	} finally {
 		sharedConfig.context = undefined;
 	}
@@ -99,7 +130,7 @@ export async function* renderToStream(
 ): AsyncGenerator<string> {
 	sharedConfig.context = { id: options?.renderId ?? "", count: 0 };
 	try {
-		yield resolve(await code());
+		yield resolveSSRNode(escape(await code()));
 	} finally {
 		sharedConfig.context = undefined;
 	}
@@ -110,7 +141,7 @@ export function wrapIsland(
 	opts: { chunkId: string; propsJson: string; hydrate: string },
 ): string {
 	return (
-		`<a-island data-c="${escape(opts.chunkId, true)}" data-p="${escape(opts.propsJson, true)}" data-h="${escape(opts.hydrate, true)}">` +
+		`<a-island data-c="${escape(opts.chunkId, true) as string}" data-p="${escape(opts.propsJson, true) as string}" data-h="${escape(opts.hydrate, true) as string}">` +
 		html +
 		`</a-island>`
 	);

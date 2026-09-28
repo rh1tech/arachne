@@ -21,8 +21,8 @@ export const mcpModule = defineMcpModule({
 				const html = renderToString(() =>
 					ssr(
 						[`<${tag}`, ">", `</${tag}>`],
-						className ? ` class="${escape(className, true)}"` : "",
-						escape(args["text"]),
+						className ? ` class="${escape(className, true) as string}"` : "",
+						escape(args["text"]) as string,
 					),
 				);
 				return jsonResult({ html });
@@ -55,7 +55,7 @@ export const mcpModule = defineMcpModule({
 			},
 			handler: (args) =>
 				jsonResult({
-					escaped: escape(args["value"], Boolean(args["attr"])),
+					escaped: escape(args["value"], Boolean(args["attr"])) as string,
 				}),
 		},
 		{
