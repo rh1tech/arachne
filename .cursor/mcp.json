@@ -1,0 +1,14 @@
+{
+	"mcpServers": {
+		"arachne": {
+			"command": "bun",
+			"args": ["run", "packages/mcp/bin/arachne-mcp.ts"],
+			"cwd": "${workspaceFolder}"
+		},
+		"arachne-jsx": {
+			"command": "bun",
+			"args": ["run", "packages/mcp/bin/arachne-mcp.ts", "--modules", "jsx,signals,render"],
+			"cwd": "${workspaceFolder}"
+		}
+	}
+}

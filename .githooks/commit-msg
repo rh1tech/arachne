@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Reject commit messages that still contain AI/tooling authorship traces.
+set -euo pipefail
+
+msg_file="${1:?}"
+
+if grep -Eiq \
+  -e '^[[:space:]]*co-authored-by:[[:space:]]*' \
+  -e '^[[:space:]]*generated-by:[[:space:]]*' \
+  -e '^[[:space:]]*made-with:[[:space:]]*' \
+  -e '^[[:space:]]*assisted-by:[[:space:]]*' \
+  -e '^[[:space:]]*🤖' \
+  -e '^[[:space:]]*generated with[[:space:]]+' \
+  -e '^[[:space:]]*signed-off-by:[[:space:]]*(cursor|claude|copilot|chatgpt|openai|anthropic|gemini)' \
+  "$msg_file"
+then
+  echo "commit-msg: refused AI/tooling authorship trailer in commit message" >&2
+  echo "Remove Co-Authored-By / Generated-By / Made-with / similar AI traces and retry." >&2
+  exit 1
+fi

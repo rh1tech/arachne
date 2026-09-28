@@ -1,0 +1,9 @@
+[install]
+exact = false
+peer = true
+
+[test]
+coverage = true
+
+[run]
+bun = true

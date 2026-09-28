@@ -1,0 +1,38 @@
+{
+	"name": "arachne",
+	"private": true,
+	"version": "0.0.0",
+	"description": "Arachne — universal, modular, high-performance web framework",
+	"license": "MIT OR Apache-2.0",
+	"type": "module",
+	"workspaces": [
+		"packages/*"
+	],
+	"scripts": {
+		"prepare": "git config core.hooksPath .githooks",
+		"build": "turbo run build",
+		"test": "turbo run test",
+		"typecheck": "turbo run typecheck",
+		"lint": "biome check .",
+		"lint:fix": "biome check --write .",
+		"format": "biome format --write .",
+		"boundaries": "bun run scripts/check-boundaries.ts",
+		"mcp": "bun run packages/mcp/bin/arachne-mcp.ts",
+		"mcp:http": "bun run packages/mcp/bin/arachne-mcp.ts --http",
+		"mcp:check": "bun run scripts/check-mcp.ts",
+		"changeset": "changeset",
+		"version-packages": "changeset version",
+		"ci": "bun run lint && bun run boundaries && bun run mcp:check && bun run typecheck && bun run test"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.2.4",
+		"@changesets/cli": "^2.29.7",
+		"@types/bun": "^1.2.22",
+		"turbo": "^2.5.6",
+		"typescript": "^5.9.2"
+	},
+	"packageManager": "bun@1.3.13",
+	"engines": {
+		"bun": ">=1.3.0"
+	}
+}
