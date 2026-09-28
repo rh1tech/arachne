@@ -17,6 +17,7 @@
       "version": "0.0.0",
       "dependencies": {
         "@arachne/render": "workspace:*",
+        "@arachne/router": "workspace:*",
         "@arachne/signals": "workspace:*",
       },
     },
@@ -83,6 +84,20 @@
         "typescript": "^5.9.2",
       },
     },
+    "packages/router": {
+      "name": "@arachne/router",
+      "version": "0.0.1",
+      "dependencies": {
+        "@arachne/mcp": "workspace:*",
+        "@arachne/render": "workspace:*",
+        "@arachne/signals": "workspace:*",
+        "zod": "3.25.76",
+      },
+      "devDependencies": {
+        "happy-dom": "^18.0.1",
+        "typescript": "^5.9.2",
+      },
+    },
     "packages/schema": {
       "name": "@arachne/schema",
       "version": "0.0.1",
@@ -131,6 +146,8 @@
     "@arachne/playground": ["@arachne/playground@workspace:apps/playground"],
 
     "@arachne/render": ["@arachne/render@workspace:packages/render"],
+
+    "@arachne/router": ["@arachne/router@workspace:packages/router"],
 
     "@arachne/schema": ["@arachne/schema@workspace:packages/schema"],
 

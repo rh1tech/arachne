@@ -122,6 +122,10 @@ h1 {
 	.demo {
 		grid-template-columns: 1fr 1fr;
 	}
+
+	.panel-wide {
+		grid-column: 1 / -1;
+	}
 }
 
 .panel {
@@ -213,4 +217,25 @@ button.ghost:hover {
 	border-left: 3px solid var(--accent);
 	background: color-mix(in oklab, var(--paper) 5%, transparent);
 	animation: settle 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.pathline {
+	margin: 0 0 1rem;
+	font-size: 0.95rem;
+	color: var(--accent);
+	letter-spacing: 0.02em;
+}
+
+.outlet {
+	margin-top: 1rem;
+	padding-top: 1rem;
+	border-top: 1px solid var(--line);
+}
+
+.route-view {
+	margin: 0;
+	font-family: var(--font-display);
+	font-size: 1.35rem;
+	font-weight: 700;
+	letter-spacing: -0.03em;
 }

@@ -8,6 +8,7 @@
 	},
 	"dependencies": {
 		"@arachne/render": "workspace:*",
+		"@arachne/router": "workspace:*",
 		"@arachne/signals": "workspace:*"
 	}
 }
