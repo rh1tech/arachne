@@ -1,6 +1,7 @@
 import { join } from "node:path";
-import { createServer, html } from "@arachne/server";
+import { createServer, html, json } from "@arachne/server";
 import { bunPlugin } from "@arachne/vite";
+import { db, notes } from "./db.ts";
 
 const root = import.meta.dir;
 const port = Number(process.env["PORT"] ?? 3920);
@@ -52,7 +53,37 @@ const app = createServer({
 		{
 			method: "GET",
 			path: "/api/health",
-			handler: () => Response.json({ ok: true, package: "@arachne/server" }),
+			handler: () => json({ ok: true, package: "@arachne/server" }),
+		},
+		{
+			method: "GET",
+			path: "/api/notes",
+			handler: async () => json({ notes: await db.select(notes).all() }),
+		},
+		{
+			method: "POST",
+			path: "/api/notes",
+			handler: async (ctx) => {
+				const body = await ctx.json<{ body?: string }>();
+				const text = body.body?.trim();
+				if (!text) return json({ error: "body required" }, { status: 400 });
+				const row = await db.insert(notes).values({
+					id: crypto.randomUUID(),
+					body: text,
+					createdAt: new Date().toISOString(),
+				});
+				return json({ note: row }, { status: 201 });
+			},
+		},
+		{
+			method: "DELETE",
+			path: "/api/notes/:id",
+			handler: async (ctx) => {
+				const id = ctx.params["id"];
+				if (!id) return json({ error: "missing id" }, { status: 400 });
+				await db.delete(notes).where({ id }).run();
+				return json({ ok: true });
+			},
 		},
 	],
 	fallback: async () => {

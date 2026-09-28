@@ -6,6 +6,42 @@ const count = signal(0);
 const showList = signal(true);
 const items = signal(["silk", "thread", "anchor", "orbit"]);
 
+type Note = { id: string; body: string; createdAt: string };
+const noteList = signal<Note[]>([]);
+const draft = signal("");
+const notesError = signal("");
+
+async function refreshNotes(): Promise<void> {
+	const res = await fetch("/api/notes");
+	const data = (await res.json()) as { notes: Note[] };
+	noteList.set(data.notes);
+}
+
+async function addNote(): Promise<void> {
+	const body = draft().trim();
+	if (!body) return;
+	notesError.set("");
+	const res = await fetch("/api/notes", {
+		method: "POST",
+		headers: { "content-type": "application/json" },
+		body: JSON.stringify({ body }),
+	});
+	if (!res.ok) {
+		const err = (await res.json()) as { error?: string };
+		notesError.set(err.error ?? "failed");
+		return;
+	}
+	draft.set("");
+	await refreshNotes();
+}
+
+async function removeNote(id: string): Promise<void> {
+	await fetch(`/api/notes/${id}`, { method: "DELETE" });
+	await refreshNotes();
+}
+
+void refreshNotes();
+
 function Home() {
 	return <p class="route-view">Home route</p>;
 }
@@ -80,11 +116,45 @@ function App() {
 				</div>
 				<div class="outlet">{router.Outlet()}</div>
 			</section>
+
+			<section class="panel panel-wide">
+				<h2>DB notes</h2>
+				<p class="muted">In-memory SQLite via @arachne/db + @arachne/db-sqlite</p>
+				<div class="note-form">
+					<input
+						type="text"
+						value={draft()}
+						placeholder="Write a note"
+						onInput={(e: InputEvent) => draft.set((e.currentTarget as HTMLInputElement).value)}
+						onKeyDown={(e: KeyboardEvent) => {
+							if (e.key === "Enter") void addNote();
+						}}
+					/>
+					<button type="button" onClick={() => void addNote()}>
+						Save
+					</button>
+				</div>
+				<Show when={notesError()} fallback={null}>
+					<p class="muted">{notesError()}</p>
+				</Show>
+				<ul class="web">
+					<For each={noteList()}>
+						{(note) => (
+							<li class="note-row">
+								<span>{note.body}</span>
+								<button type="button" class="ghost" onClick={() => void removeNote(note.id)}>
+									Delete
+								</button>
+							</li>
+						)}
+					</For>
+				</ul>
+			</section>
 		</div>
 	);
 }
 
 const mount = document.querySelector("#app");
 if (!mount) throw new Error("#app missing");
-delegateEvents(["click"]);
+delegateEvents(["click", "input", "keydown"]);
 render(() => <App />, mount);

@@ -29,6 +29,7 @@ Domain schemas: [`@arachne/schema`](packages/schema) ([ADR 0008](docs/adr/0008-s
 Boot config stays on [`@arachne/config`](packages/config).
 HTTP: [`@arachne/server`](packages/server) + [`@arachne/router`](packages/router).
 JSX bundling: [`@arachne/vite`](packages/vite) (Bun + Vite plugins).
+Data: [`@arachne/db`](packages/db) + [`@arachne/db-sqlite`](packages/db-sqlite).
 
 See [`docs/adr/`](docs/adr/) for architecture decisions.
 

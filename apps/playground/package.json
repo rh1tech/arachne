@@ -7,8 +7,11 @@
 		"start": "bun run server.ts"
 	},
 	"dependencies": {
+		"@arachne/db": "workspace:*",
+		"@arachne/db-sqlite": "workspace:*",
 		"@arachne/render": "workspace:*",
 		"@arachne/router": "workspace:*",
+		"@arachne/schema": "workspace:*",
 		"@arachne/server": "workspace:*",
 		"@arachne/signals": "workspace:*",
 		"@arachne/vite": "workspace:*"

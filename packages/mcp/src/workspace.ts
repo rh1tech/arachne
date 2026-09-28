@@ -14,6 +14,7 @@ const KNOWN_MODULES = [
 	"server",
 	"vite",
 	"db",
+	"db-sqlite",
 	"auth",
 	"acl",
 	"ui",

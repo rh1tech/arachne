@@ -16,8 +16,11 @@
       "name": "@arachne/playground",
       "version": "0.0.0",
       "dependencies": {
+        "@arachne/db": "workspace:*",
+        "@arachne/db-sqlite": "workspace:*",
         "@arachne/render": "workspace:*",
         "@arachne/router": "workspace:*",
+        "@arachne/schema": "workspace:*",
         "@arachne/server": "workspace:*",
         "@arachne/signals": "workspace:*",
         "@arachne/vite": "workspace:*",
@@ -40,6 +43,32 @@
       "version": "0.0.1",
       "dependencies": {
         "@arachne/mcp": "workspace:*",
+        "zod": "3.25.76",
+      },
+      "devDependencies": {
+        "typescript": "^5.9.2",
+      },
+    },
+    "packages/db": {
+      "name": "@arachne/db",
+      "version": "0.0.1",
+      "dependencies": {
+        "@arachne/core": "workspace:*",
+        "@arachne/mcp": "workspace:*",
+        "@arachne/schema": "workspace:*",
+        "zod": "3.25.76",
+      },
+      "devDependencies": {
+        "typescript": "^5.9.2",
+      },
+    },
+    "packages/db-sqlite": {
+      "name": "@arachne/db-sqlite",
+      "version": "0.0.1",
+      "dependencies": {
+        "@arachne/db": "workspace:*",
+        "@arachne/mcp": "workspace:*",
+        "@arachne/schema": "workspace:*",
         "zod": "3.25.76",
       },
       "devDependencies": {
@@ -167,6 +196,10 @@
     "@arachne/config": ["@arachne/config@workspace:packages/config"],
 
     "@arachne/core": ["@arachne/core@workspace:packages/core"],
+
+    "@arachne/db": ["@arachne/db@workspace:packages/db"],
+
+    "@arachne/db-sqlite": ["@arachne/db-sqlite@workspace:packages/db-sqlite"],
 
     "@arachne/jsx": ["@arachne/jsx@workspace:packages/jsx"],
 
