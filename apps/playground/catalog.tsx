@@ -221,10 +221,10 @@ function Parts(props: { entry: CatalogEntry }) {
 				<Title order={2} size={4}>
 					Parts
 				</Title>
-				<Text muted>
+				<p class="catalog-meta catalog-meta-hint">
 					Compose {props.entry.name} from these sub-components:{" "}
-					{parts.map((part, i) => [i ? ", " : "", <Code>{part.name}</Code>])}.
-				</Text>
+					{parts.map((part, i) => [i ? ", " : "", <code>{part.name}</code>])}.
+				</p>
 			</section>
 			<For each={parts}>{(part) => <Part entry={part} />}</For>
 		</Show>
@@ -261,10 +261,7 @@ export function ComponentReference(props: { pageId: string }) {
 	if (!entry) return null;
 	return (
 		<section class="catalog-reference" aria-label={`${entry.name} reference`}>
-			<Title order={2} size={3}>
-				{entry.name} reference
-			</Title>
-			<ApiReference entry={entry} order={3} title="API" />
+			<ApiReference entry={entry} order={2} />
 			<Parts entry={entry} />
 		</section>
 	);

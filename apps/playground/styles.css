@@ -516,13 +516,13 @@ span.catalog-meta-hint {
 }
 
 /* A sub-component on its parent's page: indented under a rule so the hierarchy reads. */
+/* A sub-component on its parent's page: aligned with the page, separated by a rule. */
 .catalog-part {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr);
 	gap: 0.75rem;
-	margin-top: 1.5rem;
-	padding-left: 1.25rem;
-	border-left: 2px solid var(--a-line);
+	padding-top: 1.5rem;
+	border-top: 1px solid var(--a-line);
 }
 
 /* Reference (props, slots, parts) at the top of a hand-written showcase page. */
