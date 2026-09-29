@@ -7,7 +7,14 @@
 	},
 	"files": {
 		"ignoreUnknown": true,
-		"includes": ["**", "!**/dist", "!**/coverage", "!**/.turbo", "!**/node_modules"]
+		"includes": [
+			"**",
+			"!**/dist",
+			"!**/coverage",
+			"!**/.turbo",
+			"!**/node_modules",
+			"!**/jsx-runtime.d.ts"
+		]
 	},
 	"formatter": {
 		"enabled": true,
@@ -45,5 +52,17 @@
 				"organizeImports": "on"
 			}
 		}
-	}
+	},
+	"overrides": [
+		{
+			"includes": ["**/*.d.ts"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noUnusedVariables": "off"
+					}
+				}
+			}
+		}
+	]
 }

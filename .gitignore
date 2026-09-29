@@ -11,3 +11,4 @@ coverage/
 bench/results.local.md
 apps/**/tmp/
 *.tgz
+packages/**/.test-out/

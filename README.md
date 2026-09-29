@@ -30,6 +30,8 @@ Boot config stays on [`@arachne/config`](packages/config).
 HTTP: [`@arachne/server`](packages/server) + [`@arachne/router`](packages/router).
 JSX bundling: [`@arachne/vite`](packages/vite) (Bun + Vite plugins).
 Data: [`@arachne/db`](packages/db) + [`@arachne/db-sqlite`](packages/db-sqlite).
+UI: [`@arachne/ui`](packages/ui) + [`@arachne/forms`](packages/forms)
+([ADR 0013](docs/adr/0013-ui-forms.md)).
 
 See [`docs/adr/`](docs/adr/) for architecture decisions.
 
