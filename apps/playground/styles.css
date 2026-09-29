@@ -486,7 +486,6 @@ span.catalog-meta-hint {
 	/* Dropdowns inside a preview paint above the code block that follows it. */
 	z-index: 1;
 	transform: translateZ(0);
-	min-height: 4rem;
 }
 
 /* Event log under a preview: which callbacks the example fired. */
