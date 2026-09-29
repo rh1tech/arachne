@@ -177,9 +177,14 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Click-to-toggle panel anchored to a trigger. Escape / outside click close it and return focus to the trigger.
 
 ```tsx
-<Popover open={false} onOpenChange={() => {}} label="Share" panelLabel="Share project">
-	Anyone with the link can view this project.
-</Popover>
+function Example() {
+	const open = signal(false);
+	return (
+		<Popover open={open()} onOpenChange={open.set} label="Share" panelLabel="Share project">
+			Anyone with the link can view this project.
+		</Popover>
+	);
+}
 ```
 
 **Slots:** `root` `arrow` `panel` `trigger`
@@ -224,7 +229,9 @@ Hover/focus tooltip linked with `aria-describedby`; Escape dismisses and the too
 
 ```tsx
 <Tooltip content="Copies the deploy URL">
-	<Button variant="outline">Copy link</Button>
+	<Button variant="outline" onClick={() => {}}>
+		Copy link
+	</Button>
 </Tooltip>
 ```
 
@@ -247,17 +254,33 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Action menu with roving focus (↑ ↓ Home End, type-ahead), Escape, outside click, focus restore and enter/exit motion.
 
 ```tsx
-<Menu
-	open
-	label="Project actions"
-	items={[
-		{ type: "label", label: "marketing-site" },
-		{ label: "Rename", onSelect: () => {} },
-		{ label: "Duplicate", onSelect: () => {} },
-		{ type: "separator" },
-		{ label: "Delete", onSelect: () => {}, danger: true },
-	]}
-/>
+function Example() {
+	const open = signal(false);
+	const last = signal("");
+	const pick = (label: string) => () => last.set(label);
+	return (
+		<Group gap="0.75rem">
+			<div style={{ position: "relative" }}>
+				<Button variant="outline" aria-expanded={open()} onClick={() => open.set(!open())}>
+					Project actions ▾
+				</Button>
+				<Menu
+					open={open()}
+					onClose={() => open.set(false)}
+					label="Project actions"
+					items={[
+						{ type: "label", label: "marketing-site" },
+						{ label: "Rename", onSelect: pick("Rename") },
+						{ label: "Duplicate", onSelect: pick("Duplicate") },
+						{ type: "separator" },
+						{ label: "Delete", onSelect: pick("Delete"), danger: true },
+					]}
+				/>
+			</div>
+			<Text muted>{last() ? `Chose “${last()}”` : "Nothing chosen yet"}</Text>
+		</Group>
+	);
+}
 ```
 
 **Slots:** `root` `description` `group` `icon` `item` `label` `separator` `shortcut`
@@ -340,9 +363,9 @@ Fullscreen image viewer: focus trap, Escape, ← → between images.
 function Example() {
 	const index = signal<number | null>(null);
 	const images = [
-		{ src: swatch(210, "One"), alt: "Blue placeholder" },
-		{ src: swatch(150, "Two"), alt: "Green placeholder" },
-		{ src: swatch(20, "Three"), alt: "Orange placeholder" },
+		{ src: "/images/one.jpg", alt: "Blue placeholder" },
+		{ src: "/images/two.jpg", alt: "Green placeholder" },
+		{ src: "/images/three.jpg", alt: "Orange placeholder" },
 	];
 	return (
 		<>
@@ -351,7 +374,7 @@ function Example() {
 				<Lightbox
 					images={images}
 					index={index() ?? 0}
-					onIndexChange={(i: number) => index.set(i)}
+					onChange={index.set}
 					onClose={() => index.set(null)}
 				/>
 			) : null}
@@ -395,10 +418,27 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Covers its positioned parent with a spinner while `visible`.
 
 ```tsx
-<Box style={{ position: "relative", "min-height": "6rem" }}>
-	<Text>Refreshing the deploy list…</Text>
-	<LoadingOverlay visible label="Refreshing" />
-</Box>
+function Example() {
+	const loading = signal(true);
+	const refresh = () => loading.set(true);
+	// Pretend each refresh takes 1.5 s (effects run only in the browser).
+	effect(() => {
+		if (!loading()) return;
+		const timer = setTimeout(() => loading.set(false), 1500);
+		return () => clearTimeout(timer);
+	});
+	return (
+		<Stack gap="0.5rem">
+			<Box style={{ position: "relative", "min-height": "6rem" }}>
+				<Text>Deploy list</Text>
+				<LoadingOverlay visible={loading()} label="Refreshing" />
+			</Box>
+			<Button size="sm" variant="outline" onClick={refresh} disabled={loading()}>
+				Refresh
+			</Button>
+		</Stack>
+	);
+}
 ```
 
 **Slots:** `root` `spinner`

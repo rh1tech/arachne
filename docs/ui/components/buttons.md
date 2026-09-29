@@ -8,7 +8,9 @@
 Button (or link when `href` is set).
 
 ```tsx
-<Button>Save changes</Button>
+<Button onClick={() => {}}>
+	Save changes
+</Button>
 ```
 
 **Slots:** `root` `end` `label` `spinner` `start`
@@ -36,7 +38,9 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Button with browser chrome reset — bring your own look.
 
 ```tsx
-<UnstyledButton>Plain clickable text</UnstyledButton>
+<UnstyledButton onClick={() => {}}>
+	Plain clickable text
+</UnstyledButton>
 ```
 
 | Prop | Type | Required | Description |
@@ -54,9 +58,15 @@ Bootstrap-style button group.
 
 ```tsx
 <ButtonGroup label="Text alignment">
-	<Button variant="outline">Left</Button>
-	<Button variant="outline">Center</Button>
-	<Button variant="outline">Right</Button>
+	<Button variant="outline" onClick={() => {}}>
+		Left
+	</Button>
+	<Button variant="outline" onClick={() => {}}>
+		Center
+	</Button>
+	<Button variant="outline" onClick={() => {}}>
+		Right
+	</Button>
 </ButtonGroup>
 ```
 
@@ -73,15 +83,25 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Primary action + caret menu.
 
 ```tsx
-<SplitButton
-	label="Merge"
-	caretLabel="More merge options"
-	onClick={() => {}}
-	menu={[
-		{ label: "Squash and merge", onSelect: () => {} },
-		{ label: "Rebase and merge", onSelect: () => {} },
-	]}
-/>
+function Example() {
+	const strategy = signal("Merge");
+	const merged = signal("");
+	return (
+		<Stack gap="0.5rem">
+			<SplitButton
+				label={strategy()}
+				caretLabel="More merge options"
+				onClick={() => merged.set(`${strategy()} done`)}
+				menu={[
+					{ label: "Merge", onSelect: () => strategy.set("Merge") },
+					{ label: "Squash and merge", onSelect: () => strategy.set("Squash and merge") },
+					{ label: "Rebase and merge", onSelect: () => strategy.set("Rebase and merge") },
+				]}
+			/>
+			<Text muted>{merged() || "Pick a strategy from the caret menu."}</Text>
+		</Stack>
+	);
+}
 ```
 
 **Slots:** `root` `caret` `main` `menu`
@@ -103,17 +123,22 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Pressed-toggle group.
 
 ```tsx
-<ToggleGroup
-	label="Formatting"
-	multiple
-	items={[
-		{ id: "bold", label: "Bold" },
-		{ id: "italic", label: "Italic" },
-		{ id: "underline", label: "Underline" },
-	]}
-	value={["bold"]}
-	onChange={() => {}}
-/>
+function Example() {
+	const formats = signal<string[]>(["bold"]);
+	return (
+		<ToggleGroup
+			label="Formatting"
+			multiple
+			items={[
+				{ id: "bold", label: "Bold" },
+				{ id: "italic", label: "Italic" },
+				{ id: "underline", label: "Underline" },
+			]}
+			value={formats()}
+			onChange={(next) => formats.set(Array.isArray(next) ? next : next ? [next] : [])}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `item`
@@ -133,16 +158,21 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Pressed-button group.
 
 ```tsx
-<Segmented
-	label="Range"
-	items={[
-		{ id: "24h", label: "24h" },
-		{ id: "7d", label: "7 days" },
-		{ id: "30d", label: "30 days" },
-	]}
-	value="7d"
-	onChange={() => {}}
-/>
+function Example() {
+	const range = signal("7d");
+	return (
+		<Segmented
+			label="Range"
+			items={[
+				{ id: "24h", label: "24h" },
+				{ id: "7d", label: "7 days" },
+				{ id: "30d", label: "30 days" },
+			]}
+			value={range()}
+			onChange={range.set}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `segment`
@@ -161,7 +191,7 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Icon-only button (`label` is its accessible name).
 
 ```tsx
-<ActionIcon label="Edit project" variant="subtle">
+<ActionIcon label="Edit project" variant="subtle" onClick={() => {}}>
 	<Icon name="edit" />
 </ActionIcon>
 ```
@@ -182,7 +212,7 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Dismiss control (×).
 
 ```tsx
-<CloseButton />
+<CloseButton onClick={() => {}} />
 ```
 
 | Prop | Type | Required | Description |
@@ -198,7 +228,19 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Standalone hamburger control (Mantine Burger).
 
 ```tsx
-<Burger label="Open navigation" onClick={() => {}} />
+function Example() {
+	const opened = signal(false);
+	return (
+		<Group gap="0.75rem">
+			<Burger
+				opened={opened()}
+				label={opened() ? "Close navigation" : "Open navigation"}
+				onClick={() => opened.set(!opened())}
+			/>
+			<Text muted>Navigation is {opened() ? "open" : "closed"}</Text>
+		</Group>
+	);
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -215,7 +257,11 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Pinned primary action. `children` replaces the icon.
 
 ```tsx
-<FloatingActionButton label="New project" icon="plus" />
+<FloatingActionButton
+	label="New project"
+	icon="plus"
+	onClick={() => {}}
+/>
 ```
 
 **Slots:** `root` `icon`
@@ -336,7 +382,15 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 List / grid toggle.
 
 ```tsx
-<ViewToggle value="list" onChange={() => {}} />
+function Example() {
+	const view = signal<"list" | "grid">("list");
+	return (
+		<Group gap="0.75rem">
+			<ViewToggle value={view()} onChange={view.set} />
+			<Text muted>Showing a {view()}</Text>
+		</Group>
+	);
+}
 ```
 
 **Slots:** `root` `option`
@@ -353,7 +407,15 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Compact / comfortable density switch.
 
 ```tsx
-<DensityToggle value="compact" onChange={() => {}} />
+function Example() {
+	const density = signal<Density>("compact");
+	return (
+		<Group gap="0.75rem">
+			<DensityToggle value={density()} onChange={density.set} />
+			<Text muted>Density: {density()}</Text>
+		</Group>
+	);
+}
 ```
 
 **Slots:** `root` `option`
@@ -371,7 +433,17 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Toggle between light and dark themes.
 
 ```tsx
-<ThemeToggle value="light" onChange={() => {}} />
+function Example() {
+	const theme = signal<"light" | "dark">("light");
+	return (
+		<Paper withBorder class={theme() === "dark" ? "a-theme-dark" : undefined}>
+			<Group gap="0.75rem">
+				<ThemeToggle value={theme()} onChange={theme.set} />
+				<Text>This panel is in the {theme()} theme.</Text>
+			</Group>
+		</Paper>
+	);
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -387,13 +459,13 @@ WAI-ARIA toolbar for page-level actions: one Tab stop, arrow keys (and Home / En
 
 ```tsx
 <CommandBar label="Selection actions">
-	<Button size="sm" variant="ghost">
+	<Button size="sm" variant="ghost" onClick={() => {}}>
 		Archive
 	</Button>
-	<Button size="sm" variant="ghost">
+	<Button size="sm" variant="ghost" onClick={() => {}}>
 		Move
 	</Button>
-	<Button size="sm" variant="ghost">
+	<Button size="sm" variant="ghost" onClick={() => {}}>
 		Delete
 	</Button>
 </CommandBar>
@@ -413,13 +485,13 @@ Floating toolbar for contextual actions (e.g. over a selection): a WAI-ARIA tool
 
 ```tsx
 <FloatingToolbar label="Text formatting">
-	<Button size="sm" variant="ghost">
+	<Button size="sm" variant="ghost" onClick={() => {}}>
 		Bold
 	</Button>
-	<Button size="sm" variant="ghost">
+	<Button size="sm" variant="ghost" onClick={() => {}}>
 		Italic
 	</Button>
-	<Button size="sm" variant="ghost">
+	<Button size="sm" variant="ghost" onClick={() => {}}>
 		Link
 	</Button>
 </FloatingToolbar>
@@ -437,11 +509,25 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Selection action bar.
 
 ```tsx
-<BulkBar count={3} onClear={() => {}}>
-	<Button size="sm" variant="outline">
-		Archive
-	</Button>
-</BulkBar>
+function Example() {
+	const selected = signal(3);
+	return (
+		<Show
+			when={selected() > 0}
+			fallback={
+				<Button size="sm" variant="outline" onClick={() => selected.set(3)}>
+					Select 3 deploys
+				</Button>
+			}
+		>
+			<BulkBar count={selected()} onClear={() => selected.set(0)}>
+				<Button size="sm" variant="outline" onClick={() => selected.set(0)}>
+					Archive
+				</Button>
+			</BulkBar>
+		</Show>
+	);
+}
 ```
 
 **Slots:** `root` `actions` `clear` `count`

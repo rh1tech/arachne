@@ -528,7 +528,38 @@ export type ScrollSpyProps = SlotProps<ScrollSpySlot> & {
 	label?: string | undefined;
 };
 
-/** Highlights the section currently in view. Slots: `root` `item`. */
+/** Nearest scrollable ancestor of `el`, or `null` for the page itself. */
+function scrollParent(el: HTMLElement): HTMLElement | null {
+	for (let node = el.parentElement; node && node !== document.body; node = node.parentElement) {
+		const overflow = getComputedStyle(node).overflowY;
+		if ((overflow === "auto" || overflow === "scroll") && node.scrollHeight > node.clientHeight)
+			return node;
+	}
+	return null;
+}
+
+/** The last section scrolled past `offset` (or the last one once scrolled to the end). */
+function activeSection(ids: string[], offset: number): string {
+	const sections = ids.flatMap((id) => document.getElementById(id) ?? []);
+	const first = sections[0];
+	if (!first) return ids[0] ?? "";
+	const container = scrollParent(first);
+	const top = container ? container.getBoundingClientRect().top : 0;
+	let current = first.id;
+	for (const el of sections)
+		if (el.getBoundingClientRect().top - top - offset <= 0) current = el.id;
+	// Scrolled to the end: the last sections may never reach the top.
+	const scroller = container ?? document.documentElement;
+	const atEnd =
+		scroller.scrollTop > 0 &&
+		scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 2;
+	return atEnd ? (sections[sections.length - 1]?.id ?? current) : current;
+}
+
+/**
+ * Highlights the section currently in view, in the page or in the sections'
+ * scroll container. Slots: `root` `item`.
+ */
 export function ScrollSpy(input: ScrollSpyProps) {
 	const [props, rest, slot] = setup(
 		"ScrollSpy",
@@ -542,18 +573,11 @@ export function ScrollSpy(input: ScrollSpyProps) {
 	effect(() => {
 		const ids = props.items.map((i) => i.id);
 		const offset = props.offset ?? 96;
-		const onScroll = () => {
-			let current = ids[0] ?? "";
-			for (const id of ids) {
-				const el = document.getElementById(id);
-				if (!el) continue;
-				if (el.getBoundingClientRect().top - offset <= 0) current = id;
-			}
-			active.set(current);
-		};
+		const onScroll = () => active.set(activeSection(ids, offset));
 		onScroll();
-		window.addEventListener("scroll", onScroll, { passive: true });
-		return () => window.removeEventListener("scroll", onScroll);
+		// Capture: scroll events don't bubble, so this sees window *and* container scrolling.
+		document.addEventListener("scroll", onScroll, { passive: true, capture: true });
+		return () => document.removeEventListener("scroll", onScroll, { capture: true });
 	});
 
 	return (
@@ -574,9 +598,11 @@ export function ScrollSpy(input: ScrollSpyProps) {
 							aria-current={current() ? "location" : undefined}
 							data-state={current() ? "active" : "inactive"}
 							onClick={() => {
-								document
-									.getElementById(item.id)
-									?.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth" });
+								active.set(item.id);
+								document.getElementById(item.id)?.scrollIntoView({
+									behavior: prefersReducedMotion() ? "auto" : "smooth",
+									block: "start",
+								});
 							}}
 						>
 							{item.label}

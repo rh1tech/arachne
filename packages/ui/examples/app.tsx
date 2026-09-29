@@ -1,3 +1,5 @@
+import { For, Show } from "@arachne/render";
+import { effect, signal } from "@arachne/signals";
 import {
 	Alert,
 	AnnouncementBar,
@@ -22,6 +24,7 @@ import {
 	FilterChip,
 	FormFooter,
 	GalleryGrid,
+	Group,
 	Heading,
 	Icon,
 	IconBadge,
@@ -46,6 +49,7 @@ import {
 	Reel,
 	ResultCount,
 	ReviewCard,
+	ScrollArea,
 	SecretField,
 	SettingsRow,
 	ShareButton,
@@ -69,10 +73,278 @@ import {
 	ViewToggle,
 	WizardNav,
 } from "../src/index.ts";
+import { action } from "./actions.ts";
 import { swatch } from "./placeholder.ts";
-import type { Example } from "./types.ts";
+import type { Example, ExampleProps } from "./types.ts";
 
-const noop = () => {};
+function AnnouncementBarExample(p: ExampleProps) {
+	const visible = signal(true);
+	return (
+		<Show
+			when={visible()}
+			fallback={
+				<Button size="sm" variant="outline" onClick={() => visible.set(true)}>
+					Show announcement again
+				</Button>
+			}
+		>
+			<AnnouncementBar {...p} tone="accent" dismissible onDismiss={() => visible.set(false)}>
+				Arachne 2.4 is out — dark theme and a new component reference.
+			</AnnouncementBar>
+		</Show>
+	);
+}
+
+function QuantityInputExample(p: ExampleProps) {
+	const quantity = signal(2);
+	return <QuantityInput {...p} min={1} max={10} value={quantity()} onChange={quantity.set} />;
+}
+
+function ProductCardExample(p: ExampleProps) {
+	const inCart = signal(0);
+	return (
+		<Stack gap="0.5rem">
+			<ProductCard
+				{...p}
+				title="Stoneware mug"
+				order={3}
+				price={24}
+				strike={32}
+				badge="Sale"
+				image={swatch(28, "Mug", 480, 360)}
+				imageAlt="Terracotta stoneware mug"
+				onAdd={() => inCart.set(inCart() + 1)}
+			/>
+			<Text muted>In cart: {inCart()}</Text>
+		</Stack>
+	);
+}
+
+function CartLineExample(p: ExampleProps) {
+	const quantity = signal(2);
+	const removed = signal(false);
+	return (
+		<Show
+			when={!removed()}
+			fallback={
+				<Button size="sm" variant="outline" onClick={() => removed.set(false)}>
+					Undo remove
+				</Button>
+			}
+		>
+			<CartLine
+				{...p}
+				title="Stoneware mug"
+				price={24}
+				quantity={quantity()}
+				image={swatch(28, "Mug", 160, 160)}
+				onQuantityChange={quantity.set}
+				onRemove={() => removed.set(true)}
+			/>
+		</Show>
+	);
+}
+
+function LocaleSwitcherExample(p: ExampleProps) {
+	const locale = signal("en");
+	return (
+		<LocaleSwitcher
+			{...p}
+			label="Language"
+			value={locale()}
+			options={[
+				{ value: "en", label: "English" },
+				{ value: "de", label: "Deutsch" },
+				{ value: "ja", label: "日本語" },
+			]}
+			onChange={locale.set}
+		/>
+	);
+}
+
+function ReactionBarExample(p: ExampleProps) {
+	const reactions = signal([
+		{ emoji: "👍", count: 12, active: true },
+		{ emoji: "🎉", count: 4, active: false },
+		{ emoji: "👀", count: 2, active: false },
+	]);
+	const toggle = (emoji: string) =>
+		reactions.set(
+			reactions().map((r) =>
+				r.emoji === emoji ? { ...r, active: !r.active, count: r.count + (r.active ? -1 : 1) } : r,
+			),
+		);
+	return <ReactionBar {...p} reactions={reactions()} onToggle={toggle} />;
+}
+
+function ViewToggleExample(p: ExampleProps) {
+	const view = signal<"list" | "grid">("list");
+	return (
+		<Group gap="0.75rem">
+			<ViewToggle {...p} value={view()} onChange={view.set} />
+			<Text muted>Showing a {view()}</Text>
+		</Group>
+	);
+}
+
+function FilterChipExample(p: ExampleProps) {
+	const filters = signal(["Status: failed", "Branch: main", "Author: ada"]);
+	return (
+		<Group gap="0.5rem">
+			<For each={filters()}>
+				{(filter) => (
+					<FilterChip
+						{...p}
+						label={filter}
+						onRemove={() => filters.set(filters().filter((f) => f !== filter))}
+					/>
+				)}
+			</For>
+			<Show when={filters().length < 3}>
+				<Button
+					size="sm"
+					variant="ghost"
+					onClick={() => filters.set(["Status: failed", "Branch: main", "Author: ada"])}
+				>
+					Reset filters
+				</Button>
+			</Show>
+		</Group>
+	);
+}
+
+function BulkBarExample(p: ExampleProps) {
+	const selected = signal(3);
+	return (
+		<Show
+			when={selected() > 0}
+			fallback={
+				<Button size="sm" variant="outline" onClick={() => selected.set(3)}>
+					Select 3 deploys
+				</Button>
+			}
+		>
+			<BulkBar {...p} count={selected()} onClear={() => selected.set(0)}>
+				<Button size="sm" variant="outline" onClick={() => selected.set(0)}>
+					Archive
+				</Button>
+			</BulkBar>
+		</Show>
+	);
+}
+
+function InfiniteScrollExample(p: ExampleProps) {
+	const deploys = signal(Array.from({ length: 6 }, (_, i) => 128 - i));
+	const loading = signal(false);
+	const hasMore = () => deploys().length < 30;
+	const loadMore = () => {
+		if (loading() || !hasMore()) return;
+		loading.set(true);
+		setTimeout(() => {
+			const last = deploys()[deploys().length - 1] ?? 128;
+			deploys.set([...deploys(), ...Array.from({ length: 6 }, (_, i) => last - 1 - i)]);
+			loading.set(false);
+		}, 600);
+	};
+	return (
+		<ScrollArea maxHeight="12rem">
+			<InfiniteScroll {...p} onLoadMore={loadMore} hasMore={hasMore()} loading={loading()}>
+				<Stack gap="0.5rem">
+					<For each={deploys()}>{(n) => <Text>Deploy #{n}</Text>}</For>
+				</Stack>
+			</InfiniteScroll>
+		</ScrollArea>
+	);
+}
+
+function ToggleRowExample(p: ExampleProps) {
+	const previews = signal(true);
+	return (
+		<ToggleRow
+			{...p}
+			label="Preview deploys"
+			description="Deploy every pull request to a unique URL."
+			checked={previews()}
+			onChange={previews.set}
+		/>
+	);
+}
+
+function UploadItemExample(p: ExampleProps) {
+	const progress = signal(12);
+	const cancelled = signal(false);
+	// Simulated upload; effects run only in the browser.
+	effect(() => {
+		const timer = setInterval(() => {
+			if (!cancelled() && progress() < 100) progress.set(Math.min(100, progress() + 8));
+		}, 400);
+		return () => clearInterval(timer);
+	});
+	return (
+		<Show
+			when={!cancelled()}
+			fallback={
+				<Button
+					size="sm"
+					variant="outline"
+					onClick={() => {
+						progress.set(0);
+						cancelled.set(false);
+					}}
+				>
+					Upload again
+				</Button>
+			}
+		>
+			<UploadItem
+				{...p}
+				name="hero@2x.png"
+				progress={progress()}
+				onCancel={() => cancelled.set(true)}
+			/>
+		</Show>
+	);
+}
+
+function WizardNavExample(p: ExampleProps) {
+	const steps = ["Account", "Team", "Billing", "Done"];
+	const step = signal(0);
+	return (
+		<Stack gap="0.75rem">
+			<Text>
+				Step {step() + 1} of {steps.length}: <strong>{steps[step()]}</strong>
+			</Text>
+			<WizardNav
+				{...p}
+				canBack={step() > 0}
+				canNext={step() < steps.length - 1}
+				nextLabel={step() === steps.length - 2 ? "Finish" : "Continue"}
+				onBack={() => step.set(step() - 1)}
+				onNext={() => step.set(step() + 1)}
+			/>
+		</Stack>
+	);
+}
+
+function TableOfContentsExample(p: ExampleProps) {
+	const current = signal("install");
+	const sections = [
+		{ id: "install", label: "Installation" },
+		{ id: "usage", label: "Usage" },
+		{ id: "theming", label: "Theming" },
+	];
+	return (
+		<TableOfContents
+			{...p}
+			title="On this page"
+			items={sections.map((s) => ({
+				...s,
+				active: current() === s.id,
+				onSelect: () => current.set(s.id),
+			}))}
+		/>
+	);
+}
 
 /** One example per exported component of this group (showcase, docs and contract tests use these). */
 export const examples: Example[] = [
@@ -112,7 +384,7 @@ export const examples: Example[] = [
 				{...p}
 				title="No projects yet"
 				description="Create a project to start deploying."
-				action={<Button>New project</Button>}
+				action={<Button onClick={action("New project")}>New project</Button>}
 			/>
 		),
 	},
@@ -135,46 +407,26 @@ export const examples: Example[] = [
 	// icons.tsx
 	{ name: "Icon", render: (p) => <Icon {...p} name="bell" /> },
 	{ name: "IconBadge", render: (p) => <IconBadge {...p} name="zap" tone="accent" /> },
-	{ name: "CloseButton", render: (p) => <CloseButton {...p} /> },
+	{ name: "CloseButton", render: (p) => <CloseButton {...p} onClick={action("close")} /> },
 	// kit-app.tsx
-	{
-		name: "AnnouncementBar",
-		render: (p) => (
-			<AnnouncementBar {...p} tone="accent" dismissible onDismiss={noop}>
-				Arachne 2.4 is out — dark theme and a new component reference.
-			</AnnouncementBar>
-		),
-	},
+	{ name: "AnnouncementBar", render: (p) => <AnnouncementBarExample {...p} /> },
 	{
 		name: "CommandBar",
 		render: (p) => (
 			<CommandBar {...p} label="Selection actions">
-				<Button size="sm" variant="ghost">
+				<Button size="sm" variant="ghost" onClick={action("Archive")}>
 					Archive
 				</Button>
-				<Button size="sm" variant="ghost">
+				<Button size="sm" variant="ghost" onClick={action("Move")}>
 					Move
 				</Button>
-				<Button size="sm" variant="ghost">
+				<Button size="sm" variant="ghost" onClick={action("Delete")}>
 					Delete
 				</Button>
 			</CommandBar>
 		),
 	},
-	{
-		name: "TableOfContents",
-		render: (p) => (
-			<TableOfContents
-				{...p}
-				title="On this page"
-				items={[
-					{ id: "install", label: "Installation", active: true },
-					{ id: "usage", label: "Usage" },
-					{ id: "theming", label: "Theming" },
-				]}
-			/>
-		),
-	},
+	{ name: "TableOfContents", render: (p) => <TableOfContentsExample {...p} /> },
 	{
 		name: "PropertyList",
 		render: (p) => (
@@ -192,38 +444,10 @@ export const examples: Example[] = [
 		name: "StatCard",
 		render: (p) => <StatCard {...p} label="MRR" value="$48.2k" hint="vs. last month" trend={6.4} />,
 	},
-	{ name: "QuantityInput", render: (p) => <QuantityInput {...p} value={2} onChange={noop} /> },
+	{ name: "QuantityInput", render: (p) => <QuantityInputExample {...p} /> },
 	{ name: "Price", render: (p) => <Price {...p} amount={24} strike={32} period="month" /> },
-	{
-		name: "ProductCard",
-		render: (p) => (
-			<ProductCard
-				{...p}
-				title="Stoneware mug"
-				order={3}
-				price={24}
-				strike={32}
-				badge="Sale"
-				image={swatch(28, "Mug", 480, 360)}
-				imageAlt="Terracotta stoneware mug"
-				onAdd={noop}
-			/>
-		),
-	},
-	{
-		name: "CartLine",
-		render: (p) => (
-			<CartLine
-				{...p}
-				title="Stoneware mug"
-				price={24}
-				quantity={2}
-				image={swatch(28, "Mug", 160, 160)}
-				onQuantityChange={noop}
-				onRemove={noop}
-			/>
-		),
-	},
+	{ name: "ProductCard", render: (p) => <ProductCardExample {...p} /> },
+	{ name: "CartLine", render: (p) => <CartLineExample {...p} /> },
 	{
 		name: "OrderSummary",
 		render: (p) => (
@@ -244,26 +468,15 @@ export const examples: Example[] = [
 	},
 	{ name: "CopyId", render: (p) => <CopyId {...p} value="prj_8f3k29dz" /> },
 	{ name: "EnvBadge", render: (p) => <EnvBadge {...p} env="staging" /> },
-	{
-		name: "LocaleSwitcher",
-		render: (p) => (
-			<LocaleSwitcher
-				{...p}
-				label="Language"
-				value="en"
-				options={[
-					{ value: "en", label: "English" },
-					{ value: "de", label: "Deutsch" },
-					{ value: "ja", label: "日本語" },
-				]}
-				onChange={noop}
-			/>
-		),
-	},
+	{ name: "LocaleSwitcher", render: (p) => <LocaleSwitcherExample {...p} /> },
 	{
 		name: "OrgSwitcher",
 		render: (p) => (
-			<OrgSwitcher {...p} org={{ id: "acme", name: "Acme Inc.", plan: "Pro" }} onClick={noop} />
+			<OrgSwitcher
+				{...p}
+				org={{ id: "acme", name: "Acme Inc.", plan: "Pro" }}
+				onClick={action("onClick")}
+			/>
 		),
 	},
 	{
@@ -276,29 +489,16 @@ export const examples: Example[] = [
 				body="#421 Toast: pause on hover"
 				time="5m"
 				unread
-				onClick={noop}
+				onClick={action("onClick")}
 			/>
 		),
 	},
-	{
-		name: "ReactionBar",
-		render: (p) => (
-			<ReactionBar
-				{...p}
-				reactions={[
-					{ emoji: "👍", count: 12, active: true },
-					{ emoji: "🎉", count: 4 },
-					{ emoji: "👀", count: 2 },
-				]}
-				onToggle={noop}
-			/>
-		),
-	},
+	{ name: "ReactionBar", render: (p) => <ReactionBarExample {...p} /> },
 	{
 		name: "Mention",
 		render: (p) => (
 			<Text>
-				Thanks <Mention {...p} name="ada" />, merging now.
+				Thanks <Mention {...p} name="ada" onClick={action("open profile")} />, merging now.
 			</Text>
 		),
 	},
@@ -332,22 +532,10 @@ export const examples: Example[] = [
 			/>
 		),
 	},
-	{ name: "ViewToggle", render: (p) => <ViewToggle {...p} value="list" onChange={noop} /> },
+	{ name: "ViewToggle", render: (p) => <ViewToggleExample {...p} /> },
 	{ name: "ResultCount", render: (p) => <ResultCount {...p} count={1284} label="deploys" /> },
-	{
-		name: "FilterChip",
-		render: (p) => <FilterChip {...p} label="Status: failed" onRemove={noop} />,
-	},
-	{
-		name: "BulkBar",
-		render: (p) => (
-			<BulkBar {...p} count={3} onClear={noop}>
-				<Button size="sm" variant="outline">
-					Archive
-				</Button>
-			</BulkBar>
-		),
-	},
+	{ name: "FilterChip", render: (p) => <FilterChipExample {...p} /> },
+	{ name: "BulkBar", render: (p) => <BulkBarExample {...p} /> },
 	{ name: "LiveBadge", render: (p) => <LiveBadge {...p} /> },
 	{
 		name: "UnreadBadge",
@@ -361,17 +549,7 @@ export const examples: Example[] = [
 		name: "SecretField",
 		render: (p) => <SecretField {...p} label="Webhook secret" value="whsec_9f2kQ83m1x" />,
 	},
-	{
-		name: "InfiniteScroll",
-		render: (p) => (
-			<InfiniteScroll {...p} onLoadMore={noop} hasMore>
-				<Stack gap="0.5rem">
-					<Text>Deploy #128 — production</Text>
-					<Text>Deploy #127 — preview</Text>
-				</Stack>
-			</InfiniteScroll>
-		),
-	},
+	{ name: "InfiniteScroll", render: (p) => <InfiniteScrollExample {...p} /> },
 	// kit-extra.tsx
 	{
 		name: "PresenceAvatar",
@@ -427,7 +605,7 @@ export const examples: Example[] = [
 	},
 	{
 		name: "ConfirmButton",
-		render: (p) => <ConfirmButton {...p} label="Delete project" onConfirm={noop} />,
+		render: (p) => <ConfirmButton {...p} label="Delete project" onConfirm={action("onConfirm")} />,
 	},
 	{
 		name: "SettingsRow",
@@ -440,18 +618,7 @@ export const examples: Example[] = [
 			/>
 		),
 	},
-	{
-		name: "ToggleRow",
-		render: (p) => (
-			<ToggleRow
-				{...p}
-				label="Preview deploys"
-				description="Deploy every pull request to a unique URL."
-				checked
-				onChange={noop}
-			/>
-		),
-	},
+	{ name: "ToggleRow", render: (p) => <ToggleRowExample {...p} /> },
 	{
 		name: "DangerZone",
 		render: (p) => (
@@ -460,7 +627,9 @@ export const examples: Example[] = [
 				title="Delete project"
 				description="This permanently removes all deploys and domains."
 			>
-				<Button variant="outline">Delete marketing-site</Button>
+				<Button variant="outline" onClick={action("Delete marketing-site")}>
+					Delete marketing-site
+				</Button>
 			</DangerZone>
 		),
 	},
@@ -469,7 +638,9 @@ export const examples: Example[] = [
 		render: (p) => (
 			<StickyBar {...p} position="bottom">
 				<Text>You have unsaved changes.</Text>
-				<Button size="sm">Save</Button>
+				<Button size="sm" onClick={action("Save")}>
+					Save
+				</Button>
 			</StickyBar>
 		),
 	},
@@ -556,21 +727,24 @@ export const examples: Example[] = [
 		name: "LogoCloud",
 		render: (p) => <LogoCloud {...p} items={["Acme", "Globex", "Initech", "Umbrella"]} />,
 	},
-	{
-		name: "UploadItem",
-		render: (p) => <UploadItem {...p} name="hero@2x.png" progress={64} onCancel={noop} />,
-	},
-	{
-		name: "WizardNav",
-		render: (p) => <WizardNav {...p} canBack canNext onBack={noop} onNext={noop} />,
-	},
+	{ name: "UploadItem", render: (p) => <UploadItemExample {...p} /> },
+	{ name: "WizardNav", render: (p) => <WizardNavExample {...p} /> },
 	{
 		name: "FormFooter",
 		render: (p) => (
-			<FormFooter {...p}>
-				<Button variant="ghost">Cancel</Button>
-				<Button type="submit">Save changes</Button>
-			</FormFooter>
+			<form
+				onSubmit={(e: SubmitEvent) => {
+					e.preventDefault();
+					action("submit")();
+				}}
+			>
+				<FormFooter {...p}>
+					<Button variant="ghost" onClick={action("Cancel")}>
+						Cancel
+					</Button>
+					<Button type="submit">Save changes</Button>
+				</FormFooter>
+			</form>
 		),
 	},
 	{

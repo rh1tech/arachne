@@ -71,7 +71,12 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 API endpoint row: method, path and summary.
 
 ```tsx
-<EndpointRow method="POST" path="/v1/projects/{id}/deploys" summary="Start a deploy" />
+<EndpointRow
+	method="POST"
+	path="/v1/projects/{id}/deploys"
+	summary="Start a deploy"
+	onClick={() => {}}
+/>
 ```
 
 **Slots:** `root` `path` `summary`
@@ -145,7 +150,11 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Commit SHA and message chip.
 
 ```tsx
-<CommitChip sha="3f9c2e7a41d0b8" />
+<CommitChip
+	sha="3f9c2e7a41d0b8"
+	message="Fix toast focus"
+	onClick={() => {}}
+/>
 ```
 
 **Slots:** `root` `message` `sha`
@@ -181,7 +190,11 @@ Profile header with cover, avatar, name, handle, bio and actions.
 	name="Ada Lovelace"
 	handle="@ada"
 	bio="Analyst of engines. Writes the first programs."
-	actions={<Button variant="outline">Follow</Button>}
+	actions={
+		<Button variant="outline" onClick={() => {}}>
+			Follow
+		</Button>
+	}
 />
 ```
 
@@ -203,7 +216,28 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Team member row with avatar, email and remove action.
 
 ```tsx
-<MemberRow name="Grace Hopper" email="grace@navy.mil" onRemove={() => {}} />
+function Example() {
+	const members = signal([
+		{ name: "Grace Hopper", email: "grace@navy.mil" },
+		{ name: "Alan Turing", email: "alan@bletchley.uk" },
+	]);
+	return (
+		<Stack gap="0.25rem">
+			<For each={members()}>
+				{(member) => (
+					<MemberRow
+						name={member.name}
+						email={member.email}
+						onRemove={() => members.set(members().filter((m) => m !== member))}
+					/>
+				)}
+			</For>
+			<Show when={members().length === 0}>
+				<Text muted>No members left.</Text>
+			</Show>
+		</Stack>
+	);
+}
 ```
 
 **Slots:** `root` `avatar` `email` `meta` `name` `remove`
@@ -237,7 +271,19 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Pending invitation with resend and revoke actions.
 
 ```tsx
-<InviteCard email="linus@example.com" onResend={() => {}} onRevoke={() => {}} />
+function Example() {
+	const status = signal("Invitation pending");
+	return (
+		<Stack gap="0.5rem">
+			<InviteCard
+				email="linus@example.com"
+				onResend={() => status.set("Invitation re-sent just now")}
+				onRevoke={() => status.set("Invitation revoked")}
+			/>
+			<Text muted>{status()}</Text>
+		</Stack>
+	);
+}
 ```
 
 **Slots:** `root` `actions` `email` `meta`
@@ -286,7 +332,25 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Attached file with icon, name, metadata and remove action.
 
 ```tsx
-<FileCard name="Q3-report.pdf" meta="2.4 MB · PDF" onRemove={() => {}} />
+function Example() {
+	const attached = signal(true);
+	return (
+		<Show
+			when={attached()}
+			fallback={
+				<Button size="sm" variant="outline" onClick={() => attached.set(true)}>
+					Attach Q3-report.pdf
+				</Button>
+			}
+		>
+			<FileCard
+				name="Q3-report.pdf"
+				meta="2.4 MB · PDF"
+				onRemove={() => attached.set(false)}
+			/>
+		</Show>
+	);
+}
 ```
 
 **Slots:** `root` `icon` `meta` `name` `remove` `text`

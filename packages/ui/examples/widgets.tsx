@@ -1,3 +1,5 @@
+import { Show } from "@arachne/render";
+import { effect, signal } from "@arachne/signals";
 import {
 	ActionIcon,
 	Affix,
@@ -63,15 +65,238 @@ import {
 	UnstyledButton,
 	YearPicker,
 } from "../src/index.ts";
+import { action } from "./actions.ts";
 import { swatch } from "./placeholder.ts";
-import type { Example } from "./types.ts";
+import type { Example, ExampleProps } from "./types.ts";
 
-const noop = () => {};
 const sections = [
 	{ id: "overview", label: "Overview" },
 	{ id: "deploys", label: "Deploys" },
 	{ id: "settings", label: "Settings" },
 ];
+
+function AppShellExample(p: ExampleProps) {
+	const page = signal("deploys");
+	return (
+		<AppShell
+			contentAs="div"
+			{...p}
+			header={<strong>Acme Console</strong>}
+			sidebar={<SidebarNav label="Main" items={sections} value={page()} onChange={page.set} />}
+		>
+			<Text>{sections.find((s) => s.id === page())?.label} page</Text>
+		</AppShell>
+	);
+}
+
+function SidebarNavExample(p: ExampleProps) {
+	const page = signal("deploys");
+	return <SidebarNav {...p} label="Project" items={sections} value={page()} onChange={page.set} />;
+}
+
+function SegmentedExample(p: ExampleProps) {
+	const range = signal("7d");
+	return (
+		<Segmented
+			{...p}
+			label="Range"
+			items={[
+				{ id: "24h", label: "24h" },
+				{ id: "7d", label: "7 days" },
+				{ id: "30d", label: "30 days" },
+			]}
+			value={range()}
+			onChange={range.set}
+		/>
+	);
+}
+
+function StepsExample(p: ExampleProps) {
+	const step = signal("shipping");
+	return (
+		<Steps
+			{...p}
+			label="Checkout"
+			items={[
+				{ id: "cart", label: "Cart" },
+				{ id: "shipping", label: "Shipping", description: "Address and method" },
+				{ id: "payment", label: "Payment" },
+			]}
+			value={step()}
+			onChange={step.set}
+		/>
+	);
+}
+
+function DocMenuExample(p: ExampleProps) {
+	const page = signal("install");
+	return (
+		<DocMenu
+			{...p}
+			label="Documentation pages"
+			sections={[
+				{
+					id: "start",
+					label: "Getting started",
+					items: [
+						{ id: "install", label: "Installation" },
+						{ id: "theming", label: "Theming" },
+					],
+				},
+				{ id: "changelog", label: "Changelog" },
+			]}
+			defaultOpen={["start"]}
+			value={page()}
+			onChange={page.set}
+		/>
+	);
+}
+
+function CollapseExample(p: ExampleProps) {
+	const open = signal(true);
+	return (
+		<Stack gap="0.5rem">
+			<Button size="sm" variant="outline" aria-expanded={open()} onClick={() => open.set(!open())}>
+				{open() ? "Hide details" : "Show details"}
+			</Button>
+			<Collapse {...p} open={open()}>
+				<Text>Collapsible content animates its height when toggled.</Text>
+			</Collapse>
+		</Stack>
+	);
+}
+
+function LoadingOverlayExample(p: ExampleProps) {
+	const loading = signal(true);
+	const refresh = () => loading.set(true);
+	// Pretend each refresh takes 1.5 s (effects run only in the browser).
+	effect(() => {
+		if (!loading()) return;
+		const timer = setTimeout(() => loading.set(false), 1500);
+		return () => clearTimeout(timer);
+	});
+	return (
+		<Stack gap="0.5rem">
+			<Box style={{ position: "relative", "min-height": "6rem" }}>
+				<Text>Deploy list</Text>
+				<LoadingOverlay {...p} visible={loading()} label="Refreshing" />
+			</Box>
+			<Button size="sm" variant="outline" onClick={refresh} disabled={loading()}>
+				Refresh
+			</Button>
+		</Stack>
+	);
+}
+
+function SplitButtonExample(p: ExampleProps) {
+	const strategy = signal("Merge");
+	const merged = signal("");
+	return (
+		<Stack gap="0.5rem">
+			<SplitButton
+				{...p}
+				label={strategy()}
+				caretLabel="More merge options"
+				onClick={() => merged.set(`${strategy()} done`)}
+				menu={[
+					{ label: "Merge", onSelect: () => strategy.set("Merge") },
+					{ label: "Squash and merge", onSelect: () => strategy.set("Squash and merge") },
+					{ label: "Rebase and merge", onSelect: () => strategy.set("Rebase and merge") },
+				]}
+			/>
+			<Text muted>{merged() || "Pick a strategy from the caret menu."}</Text>
+		</Stack>
+	);
+}
+
+function ToggleGroupExample(p: ExampleProps) {
+	const formats = signal<string[]>(["bold"]);
+	return (
+		<ToggleGroup
+			{...p}
+			label="Formatting"
+			multiple
+			items={[
+				{ id: "bold", label: "Bold" },
+				{ id: "italic", label: "Italic" },
+				{ id: "underline", label: "Underline" },
+			]}
+			value={formats()}
+			onChange={(next) => formats.set(Array.isArray(next) ? next : next ? [next] : [])}
+		/>
+	);
+}
+
+function NotificationExample(p: ExampleProps) {
+	const visible = signal(true);
+	return (
+		<Show
+			when={visible()}
+			fallback={
+				<Button size="sm" variant="outline" onClick={() => visible.set(true)}>
+					Show notification
+				</Button>
+			}
+		>
+			<Notification {...p} tone="info" title="New sign-in" onClose={() => visible.set(false)}>
+				Chrome on macOS, Berlin — just now.
+			</Notification>
+		</Show>
+	);
+}
+
+function BottomNavExample(p: ExampleProps) {
+	const tab = signal("home");
+	return (
+		<BottomNav
+			{...p}
+			label="Primary"
+			items={[
+				{ id: "home", label: "Home", icon: "home" },
+				{ id: "search", label: "Search", icon: "search" },
+				{ id: "inbox", label: "Inbox", icon: "bell" },
+			]}
+			value={tab()}
+			onChange={tab.set}
+		/>
+	);
+}
+
+function SortableListExample(p: ExampleProps) {
+	const steps = signal([
+		{ id: "install", label: "Install" },
+		{ id: "test", label: "Test" },
+		{ id: "deploy", label: "Deploy" },
+	]);
+	return <SortableList {...p} items={steps()} onChange={steps.set} />;
+}
+
+function ThumbnavExample(p: ExampleProps) {
+	const photo = signal("2");
+	return (
+		<Thumbnav
+			{...p}
+			label="Photos"
+			items={[
+				{ id: "1", src: swatch(200, "1", 120, 80), alt: "Photo 1" },
+				{ id: "2", src: swatch(150, "2", 120, 80), alt: "Photo 2" },
+				{ id: "3", src: swatch(30, "3", 120, 80), alt: "Photo 3" },
+			]}
+			value={photo()}
+			onChange={photo.set}
+		/>
+	);
+}
+
+function YearPickerExample(p: ExampleProps) {
+	const year = signal(2026);
+	return (
+		<>
+			<YearPicker {...p} value={year()} onChange={year.set} />
+			<Text muted>Selected: {year()}</Text>
+		</>
+	);
+}
 
 /** One example per exported component of this group (showcase, docs and contract tests use these). */
 export const examples: Example[] = [
@@ -141,57 +366,11 @@ export const examples: Example[] = [
 		),
 	},
 	// appshell.tsx
-	{
-		name: "AppShell",
-		render: (p) => (
-			<AppShell
-				contentAs="div"
-				{...p}
-				header={<strong>Acme Console</strong>}
-				sidebar={<SidebarNav label="Main" items={sections} value="deploys" />}
-			>
-				<Text>Main content</Text>
-			</AppShell>
-		),
-	},
-	{
-		name: "SidebarNav",
-		render: (p) => (
-			<SidebarNav {...p} label="Project" items={sections} value="deploys" onChange={noop} />
-		),
-	},
-	{
-		name: "Segmented",
-		render: (p) => (
-			<Segmented
-				{...p}
-				label="Range"
-				items={[
-					{ id: "24h", label: "24h" },
-					{ id: "7d", label: "7 days" },
-					{ id: "30d", label: "30 days" },
-				]}
-				value="7d"
-				onChange={noop}
-			/>
-		),
-	},
+	{ name: "AppShell", render: (p) => <AppShellExample {...p} /> },
+	{ name: "SidebarNav", render: (p) => <SidebarNavExample {...p} /> },
+	{ name: "Segmented", render: (p) => <SegmentedExample {...p} /> },
 	// steps.tsx
-	{
-		name: "Steps",
-		render: (p) => (
-			<Steps
-				{...p}
-				label="Checkout"
-				items={[
-					{ id: "cart", label: "Cart" },
-					{ id: "shipping", label: "Shipping", description: "Address and method" },
-					{ id: "payment", label: "Payment" },
-				]}
-				value="shipping"
-			/>
-		),
-	},
+	{ name: "Steps", render: (p) => <StepsExample {...p} /> },
 	// doc-page.tsx / doc-menu.tsx
 	{
 		name: "DocPage",
@@ -205,40 +384,20 @@ export const examples: Example[] = [
 		name: "DocExample",
 		render: (p) => (
 			<DocExample {...p} title="Primary button" code={"<Button>Save</Button>"}>
-				<Button>Save</Button>
+				<Button onClick={action("Save")}>Save</Button>
 			</DocExample>
 		),
 	},
-	{
-		name: "DocMenu",
-		render: (p) => (
-			<DocMenu
-				{...p}
-				label="Documentation pages"
-				sections={[
-					{
-						id: "start",
-						label: "Getting started",
-						items: [
-							{ id: "install", label: "Installation" },
-							{ id: "theming", label: "Theming" },
-						],
-					},
-					{ id: "changelog", label: "Changelog" },
-				]}
-				defaultOpen={["start"]}
-				value="install"
-				onChange={noop}
-			/>
-		),
-	},
+	{ name: "DocMenu", render: (p) => <DocMenuExample {...p} /> },
 	// widgets.tsx
 	{
 		name: "Group",
 		render: (p) => (
 			<Group {...p} gap="0.5rem">
-				<Button variant="ghost">Cancel</Button>
-				<Button>Save</Button>
+				<Button variant="ghost" onClick={action("Cancel")}>
+					Cancel
+				</Button>
+				<Button onClick={action("Save")}>Save</Button>
 			</Group>
 		),
 	},
@@ -265,7 +424,9 @@ export const examples: Example[] = [
 		render: (p) => (
 			<Flex {...p} justify="space-between" align="center">
 				<Text>Invoices</Text>
-				<Button size="sm">Export</Button>
+				<Button size="sm" onClick={action("Export")}>
+					Export
+				</Button>
 			</Flex>
 		),
 	},
@@ -281,7 +442,9 @@ export const examples: Example[] = [
 		name: "Affix",
 		render: (p) => (
 			<Affix {...p} position="bottom-right" offset="1rem">
-				<Button size="sm">Feedback</Button>
+				<Button size="sm" onClick={action("Feedback")}>
+					Feedback
+				</Button>
 			</Affix>
 		),
 	},
@@ -294,20 +457,14 @@ export const examples: Example[] = [
 			</Box>
 		),
 	},
-	{
-		name: "LoadingOverlay",
-		render: (p) => (
-			<Box style={{ position: "relative", "min-height": "6rem" }}>
-				<Text>Refreshing the deploy list…</Text>
-				<LoadingOverlay {...p} visible label="Refreshing" />
-			</Box>
-		),
-	},
+	{ name: "LoadingOverlay", render: (p) => <LoadingOverlayExample {...p} /> },
 	{
 		name: "Indicator",
 		render: (p) => (
 			<Indicator {...p} label={3}>
-				<Button variant="outline">Inbox</Button>
+				<Button variant="outline" onClick={action("Inbox")}>
+					Inbox
+				</Button>
 			</Indicator>
 		),
 	},
@@ -384,19 +541,12 @@ export const examples: Example[] = [
 	{
 		name: "ActionIcon",
 		render: (p) => (
-			<ActionIcon {...p} label="Edit project" variant="subtle">
+			<ActionIcon {...p} label="Edit project" variant="subtle" onClick={action("edit")}>
 				<Icon name="edit" />
 			</ActionIcon>
 		),
 	},
-	{
-		name: "Collapse",
-		render: (p) => (
-			<Collapse {...p} open>
-				<Text>Collapsible content animates its height when toggled.</Text>
-			</Collapse>
-		),
-	},
+	{ name: "Collapse", render: (p) => <CollapseExample {...p} /> },
 	{
 		name: "Spoiler",
 		render: (p) => (
@@ -462,50 +612,30 @@ export const examples: Example[] = [
 	// composite.tsx
 	{
 		name: "UnstyledButton",
-		render: (p) => <UnstyledButton {...p}>Plain clickable text</UnstyledButton>,
+		render: (p) => (
+			<UnstyledButton {...p} onClick={action("click")}>
+				Plain clickable text
+			</UnstyledButton>
+		),
 	},
 	{
 		name: "ButtonGroup",
 		render: (p) => (
 			<ButtonGroup {...p} label="Text alignment">
-				<Button variant="outline">Left</Button>
-				<Button variant="outline">Center</Button>
-				<Button variant="outline">Right</Button>
+				<Button variant="outline" onClick={action("Left")}>
+					Left
+				</Button>
+				<Button variant="outline" onClick={action("Center")}>
+					Center
+				</Button>
+				<Button variant="outline" onClick={action("Right")}>
+					Right
+				</Button>
 			</ButtonGroup>
 		),
 	},
-	{
-		name: "SplitButton",
-		render: (p) => (
-			<SplitButton
-				{...p}
-				label="Merge"
-				caretLabel="More merge options"
-				onClick={noop}
-				menu={[
-					{ label: "Squash and merge", onSelect: noop },
-					{ label: "Rebase and merge", onSelect: noop },
-				]}
-			/>
-		),
-	},
-	{
-		name: "ToggleGroup",
-		render: (p) => (
-			<ToggleGroup
-				{...p}
-				label="Formatting"
-				multiple
-				items={[
-					{ id: "bold", label: "Bold" },
-					{ id: "italic", label: "Italic" },
-					{ id: "underline", label: "Underline" },
-				]}
-				value={["bold"]}
-				onChange={noop}
-			/>
-		),
-	},
+	{ name: "SplitButton", render: (p) => <SplitButtonExample {...p} /> },
+	{ name: "ToggleGroup", render: (p) => <ToggleGroupExample {...p} /> },
 	{
 		name: "AvatarGroup",
 		render: (p) => (
@@ -516,48 +646,20 @@ export const examples: Example[] = [
 			/>
 		),
 	},
-	{
-		name: "Notification",
-		render: (p) => (
-			<Notification {...p} tone="info" title="New sign-in" onClose={noop}>
-				Chrome on macOS, Berlin — just now.
-			</Notification>
-		),
-	},
+	{ name: "Notification", render: (p) => <NotificationExample {...p} /> },
 	{
 		name: "FloatingActionButton",
-		render: (p) => <FloatingActionButton {...p} label="New project" icon="plus" />,
-	},
-	{
-		name: "BottomNav",
 		render: (p) => (
-			<BottomNav
+			<FloatingActionButton
 				{...p}
-				label="Primary"
-				items={[
-					{ id: "home", label: "Home", icon: "home" },
-					{ id: "search", label: "Search", icon: "search" },
-					{ id: "inbox", label: "Inbox", icon: "bell" },
-				]}
-				value="home"
-				onChange={noop}
+				label="New project"
+				icon="plus"
+				onClick={action("new project")}
 			/>
 		),
 	},
-	{
-		name: "SortableList",
-		render: (p) => (
-			<SortableList
-				{...p}
-				items={[
-					{ id: "install", label: "Install" },
-					{ id: "test", label: "Test" },
-					{ id: "deploy", label: "Deploy" },
-				]}
-				onChange={noop}
-			/>
-		),
-	},
+	{ name: "BottomNav", render: (p) => <BottomNavExample {...p} /> },
+	{ name: "SortableList", render: (p) => <SortableListExample {...p} /> },
 	{ name: "PasswordStrength", render: (p) => <PasswordStrength {...p} password="correct horse" /> },
 	{ name: "Meter", render: (p) => <Meter {...p} value={62} label="Disk usage" /> },
 	{
@@ -576,22 +678,7 @@ export const examples: Example[] = [
 			</SkipLink>
 		),
 	},
-	{
-		name: "Thumbnav",
-		render: (p) => (
-			<Thumbnav
-				{...p}
-				label="Photos"
-				items={[
-					{ id: "1", src: swatch(200, "1", 120, 80), alt: "Photo 1" },
-					{ id: "2", src: swatch(150, "2", 120, 80), alt: "Photo 2" },
-					{ id: "3", src: swatch(30, "3", 120, 80), alt: "Photo 3" },
-				]}
-				value="2"
-				onChange={noop}
-			/>
-		),
-	},
+	{ name: "Thumbnav", render: (p) => <ThumbnavExample {...p} /> },
 	{ name: "Leader", render: (p) => <Leader {...p} label="Espresso" value="$3.50" /> },
 	{
 		name: "Marquee",
@@ -651,5 +738,5 @@ export const examples: Example[] = [
 			/>
 		),
 	},
-	{ name: "YearPicker", render: (p) => <YearPicker {...p} value={2026} onChange={noop} /> },
+	{ name: "YearPicker", render: (p) => <YearPickerExample {...p} /> },
 ];

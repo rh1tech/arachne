@@ -11,8 +11,10 @@ import {
 	Drawer,
 	Group,
 	Lightbox,
+	Menu,
 	Modal,
 	Spotlight,
+	Text,
 	ToastHost,
 } from "../src/index.ts";
 import { swatch } from "./placeholder.ts";
@@ -100,7 +102,7 @@ function LightboxDemo() {
 				<Lightbox
 					images={images}
 					index={index() ?? 0}
-					onIndexChange={(i: number) => index.set(i)}
+					onChange={index.set}
 					onClose={() => index.set(null)}
 				/>
 			) : null}
@@ -158,7 +160,36 @@ function ToastDemo() {
 	);
 }
 
+function MenuDemo() {
+	const open = signal(false);
+	const last = signal("");
+	const pick = (label: string) => () => last.set(label);
+	return (
+		<Group gap="0.75rem">
+			<div style={{ position: "relative" }}>
+				<Button variant="outline" aria-expanded={open()} onClick={() => open.set(!open())}>
+					Project actions ▾
+				</Button>
+				<Menu
+					open={open()}
+					onClose={() => open.set(false)}
+					label="Project actions"
+					items={[
+						{ type: "label", label: "marketing-site" },
+						{ label: "Rename", onSelect: pick("Rename") },
+						{ label: "Duplicate", onSelect: pick("Duplicate") },
+						{ type: "separator" },
+						{ label: "Delete", onSelect: pick("Delete"), danger: true },
+					]}
+				/>
+			</div>
+			<Text muted>{last() ? `Chose “${last()}”` : "Nothing chosen yet"}</Text>
+		</Group>
+	);
+}
+
 export const demos: Record<string, () => unknown> = {
+	Menu: () => <MenuDemo />,
 	Modal: () => <ModalDemo />,
 	Drawer: () => <DrawerDemo />,
 	ConfirmDialog: () => <ConfirmDemo />,

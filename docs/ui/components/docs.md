@@ -29,7 +29,7 @@ Live preview + code snippet — the Bulma docs pattern.
 
 ```tsx
 <DocExample title="Primary button" code={"<Button>Save</Button>"}>
-	<Button>Save</Button>
+	<Button onClick={() => {}}>Save</Button>
 </DocExample>
 ```
 
@@ -50,23 +50,34 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Sidebar catalog with collapsible sections.
 
 ```tsx
-<DocMenu
-	label="Documentation pages"
-	sections={[
-		{
-			id: "start",
-			label: "Getting started",
-			items: [
-				{ id: "install", label: "Installation" },
-				{ id: "theming", label: "Theming" },
-			],
-		},
-		{ id: "changelog", label: "Changelog" },
-	]}
-	defaultOpen={["start"]}
-	value="install"
-	onChange={() => {}}
-/>
+const sections = [
+	{ id: "overview", label: "Overview" },
+	{ id: "deploys", label: "Deploys" },
+	{ id: "settings", label: "Settings" },
+];
+
+function Example() {
+	const page = signal("install");
+	return (
+		<DocMenu
+			label="Documentation pages"
+			sections={[
+				{
+					id: "start",
+					label: "Getting started",
+					items: [
+						{ id: "install", label: "Installation" },
+						{ id: "theming", label: "Theming" },
+					],
+				},
+				{ id: "changelog", label: "Changelog" },
+			]}
+			defaultOpen={["start"]}
+			value={page()}
+			onChange={page.set}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `brand` `chevron` `items` `label` `link` `list` `section`

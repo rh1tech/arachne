@@ -155,9 +155,36 @@ function localFunctions(sf: ts.SourceFile): Map<string, string> {
 	return out;
 }
 
+/** Top-level `const` data in a file (e.g. `const plans = [...]`), by name. */
+function localConsts(sf: ts.SourceFile): Map<string, string> {
+	const out = new Map<string, string>();
+	for (const stmt of sf.statements) {
+		if (!ts.isVariableStatement(stmt)) continue;
+		for (const decl of stmt.declarationList.declarations) {
+			if (ts.isIdentifier(decl.name) && decl.name.text !== "examples")
+				out.set(decl.name.text, dedent(stmt.getText(sf)).replace(/^export\s+/, ""));
+		}
+	}
+	return out;
+}
+
+/** Prepend the module-level constants a snippet uses, so it runs when copied. */
+function withConsts(code: string, consts: Map<string, string>): string {
+	const used = [...consts].filter(
+		([name]) =>
+			new RegExp(`\\b${name}\\b`).test(code) &&
+			!new RegExp(`\\b(const|let|function)\\s+${name}\\b`).test(code),
+	);
+	return used.length
+		? `${used.map(([, text]) => withImagePaths(text)).join("\n")}\n\n${code}`
+		: code;
+}
+
 /** Strip test plumbing (`p` probe param and spreads) from a helper's source. */
 function asExample(source: string, name: string, rename = true): string {
-	const cleaned = source.replace(/\(p: [^)]*\)/, "()").replace(/\s*\{\.\.\.p\}/g, "");
+	const cleaned = withImagePaths(source)
+		.replace(/\(p: [^)]*\)/, "()")
+		.replace(/\s*\{\.\.\.p\}/g, "");
 	return rename ? cleaned.replace(`function ${name}`, "function Example") : cleaned;
 }
 
@@ -189,6 +216,7 @@ const withImagePaths = (code: string) => {
 	const call = /swatch\(\s*\d+,\s*"([^"]*)"[^)]*\)/;
 	return code
 		.replace(/\{noop\}/g, "{() => {}}")
+		.replace(/\baction\("[^"]*"\)/g, "() => {}")
 		.replace(/: noop\b/g, ": () => {}")
 		.replace(new RegExp(`=\\{${call.source}\\}`, "g"), (_, label: string) => `=${path(label)}`)
 		.replace(new RegExp(call.source, "g"), (_, label: string) => path(label));
@@ -224,10 +252,11 @@ function snippetsFor(file: string): Map<string, string> {
 		ts.ScriptKind.TSX,
 	);
 	const helpers = localFunctions(sf);
+	const consts = localConsts(sf);
 	const out = new Map<string, string>();
 	const visit = (node: ts.Node) => {
 		const found = exampleCase(node, sf);
-		if (found) out.set(found[0], snippetText(found[1], sf, helpers));
+		if (found) out.set(found[0], withConsts(snippetText(found[1], sf, helpers), consts));
 		ts.forEachChild(node, visit);
 	};
 	visit(sf);
@@ -251,7 +280,10 @@ function demoSources(): Map<string, string> {
 			const demoName = node.initializer.body.getText(sf).match(/<(\w+Demo)\s*\/>/)?.[1];
 			const source = demoName ? helpers.get(demoName) : undefined;
 			if (source)
-				out.set(node.name.getText(sf), source.replace(`function ${demoName}`, "function Example"));
+				out.set(
+					node.name.getText(sf),
+					withImagePaths(source).replace(`function ${demoName}`, "function Example"),
+				);
 		}
 		ts.forEachChild(node, visit);
 	};

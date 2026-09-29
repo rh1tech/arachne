@@ -5,7 +5,7 @@
  * hand-written showcase page get their reference appended there instead.
  */
 import { For, Show } from "@arachne/render";
-import { effect } from "@arachne/signals";
+import { effect, untrack } from "@arachne/signals";
 import {
 	Code,
 	DocExample,
@@ -22,6 +22,7 @@ import {
 	Title,
 	Tr,
 } from "@arachne/ui";
+import { actionLog, clearActions } from "../../packages/ui/examples/actions.ts";
 import { categories, curatedPages } from "../../packages/ui/examples/catalog-map.ts";
 import { exampleGroups } from "../../packages/ui/examples/index.ts";
 import { type CatalogEntry, catalog } from "./catalog.generated.ts";
@@ -40,6 +41,30 @@ export const catalogSections: DocMenuSection[] = categories.map((category) => ({
 		.filter((name) => !curated.has(name))
 		.map((name) => ({ id: `${CATALOG_PREFIX}${name}`, label: name })),
 }));
+
+/** Callbacks the example fired (`action("onX")` handlers), newest first. */
+function ActionLog() {
+	return (
+		<output class="catalog-actions" aria-live="polite" aria-label="Event log">
+			<Show
+				when={actionLog().length > 0}
+				fallback={
+					<span class="catalog-actions-empty">
+						Interact with the example — callbacks show up here.
+					</span>
+				}
+			>
+				<For each={actionLog()}>
+					{(entry) => (
+						<code class="catalog-action">
+							{entry.name}({entry.args})
+						</code>
+					)}
+				</For>
+			</Show>
+		</output>
+	);
+}
 
 /** JSDoc text with `inline code` spans rendered as <Code>. */
 function RichText(props: { text: string }) {
@@ -80,6 +105,9 @@ function Preview(props: { name: string }) {
 	if (!example) return <Text muted>No example.</Text>;
 	let dispose: (() => void) | undefined;
 	effect(() => () => dispose?.());
+	// Built once, untracked (like a component): the example's own state updates
+	// patch the DOM instead of re-creating the whole example.
+	const content = untrack(() => (example.demo ? example.demo() : example.render({})));
 	return (
 		// `transform` makes the preview the containing block of fixed-position components.
 		<div
@@ -91,7 +119,7 @@ function Preview(props: { name: string }) {
 				});
 			}}
 		>
-			{example.demo ? example.demo() : example.render({})}
+			{content}
 		</div>
 	);
 }
@@ -219,6 +247,7 @@ function Parts(props: { entry: CatalogEntry }) {
 }
 
 export function CatalogPage(props: { name: string }) {
+	clearActions();
 	const entry = entries.get(props.name);
 	if (!entry) return <Text muted>Unknown component “{props.name}”.</Text>;
 	return (
@@ -229,6 +258,7 @@ export function CatalogPage(props: { name: string }) {
 				code={entry.code}
 			>
 				<Preview name={entry.name} />
+				<ActionLog />
 			</DocExample>
 			<Slots entry={entry} order={2} />
 			<Props entry={entry} order={2} />

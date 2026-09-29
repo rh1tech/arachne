@@ -1,3 +1,5 @@
+import { For, Show } from "@arachne/render";
+import { signal } from "@arachne/signals";
 import {
 	ActivityItem,
 	Anchor,
@@ -34,6 +36,7 @@ import {
 	Footer,
 	Grid,
 	GridItem,
+	Group,
 	Hero,
 	HeroBody,
 	HeroFoot,
@@ -66,6 +69,7 @@ import {
 	PanelTabs,
 	Paper,
 	RelativeTime,
+	ScrollArea,
 	ScrollSpy,
 	SearchInput,
 	Section,
@@ -81,10 +85,354 @@ import {
 	UserButton,
 	VisuallyHidden,
 } from "../src/index.ts";
+import { action } from "./actions.ts";
 import { swatch } from "./placeholder.ts";
-import type { Example } from "./types.ts";
+import type { Example, ExampleProps } from "./types.ts";
 
-const noop = () => {};
+function PanelExample(p: ExampleProps) {
+	const repos = [
+		{ name: "arachne", visibility: "public" },
+		{ name: "marketing-site", visibility: "private" },
+		{ name: "design-tokens", visibility: "public" },
+	];
+	const tab = signal("all");
+	const active = signal("arachne");
+	const shown = () => repos.filter((r) => tab() === "all" || r.visibility === tab());
+	return (
+		<Panel label="Repositories" style={{ "max-width": "22rem" }} {...p}>
+			<PanelHeading>Repositories</PanelHeading>
+			<PanelTabs>
+				<For each={["all", "public", "private"]}>
+					{(id) => (
+						<PanelTab active={tab() === id} onClick={() => tab.set(id)}>
+							{id[0]?.toUpperCase() + id.slice(1)}
+						</PanelTab>
+					)}
+				</For>
+			</PanelTabs>
+			<For each={shown()}>
+				{(repo) => (
+					<PanelBlock active={active() === repo.name} onClick={() => active.set(repo.name)}>
+						{repo.name}
+					</PanelBlock>
+				)}
+			</For>
+		</Panel>
+	);
+}
+
+function PanelTabExample(p: ExampleProps) {
+	const tab = signal("all");
+	return (
+		<Panel label="Sources">
+			<PanelTabs>
+				<PanelTab {...p} active={tab() === "all"} onClick={() => tab.set("all")}>
+					All
+				</PanelTab>
+				<PanelTab active={tab() === "forks"} onClick={() => tab.set("forks")}>
+					Forks
+				</PanelTab>
+			</PanelTabs>
+		</Panel>
+	);
+}
+
+function PanelBlockExample(p: ExampleProps) {
+	const active = signal("marketing-site");
+	return (
+		<Panel label="Recent projects">
+			<PanelBlock
+				{...p}
+				active={active() === "marketing-site"}
+				onClick={() => active.set("marketing-site")}
+			>
+				marketing-site
+			</PanelBlock>
+			<PanelBlock active={active() === "docs"} onClick={() => active.set("docs")}>
+				docs
+			</PanelBlock>
+		</Panel>
+	);
+}
+
+function MessageExample(p: ExampleProps) {
+	const visible = signal(true);
+	return (
+		<Show
+			when={visible()}
+			fallback={
+				<Button size="sm" variant="outline" onClick={() => visible.set(true)}>
+					Show message
+				</Button>
+			}
+		>
+			<Message {...p} tone="info">
+				<MessageHeader onClose={() => visible.set(false)}>Scheduled maintenance</MessageHeader>
+				<MessageBody>
+					Builds pause on Sunday 02:00–03:00 UTC while we upgrade the runners.
+				</MessageBody>
+			</Message>
+		</Show>
+	);
+}
+
+function MessageHeaderExample(p: ExampleProps) {
+	const visible = signal(true);
+	return (
+		<Show
+			when={visible()}
+			fallback={
+				<Button size="sm" variant="outline" onClick={() => visible.set(true)}>
+					Show message
+				</Button>
+			}
+		>
+			<Message tone="warning">
+				<MessageHeader {...p} onClose={() => visible.set(false)}>
+					Usage limit
+				</MessageHeader>
+				<MessageBody>You've used 92% of this month's build minutes.</MessageBody>
+			</Message>
+		</Show>
+	);
+}
+
+function BannerExample(p: ExampleProps) {
+	const visible = signal(true);
+	return (
+		<Show
+			when={visible()}
+			fallback={
+				<Button size="sm" variant="outline" onClick={() => visible.set(true)}>
+					Show banner
+				</Button>
+			}
+		>
+			<Banner
+				{...p}
+				tone="warning"
+				title="Payment failed"
+				action={
+					<Button size="sm" onClick={() => visible.set(false)}>
+						Update card
+					</Button>
+				}
+				onClose={() => visible.set(false)}
+			>
+				Your card ending in 4242 was declined.
+			</Banner>
+		</Show>
+	);
+}
+
+function ThemeToggleExample(p: ExampleProps) {
+	const theme = signal<"light" | "dark">("light");
+	return (
+		<Paper withBorder class={theme() === "dark" ? "a-theme-dark" : undefined}>
+			<Group gap="0.75rem">
+				<ThemeToggle {...p} value={theme()} onChange={theme.set} />
+				<Text>This panel is in the {theme()} theme.</Text>
+			</Group>
+		</Paper>
+	);
+}
+
+function ChoiceCardExample(p: ExampleProps) {
+	const plan = signal("pro");
+	return (
+		<Group gap="0.75rem">
+			<ChoiceCard
+				type="radio"
+				name="plan"
+				value="free"
+				checked={plan() === "free"}
+				label="Free"
+				description="For side projects"
+				onChange={(checked) => checked && plan.set("free")}
+			/>
+			<ChoiceCard
+				{...p}
+				type="radio"
+				name="plan"
+				value="pro"
+				checked={plan() === "pro"}
+				label="Pro"
+				description="$20 per seat / month"
+				onChange={(checked) => checked && plan.set("pro")}
+			/>
+		</Group>
+	);
+}
+
+function LoadMoreExample(p: ExampleProps) {
+	const count = signal(3);
+	const loading = signal(false);
+	const load = () => {
+		loading.set(true);
+		setTimeout(() => {
+			count.set(count() + 3);
+			loading.set(false);
+		}, 500);
+	};
+	return (
+		<Stack gap="0.5rem">
+			<For each={Array.from({ length: count() }, (_, i) => i + 1)}>
+				{(n) => <Text>Activity #{n}</Text>}
+			</For>
+			<LoadMore
+				{...p}
+				onLoad={load}
+				loading={loading()}
+				hasMore={count() < 12}
+				endLabel="That's everything."
+			>
+				Load 3 more
+			</LoadMore>
+		</Stack>
+	);
+}
+
+function FilterBarExample(p: ExampleProps) {
+	const query = signal("");
+	const deploys = ["marketing-site #128", "docs #127", "marketing-site #126", "api #125"];
+	return (
+		<Stack gap="0.5rem">
+			<FilterBar {...p}>
+				<SearchInput
+					aria-label="Search deploys"
+					placeholder="Search deploys"
+					value={query()}
+					onChange={query.set}
+				/>
+				<Button variant="outline" onClick={() => query.set("")}>
+					Clear
+				</Button>
+			</FilterBar>
+			<For each={deploys.filter((d) => d.includes(query()))}>{(d) => <Text>{d}</Text>}</For>
+		</Stack>
+	);
+}
+
+function BurgerExample(p: ExampleProps) {
+	const opened = signal(false);
+	return (
+		<Group gap="0.75rem">
+			<Burger
+				{...p}
+				opened={opened()}
+				label={opened() ? "Close navigation" : "Open navigation"}
+				onClick={() => opened.set(!opened())}
+			/>
+			<Text muted>Navigation is {opened() ? "open" : "closed"}</Text>
+		</Group>
+	);
+}
+
+function FileButtonExample(p: ExampleProps) {
+	const file = signal("");
+	return (
+		<Group gap="0.75rem">
+			<FileButton {...p} accept="image/*" onChange={(files) => file.set(files[0]?.name ?? "")}>
+				Upload avatar
+			</FileButton>
+			<Text muted>{file() || "No file chosen"}</Text>
+		</Group>
+	);
+}
+
+function DropzoneExample(p: ExampleProps) {
+	const files = signal<string[]>([]);
+	return (
+		<Stack gap="0.5rem">
+			<Dropzone
+				{...p}
+				multiple
+				accept=".csv"
+				onDrop={(dropped) => files.set(dropped.map((f) => f.name))}
+			>
+				Drop CSV files here, or click to browse
+			</Dropzone>
+			<Text muted>{files().length ? files().join(", ") : "No files yet"}</Text>
+		</Stack>
+	);
+}
+
+function SubnavExample(p: ExampleProps) {
+	const filter = signal("all");
+	return (
+		<Subnav
+			{...p}
+			label="Filter"
+			value={filter()}
+			onChange={filter.set}
+			items={[
+				{ id: "all", label: "All" },
+				{ id: "production", label: "Production" },
+				{ id: "preview", label: "Preview" },
+			]}
+		/>
+	);
+}
+
+function IconnavExample(p: ExampleProps) {
+	const section = signal("home");
+	return (
+		<Iconnav
+			{...p}
+			label="Workspace"
+			value={section()}
+			onChange={section.set}
+			items={[
+				{ id: "home", icon: "home", label: "Home" },
+				{ id: "alerts", icon: "bell", label: "Alerts" },
+				{ id: "settings", icon: "settings", label: "Settings" },
+			]}
+		/>
+	);
+}
+
+function ScrollSpyExample(p: ExampleProps) {
+	const sections = [
+		{ id: "spy-intro", label: "Introduction", text: "What Arachne UI is and when to use it." },
+		{
+			id: "spy-install",
+			label: "Installation",
+			text: "Add the package and import the stylesheet.",
+		},
+		{ id: "spy-usage", label: "Usage", text: "Render components and wire their state." },
+	];
+	return (
+		<Group align="start" gap="1.5rem">
+			<ScrollSpy {...p} label="On this page" offset={8} items={sections} />
+			<ScrollArea maxHeight="9rem" aria-label="Article">
+				<For each={sections}>
+					{(section) => (
+						<section id={section.id} style={{ "min-height": "7rem" }}>
+							<strong>{section.label}</strong>
+							<Text muted>{section.text}</Text>
+						</section>
+					)}
+				</For>
+			</ScrollArea>
+		</Group>
+	);
+}
+
+function PanelTabsExample(p: ExampleProps) {
+	const tab = signal("all");
+	return (
+		<Panel label="Filter tabs">
+			<PanelTabs {...p}>
+				<PanelTab active={tab() === "all"} onClick={() => tab.set("all")}>
+					All
+				</PanelTab>
+				<PanelTab active={tab() === "forks"} onClick={() => tab.set("forks")}>
+					Forks
+				</PanelTab>
+			</PanelTabs>
+		</Panel>
+	);
+}
 
 /** One example per exported component of this group (showcase, docs and contract tests use these). */
 const cardImage = swatch(210, "Cover", 640, 280);
@@ -103,8 +451,8 @@ export const examples: Example[] = [
 					<Text muted>Deployed 4 minutes ago from main.</Text>
 				</CardContent>
 				<CardFooter>
-					<CardFooterItem onClick={noop}>Visit</CardFooterItem>
-					<CardFooterItem onClick={noop}>Logs</CardFooterItem>
+					<CardFooterItem onClick={action("onClick")}>Visit</CardFooterItem>
+					<CardFooterItem onClick={action("onClick")}>Logs</CardFooterItem>
 				</CardFooter>
 			</Card>
 		),
@@ -154,8 +502,8 @@ export const examples: Example[] = [
 			<Card>
 				<CardContent>Delete this project?</CardContent>
 				<CardFooter {...p}>
-					<CardFooterItem onClick={noop}>Cancel</CardFooterItem>
-					<CardFooterItem onClick={noop}>Delete</CardFooterItem>
+					<CardFooterItem onClick={action("onClick")}>Cancel</CardFooterItem>
+					<CardFooterItem onClick={action("onClick")}>Delete</CardFooterItem>
 				</CardFooter>
 			</Card>
 		),
@@ -165,31 +513,15 @@ export const examples: Example[] = [
 		render: (p) => (
 			<Card>
 				<CardFooter>
-					<CardFooterItem {...p} onClick={noop}>
+					<CardFooterItem {...p} onClick={action("onClick")}>
 						Save
 					</CardFooterItem>
-					<CardFooterItem onClick={noop}>Cancel</CardFooterItem>
+					<CardFooterItem onClick={action("onClick")}>Cancel</CardFooterItem>
 				</CardFooter>
 			</Card>
 		),
 	},
-	{
-		name: "Panel",
-		render: (p) => (
-			<Panel label="Repositories" style={{ "max-width": "22rem" }} {...p}>
-				<PanelHeading>Repositories</PanelHeading>
-				<PanelTabs>
-					<PanelTab active>All</PanelTab>
-					<PanelTab>Public</PanelTab>
-					<PanelTab>Private</PanelTab>
-				</PanelTabs>
-				<PanelBlock active onClick={noop}>
-					arachne
-				</PanelBlock>
-				<PanelBlock onClick={noop}>marketing-site</PanelBlock>
-			</Panel>
-		),
-	},
+	{ name: "Panel", render: (p) => <PanelExample {...p} /> },
 	{
 		name: "PanelHeading",
 		render: (p) => (
@@ -199,40 +531,9 @@ export const examples: Example[] = [
 			</Panel>
 		),
 	},
-	{
-		name: "PanelTabs",
-		render: (p) => (
-			<Panel label="Filter tabs">
-				<PanelTabs {...p}>
-					<PanelTab active>All</PanelTab>
-					<PanelTab>Forks</PanelTab>
-				</PanelTabs>
-			</Panel>
-		),
-	},
-	{
-		name: "PanelTab",
-		render: (p) => (
-			<Panel label="Sources">
-				<PanelTabs>
-					<PanelTab {...p} active onClick={noop}>
-						All
-					</PanelTab>
-					<PanelTab onClick={noop}>Forks</PanelTab>
-				</PanelTabs>
-			</Panel>
-		),
-	},
-	{
-		name: "PanelBlock",
-		render: (p) => (
-			<Panel label="Recent projects">
-				<PanelBlock {...p} onClick={noop}>
-					marketing-site
-				</PanelBlock>
-			</Panel>
-		),
-	},
+	{ name: "PanelTabs", render: (p) => <PanelTabsExample {...p} /> },
+	{ name: "PanelTab", render: (p) => <PanelTabExample {...p} /> },
+	{ name: "PanelBlock", render: (p) => <PanelBlockExample {...p} /> },
 	{
 		name: "Tile",
 		render: (p) => (
@@ -250,28 +551,8 @@ export const examples: Example[] = [
 			</Tile>
 		),
 	},
-	{
-		name: "Message",
-		render: (p) => (
-			<Message {...p} tone="info">
-				<MessageHeader onClose={noop}>Scheduled maintenance</MessageHeader>
-				<MessageBody>
-					Builds pause on Sunday 02:00–03:00 UTC while we upgrade the runners.
-				</MessageBody>
-			</Message>
-		),
-	},
-	{
-		name: "MessageHeader",
-		render: (p) => (
-			<Message tone="warning">
-				<MessageHeader {...p} onClose={noop}>
-					Usage limit
-				</MessageHeader>
-				<MessageBody>You've used 92% of this month's build minutes.</MessageBody>
-			</Message>
-		),
-	},
+	{ name: "Message", render: (p) => <MessageExample {...p} /> },
+	{ name: "MessageHeader", render: (p) => <MessageHeaderExample {...p} /> },
 	{
 		name: "MessageBody",
 		render: (p) => (
@@ -393,7 +674,7 @@ export const examples: Example[] = [
 			<Media>
 				<MediaContent>Row content</MediaContent>
 				<MediaRight {...p}>
-					<Button size="sm" variant="ghost">
+					<Button size="sm" variant="ghost" onClick={action("Reply")}>
 						Reply
 					</Button>
 				</MediaRight>
@@ -531,7 +812,9 @@ export const examples: Example[] = [
 				</LevelLeft>
 				<LevelRight>
 					<LevelItem>
-						<Button size="sm">New deploy</Button>
+						<Button size="sm" onClick={action("New deploy")}>
+							New deploy
+						</Button>
 					</LevelItem>
 				</LevelRight>
 			</Level>
@@ -575,25 +858,12 @@ export const examples: Example[] = [
 		name: "BottomSheet",
 		host: "panel",
 		render: (p) => (
-			<BottomSheet {...p} open onClose={noop} title="Share project">
+			<BottomSheet {...p} open onClose={action("onClose")} title="Share project">
 				Anyone with the link can view.
 			</BottomSheet>
 		),
 	},
-	{
-		name: "Banner",
-		render: (p) => (
-			<Banner
-				{...p}
-				tone="warning"
-				title="Payment failed"
-				action={<Button size="sm">Update card</Button>}
-				onClose={noop}
-			>
-				Your card ending in 4242 was declined.
-			</Banner>
-		),
-	},
+	{ name: "Banner", render: (p) => <BannerExample {...p} /> },
 	{ name: "StatusDot", render: (p) => <StatusDot {...p} label="Online" tone="success" /> },
 	{
 		name: "PageHeader",
@@ -602,30 +872,18 @@ export const examples: Example[] = [
 				{...p}
 				title="Deploys"
 				description="Every push to a branch creates a deploy."
-				actions={<Button>New deploy</Button>}
+				actions={<Button onClick={action("New deploy")}>New deploy</Button>}
 			/>
 		),
 	},
 	{
 		name: "UserButton",
-		render: (p) => <UserButton {...p} name="Ada Lovelace" email="ada@example.com" onClick={noop} />,
-	},
-	{ name: "ThemeToggle", render: (p) => <ThemeToggle {...p} value="light" onChange={noop} /> },
-	{
-		name: "ChoiceCard",
 		render: (p) => (
-			<ChoiceCard
-				{...p}
-				type="radio"
-				name="plan"
-				value="pro"
-				checked
-				label="Pro"
-				description="$20 per seat / month"
-				onChange={noop}
-			/>
+			<UserButton {...p} name="Ada Lovelace" email="ada@example.com" onClick={action("onClick")} />
 		),
 	},
+	{ name: "ThemeToggle", render: (p) => <ThemeToggleExample {...p} /> },
+	{ name: "ChoiceCard", render: (p) => <ChoiceCardExample {...p} /> },
 	{
 		name: "ChatBubble",
 		render: (p) => (
@@ -648,20 +906,7 @@ export const examples: Example[] = [
 	},
 	{ name: "RelativeTime", render: (p) => <RelativeTime {...p} value={Date.now() - 5 * 60_000} /> },
 	{ name: "CountUp", render: (p) => <CountUp {...p} value={12480} duration={0} /> },
-	{
-		name: "ScrollSpy",
-		render: (p) => (
-			<ScrollSpy
-				{...p}
-				label="On this page"
-				items={[
-					{ id: "intro", label: "Introduction" },
-					{ id: "install", label: "Installation" },
-					{ id: "usage", label: "Usage" },
-				]}
-			/>
-		),
-	},
+	{ name: "ScrollSpy", render: (p) => <ScrollSpyExample {...p} /> },
 	{
 		name: "BeforeAfter",
 		render: (p) => (
@@ -676,30 +921,14 @@ export const examples: Example[] = [
 			/>
 		),
 	},
-	{
-		name: "LoadMore",
-		render: (p) => (
-			<LoadMore {...p} onLoad={noop} hasMore>
-				Load 20 more
-			</LoadMore>
-		),
-	},
+	{ name: "LoadMore", render: (p) => <LoadMoreExample {...p} /> },
 	{
 		name: "ActivityItem",
 		render: (p) => (
 			<ActivityItem {...p} icon="git" title="Ada pushed 3 commits to main" meta="12 minutes ago" />
 		),
 	},
-	{
-		name: "FilterBar",
-		render: (p) => (
-			<FilterBar {...p}>
-				<SearchInput aria-label="Search deploys" value="" onChange={noop} />
-				<Button variant="outline">Status</Button>
-				<Button variant="outline">Branch</Button>
-			</FilterBar>
-		),
-	},
+	{ name: "FilterBar", render: (p) => <FilterBarExample {...p} /> },
 	{
 		name: "Masonry",
 		render: (p) => (
@@ -720,12 +949,12 @@ export const examples: Example[] = [
 			</HoverCard>
 		),
 	},
-	{ name: "Burger", render: (p) => <Burger {...p} label="Open navigation" onClick={noop} /> },
+	{ name: "Burger", render: (p) => <BurgerExample {...p} /> },
 	{ name: "ColorSwatch", render: (p) => <ColorSwatch {...p} color="#fca311" /> },
 	{
 		name: "VisuallyHidden",
 		render: (p) => (
-			<Button variant="ghost">
+			<Button variant="ghost" onClick={action("★Add to favourites")}>
 				★<VisuallyHidden {...p}>Add to favourites</VisuallyHidden>
 			</Button>
 		),
@@ -753,54 +982,10 @@ export const examples: Example[] = [
 		),
 	},
 	// files-nav.tsx
-	{
-		name: "FileButton",
-		render: (p) => (
-			<FileButton {...p} accept="image/*" onChange={noop}>
-				Upload avatar
-			</FileButton>
-		),
-	},
-	{
-		name: "Dropzone",
-		render: (p) => (
-			<Dropzone {...p} multiple accept=".csv" onDrop={noop}>
-				Drop CSV files here, or click to browse
-			</Dropzone>
-		),
-	},
-	{
-		name: "Subnav",
-		render: (p) => (
-			<Subnav
-				{...p}
-				label="Filter"
-				value="all"
-				onChange={noop}
-				items={[
-					{ id: "all", label: "All" },
-					{ id: "production", label: "Production" },
-					{ id: "preview", label: "Preview" },
-				]}
-			/>
-		),
-	},
-	{
-		name: "Iconnav",
-		render: (p) => (
-			<Iconnav
-				{...p}
-				label="Workspace"
-				value="home"
-				onChange={noop}
-				items={[
-					{ id: "home", icon: "home", label: "Home" },
-					{ id: "alerts", icon: "bell", label: "Alerts" },
-					{ id: "settings", icon: "settings", label: "Settings" },
-				]}
-			/>
-		),
-	},
+	{ name: "FileButton", render: (p) => <FileButtonExample {...p} /> },
+	{ name: "Dropzone", render: (p) => <DropzoneExample {...p} /> },
+	{ name: "Subnav", render: (p) => <SubnavExample {...p} /> },
+	{ name: "Iconnav", render: (p) => <IconnavExample {...p} /> },
 	{ name: "NavigationProgress", render: (p) => <NavigationProgress {...p} visible value={40} /> },
 	{
 		name: "NumberFormatter",

@@ -117,7 +117,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Button>Save changes</Button>",
+		"code": "<Button onClick={() => {}}>\n\tSave changes\n</Button>",
 		"interactive": false
 	},
 	{
@@ -152,7 +152,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<UnstyledButton>Plain clickable text</UnstyledButton>",
+		"code": "<UnstyledButton onClick={() => {}}>\n\tPlain clickable text\n</UnstyledButton>",
 		"interactive": false
 	},
 	{
@@ -181,7 +181,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Accessible name for the group."
 			}
 		],
-		"code": "<ButtonGroup label=\"Text alignment\">\n\t<Button variant=\"outline\">Left</Button>\n\t<Button variant=\"outline\">Center</Button>\n\t<Button variant=\"outline\">Right</Button>\n</ButtonGroup>",
+		"code": "<ButtonGroup label=\"Text alignment\">\n\t<Button variant=\"outline\" onClick={() => {}}>\n\t\tLeft\n\t</Button>\n\t<Button variant=\"outline\" onClick={() => {}}>\n\t\tCenter\n\t</Button>\n\t<Button variant=\"outline\" onClick={() => {}}>\n\t\tRight\n\t</Button>\n</ButtonGroup>",
 		"interactive": false
 	},
 	{
@@ -239,7 +239,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<SplitButton\n\tlabel=\"Merge\"\n\tcaretLabel=\"More merge options\"\n\tonClick={() => {}}\n\tmenu={[\n\t\t{ label: \"Squash and merge\", onSelect: () => {} },\n\t\t{ label: \"Rebase and merge\", onSelect: () => {} },\n\t]}\n/>",
+		"code": "function Example() {\n\tconst strategy = signal(\"Merge\");\n\tconst merged = signal(\"\");\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<SplitButton\n\t\t\t\tlabel={strategy()}\n\t\t\t\tcaretLabel=\"More merge options\"\n\t\t\t\tonClick={() => merged.set(`${strategy()} done`)}\n\t\t\t\tmenu={[\n\t\t\t\t\t{ label: \"Merge\", onSelect: () => strategy.set(\"Merge\") },\n\t\t\t\t\t{ label: \"Squash and merge\", onSelect: () => strategy.set(\"Squash and merge\") },\n\t\t\t\t\t{ label: \"Rebase and merge\", onSelect: () => strategy.set(\"Rebase and merge\") },\n\t\t\t\t]}\n\t\t\t/>\n\t\t\t<Text muted>{merged() || \"Pick a strategy from the caret menu.\"}</Text>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -283,7 +283,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<ToggleGroup\n\tlabel=\"Formatting\"\n\tmultiple\n\titems={[\n\t\t{ id: \"bold\", label: \"Bold\" },\n\t\t{ id: \"italic\", label: \"Italic\" },\n\t\t{ id: \"underline\", label: \"Underline\" },\n\t]}\n\tvalue={[\"bold\"]}\n\tonChange={() => {}}\n/>",
+		"code": "function Example() {\n\tconst formats = signal<string[]>([\"bold\"]);\n\treturn (\n\t\t<ToggleGroup\n\t\t\tlabel=\"Formatting\"\n\t\t\tmultiple\n\t\t\titems={[\n\t\t\t\t{ id: \"bold\", label: \"Bold\" },\n\t\t\t\t{ id: \"italic\", label: \"Italic\" },\n\t\t\t\t{ id: \"underline\", label: \"Underline\" },\n\t\t\t]}\n\t\t\tvalue={formats()}\n\t\t\tonChange={(next) => formats.set(Array.isArray(next) ? next : next ? [next] : [])}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -321,7 +321,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Accessible name for the group (default \"Options\")."
 			}
 		],
-		"code": "<Segmented\n\tlabel=\"Range\"\n\titems={[\n\t\t{ id: \"24h\", label: \"24h\" },\n\t\t{ id: \"7d\", label: \"7 days\" },\n\t\t{ id: \"30d\", label: \"30 days\" },\n\t]}\n\tvalue=\"7d\"\n\tonChange={() => {}}\n/>",
+		"code": "function Example() {\n\tconst range = signal(\"7d\");\n\treturn (\n\t\t<Segmented\n\t\t\tlabel=\"Range\"\n\t\t\titems={[\n\t\t\t\t{ id: \"24h\", label: \"24h\" },\n\t\t\t\t{ id: \"7d\", label: \"7 days\" },\n\t\t\t\t{ id: \"30d\", label: \"30 days\" },\n\t\t\t]}\n\t\t\tvalue={range()}\n\t\t\tonChange={range.set}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -368,7 +368,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<ActionIcon label=\"Edit project\" variant=\"subtle\">\n\t<Icon name=\"edit\" />\n</ActionIcon>",
+		"code": "<ActionIcon label=\"Edit project\" variant=\"subtle\" onClick={() => {}}>\n\t<Icon name=\"edit\" />\n</ActionIcon>",
 		"interactive": false
 	},
 	{
@@ -397,7 +397,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<CloseButton />",
+		"code": "<CloseButton onClick={() => {}} />",
 		"interactive": false
 	},
 	{
@@ -432,7 +432,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Burger label=\"Open navigation\" onClick={() => {}} />",
+		"code": "function Example() {\n\tconst opened = signal(false);\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<Burger\n\t\t\t\topened={opened()}\n\t\t\t\tlabel={opened() ? \"Close navigation\" : \"Open navigation\"}\n\t\t\t\tonClick={() => opened.set(!opened())}\n\t\t\t/>\n\t\t\t<Text muted>Navigation is {opened() ? \"open\" : \"closed\"}</Text>\n\t\t</Group>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -476,7 +476,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<FloatingActionButton label=\"New project\" icon=\"plus\" />",
+		"code": "<FloatingActionButton\n\tlabel=\"New project\"\n\ticon=\"plus\"\n\tonClick={() => {}}\n/>",
 		"interactive": false
 	},
 	{
@@ -726,7 +726,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<ViewToggle value=\"list\" onChange={() => {}} />",
+		"code": "function Example() {\n\tconst view = signal<\"list\" | \"grid\">(\"list\");\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<ViewToggle value={view()} onChange={view.set} />\n\t\t\t<Text muted>Showing a {view()}</Text>\n\t\t</Group>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -758,7 +758,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Accessible name (default \"Density\")."
 			}
 		],
-		"code": "<DensityToggle value=\"compact\" onChange={() => {}} />",
+		"code": "function Example() {\n\tconst density = signal<Density>(\"compact\");\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<DensityToggle value={density()} onChange={density.set} />\n\t\t\t<Text muted>Density: {density()}</Text>\n\t\t</Group>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -781,7 +781,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<ThemeToggle value=\"light\" onChange={() => {}} />",
+		"code": "function Example() {\n\tconst theme = signal<\"light\" | \"dark\">(\"light\");\n\treturn (\n\t\t<Paper withBorder class={theme() === \"dark\" ? \"a-theme-dark\" : undefined}>\n\t\t\t<Group gap=\"0.75rem\">\n\t\t\t\t<ThemeToggle value={theme()} onChange={theme.set} />\n\t\t\t\t<Text>This panel is in the {theme()} theme.</Text>\n\t\t\t</Group>\n\t\t</Paper>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -810,7 +810,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<CommandBar label=\"Selection actions\">\n\t<Button size=\"sm\" variant=\"ghost\">\n\t\tArchive\n\t</Button>\n\t<Button size=\"sm\" variant=\"ghost\">\n\t\tMove\n\t</Button>\n\t<Button size=\"sm\" variant=\"ghost\">\n\t\tDelete\n\t</Button>\n</CommandBar>",
+		"code": "<CommandBar label=\"Selection actions\">\n\t<Button size=\"sm\" variant=\"ghost\" onClick={() => {}}>\n\t\tArchive\n\t</Button>\n\t<Button size=\"sm\" variant=\"ghost\" onClick={() => {}}>\n\t\tMove\n\t</Button>\n\t<Button size=\"sm\" variant=\"ghost\" onClick={() => {}}>\n\t\tDelete\n\t</Button>\n</CommandBar>",
 		"interactive": false
 	},
 	{
@@ -833,7 +833,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Accessible name for the toolbar."
 			}
 		],
-		"code": "<FloatingToolbar label=\"Text formatting\">\n\t<Button size=\"sm\" variant=\"ghost\">\n\t\tBold\n\t</Button>\n\t<Button size=\"sm\" variant=\"ghost\">\n\t\tItalic\n\t</Button>\n\t<Button size=\"sm\" variant=\"ghost\">\n\t\tLink\n\t</Button>\n</FloatingToolbar>",
+		"code": "<FloatingToolbar label=\"Text formatting\">\n\t<Button size=\"sm\" variant=\"ghost\" onClick={() => {}}>\n\t\tBold\n\t</Button>\n\t<Button size=\"sm\" variant=\"ghost\" onClick={() => {}}>\n\t\tItalic\n\t</Button>\n\t<Button size=\"sm\" variant=\"ghost\" onClick={() => {}}>\n\t\tLink\n\t</Button>\n</FloatingToolbar>",
 		"interactive": false
 	},
 	{
@@ -873,7 +873,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<BulkBar count={3} onClear={() => {}}>\n\t<Button size=\"sm\" variant=\"outline\">\n\t\tArchive\n\t</Button>\n</BulkBar>",
+		"code": "function Example() {\n\tconst selected = signal(3);\n\treturn (\n\t\t<Show\n\t\t\twhen={selected() > 0}\n\t\t\tfallback={\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => selected.set(3)}>\n\t\t\t\t\tSelect 3 deploys\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<BulkBar count={selected()} onClear={() => selected.set(0)}>\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => selected.set(0)}>\n\t\t\t\t\tArchive\n\t\t\t\t</Button>\n\t\t\t</BulkBar>\n\t\t</Show>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -944,7 +944,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<TextInput aria-label=\"Full name\" placeholder=\"Ada Lovelace\" value=\"\" />",
+		"code": "function Example() {\n\tconst name = signal(\"\");\n\treturn (\n\t\t<TextInput\n\t\t\taria-label=\"Full name\"\n\t\t\tplaceholder=\"Ada Lovelace\"\n\t\t\tvalue={name()}\n\t\t\tonInput={(e) => name.set((e.target as HTMLInputElement).value)}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -1003,7 +1003,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<TextArea\n\taria-label=\"Message\"\n\trows={3}\n\tplaceholder=\"Tell us what happened…\"\n\tvalue=\"\"\n/>",
+		"code": "function Example() {\n\tconst message = signal(\"\");\n\treturn (\n\t\t<TextArea\n\t\t\taria-label=\"Message\"\n\t\t\trows={3}\n\t\t\tplaceholder=\"Tell us what happened…\"\n\t\t\tvalue={message()}\n\t\t\tonInput={(e) => message.set((e.target as HTMLInputElement).value)}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -1079,7 +1079,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<NumberInput aria-label=\"Seats\" value={5} onChange={() => {}} />",
+		"code": "function Example() {\n\tconst seats = signal(5);\n\treturn (\n\t\t<NumberInput aria-label=\"Seats\" min={1} max={50} value={seats()} onChange={seats.set} />\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -1142,7 +1142,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<PasswordInput aria-label=\"Password\" value=\"\" onChange={() => {}} />",
+		"code": "function Example() {\n\tconst password = signal(\"\");\n\treturn <PasswordInput aria-label=\"Password\" value={password()} onChange={password.set} />;\n}",
 		"interactive": false
 	},
 	{
@@ -1228,7 +1228,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<SearchInput aria-label=\"Search projects\" value=\"\" onChange={() => {}} />",
+		"code": "function Example() {\n\tconst query = signal(\"\");\n\treturn (\n\t\t<SearchInput\n\t\t\taria-label=\"Search projects\"\n\t\t\tplaceholder=\"Search projects\"\n\t\t\tvalue={query()}\n\t\t\tonChange={query.set}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -1272,7 +1272,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Mask digits like a password."
 			}
 		],
-		"code": "<PinInput aria-label=\"Verification code\" length={6} value=\"42\" onChange={() => {}} />",
+		"code": "function Example() {\n\tconst code = signal(\"\");\n\treturn (\n\t\t<>\n\t\t\t<PinInput\n\t\t\t\taria-label=\"Verification code\"\n\t\t\t\tlength={6}\n\t\t\t\tvalue={code()}\n\t\t\t\tonChange={code.set}\n\t\t\t/>\n\t\t\t<Text muted>{code().length === 6 ? `Verifying ${code()}…` : \"Enter the 6-digit code.\"}</Text>\n\t\t</>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -1366,7 +1366,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Native `value` submitted with the form."
 			}
 		],
-		"code": "<Checkbox label=\"Email me about product updates\" checked />",
+		"code": "function Example() {\n\tconst updates = signal(true);\n\treturn (\n\t\t<Checkbox\n\t\t\tlabel=\"Email me about product updates\"\n\t\t\tchecked={updates()}\n\t\t\tonChange={(e) => updates.set((e.target as HTMLInputElement).checked)}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -1411,7 +1411,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Visible group label rendered as `<legend>`."
 			}
 		],
-		"code": "<CheckboxGroup legend=\"Regions\" options={regions} value={[\"fra1\"]} onChange={() => {}} />",
+		"code": "const regions = [\n\t{ value: \"fra1\", label: \"Frankfurt\" },\n\t{ value: \"iad1\", label: \"Washington, D.C.\" },\n\t{ value: \"hnd1\", label: \"Tokyo\" },\n];\n\nfunction Example() {\n\tconst selected = signal([\"fra1\"]);\n\treturn (\n\t\t<CheckboxGroup\n\t\t\tlegend=\"Regions\"\n\t\t\toptions={regions}\n\t\t\tvalue={selected()}\n\t\t\tonChange={selected.set}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -1439,7 +1439,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Checklist\n\titems={[\n\t\t{ id: \"domain\", label: \"Connect a domain\", done: true },\n\t\t{ id: \"invite\", label: \"Invite your team\", done: true },\n\t\t{ id: \"deploy\", label: \"Ship your first deploy\" },\n\t]}\n\tonChange={() => {}}\n/>",
+		"code": "function Example() {\n\tconst items = signal<ChecklistItemData[]>([\n\t\t{ id: \"domain\", label: \"Connect a domain\", done: true },\n\t\t{ id: \"invite\", label: \"Invite your team\", done: true },\n\t\t{ id: \"deploy\", label: \"Ship your first deploy\" },\n\t]);\n\tconst done = () => items().filter((i) => i.done).length;\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Checklist items={items()} onChange={items.set} />\n\t\t\t<Text muted>\n\t\t\t\t{done()} of {items().length} done\n\t\t\t</Text>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -1484,7 +1484,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Switch label=\"Preview deploys\" checked />",
+		"code": "function Example() {\n\tconst previews = signal(true);\n\treturn (\n\t\t<Switch\n\t\t\tlabel=\"Preview deploys\"\n\t\t\tchecked={previews()}\n\t\t\tonChange={(e) => previews.set((e.target as HTMLInputElement).checked)}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -1542,7 +1542,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<RadioGroup label=\"Plan\" name=\"plan\" options={plans} value=\"pro\" />",
+		"code": "const plans = [\n\t{ value: \"free\", label: \"Free\" },\n\t{ value: \"pro\", label: \"Pro\" },\n\t{ value: \"team\", label: \"Team\" },\n];\n\nfunction Example() {\n\tconst plan = signal(\"pro\");\n\treturn (\n\t\t<RadioGroup\n\t\t\tlabel=\"Plan\"\n\t\t\tname=\"plan\"\n\t\t\toptions={plans}\n\t\t\tvalue={plan()}\n\t\t\tonChange={(e) => plan.set((e.target as HTMLInputElement).value)}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -1607,7 +1607,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<ChoiceCard\n\ttype=\"radio\"\n\tname=\"plan\"\n\tvalue=\"pro\"\n\tchecked\n\tlabel=\"Pro\"\n\tdescription=\"$20 per seat / month\"\n\tonChange={() => {}}\n/>",
+		"code": "function Example() {\n\tconst plan = signal(\"pro\");\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<ChoiceCard\n\t\t\t\ttype=\"radio\"\n\t\t\t\tname=\"plan\"\n\t\t\t\tvalue=\"free\"\n\t\t\t\tchecked={plan() === \"free\"}\n\t\t\t\tlabel=\"Free\"\n\t\t\t\tdescription=\"For side projects\"\n\t\t\t\tonChange={(checked) => checked && plan.set(\"free\")}\n\t\t\t/>\n\t\t\t<ChoiceCard\n\t\t\t\ttype=\"radio\"\n\t\t\t\tname=\"plan\"\n\t\t\t\tvalue=\"pro\"\n\t\t\t\tchecked={plan() === \"pro\"}\n\t\t\t\tlabel=\"Pro\"\n\t\t\t\tdescription=\"$20 per seat / month\"\n\t\t\t\tonChange={(checked) => checked && plan.set(\"pro\")}\n\t\t\t/>\n\t\t</Group>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -1660,7 +1660,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Select aria-label=\"Plan\" options={plans} value=\"pro\" />",
+		"code": "const plans = [\n\t{ value: \"free\", label: \"Free\" },\n\t{ value: \"pro\", label: \"Pro\" },\n\t{ value: \"team\", label: \"Team\" },\n];\n\nfunction Example() {\n\tconst plan = signal(\"pro\");\n\treturn (\n\t\t<Select\n\t\t\taria-label=\"Plan\"\n\t\t\toptions={plans}\n\t\t\tvalue={plan()}\n\t\t\tonChange={(e) => plan.set((e.target as HTMLInputElement).value)}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -1713,7 +1713,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<NativeSelect aria-label=\"Region\" options={regions} value=\"fra1\" onChange={() => {}} />",
+		"code": "const regions = [\n\t{ value: \"fra1\", label: \"Frankfurt\" },\n\t{ value: \"iad1\", label: \"Washington, D.C.\" },\n\t{ value: \"hnd1\", label: \"Tokyo\" },\n];\n\nfunction Example() {\n\tconst region = signal(\"fra1\");\n\treturn (\n\t\t<NativeSelect\n\t\t\taria-label=\"Region\"\n\t\t\toptions={regions}\n\t\t\tvalue={region()}\n\t\t\tonChange={region.set}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -1759,7 +1759,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<MultiSelect\n\taria-label=\"Regions\"\n\toptions={regions}\n\tvalue={[\"fra1\", \"iad1\"]}\n\tonChange={() => {}}\n/>",
+		"code": "const regions = [\n\t{ value: \"fra1\", label: \"Frankfurt\" },\n\t{ value: \"iad1\", label: \"Washington, D.C.\" },\n\t{ value: \"hnd1\", label: \"Tokyo\" },\n];\n\nfunction Example() {\n\tconst selected = signal([\"fra1\", \"iad1\"]);\n\treturn (\n\t\t<MultiSelect\n\t\t\taria-label=\"Regions\"\n\t\t\toptions={regions}\n\t\t\tvalue={selected()}\n\t\t\tonChange={selected.set}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -1829,7 +1829,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Render an option (default: the text)."
 			}
 		],
-		"code": "<Autocomplete\n\taria-label=\"Country\"\n\tvalue=\"\"\n\toptions={[\"Germany\", \"Japan\", \"United Kingdom\", \"United States\"]}\n\tonChange={() => {}}\n/>",
+		"code": "function Example() {\n\tconst country = signal(\"\");\n\treturn (\n\t\t<Autocomplete\n\t\t\taria-label=\"Country\"\n\t\t\tplaceholder=\"Start typing a country\"\n\t\t\tvalue={country()}\n\t\t\toptions={[\"Germany\", \"Japan\", \"United Kingdom\", \"United States\"]}\n\t\t\tonChange={country.set}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -1875,7 +1875,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Render a tag's content (default: the text)."
 			}
 		],
-		"code": "<TagsInput\n\taria-label=\"Topics\"\n\tplaceholder=\"Add a topic\"\n\tvalue={[\"signals\", \"ssr\"]}\n\tonChange={() => {}}\n/>",
+		"code": "function Example() {\n\tconst topics = signal([\"signals\", \"ssr\"]);\n\treturn (\n\t\t<TagsInput\n\t\t\taria-label=\"Topics\"\n\t\t\tplaceholder=\"Add a topic and press Enter\"\n\t\t\tvalue={topics()}\n\t\t\tonChange={topics.set}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -1926,7 +1926,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<ChipGroup\n\tlegend=\"Frameworks\"\n\tmultiple\n\toptions={[\n\t\t{ value: \"arachne\", label: \"Arachne\" },\n\t\t{ value: \"solid\", label: \"Solid\" },\n\t\t{ value: \"svelte\", label: \"Svelte\" },\n\t]}\n\tvalue={[\"arachne\"]}\n\tonChange={() => {}}\n/>",
+		"code": "function Example() {\n\tconst frameworks = signal([\"arachne\"]);\n\treturn (\n\t\t<ChipGroup\n\t\t\tlegend=\"Frameworks\"\n\t\t\tmultiple\n\t\t\toptions={[\n\t\t\t\t{ value: \"arachne\", label: \"Arachne\" },\n\t\t\t\t{ value: \"solid\", label: \"Solid\" },\n\t\t\t\t{ value: \"svelte\", label: \"Svelte\" },\n\t\t\t]}\n\t\t\tvalue={frameworks()}\n\t\t\tonChange={frameworks.set}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -1967,7 +1967,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Chip checked onChange={() => {}}>\n\tTypeScript\n</Chip>",
+		"code": "function Example() {\n\tconst on = signal(true);\n\treturn (\n\t\t<Chip checked={on()} onChange={on.set}>\n\t\t\tTypeScript\n\t\t</Chip>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -2017,7 +2017,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Star glyph (default ★)."
 			}
 		],
-		"code": "<Rating aria-label=\"Rating\" value={4} onChange={() => {}} />",
+		"code": "function Example() {\n\tconst stars = signal(4);\n\treturn <Rating aria-label=\"Rating\" value={stars()} onChange={stars.set} />;\n}",
 		"interactive": false
 	},
 	{
@@ -2064,7 +2064,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Slider aria-label=\"Volume\" value={60} onChange={() => {}} />",
+		"code": "function Example() {\n\tconst volume = signal(60);\n\treturn (\n\t\t<>\n\t\t\t<Slider aria-label=\"Volume\" value={volume()} onChange={volume.set} />\n\t\t\t<Text muted>Volume: {volume()}</Text>\n\t\t</>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -2127,7 +2127,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<RangeSlider\n\taria-label=\"Price range\"\n\tmin={0}\n\tmax={200}\n\tvalue={[40, 120]}\n\tonChange={() => {}}\n/>",
+		"code": "function Example() {\n\tconst range = signal<[number, number]>([40, 120]);\n\treturn (\n\t\t<>\n\t\t\t<RangeSlider\n\t\t\t\taria-label=\"Price range\"\n\t\t\t\tmin={0}\n\t\t\t\tmax={200}\n\t\t\t\tvalue={range()}\n\t\t\t\tonChange={range.set}\n\t\t\t/>\n\t\t\t<Text muted>\n\t\t\t\t${range()[0]} – ${range()[1]}\n\t\t\t</Text>\n\t\t</>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -2175,7 +2175,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Degrees per arrow key press (default 5)."
 			}
 		],
-		"code": "<AngleSlider value={135} onChange={() => {}} />",
+		"code": "function Example() {\n\tconst angle = signal(135);\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<AngleSlider value={angle()} onChange={angle.set} />\n\t\t\t<Text muted>{angle()}°</Text>\n\t\t</Group>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -2226,7 +2226,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<QuantityInput value={2} onChange={() => {}} />",
+		"code": "function Example() {\n\tconst quantity = signal(2);\n\treturn <QuantityInput min={1} max={10} value={quantity()} onChange={quantity.set} />;\n}",
 		"interactive": false
 	},
 	{
@@ -2266,7 +2266,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<InlineEdit label=\"Project name\" value=\"Marketing site\" onChange={() => {}} />",
+		"code": "function Example() {\n\tconst name = signal(\"Marketing site\");\n\treturn <InlineEdit label=\"Project name\" value={name()} onChange={name.set} />;\n}",
 		"interactive": false
 	},
 	{
@@ -2363,7 +2363,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<JsonInput\n\taria-label=\"Config JSON\"\n\tvalue={'{\\n  \"region\": \"fra1\",\\n  \"replicas\": 2\\n}'}\n\tonChange={() => {}}\n/>",
+		"code": "function Example() {\n\tconst config = signal('{\\n  \"region\": \"fra1\",\\n  \"replicas\": 2\\n}');\n\treturn <JsonInput aria-label=\"Config JSON\" value={config()} onChange={config.set} />;\n}",
 		"interactive": false
 	},
 	{
@@ -2461,7 +2461,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<FileButton accept=\"image/*\" onChange={() => {}}>\n\tUpload avatar\n</FileButton>",
+		"code": "function Example() {\n\tconst file = signal(\"\");\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<FileButton accept=\"image/*\" onChange={(files) => file.set(files[0]?.name ?? \"\")}>\n\t\t\t\tUpload avatar\n\t\t\t</FileButton>\n\t\t\t<Text muted>{file() || \"No file chosen\"}</Text>\n\t\t</Group>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -2506,7 +2506,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Dropzone multiple accept=\".csv\" onDrop={() => {}}>\n\tDrop CSV files here, or click to browse\n</Dropzone>",
+		"code": "function Example() {\n\tconst files = signal<string[]>([]);\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Dropzone\n\t\t\t\tmultiple\n\t\t\t\taccept=\".csv\"\n\t\t\t\tonDrop={(dropped) => files.set(dropped.map((f) => f.name))}\n\t\t\t>\n\t\t\t\tDrop CSV files here, or click to browse\n\t\t\t</Dropzone>\n\t\t\t<Text muted>{files().length ? files().join(\", \") : \"No files yet\"}</Text>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -2549,7 +2549,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<UploadItem name=\"hero@2x.png\" progress={64} onCancel={() => {}} />",
+		"code": "function Example() {\n\tconst progress = signal(12);\n\tconst cancelled = signal(false);\n\t// Simulated upload; effects run only in the browser.\n\teffect(() => {\n\t\tconst timer = setInterval(() => {\n\t\t\tif (!cancelled() && progress() < 100) progress.set(Math.min(100, progress() + 8));\n\t\t}, 400);\n\t\treturn () => clearInterval(timer);\n\t});\n\treturn (\n\t\t<Show\n\t\t\twhen={!cancelled()}\n\t\t\tfallback={\n\t\t\t\t<Button\n\t\t\t\t\tsize=\"sm\"\n\t\t\t\t\tvariant=\"outline\"\n\t\t\t\t\tonClick={() => {\n\t\t\t\t\t\tprogress.set(0);\n\t\t\t\t\t\tcancelled.set(false);\n\t\t\t\t\t}}\n\t\t\t\t>\n\t\t\t\t\tUpload again\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<UploadItem\n\t\t\t\tname=\"hero@2x.png\"\n\t\t\t\tprogress={progress()}\n\t\t\t\tonCancel={() => cancelled.set(true)}\n\t\t\t/>\n\t\t</Show>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -2590,7 +2590,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<DateInput aria-label=\"Start date\" value=\"2026-10-01\" onChange={() => {}} />",
+		"code": "function Example() {\n\tconst date = signal(\"2026-10-01\");\n\treturn <DateInput aria-label=\"Start date\" value={date()} onChange={date.set} />;\n}",
 		"interactive": false
 	},
 	{
@@ -2631,7 +2631,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<TimeInput aria-label=\"Start time\" value=\"09:30\" onChange={() => {}} />",
+		"code": "function Example() {\n\tconst time = signal(\"09:30\");\n\treturn <TimeInput aria-label=\"Start time\" value={time()} onChange={time.set} />;\n}",
 		"interactive": false
 	},
 	{
@@ -2702,7 +2702,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "First column: 0 = Sunday (default) … 6 = Saturday."
 			}
 		],
-		"code": "<Calendar value=\"2026-09-29\" />",
+		"code": "function Example() {\n\tconst date = signal(\"2026-09-29\");\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Calendar value={date()} onChange={date.set} />\n\t\t\t<Text muted>Selected: {date()}</Text>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -2774,7 +2774,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "First column: 0 = Sunday (default) … 6 = Saturday."
 			}
 		],
-		"code": "<DatePicker value=\"2026-09-29\" label=\"Due date\" />",
+		"code": "function Example() {\n\tconst due = signal(\"2026-09-29\");\n\treturn <DatePicker value={due()} onChange={due.set} label=\"Due date\" />;\n}",
 		"interactive": false
 	},
 	{
@@ -2809,7 +2809,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Trigger text when nothing is picked."
 			}
 		],
-		"code": "<DateRangePicker\n\tplaceholder=\"Select dates\"\n\tvalue={{ start: \"2026-10-05\", end: \"2026-10-09\" }}\n\tonChange={() => {}}\n/>",
+		"code": "function Example() {\n\tconst range = signal<DateRange>({ start: \"2026-10-05\", end: \"2026-10-09\" });\n\treturn <DateRangePicker placeholder=\"Select dates\" value={range()} onChange={range.set} />;\n}",
 		"interactive": false
 	},
 	{
@@ -2844,7 +2844,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "YYYY-MM"
 			}
 		],
-		"code": "<MonthPicker value=\"2026-10\" />",
+		"code": "function Example() {\n\tconst month = signal(\"2026-10\");\n\treturn (\n\t\t<>\n\t\t\t<MonthPicker value={month()} onChange={month.set} />\n\t\t\t<Text muted>Selected: {month()}</Text>\n\t\t</>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -2873,7 +2873,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<YearPicker value={2026} onChange={() => {}} />",
+		"code": "function Example() {\n\tconst year = signal(2026);\n\treturn (\n\t\t<>\n\t\t\t<YearPicker value={year()} onChange={year.set} />\n\t\t\t<Text muted>Selected: {year()}</Text>\n\t\t</>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -2908,7 +2908,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "HH:MM"
 			}
 		],
-		"code": "<TimePicker value=\"09:30\" />",
+		"code": "function Example() {\n\tconst time = signal(\"09:30\");\n\treturn (\n\t\t<>\n\t\t\t<TimePicker value={time()} onChange={time.set} />\n\t\t\t<Text muted>Selected: {time()}</Text>\n\t\t</>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -2959,7 +2959,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Accessible name for the swatch picker (default \"Color\")."
 			}
 		],
-		"code": "<ColorInput aria-label=\"Brand colour\" value=\"#4f46e5\" onChange={() => {}} />",
+		"code": "function Example() {\n\tconst color = signal(\"#4f46e5\");\n\treturn <ColorInput aria-label=\"Brand colour\" value={color()} onChange={color.set} />;\n}",
 		"interactive": false
 	},
 	{
@@ -2994,7 +2994,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<ColorPicker value=\"#1e87f0\" onChange={() => {}} />",
+		"code": "function Example() {\n\tconst color = signal(\"#1e87f0\");\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<ColorPicker value={color()} onChange={color.set} />\n\t\t\t<Text muted>\n\t\t\t\tSelected: <code>{color()}</code>\n\t\t\t</Text>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -3127,7 +3127,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<FormField\n\tlabel=\"Project name\"\n\tlabelFor=\"field-project\"\n\thelp=\"Lowercase letters, numbers and dashes.\"\n>\n\t<TextInput id=\"field-project\" value=\"marketing-site\" />\n</FormField>",
+		"code": "function Example() {\n\tconst project = signal(\"marketing-site\");\n\tconst invalid = () => !/^[a-z0-9-]+$/.test(project());\n\treturn (\n\t\t<FormField\n\t\t\tlabel=\"Project name\"\n\t\t\tlabelFor=\"field-project\"\n\t\t\thelp=\"Lowercase letters, numbers and dashes.\"\n\t\t\terror={invalid() ? \"Use only lowercase letters, numbers and dashes.\" : undefined}\n\t\t>\n\t\t\t<TextInput\n\t\t\t\tid=\"field-project\"\n\t\t\t\tinvalid={invalid()}\n\t\t\t\tvalue={project()}\n\t\t\t\tonInput={(e) => project.set((e.target as HTMLInputElement).value)}\n\t\t\t/>\n\t\t</FormField>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -3163,7 +3163,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<FormField label=\"Email\" labelFor=\"control-email\">\n\t<Control expanded>\n\t\t<TextInput id=\"control-email\" type=\"email\" value=\"\" placeholder=\"you@example.com\" />\n\t</Control>\n</FormField>",
+		"code": "function Example() {\n\tconst email = signal(\"\");\n\treturn (\n\t\t<FormField label=\"Email\" labelFor=\"control-email\">\n\t\t\t<Control expanded>\n\t\t\t\t<TextInput\n\t\t\t\t\tid=\"control-email\"\n\t\t\t\t\ttype=\"email\"\n\t\t\t\t\tplaceholder=\"you@example.com\"\n\t\t\t\t\tvalue={email()}\n\t\t\t\t\tonInput={(e) => email.set((e.target as HTMLInputElement).value)}\n\t\t\t\t/>\n\t\t\t</Control>\n\t\t</FormField>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -3187,7 +3187,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<FormField label=\"Username\" labelFor=\"help-user\">\n\t<TextInput id=\"help-user\" value=\"ada\" />\n\t<Help tone=\"success\">\n\t\tThis username is available.\n\t</Help>\n</FormField>",
+		"code": "function Example() {\n\tconst user = signal(\"ada\");\n\tconst taken = () => [\"admin\", \"root\"].includes(user());\n\treturn (\n\t\t<FormField label=\"Username\" labelFor=\"help-user\">\n\t\t\t<TextInput\n\t\t\t\tid=\"help-user\"\n\t\t\t\tvalue={user()}\n\t\t\t\tonInput={(e) => user.set((e.target as HTMLInputElement).value)}\n\t\t\t/>\n\t\t\t<Help tone={taken() ? \"danger\" : \"success\"}>\n\t\t\t\t{taken() ? \"That username is taken.\" : \"This username is available.\"}\n\t\t\t</Help>\n\t\t</FormField>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -3242,7 +3242,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Fieldset legend=\"Shipping address\">\n\t<FormField label=\"Street\" labelFor=\"fs-street\">\n\t\t<TextInput id=\"fs-street\" value=\"\" />\n\t</FormField>\n\t<FormField label=\"City\" labelFor=\"fs-city\">\n\t\t<TextInput id=\"fs-city\" value=\"\" />\n\t</FormField>\n</Fieldset>",
+		"code": "function Example() {\n\tconst street = signal(\"\");\n\tconst city = signal(\"\");\n\treturn (\n\t\t<Fieldset legend=\"Shipping address\">\n\t\t\t<FormField label=\"Street\" labelFor=\"fs-street\">\n\t\t\t\t<TextInput\n\t\t\t\t\tid=\"fs-street\"\n\t\t\t\t\tvalue={street()}\n\t\t\t\t\tonInput={(e) => street.set((e.target as HTMLInputElement).value)}\n\t\t\t\t/>\n\t\t\t</FormField>\n\t\t\t<FormField label=\"City\" labelFor=\"fs-city\">\n\t\t\t\t<TextInput\n\t\t\t\t\tid=\"fs-city\"\n\t\t\t\t\tvalue={city()}\n\t\t\t\t\tonInput={(e) => city.set((e.target as HTMLInputElement).value)}\n\t\t\t\t/>\n\t\t\t</FormField>\n\t\t</Fieldset>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -3283,7 +3283,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<FormSection title=\"Profile\" description=\"Shown on your public page.\">\n\t<FormField label=\"Display name\" labelFor=\"section-name\">\n\t\t<TextInput id=\"section-name\" value=\"Ada Lovelace\" />\n\t</FormField>\n</FormSection>",
+		"code": "function Example() {\n\tconst name = signal(\"Ada Lovelace\");\n\treturn (\n\t\t<FormSection title=\"Profile\" description=\"Shown on your public page.\">\n\t\t\t<FormField label=\"Display name\" labelFor=\"section-name\">\n\t\t\t\t<TextInput\n\t\t\t\t\tid=\"section-name\"\n\t\t\t\t\tvalue={name()}\n\t\t\t\t\tonInput={(e) => name.set((e.target as HTMLInputElement).value)}\n\t\t\t\t/>\n\t\t\t</FormField>\n\t\t</FormSection>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -3330,7 +3330,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<FormArea\n\torder={3}\n\ttitle=\"Notifications\"\n\tdescription=\"Choose what we email you about.\"\n\tbordered\n>\n\t<Checkbox label=\"Failed deploys\" checked />\n\t<Checkbox label=\"Weekly summary\" />\n</FormArea>",
+		"code": "function Example() {\n\tconst failed = signal(true);\n\tconst weekly = signal(false);\n\treturn (\n\t\t<FormArea\n\t\t\torder={3}\n\t\t\ttitle=\"Notifications\"\n\t\t\tdescription=\"Choose what we email you about.\"\n\t\t\tbordered\n\t\t>\n\t\t\t<Checkbox\n\t\t\t\tlabel=\"Failed deploys\"\n\t\t\t\tchecked={failed()}\n\t\t\t\tonChange={(e) => failed.set((e.target as HTMLInputElement).checked)}\n\t\t\t/>\n\t\t\t<Checkbox\n\t\t\t\tlabel=\"Weekly summary\"\n\t\t\t\tchecked={weekly()}\n\t\t\t\tonChange={(e) => weekly.set((e.target as HTMLInputElement).checked)}\n\t\t\t/>\n\t\t</FormArea>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -3347,7 +3347,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<FormFooter>\n\t<Button variant=\"ghost\">Cancel</Button>\n\t<Button type=\"submit\">Save changes</Button>\n</FormFooter>",
+		"code": "<form\n\tonSubmit={(e: SubmitEvent) => {\n\t\te.preventDefault();\n\t\t() => {}();\n\t}}\n>\n\t<FormFooter>\n\t\t<Button variant=\"ghost\" onClick={() => {}}>\n\t\t\tCancel\n\t\t</Button>\n\t\t<Button type=\"submit\">Save changes</Button>\n\t</FormFooter>\n</form>",
 		"interactive": false
 	},
 	{
@@ -3435,7 +3435,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<ToggleRow\n\tlabel=\"Preview deploys\"\n\tdescription=\"Deploy every pull request to a unique URL.\"\n\tchecked\n\tonChange={() => {}}\n/>",
+		"code": "function Example() {\n\tconst previews = signal(true);\n\treturn (\n\t\t<ToggleRow\n\t\t\tlabel=\"Preview deploys\"\n\t\t\tdescription=\"Deploy every pull request to a unique URL.\"\n\t\t\tchecked={previews()}\n\t\t\tonChange={previews.set}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -3470,7 +3470,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<DangerZone\n\ttitle=\"Delete project\"\n\tdescription=\"This permanently removes all deploys and domains.\"\n>\n\t<Button variant=\"outline\">Delete marketing-site</Button>\n</DangerZone>",
+		"code": "<DangerZone\n\ttitle=\"Delete project\"\n\tdescription=\"This permanently removes all deploys and domains.\"\n>\n\t<Button variant=\"outline\" onClick={() => {}}>\n\t\tDelete marketing-site\n\t</Button>\n</DangerZone>",
 		"interactive": false
 	},
 	{
@@ -3521,7 +3521,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<WizardNav canBack canNext onBack={() => {}} onNext={() => {}} />",
+		"code": "function Example() {\n\tconst steps = [\"Account\", \"Team\", \"Billing\", \"Done\"];\n\tconst step = signal(0);\n\treturn (\n\t\t<Stack gap=\"0.75rem\">\n\t\t\t<Text>\n\t\t\t\tStep {step() + 1} of {steps.length}: <strong>{steps[step()]}</strong>\n\t\t\t</Text>\n\t\t\t<WizardNav\n\t\t\t\tcanBack={step() > 0}\n\t\t\t\tcanNext={step() < steps.length - 1}\n\t\t\t\tnextLabel={step() === steps.length - 2 ? \"Finish\" : \"Continue\"}\n\t\t\t\tonBack={() => step.set(step() - 1)}\n\t\t\t\tonNext={() => step.set(step() + 1)}\n\t\t\t/>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -3957,7 +3957,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Render your own trigger: `trigger={(t) => <MyButton {...t.attrs} />}`."
 			}
 		],
-		"code": "<Popover open={false} onOpenChange={() => {}} label=\"Share\" panelLabel=\"Share project\">\n\tAnyone with the link can view this project.\n</Popover>",
+		"code": "function Example() {\n\tconst open = signal(false);\n\treturn (\n\t\t<Popover open={open()} onOpenChange={open.set} label=\"Share\" panelLabel=\"Share project\">\n\t\t\tAnyone with the link can view this project.\n\t\t</Popover>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -4054,7 +4054,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Tooltip content=\"Copies the deploy URL\">\n\t<Button variant=\"outline\">Copy link</Button>\n</Tooltip>",
+		"code": "<Tooltip content=\"Copies the deploy URL\">\n\t<Button variant=\"outline\" onClick={() => {}}>\n\t\tCopy link\n\t</Button>\n</Tooltip>",
 		"interactive": false
 	},
 	{
@@ -4104,8 +4104,8 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Menu\n\topen\n\tlabel=\"Project actions\"\n\titems={[\n\t\t{ type: \"label\", label: \"marketing-site\" },\n\t\t{ label: \"Rename\", onSelect: () => {} },\n\t\t{ label: \"Duplicate\", onSelect: () => {} },\n\t\t{ type: \"separator\" },\n\t\t{ label: \"Delete\", onSelect: () => {}, danger: true },\n\t]}\n/>",
-		"interactive": false
+		"code": "function Example() {\n\tconst open = signal(false);\n\tconst last = signal(\"\");\n\tconst pick = (label: string) => () => last.set(label);\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<div style={{ position: \"relative\" }}>\n\t\t\t\t<Button variant=\"outline\" aria-expanded={open()} onClick={() => open.set(!open())}>\n\t\t\t\t\tProject actions ▾\n\t\t\t\t</Button>\n\t\t\t\t<Menu\n\t\t\t\t\topen={open()}\n\t\t\t\t\tonClose={() => open.set(false)}\n\t\t\t\t\tlabel=\"Project actions\"\n\t\t\t\t\titems={[\n\t\t\t\t\t\t{ type: \"label\", label: \"marketing-site\" },\n\t\t\t\t\t\t{ label: \"Rename\", onSelect: pick(\"Rename\") },\n\t\t\t\t\t\t{ label: \"Duplicate\", onSelect: pick(\"Duplicate\") },\n\t\t\t\t\t\t{ type: \"separator\" },\n\t\t\t\t\t\t{ label: \"Delete\", onSelect: pick(\"Delete\"), danger: true },\n\t\t\t\t\t]}\n\t\t\t\t/>\n\t\t\t</div>\n\t\t\t<Text muted>{last() ? `Chose “${last()}”` : \"Nothing chosen yet\"}</Text>\n\t\t</Group>\n\t);\n}",
+		"interactive": true
 	},
 	{
 		"category": "overlays",
@@ -4219,7 +4219,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "function Example() {\n\tconst index = signal<number | null>(null);\n\tconst images = [\n\t\t{ src: swatch(210, \"One\"), alt: \"Blue placeholder\" },\n\t\t{ src: swatch(150, \"Two\"), alt: \"Green placeholder\" },\n\t\t{ src: swatch(20, \"Three\"), alt: \"Orange placeholder\" },\n\t];\n\treturn (\n\t\t<>\n\t\t\t<Button onClick={() => index.set(0)}>Open gallery</Button>\n\t\t\t{index() !== null ? (\n\t\t\t\t<Lightbox\n\t\t\t\t\timages={images}\n\t\t\t\t\tindex={index() ?? 0}\n\t\t\t\t\tonIndexChange={(i: number) => index.set(i)}\n\t\t\t\t\tonClose={() => index.set(null)}\n\t\t\t\t/>\n\t\t\t) : null}\n\t\t</>\n\t);\n}",
+		"code": "function Example() {\n\tconst index = signal<number | null>(null);\n\tconst images = [\n\t\t{ src: \"/images/one.jpg\", alt: \"Blue placeholder\" },\n\t\t{ src: \"/images/two.jpg\", alt: \"Green placeholder\" },\n\t\t{ src: \"/images/three.jpg\", alt: \"Orange placeholder\" },\n\t];\n\treturn (\n\t\t<>\n\t\t\t<Button onClick={() => index.set(0)}>Open gallery</Button>\n\t\t\t{index() !== null ? (\n\t\t\t\t<Lightbox\n\t\t\t\t\timages={images}\n\t\t\t\t\tindex={index() ?? 0}\n\t\t\t\t\tonChange={index.set}\n\t\t\t\t\tonClose={() => index.set(null)}\n\t\t\t\t/>\n\t\t\t) : null}\n\t\t</>\n\t);\n}",
 		"interactive": true
 	},
 	{
@@ -4274,7 +4274,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Box style={{ position: \"relative\", \"min-height\": \"6rem\" }}>\n\t<Text>Refreshing the deploy list…</Text>\n\t<LoadingOverlay visible label=\"Refreshing\" />\n</Box>",
+		"code": "function Example() {\n\tconst loading = signal(true);\n\tconst refresh = () => loading.set(true);\n\t// Pretend each refresh takes 1.5 s (effects run only in the browser).\n\teffect(() => {\n\t\tif (!loading()) return;\n\t\tconst timer = setTimeout(() => loading.set(false), 1500);\n\t\treturn () => clearTimeout(timer);\n\t});\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Box style={{ position: \"relative\", \"min-height\": \"6rem\" }}>\n\t\t\t\t<Text>Deploy list</Text>\n\t\t\t\t<LoadingOverlay visible={loading()} label=\"Refreshing\" />\n\t\t\t</Box>\n\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={refresh} disabled={loading()}>\n\t\t\t\tRefresh\n\t\t\t</Button>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -4425,7 +4425,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<AppShell\n\tcontentAs=\"div\"\n\theader={<strong>Acme Console</strong>}\n\tsidebar={<SidebarNav label=\"Main\" items={sections} value=\"deploys\" />}\n>\n\t<Text>Main content</Text>\n</AppShell>",
+		"code": "const sections = [\n\t{ id: \"overview\", label: \"Overview\" },\n\t{ id: \"deploys\", label: \"Deploys\" },\n\t{ id: \"settings\", label: \"Settings\" },\n];\n\nfunction Example() {\n\tconst page = signal(\"deploys\");\n\treturn (\n\t\t<AppShell\n\t\t\tcontentAs=\"div\"\n\t\t\theader={<strong>Acme Console</strong>}\n\t\t\tsidebar={<SidebarNav label=\"Main\" items={sections} value={page()} onChange={page.set} />}\n\t\t>\n\t\t\t<Text>{sections.find((s) => s.id === page())?.label} page</Text>\n\t\t</AppShell>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -4463,7 +4463,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<SidebarNav label=\"Project\" items={sections} value=\"deploys\" onChange={() => {}} />",
+		"code": "const sections = [\n\t{ id: \"overview\", label: \"Overview\" },\n\t{ id: \"deploys\", label: \"Deploys\" },\n\t{ id: \"settings\", label: \"Settings\" },\n];\n\nfunction Example() {\n\tconst page = signal(\"deploys\");\n\treturn <SidebarNav label=\"Project\" items={sections} value={page()} onChange={page.set} />;\n}",
 		"interactive": false
 	},
 	{
@@ -4562,7 +4562,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "`line` (underline), `pills`, `enclosed` (card tabs) or `segmented`."
 			}
 		],
-		"code": "<Tabs\n\tlabel=\"Project\"\n\tvalue=\"deploys\"\n\tonChange={() => {}}\n\titems={[\n\t\t{ id: \"overview\", label: \"Overview\" },\n\t\t{ id: \"deploys\", label: \"Deploys\", badge: \"12\" },\n\t\t{ id: \"settings\", label: \"Settings\" },\n\t]}\n/>",
+		"code": "function Example() {\n\tconst tab = signal(\"deploys\");\n\treturn (\n\t\t<Tabs\n\t\t\tlabel=\"Project\"\n\t\t\tvalue={tab()}\n\t\t\tonChange={tab.set}\n\t\t\titems={[\n\t\t\t\t{ id: \"overview\", label: \"Overview\", panel: <Text>Traffic and status at a glance.</Text> },\n\t\t\t\t{\n\t\t\t\t\tid: \"deploys\",\n\t\t\t\t\tlabel: \"Deploys\",\n\t\t\t\t\tbadge: \"12\",\n\t\t\t\t\tpanel: <Text>Every push creates a deploy.</Text>,\n\t\t\t\t},\n\t\t\t\t{ id: \"settings\", label: \"Settings\", panel: <Text>Domains, builds and access.</Text> },\n\t\t\t]}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -4605,7 +4605,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Steps\n\tlabel=\"Checkout\"\n\titems={[\n\t\t{ id: \"cart\", label: \"Cart\" },\n\t\t{ id: \"shipping\", label: \"Shipping\", description: \"Address and method\" },\n\t\t{ id: \"payment\", label: \"Payment\" },\n\t]}\n\tvalue=\"shipping\"\n/>",
+		"code": "function Example() {\n\tconst step = signal(\"shipping\");\n\treturn (\n\t\t<Steps\n\t\t\tlabel=\"Checkout\"\n\t\t\titems={[\n\t\t\t\t{ id: \"cart\", label: \"Cart\" },\n\t\t\t\t{ id: \"shipping\", label: \"Shipping\", description: \"Address and method\" },\n\t\t\t\t{ id: \"payment\", label: \"Payment\" },\n\t\t\t]}\n\t\t\tvalue={step()}\n\t\t\tonChange={step.set}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -4665,7 +4665,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "`simple` = prev/next + status; `pages` = numbered buttons (default)."
 			}
 		],
-		"code": "<Pagination page={3} pageCount={12} onChange={() => {}} />",
+		"code": "function Example() {\n\tconst page = signal(3);\n\treturn <Pagination page={page()} pageCount={12} onChange={page.set} />;\n}",
 		"interactive": false
 	},
 	{
@@ -4703,7 +4703,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Accessible name (default \"Pagination\")."
 			}
 		],
-		"code": "<DotPagination count={5} value={1} onChange={() => {}} />",
+		"code": "function Example() {\n\tconst slide = signal(1);\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<DotPagination count={5} value={slide()} onChange={slide.set} />\n\t\t\t<Text muted>Slide {slide() + 1} of 5</Text>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -4754,7 +4754,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<NextPrev prevLabel=\"Installation\" nextLabel=\"Theming\" onPrev={() => {}} onNext={() => {}} />",
+		"code": "function Example() {\n\tconst pages = [\"Installation\", \"Theming\", \"Customization\", \"Accessibility\"];\n\tconst page = signal(1);\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Text>\n\t\t\t\tReading: <strong>{pages[page()]}</strong>\n\t\t\t</Text>\n\t\t\t<NextPrev\n\t\t\t\tprevLabel={pages[page() - 1] ?? \"Start\"}\n\t\t\t\tnextLabel={pages[page() + 1] ?? \"End\"}\n\t\t\t\tprevDisabled={page() === 0}\n\t\t\t\tnextDisabled={page() === pages.length - 1}\n\t\t\t\tonPrev={() => page.set(page() - 1)}\n\t\t\t\tonNext={() => page.set(page() + 1)}\n\t\t\t/>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -4825,7 +4825,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Accessible name (default \"Sub navigation\")."
 			}
 		],
-		"code": "<Subnav\n\tlabel=\"Filter\"\n\tvalue=\"all\"\n\tonChange={() => {}}\n\titems={[\n\t\t{ id: \"all\", label: \"All\" },\n\t\t{ id: \"production\", label: \"Production\" },\n\t\t{ id: \"preview\", label: \"Preview\" },\n\t]}\n/>",
+		"code": "function Example() {\n\tconst filter = signal(\"all\");\n\treturn (\n\t\t<Subnav\n\t\t\tlabel=\"Filter\"\n\t\t\tvalue={filter()}\n\t\t\tonChange={filter.set}\n\t\t\titems={[\n\t\t\t\t{ id: \"all\", label: \"All\" },\n\t\t\t\t{ id: \"production\", label: \"Production\" },\n\t\t\t\t{ id: \"preview\", label: \"Preview\" },\n\t\t\t]}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -4863,7 +4863,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Iconnav\n\tlabel=\"Workspace\"\n\tvalue=\"home\"\n\tonChange={() => {}}\n\titems={[\n\t\t{ id: \"home\", icon: \"home\", label: \"Home\" },\n\t\t{ id: \"alerts\", icon: \"bell\", label: \"Alerts\" },\n\t\t{ id: \"settings\", icon: \"settings\", label: \"Settings\" },\n\t]}\n/>",
+		"code": "function Example() {\n\tconst section = signal(\"home\");\n\treturn (\n\t\t<Iconnav\n\t\t\tlabel=\"Workspace\"\n\t\t\tvalue={section()}\n\t\t\tonChange={section.set}\n\t\t\titems={[\n\t\t\t\t{ id: \"home\", icon: \"home\", label: \"Home\" },\n\t\t\t\t{ id: \"alerts\", icon: \"bell\", label: \"Alerts\" },\n\t\t\t\t{ id: \"settings\", icon: \"settings\", label: \"Settings\" },\n\t\t\t]}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -4986,14 +4986,14 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<TableOfContents\n\ttitle=\"On this page\"\n\titems={[\n\t\t{ id: \"install\", label: \"Installation\", active: true },\n\t\t{ id: \"usage\", label: \"Usage\" },\n\t\t{ id: \"theming\", label: \"Theming\" },\n\t]}\n/>",
+		"code": "function Example() {\n\tconst current = signal(\"install\");\n\tconst sections = [\n\t\t{ id: \"install\", label: \"Installation\" },\n\t\t{ id: \"usage\", label: \"Usage\" },\n\t\t{ id: \"theming\", label: \"Theming\" },\n\t];\n\treturn (\n\t\t<TableOfContents\n\t\t\ttitle=\"On this page\"\n\t\t\titems={sections.map((s) => ({\n\t\t\t\t...s,\n\t\t\t\tactive: current() === s.id,\n\t\t\t\tonSelect: () => current.set(s.id),\n\t\t\t}))}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
 		"category": "navigation",
 		"name": "ScrollSpy",
 		"parts": [],
-		"summary": "Highlights the section currently in view.",
+		"summary": "Highlights the section currently in view, in the page or in the sections' scroll container.",
 		"slots": [
 			"root",
 			"item"
@@ -5018,7 +5018,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<ScrollSpy\n\tlabel=\"On this page\"\n\titems={[\n\t\t{ id: \"intro\", label: \"Introduction\" },\n\t\t{ id: \"install\", label: \"Installation\" },\n\t\t{ id: \"usage\", label: \"Usage\" },\n\t]}\n/>",
+		"code": "function Example() {\n\tconst sections = [\n\t\t{ id: \"spy-intro\", label: \"Introduction\", text: \"What Arachne UI is and when to use it.\" },\n\t\t{\n\t\t\tid: \"spy-install\",\n\t\t\tlabel: \"Installation\",\n\t\t\ttext: \"Add the package and import the stylesheet.\",\n\t\t},\n\t\t{ id: \"spy-usage\", label: \"Usage\", text: \"Render components and wire their state.\" },\n\t];\n\treturn (\n\t\t<Group align=\"start\" gap=\"1.5rem\">\n\t\t\t<ScrollSpy label=\"On this page\" offset={8} items={sections} />\n\t\t\t<ScrollArea maxHeight=\"9rem\" aria-label=\"Article\">\n\t\t\t\t<For each={sections}>\n\t\t\t\t\t{(section) => (\n\t\t\t\t\t\t<section id={section.id} style={{ \"min-height\": \"7rem\" }}>\n\t\t\t\t\t\t\t<strong>{section.label}</strong>\n\t\t\t\t\t\t\t<Text muted>{section.text}</Text>\n\t\t\t\t\t\t</section>\n\t\t\t\t\t)}\n\t\t\t\t</For>\n\t\t\t</ScrollArea>\n\t\t</Group>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -5081,7 +5081,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Accessible name (default \"Bottom\")."
 			}
 		],
-		"code": "<BottomNav\n\tlabel=\"Primary\"\n\titems={[\n\t\t{ id: \"home\", label: \"Home\", icon: \"home\" },\n\t\t{ id: \"search\", label: \"Search\", icon: \"search\" },\n\t\t{ id: \"inbox\", label: \"Inbox\", icon: \"bell\" },\n\t]}\n\tvalue=\"home\"\n\tonChange={() => {}}\n/>",
+		"code": "function Example() {\n\tconst tab = signal(\"home\");\n\treturn (\n\t\t<BottomNav\n\t\t\tlabel=\"Primary\"\n\t\t\titems={[\n\t\t\t\t{ id: \"home\", label: \"Home\", icon: \"home\" },\n\t\t\t\t{ id: \"search\", label: \"Search\", icon: \"search\" },\n\t\t\t\t{ id: \"inbox\", label: \"Inbox\", icon: \"bell\" },\n\t\t\t]}\n\t\t\tvalue={tab()}\n\t\t\tonChange={tab.set}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -5120,7 +5120,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Accessible name (default \"Thumbnails\")."
 			}
 		],
-		"code": "<Thumbnav\n\tlabel=\"Photos\"\n\titems={[\n\t\t{ id: \"1\", src: \"/images/1.jpg\", alt: \"Photo 1\" },\n\t\t{ id: \"2\", src: \"/images/2.jpg\", alt: \"Photo 2\" },\n\t\t{ id: \"3\", src: \"/images/3.jpg\", alt: \"Photo 3\" },\n\t]}\n\tvalue=\"2\"\n\tonChange={() => {}}\n/>",
+		"code": "function Example() {\n\tconst photo = signal(\"2\");\n\treturn (\n\t\t<Thumbnav\n\t\t\tlabel=\"Photos\"\n\t\t\titems={[\n\t\t\t\t{ id: \"1\", src: \"/images/1.jpg\", alt: \"Photo 1\" },\n\t\t\t\t{ id: \"2\", src: \"/images/2.jpg\", alt: \"Photo 2\" },\n\t\t\t\t{ id: \"3\", src: \"/images/3.jpg\", alt: \"Photo 3\" },\n\t\t\t]}\n\t\t\tvalue={photo()}\n\t\t\tonChange={photo.set}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -5180,7 +5180,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Affix position=\"bottom-right\" offset=\"1rem\">\n\t<Button size=\"sm\">Feedback</Button>\n</Affix>",
+		"code": "<Affix position=\"bottom-right\" offset=\"1rem\">\n\t<Button size=\"sm\" onClick={() => {}}>\n\t\tFeedback\n\t</Button>\n</Affix>",
 		"interactive": false
 	},
 	{
@@ -5232,7 +5232,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<StickyBar position=\"bottom\">\n\t<Text>You have unsaved changes.</Text>\n\t<Button size=\"sm\">Save</Button>\n</StickyBar>",
+		"code": "<StickyBar position=\"bottom\">\n\t<Text>You have unsaved changes.</Text>\n\t<Button size=\"sm\" onClick={() => {}}>\n\t\tSave\n\t</Button>\n</StickyBar>",
 		"interactive": false
 	},
 	{
@@ -5318,7 +5318,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Accessible name (default \"Language\")."
 			}
 		],
-		"code": "<LocaleSwitcher\n\tlabel=\"Language\"\n\tvalue=\"en\"\n\toptions={[\n\t\t{ value: \"en\", label: \"English\" },\n\t\t{ value: \"de\", label: \"Deutsch\" },\n\t\t{ value: \"ja\", label: \"日本語\" },\n\t]}\n\tonChange={() => {}}\n/>",
+		"code": "function Example() {\n\tconst locale = signal(\"en\");\n\treturn (\n\t\t<LocaleSwitcher\n\t\t\tlabel=\"Language\"\n\t\t\tvalue={locale()}\n\t\t\toptions={[\n\t\t\t\t{ value: \"en\", label: \"English\" },\n\t\t\t\t{ value: \"de\", label: \"Deutsch\" },\n\t\t\t\t{ value: \"ja\", label: \"日本語\" },\n\t\t\t]}\n\t\t\tonChange={locale.set}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -5348,7 +5348,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<OrgSwitcher org={{ id: \"acme\", name: \"Acme Inc.\", plan: \"Pro\" }} onClick={() => {}} />",
+		"code": "<OrgSwitcher\n\torg={{ id: \"acme\", name: \"Acme Inc.\", plan: \"Pro\" }}\n\tonClick={() => {}}\n/>",
 		"interactive": false
 	},
 	{
@@ -5448,7 +5448,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Message tone=\"info\">\n\t<MessageHeader onClose={() => {}}>Scheduled maintenance</MessageHeader>\n\t<MessageBody>\n\t\tBuilds pause on Sunday 02:00–03:00 UTC while we upgrade the runners.\n\t</MessageBody>\n</Message>",
+		"code": "function Example() {\n\tconst visible = signal(true);\n\treturn (\n\t\t<Show\n\t\t\twhen={visible()}\n\t\t\tfallback={\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => visible.set(true)}>\n\t\t\t\t\tShow message\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<Message tone=\"info\">\n\t\t\t\t<MessageHeader onClose={() => visible.set(false)}>Scheduled maintenance</MessageHeader>\n\t\t\t\t<MessageBody>\n\t\t\t\t\tBuilds pause on Sunday 02:00–03:00 UTC while we upgrade the runners.\n\t\t\t\t</MessageBody>\n\t\t\t</Message>\n\t\t</Show>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -5482,7 +5482,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Message tone=\"warning\">\n\t<MessageHeader onClose={() => {}}>\n\t\tUsage limit\n\t</MessageHeader>\n\t<MessageBody>You've used 92% of this month's build minutes.</MessageBody>\n</Message>",
+		"code": "function Example() {\n\tconst visible = signal(true);\n\treturn (\n\t\t<Show\n\t\t\twhen={visible()}\n\t\t\tfallback={\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => visible.set(true)}>\n\t\t\t\t\tShow message\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<Message tone=\"warning\">\n\t\t\t\t<MessageHeader onClose={() => visible.set(false)}>\n\t\t\t\t\tUsage limit\n\t\t\t\t</MessageHeader>\n\t\t\t\t<MessageBody>You've used 92% of this month's build minutes.</MessageBody>\n\t\t\t</Message>\n\t\t</Show>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -5541,7 +5541,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Notification tone=\"info\" title=\"New sign-in\" onClose={() => {}}>\n\tChrome on macOS, Berlin — just now.\n</Notification>",
+		"code": "function Example() {\n\tconst visible = signal(true);\n\treturn (\n\t\t<Show\n\t\t\twhen={visible()}\n\t\t\tfallback={\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => visible.set(true)}>\n\t\t\t\t\tShow notification\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<Notification tone=\"info\" title=\"New sign-in\" onClose={() => visible.set(false)}>\n\t\t\t\tChrome on macOS, Berlin — just now.\n\t\t\t</Notification>\n\t\t</Show>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -5627,7 +5627,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Banner\n\ttone=\"warning\"\n\ttitle=\"Payment failed\"\n\taction={<Button size=\"sm\">Update card</Button>}\n\tonClose={() => {}}\n>\n\tYour card ending in 4242 was declined.\n</Banner>",
+		"code": "function Example() {\n\tconst visible = signal(true);\n\treturn (\n\t\t<Show\n\t\t\twhen={visible()}\n\t\t\tfallback={\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => visible.set(true)}>\n\t\t\t\t\tShow banner\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<Banner\n\t\t\t\ttone=\"warning\"\n\t\t\t\ttitle=\"Payment failed\"\n\t\t\t\taction={\n\t\t\t\t\t<Button size=\"sm\" onClick={() => visible.set(false)}>\n\t\t\t\t\t\tUpdate card\n\t\t\t\t\t</Button>\n\t\t\t\t}\n\t\t\t\tonClose={() => visible.set(false)}\n\t\t\t>\n\t\t\t\tYour card ending in 4242 was declined.\n\t\t\t</Banner>\n\t\t</Show>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -5666,7 +5666,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<AnnouncementBar tone=\"accent\" dismissible onDismiss={() => {}}>\n\tArachne 2.4 is out — dark theme and a new component reference.\n</AnnouncementBar>",
+		"code": "function Example() {\n\tconst visible = signal(true);\n\treturn (\n\t\t<Show\n\t\t\twhen={visible()}\n\t\t\tfallback={\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => visible.set(true)}>\n\t\t\t\t\tShow announcement again\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<AnnouncementBar tone=\"accent\" dismissible onDismiss={() => visible.set(false)}>\n\t\t\t\tArachne 2.4 is out — dark theme and a new component reference.\n\t\t\t</AnnouncementBar>\n\t\t</Show>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -5701,7 +5701,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<UpgradeBanner\n\ttitle=\"You're at 92% of your build minutes\"\n\taction={<Button>Upgrade</Button>}\n>\n\tPro includes 10,000 minutes and concurrent builds.\n</UpgradeBanner>",
+		"code": "<UpgradeBanner\n\ttitle=\"You're at 92% of your build minutes\"\n\taction={<Button onClick={() => {}}>Upgrade</Button>}\n>\n\tPro includes 10,000 minutes and concurrent builds.\n</UpgradeBanner>",
 		"interactive": false
 	},
 	{
@@ -5760,7 +5760,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<CookieConsent\n\topen\n\tmessage=\"We use cookies to keep you signed in and to measure usage.\"\n\tonAccept={() => {}}\n\tonDecline={() => {}}\n/>",
+		"code": "function Example() {\n\tconst choice = signal<\"accepted\" | \"declined\" | null>(null);\n\treturn (\n\t\t<>\n\t\t\t<CookieConsent\n\t\t\t\topen={choice() === null}\n\t\t\t\tmessage=\"We use cookies to keep you signed in and to measure usage.\"\n\t\t\t\tonAccept={() => choice.set(\"accepted\")}\n\t\t\t\tonDecline={() => choice.set(\"declined\")}\n\t\t\t/>\n\t\t\t<Show when={choice()}>\n\t\t\t\t<Group gap=\"0.75rem\">\n\t\t\t\t\t<Text muted>Cookies {choice()}.</Text>\n\t\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => choice.set(null)}>\n\t\t\t\t\t\tAsk again\n\t\t\t\t\t</Button>\n\t\t\t\t</Group>\n\t\t\t</Show>\n\t\t</>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -6245,7 +6245,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<EmptyState\n\ttitle=\"No projects yet\"\n\tdescription=\"Create a project to start deploying.\"\n\taction={<Button>New project</Button>}\n/>",
+		"code": "<EmptyState\n\ttitle=\"No projects yet\"\n\tdescription=\"Create a project to start deploying.\"\n\taction={<Button onClick={() => {}}>New project</Button>}\n/>",
 		"interactive": false
 	},
 	{
@@ -6313,7 +6313,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<ErrorState\n\tdescription=\"We couldn't load your deploys. Check your connection and try again.\"\n\taction={<Button variant=\"outline\">Retry</Button>}\n/>",
+		"code": "<ErrorState\n\tdescription=\"We couldn't load your deploys. Check your connection and try again.\"\n\taction={\n\t\t<Button variant=\"outline\" onClick={() => {}}>\n\t\t\tRetry\n\t\t</Button>\n\t}\n/>",
 		"interactive": false
 	},
 	{
@@ -6386,7 +6386,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Indicator label={3}>\n\t<Button variant=\"outline\">Inbox</Button>\n</Indicator>",
+		"code": "<Indicator label={3}>\n\t<Button variant=\"outline\" onClick={() => {}}>\n\t\tInbox\n\t</Button>\n</Indicator>",
 		"interactive": false
 	},
 	{
@@ -7106,7 +7106,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "`separated` renders each item as its own card."
 			}
 		],
-		"code": "<Accordion\n\tvalue=\"billing\"\n\tonChange={() => {}}\n\titems={[\n\t\t{\n\t\t\tid: \"billing\",\n\t\t\ttitle: \"How does billing work?\",\n\t\t\tcontent: \"You're billed monthly per seat.\",\n\t\t},\n\t\t{\n\t\t\tid: \"cancel\",\n\t\t\ttitle: \"Can I cancel anytime?\",\n\t\t\tcontent: \"Yes — your plan ends at the period's close.\",\n\t\t},\n\t\t{\n\t\t\tid: \"data\",\n\t\t\ttitle: \"Where is my data stored?\",\n\t\t\tcontent: \"In the EU (Frankfurt) by default.\",\n\t\t},\n\t]}\n/>",
+		"code": "function Example() {\n\tconst openItem = signal<string | null>(\"billing\");\n\treturn (\n\t\t<Accordion\n\t\t\tvalue={openItem() ?? \"\"}\n\t\t\tonChange={(id: string | null) => openItem.set(id)}\n\t\t\titems={[\n\t\t\t\t{\n\t\t\t\t\tid: \"billing\",\n\t\t\t\t\ttitle: \"How does billing work?\",\n\t\t\t\t\tcontent: \"You're billed monthly per seat.\",\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\tid: \"cancel\",\n\t\t\t\t\ttitle: \"Can I cancel anytime?\",\n\t\t\t\t\tcontent: \"Yes — your plan ends at the period's close.\",\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\tid: \"data\",\n\t\t\t\t\ttitle: \"Where is my data stored?\",\n\t\t\t\t\tcontent: \"In the EU (Frankfurt) by default.\",\n\t\t\t\t},\n\t\t\t]}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -7129,7 +7129,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Collapse open>\n\t<Text>Collapsible content animates its height when toggled.</Text>\n</Collapse>",
+		"code": "function Example() {\n\tconst open = signal(true);\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Button size=\"sm\" variant=\"outline\" aria-expanded={open()} onClick={() => open.set(!open())}>\n\t\t\t\t{open() ? \"Hide details\" : \"Show details\"}\n\t\t\t</Button>\n\t\t\t<Collapse open={open()}>\n\t\t\t\t<Text>Collapsible content animates its height when toggled.</Text>\n\t\t\t</Collapse>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -7249,7 +7249,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Tree\n\tlabel=\"Workspace\"\n\tdefaultExpanded={[\"apps\"]}\n\tvalue=\"web\"\n\tdata={[\n\t\t{\n\t\t\tid: \"apps\",\n\t\t\tlabel: \"apps\",\n\t\t\tchildren: [\n\t\t\t\t{ id: \"web\", label: \"web\" },\n\t\t\t\t{ id: \"admin\", label: \"admin\" },\n\t\t\t],\n\t\t},\n\t\t{ id: \"packages\", label: \"packages\", children: [{ id: \"ui\", label: \"ui\" }] },\n\t]}\n/>",
+		"code": "function Example() {\n\tconst selected = signal(\"web\");\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Tree\n\t\t\t\tlabel=\"Workspace\"\n\t\t\t\tdefaultExpanded={[\"apps\"]}\n\t\t\t\tvalue={selected()}\n\t\t\t\tonChange={selected.set}\n\t\t\t\tdata={[\n\t\t\t\t\t{\n\t\t\t\t\t\tid: \"apps\",\n\t\t\t\t\t\tlabel: \"apps\",\n\t\t\t\t\t\tchildren: [\n\t\t\t\t\t\t\t{ id: \"web\", label: \"web\" },\n\t\t\t\t\t\t\t{ id: \"admin\", label: \"admin\" },\n\t\t\t\t\t\t],\n\t\t\t\t\t},\n\t\t\t\t\t{ id: \"packages\", label: \"packages\", children: [{ id: \"ui\", label: \"ui\" }] },\n\t\t\t\t]}\n\t\t\t/>\n\t\t\t<Text muted>Selected: {selected()}</Text>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -7284,7 +7284,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<FileTree label=\"Repository\" nodes={repoTree} selected=\"src/button.tsx\" />",
+		"code": "const repoTree: FileTreeNode[] = [\n\t{\n\t\tid: \"src\",\n\t\tname: \"src\",\n\t\tkind: \"folder\",\n\t\tchildren: [\n\t\t\t{ id: \"src/index.ts\", name: \"index.ts\", kind: \"file\" },\n\t\t\t{ id: \"src/button.tsx\", name: \"button.tsx\", kind: \"file\" },\n\t\t],\n\t},\n\t{ id: \"package.json\", name: \"package.json\", kind: \"file\" },\n];\n\nfunction Example() {\n\tconst file = signal(\"src/button.tsx\");\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<FileTree label=\"Repository\" nodes={repoTree} selected={file()} onSelect={file.set} />\n\t\t\t<Text muted>Open: {file()}</Text>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -7301,7 +7301,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<JsonTree data={configJson} />",
+		"code": "const configJson: JsonNode = {\n\tkind: \"object\",\n\tentries: [\n\t\t{ key: \"name\", value: { kind: \"primitive\", value: \"arachne\" } },\n\t\t{ key: \"private\", value: { kind: \"primitive\", value: true } },\n\t\t{\n\t\t\tkey: \"workspaces\",\n\t\t\tvalue: {\n\t\t\t\tkind: \"array\",\n\t\t\t\titems: [\n\t\t\t\t\t{ kind: \"primitive\", value: \"packages/*\" },\n\t\t\t\t\t{ kind: \"primitive\", value: \"apps/*\" },\n\t\t\t\t],\n\t\t\t},\n\t\t},\n\t],\n};\n\n<JsonTree data={configJson} />",
 		"interactive": false
 	},
 	{
@@ -7366,7 +7366,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<TransferList\n\tleftTitle=\"Available\"\n\trightTitle=\"Selected\"\n\tleft={[\"Frankfurt\", \"Tokyo\", \"São Paulo\"]}\n\tright={[\"Washington, D.C.\"]}\n\tonChange={() => {}}\n/>",
+		"code": "function Example() {\n\tconst lists = signal({ left: [\"Frankfurt\", \"Tokyo\", \"São Paulo\"], right: [\"Washington, D.C.\"] });\n\treturn (\n\t\t<TransferList\n\t\t\tleftTitle=\"Available\"\n\t\t\trightTitle=\"Selected\"\n\t\t\tleft={lists().left}\n\t\t\tright={lists().right}\n\t\t\tonChange={lists.set}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -7394,7 +7394,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<SortableList\n\titems={[\n\t\t{ id: \"install\", label: \"Install\" },\n\t\t{ id: \"test\", label: \"Test\" },\n\t\t{ id: \"deploy\", label: \"Deploy\" },\n\t]}\n\tonChange={() => {}}\n/>",
+		"code": "function Example() {\n\tconst steps = signal([\n\t\t{ id: \"install\", label: \"Install\" },\n\t\t{ id: \"test\", label: \"Test\" },\n\t\t{ id: \"deploy\", label: \"Deploy\" },\n\t]);\n\treturn <SortableList items={steps()} onChange={steps.set} />;\n}",
 		"interactive": false
 	},
 	{
@@ -7426,7 +7426,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Called when a card is dropped on a column or moved with Alt+arrow keys. `index` is the position in the target column (without the moved card). Update your data; the board keeps focus on the moved card."
 			}
 		],
-		"code": "<KanbanBoard label=\"Sprint 14\" onMove={() => {}}>\n\t<KanbanColumn title=\"Todo\" columnId=\"todo\" count={2}>\n\t\t<KanbanCard cardId=\"c-1\" title=\"Audit form labels\" meta=\"#418\" />\n\t\t<KanbanCard cardId=\"c-2\" title=\"Toast pause on hover\" meta=\"#421\" />\n\t</KanbanColumn>\n\t<KanbanColumn title=\"In progress\" columnId=\"doing\" count={1}>\n\t\t<KanbanCard cardId=\"c-3\" title=\"Kanban keyboard moves\" meta=\"#402\" />\n\t</KanbanColumn>\n\t<KanbanColumn title=\"Done\" columnId=\"done\" count={1}>\n\t\t<KanbanCard cardId=\"c-4\" title=\"Dark theme tokens\" meta=\"#389\" />\n\t</KanbanColumn>\n</KanbanBoard>",
+		"code": "function Example() {\n\ttype Card = { id: string; title: string; meta: string; column: string };\n\tconst columns = [\n\t\t{ id: \"todo\", title: \"Todo\" },\n\t\t{ id: \"doing\", title: \"In progress\" },\n\t\t{ id: \"done\", title: \"Done\" },\n\t];\n\tconst cards = signal<Card[]>([\n\t\t{ id: \"c-1\", title: \"Audit form labels\", meta: \"#418\", column: \"todo\" },\n\t\t{ id: \"c-2\", title: \"Toast pause on hover\", meta: \"#421\", column: \"todo\" },\n\t\t{ id: \"c-3\", title: \"Kanban keyboard moves\", meta: \"#402\", column: \"doing\" },\n\t\t{ id: \"c-4\", title: \"Dark theme tokens\", meta: \"#389\", column: \"done\" },\n\t]);\n\tconst move = (cardId: string, toColumn: string, index: number) => {\n\t\tconst card = cards().find((c) => c.id === cardId);\n\t\tif (!card) return;\n\t\tconst rest = cards().filter((c) => c.id !== cardId);\n\t\tconst target = rest.filter((c) => c.column === toColumn);\n\t\tconst before = target[index];\n\t\tconst at = before ? rest.indexOf(before) : rest.length;\n\t\tcards.set([...rest.slice(0, at), { ...card, column: toColumn }, ...rest.slice(at)]);\n\t};\n\treturn (\n\t\t<KanbanBoard label=\"Sprint 14\" onMove={move}>\n\t\t\t<For each={columns}>\n\t\t\t\t{(column) => (\n\t\t\t\t\t<KanbanColumn\n\t\t\t\t\t\ttitle={column.title}\n\t\t\t\t\t\tcolumnId={column.id}\n\t\t\t\t\t\tcount={cards().filter((c) => c.column === column.id).length}\n\t\t\t\t\t>\n\t\t\t\t\t\t<For each={cards().filter((c) => c.column === column.id)}>\n\t\t\t\t\t\t\t{(card) => (\n\t\t\t\t\t\t\t\t<KanbanCard\n\t\t\t\t\t\t\t\t\tcardId={card.id}\n\t\t\t\t\t\t\t\t\ttitle={card.title}\n\t\t\t\t\t\t\t\t\tmeta={card.meta}\n\t\t\t\t\t\t\t\t\tonClick={() => {}}\n\t\t\t\t\t\t\t\t/>\n\t\t\t\t\t\t\t)}\n\t\t\t\t\t\t</For>\n\t\t\t\t\t</KanbanColumn>\n\t\t\t\t)}\n\t\t\t</For>\n\t\t</KanbanBoard>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -7701,7 +7701,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<FilterChip label=\"Status: failed\" onRemove={() => {}} />",
+		"code": "function Example() {\n\tconst filters = signal([\"Status: failed\", \"Branch: main\", \"Author: ada\"]);\n\treturn (\n\t\t<Group gap=\"0.5rem\">\n\t\t\t<For each={filters()}>\n\t\t\t\t{(filter) => (\n\t\t\t\t\t<FilterChip\n\t\t\t\t\t\tlabel={filter}\n\t\t\t\t\t\tonRemove={() => filters.set(filters().filter((f) => f !== filter))}\n\t\t\t\t\t/>\n\t\t\t\t)}\n\t\t\t</For>\n\t\t\t<Show when={filters().length < 3}>\n\t\t\t\t<Button\n\t\t\t\t\tsize=\"sm\"\n\t\t\t\t\tvariant=\"ghost\"\n\t\t\t\t\tonClick={() => filters.set([\"Status: failed\", \"Branch: main\", \"Author: ada\"])}\n\t\t\t\t>\n\t\t\t\t\tReset filters\n\t\t\t\t</Button>\n\t\t\t</Show>\n\t\t</Group>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -7928,7 +7928,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<CodeBlock\n\tlanguage=\"tsx\"\n\tcode={\n\t\t'import { Button } from \"@arachne/ui\";\\n\\nexport const Save = () => <Button>Save</Button>;'\n\t}\n/>",
+		"code": "<CodeBlock\n\tlanguage=\"tsx\"\n\tcode={\n\t\t'import { Button } from \"@arachne/ui\";\\n\\nexport const Save = () => <Button onClick={() => {}}>Save</Button>;'\n\t}\n/>",
 		"interactive": false
 	},
 	{
@@ -8266,7 +8266,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<LoadMore onLoad={() => {}} hasMore>\n\tLoad 20 more\n</LoadMore>",
+		"code": "function Example() {\n\tconst count = signal(3);\n\tconst loading = signal(false);\n\tconst load = () => {\n\t\tloading.set(true);\n\t\tsetTimeout(() => {\n\t\t\tcount.set(count() + 3);\n\t\t\tloading.set(false);\n\t\t}, 500);\n\t};\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<For each={Array.from({ length: count() }, (_, i) => i + 1)}>\n\t\t\t\t{(n) => <Text>Activity #{n}</Text>}\n\t\t\t</For>\n\t\t\t<LoadMore\n\t\t\t\tonLoad={load}\n\t\t\t\tloading={loading()}\n\t\t\t\thasMore={count() < 12}\n\t\t\t\tendLabel=\"That's everything.\"\n\t\t\t>\n\t\t\t\tLoad 3 more\n\t\t\t</LoadMore>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -8316,7 +8316,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "How far before the end to start loading (IntersectionObserver `rootMargin`). Default `200px`."
 			}
 		],
-		"code": "<InfiniteScroll onLoadMore={() => {}} hasMore>\n\t<Stack gap=\"0.5rem\">\n\t\t<Text>Deploy #128 — production</Text>\n\t\t<Text>Deploy #127 — preview</Text>\n\t</Stack>\n</InfiniteScroll>",
+		"code": "function Example() {\n\tconst deploys = signal(Array.from({ length: 6 }, (_, i) => 128 - i));\n\tconst loading = signal(false);\n\tconst hasMore = () => deploys().length < 30;\n\tconst loadMore = () => {\n\t\tif (loading() || !hasMore()) return;\n\t\tloading.set(true);\n\t\tsetTimeout(() => {\n\t\t\tconst last = deploys()[deploys().length - 1] ?? 128;\n\t\t\tdeploys.set([...deploys(), ...Array.from({ length: 6 }, (_, i) => last - 1 - i)]);\n\t\t\tloading.set(false);\n\t\t}, 600);\n\t};\n\treturn (\n\t\t<ScrollArea maxHeight=\"12rem\">\n\t\t\t<InfiniteScroll onLoadMore={loadMore} hasMore={hasMore()} loading={loading()}>\n\t\t\t\t<Stack gap=\"0.5rem\">\n\t\t\t\t\t<For each={deploys()}>{(n) => <Text>Deploy #{n}</Text>}</For>\n\t\t\t\t</Stack>\n\t\t\t</InfiniteScroll>\n\t\t</ScrollArea>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -8764,7 +8764,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Group gap=\"0.5rem\">\n\t<Button variant=\"ghost\">Cancel</Button>\n\t<Button>Save</Button>\n</Group>",
+		"code": "<Group gap=\"0.5rem\">\n\t<Button variant=\"ghost\" onClick={() => {}}>\n\t\tCancel\n\t</Button>\n\t<Button onClick={() => {}}>Save</Button>\n</Group>",
 		"interactive": false
 	},
 	{
@@ -8811,7 +8811,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Flex justify=\"space-between\" align=\"center\">\n\t<Text>Invoices</Text>\n\t<Button size=\"sm\">Export</Button>\n</Flex>",
+		"code": "<Flex justify=\"space-between\" align=\"center\">\n\t<Text>Invoices</Text>\n\t<Button size=\"sm\" onClick={() => {}}>\n\t\tExport\n\t</Button>\n</Flex>",
 		"interactive": false
 	},
 	{
@@ -8997,7 +8997,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Card style={{ \"max-width\": \"22rem\" }}>\n\t<CardImage>\n\t\t<img src={cardImage} alt=\"Project cover\" width=\"640\" height=\"280\" />\n\t</CardImage>\n\t<CardContent>\n\t\t<strong>marketing-site</strong>\n\t\t<Text muted>Deployed 4 minutes ago from main.</Text>\n\t</CardContent>\n\t<CardFooter>\n\t\t<CardFooterItem onClick={() => {}}>Visit</CardFooterItem>\n\t\t<CardFooterItem onClick={() => {}}>Logs</CardFooterItem>\n\t</CardFooter>\n</Card>",
+		"code": "const cardImage = \"/images/cover.jpg\";\n\n<Card style={{ \"max-width\": \"22rem\" }}>\n\t<CardImage>\n\t\t<img src={cardImage} alt=\"Project cover\" width=\"640\" height=\"280\" />\n\t</CardImage>\n\t<CardContent>\n\t\t<strong>marketing-site</strong>\n\t\t<Text muted>Deployed 4 minutes ago from main.</Text>\n\t</CardContent>\n\t<CardFooter>\n\t\t<CardFooterItem onClick={() => {}}>Visit</CardFooterItem>\n\t\t<CardFooterItem onClick={() => {}}>Logs</CardFooterItem>\n\t</CardFooter>\n</Card>",
 		"interactive": false
 	},
 	{
@@ -9051,7 +9051,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Card style={{ \"max-width\": \"22rem\" }}>\n\t<CardImage>\n\t\t<img src={cardImage} alt=\"Project cover\" width=\"640\" height=\"280\" />\n\t</CardImage>\n</Card>",
+		"code": "const cardImage = \"/images/cover.jpg\";\n\n<Card style={{ \"max-width\": \"22rem\" }}>\n\t<CardImage>\n\t\t<img src={cardImage} alt=\"Project cover\" width=\"640\" height=\"280\" />\n\t</CardImage>\n</Card>",
 		"interactive": false
 	},
 	{
@@ -9139,7 +9139,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Accessible name of the panel's `<nav>` landmark; set it when a page has several panels."
 			}
 		],
-		"code": "<Panel label=\"Repositories\" style={{ \"max-width\": \"22rem\" }}>\n\t<PanelHeading>Repositories</PanelHeading>\n\t<PanelTabs>\n\t\t<PanelTab active>All</PanelTab>\n\t\t<PanelTab>Public</PanelTab>\n\t\t<PanelTab>Private</PanelTab>\n\t</PanelTabs>\n\t<PanelBlock active onClick={() => {}}>\n\t\tarachne\n\t</PanelBlock>\n\t<PanelBlock onClick={() => {}}>marketing-site</PanelBlock>\n</Panel>",
+		"code": "function Example() {\n\tconst repos = [\n\t\t{ name: \"arachne\", visibility: \"public\" },\n\t\t{ name: \"marketing-site\", visibility: \"private\" },\n\t\t{ name: \"design-tokens\", visibility: \"public\" },\n\t];\n\tconst tab = signal(\"all\");\n\tconst active = signal(\"arachne\");\n\tconst shown = () => repos.filter((r) => tab() === \"all\" || r.visibility === tab());\n\treturn (\n\t\t<Panel label=\"Repositories\" style={{ \"max-width\": \"22rem\" }}>\n\t\t\t<PanelHeading>Repositories</PanelHeading>\n\t\t\t<PanelTabs>\n\t\t\t\t<For each={[\"all\", \"public\", \"private\"]}>\n\t\t\t\t\t{(id) => (\n\t\t\t\t\t\t<PanelTab active={tab() === id} onClick={() => tab.set(id)}>\n\t\t\t\t\t\t\t{id[0]?.toUpperCase() + id.slice(1)}\n\t\t\t\t\t\t</PanelTab>\n\t\t\t\t\t)}\n\t\t\t\t</For>\n\t\t\t</PanelTabs>\n\t\t\t<For each={shown()}>\n\t\t\t\t{(repo) => (\n\t\t\t\t\t<PanelBlock active={active() === repo.name} onClick={() => active.set(repo.name)}>\n\t\t\t\t\t\t{repo.name}\n\t\t\t\t\t</PanelBlock>\n\t\t\t\t)}\n\t\t\t</For>\n\t\t</Panel>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -9175,7 +9175,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Panel label=\"Filter tabs\">\n\t<PanelTabs>\n\t\t<PanelTab active>All</PanelTab>\n\t\t<PanelTab>Forks</PanelTab>\n\t</PanelTabs>\n</Panel>",
+		"code": "function Example() {\n\tconst tab = signal(\"all\");\n\treturn (\n\t\t<Panel label=\"Filter tabs\">\n\t\t\t<PanelTabs>\n\t\t\t\t<PanelTab active={tab() === \"all\"} onClick={() => tab.set(\"all\")}>\n\t\t\t\t\tAll\n\t\t\t\t</PanelTab>\n\t\t\t\t<PanelTab active={tab() === \"forks\"} onClick={() => tab.set(\"forks\")}>\n\t\t\t\t\tForks\n\t\t\t\t</PanelTab>\n\t\t\t</PanelTabs>\n\t\t</Panel>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -9205,7 +9205,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Panel label=\"Sources\">\n\t<PanelTabs>\n\t\t<PanelTab active onClick={() => {}}>\n\t\t\tAll\n\t\t</PanelTab>\n\t\t<PanelTab onClick={() => {}}>Forks</PanelTab>\n\t</PanelTabs>\n</Panel>",
+		"code": "function Example() {\n\tconst tab = signal(\"all\");\n\treturn (\n\t\t<Panel label=\"Sources\">\n\t\t\t<PanelTabs>\n\t\t\t\t<PanelTab active={tab() === \"all\"} onClick={() => tab.set(\"all\")}>\n\t\t\t\t\tAll\n\t\t\t\t</PanelTab>\n\t\t\t\t<PanelTab active={tab() === \"forks\"} onClick={() => tab.set(\"forks\")}>\n\t\t\t\t\tForks\n\t\t\t\t</PanelTab>\n\t\t\t</PanelTabs>\n\t\t</Panel>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -9235,7 +9235,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Panel label=\"Recent projects\">\n\t<PanelBlock onClick={() => {}}>\n\t\tmarketing-site\n\t</PanelBlock>\n</Panel>",
+		"code": "function Example() {\n\tconst active = signal(\"marketing-site\");\n\treturn (\n\t\t<Panel label=\"Recent projects\">\n\t\t\t<PanelBlock\n\t\t\t\tactive={active() === \"marketing-site\"}\n\t\t\t\tonClick={() => active.set(\"marketing-site\")}\n\t\t\t>\n\t\t\t\tmarketing-site\n\t\t\t</PanelBlock>\n\t\t\t<PanelBlock active={active() === \"docs\"} onClick={() => active.set(\"docs\")}>\n\t\t\t\tdocs\n\t\t\t</PanelBlock>\n\t\t</Panel>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -9500,7 +9500,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Level>\n\t<LevelLeft>\n\t\t<LevelItem>\n\t\t\t<strong>128 deploys</strong>\n\t\t</LevelItem>\n\t</LevelLeft>\n\t<LevelRight>\n\t\t<LevelItem>\n\t\t\t<Button size=\"sm\">New deploy</Button>\n\t\t</LevelItem>\n\t</LevelRight>\n</Level>",
+		"code": "<Level>\n\t<LevelLeft>\n\t\t<LevelItem>\n\t\t\t<strong>128 deploys</strong>\n\t\t</LevelItem>\n\t</LevelLeft>\n\t<LevelRight>\n\t\t<LevelItem>\n\t\t\t<Button size=\"sm\" onClick={() => {}}>\n\t\t\t\tNew deploy\n\t\t\t</Button>\n\t\t</LevelItem>\n\t</LevelRight>\n</Level>",
 		"interactive": false
 	},
 	{
@@ -9716,7 +9716,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Media>\n\t<MediaContent>Row content</MediaContent>\n\t<MediaRight>\n\t\t<Button size=\"sm\" variant=\"ghost\">\n\t\t\tReply\n\t\t</Button>\n\t</MediaRight>\n</Media>",
+		"code": "<Media>\n\t<MediaContent>Row content</MediaContent>\n\t<MediaRight>\n\t\t<Button size=\"sm\" variant=\"ghost\" onClick={() => {}}>\n\t\t\tReply\n\t\t</Button>\n\t</MediaRight>\n</Media>",
 		"interactive": false
 	},
 	{
@@ -9960,7 +9960,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<FilterBar>\n\t<SearchInput aria-label=\"Search deploys\" value=\"\" onChange={() => {}} />\n\t<Button variant=\"outline\">Status</Button>\n\t<Button variant=\"outline\">Branch</Button>\n</FilterBar>",
+		"code": "function Example() {\n\tconst query = signal(\"\");\n\tconst deploys = [\"marketing-site #128\", \"docs #127\", \"marketing-site #126\", \"api #125\"];\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<FilterBar>\n\t\t\t\t<SearchInput\n\t\t\t\t\taria-label=\"Search deploys\"\n\t\t\t\t\tplaceholder=\"Search deploys\"\n\t\t\t\t\tvalue={query()}\n\t\t\t\t\tonChange={query.set}\n\t\t\t\t/>\n\t\t\t\t<Button variant=\"outline\" onClick={() => query.set(\"\")}>\n\t\t\t\t\tClear\n\t\t\t\t</Button>\n\t\t\t</FilterBar>\n\t\t\t<For each={deploys.filter((d) => d.includes(query()))}>{(d) => <Text>{d}</Text>}</For>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -10237,7 +10237,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<PageHeader\n\ttitle=\"Deploys\"\n\tdescription=\"Every push to a branch creates a deploy.\"\n\tactions={<Button>New deploy</Button>}\n/>",
+		"code": "<PageHeader\n\ttitle=\"Deploys\"\n\tdescription=\"Every push to a branch creates a deploy.\"\n\tactions={<Button onClick={() => {}}>New deploy</Button>}\n/>",
 		"interactive": false
 	},
 	{
@@ -10571,7 +10571,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Button variant=\"ghost\">\n\t★<VisuallyHidden>Add to favourites</VisuallyHidden>\n</Button>",
+		"code": "<Button variant=\"ghost\" onClick={() => {}}>\n\t★<VisuallyHidden>Add to favourites</VisuallyHidden>\n</Button>",
 		"interactive": false
 	},
 	{
@@ -10594,7 +10594,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Text>\n\tThanks <Mention name=\"ada\" />, merging now.\n</Text>",
+		"code": "<Text>\n\tThanks <Mention name=\"ada\" onClick={() => {}} />, merging now.\n</Text>",
 		"interactive": false
 	},
 	{
@@ -10812,7 +10812,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<ReactionBar\n\treactions={[\n\t\t{ emoji: \"👍\", count: 12, active: true },\n\t\t{ emoji: \"🎉\", count: 4 },\n\t\t{ emoji: \"👀\", count: 2 },\n\t]}\n\tonToggle={() => {}}\n/>",
+		"code": "function Example() {\n\tconst reactions = signal([\n\t\t{ emoji: \"👍\", count: 12, active: true },\n\t\t{ emoji: \"🎉\", count: 4, active: false },\n\t\t{ emoji: \"👀\", count: 2, active: false },\n\t]);\n\tconst toggle = (emoji: string) =>\n\t\treactions.set(\n\t\t\treactions().map((r) =>\n\t\t\t\tr.emoji === emoji ? { ...r, active: !r.active, count: r.count + (r.active ? -1 : 1) } : r,\n\t\t\t),\n\t\t);\n\treturn <ReactionBar reactions={reactions()} onToggle={toggle} />;\n}",
 		"interactive": false
 	},
 	{
@@ -11070,7 +11070,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<ProductCard\n\ttitle=\"Stoneware mug\"\n\torder={3}\n\tprice={24}\n\tstrike={32}\n\tbadge=\"Sale\"\n\timage=\"/images/mug.jpg\"\n\timageAlt=\"Terracotta stoneware mug\"\n\tonAdd={() => {}}\n/>",
+		"code": "function Example() {\n\tconst inCart = signal(0);\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<ProductCard\n\t\t\t\ttitle=\"Stoneware mug\"\n\t\t\t\torder={3}\n\t\t\t\tprice={24}\n\t\t\t\tstrike={32}\n\t\t\t\tbadge=\"Sale\"\n\t\t\t\timage=\"/images/mug.jpg\"\n\t\t\t\timageAlt=\"Terracotta stoneware mug\"\n\t\t\t\tonAdd={() => inCart.set(inCart() + 1)}\n\t\t\t/>\n\t\t\t<Text muted>In cart: {inCart()}</Text>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -11130,7 +11130,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<CartLine\n\ttitle=\"Stoneware mug\"\n\tprice={24}\n\tquantity={2}\n\timage=\"/images/mug.jpg\"\n\tonQuantityChange={() => {}}\n\tonRemove={() => {}}\n/>",
+		"code": "function Example() {\n\tconst quantity = signal(2);\n\tconst removed = signal(false);\n\treturn (\n\t\t<Show\n\t\t\twhen={!removed()}\n\t\t\tfallback={\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => removed.set(false)}>\n\t\t\t\t\tUndo remove\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<CartLine\n\t\t\t\ttitle=\"Stoneware mug\"\n\t\t\t\tprice={24}\n\t\t\t\tquantity={quantity()}\n\t\t\t\timage=\"/images/mug.jpg\"\n\t\t\t\tonQuantityChange={quantity.set}\n\t\t\t\tonRemove={() => removed.set(true)}\n\t\t\t/>\n\t\t</Show>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -11230,7 +11230,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<PricingCard\n\tname=\"Pro\"\n\tprice=\"$20\"\n\tperiod=\"per seat / month\"\n\tdescription=\"For growing teams.\"\n\tfeatures={[\"Unlimited projects\", \"10,000 build minutes\", \"Email support\"]}\n\thighlighted\n\taction={<Button>Start trial</Button>}\n/>",
+		"code": "<PricingCard\n\tname=\"Pro\"\n\tprice=\"$20\"\n\tperiod=\"per seat / month\"\n\tdescription=\"For growing teams.\"\n\tfeatures={[\"Unlimited projects\", \"10,000 build minutes\", \"Email support\"]}\n\thighlighted\n\taction={<Button onClick={() => {}}>Start trial</Button>}\n/>",
 		"interactive": false
 	},
 	{
@@ -11380,7 +11380,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<InvoiceRow id=\"INV-2026-014\" date=\"Sep 1, 2026\" amount=\"$49.00\" status=\"paid\" />",
+		"code": "<InvoiceRow\n\tid=\"INV-2026-014\"\n\tdate=\"Sep 1, 2026\"\n\tamount=\"$49.00\"\n\tstatus=\"paid\"\n\tonClick={() => {}}\n/>",
 		"interactive": false
 	},
 	{
@@ -11511,7 +11511,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<EndpointRow method=\"POST\" path=\"/v1/projects/{id}/deploys\" summary=\"Start a deploy\" />",
+		"code": "<EndpointRow\n\tmethod=\"POST\"\n\tpath=\"/v1/projects/{id}/deploys\"\n\tsummary=\"Start a deploy\"\n\tonClick={() => {}}\n/>",
 		"interactive": false
 	},
 	{
@@ -11615,7 +11615,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<CommitChip sha=\"3f9c2e7a41d0b8\" />",
+		"code": "<CommitChip\n\tsha=\"3f9c2e7a41d0b8\"\n\tmessage=\"Fix toast focus\"\n\tonClick={() => {}}\n/>",
 		"interactive": false
 	},
 	{
@@ -11689,7 +11689,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<ProfileHeader\n\tname=\"Ada Lovelace\"\n\thandle=\"@ada\"\n\tbio=\"Analyst of engines. Writes the first programs.\"\n\tactions={<Button variant=\"outline\">Follow</Button>}\n/>",
+		"code": "<ProfileHeader\n\tname=\"Ada Lovelace\"\n\thandle=\"@ada\"\n\tbio=\"Analyst of engines. Writes the first programs.\"\n\tactions={\n\t\t<Button variant=\"outline\" onClick={() => {}}>\n\t\t\tFollow\n\t\t</Button>\n\t}\n/>",
 		"interactive": false
 	},
 	{
@@ -11737,7 +11737,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<MemberRow name=\"Grace Hopper\" email=\"grace@navy.mil\" onRemove={() => {}} />",
+		"code": "function Example() {\n\tconst members = signal([\n\t\t{ name: \"Grace Hopper\", email: \"grace@navy.mil\" },\n\t\t{ name: \"Alan Turing\", email: \"alan@bletchley.uk\" },\n\t]);\n\treturn (\n\t\t<Stack gap=\"0.25rem\">\n\t\t\t<For each={members()}>\n\t\t\t\t{(member) => (\n\t\t\t\t\t<MemberRow\n\t\t\t\t\t\tname={member.name}\n\t\t\t\t\t\temail={member.email}\n\t\t\t\t\t\tonRemove={() => members.set(members().filter((m) => m !== member))}\n\t\t\t\t\t/>\n\t\t\t\t)}\n\t\t\t</For>\n\t\t\t<Show when={members().length === 0}>\n\t\t\t\t<Text muted>No members left.</Text>\n\t\t\t</Show>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -11806,7 +11806,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Team role shown as a {@link RoleBadge} (not the ARIA role)."
 			}
 		],
-		"code": "<InviteCard email=\"linus@example.com\" onResend={() => {}} onRevoke={() => {}} />",
+		"code": "function Example() {\n\tconst status = signal(\"Invitation pending\");\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<InviteCard\n\t\t\t\temail=\"linus@example.com\"\n\t\t\t\tonResend={() => status.set(\"Invitation re-sent just now\")}\n\t\t\t\tonRevoke={() => status.set(\"Invitation revoked\")}\n\t\t\t/>\n\t\t\t<Text muted>{status()}</Text>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -11882,7 +11882,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<FileCard name=\"Q3-report.pdf\" meta=\"2.4 MB · PDF\" onRemove={() => {}} />",
+		"code": "function Example() {\n\tconst attached = signal(true);\n\treturn (\n\t\t<Show\n\t\t\twhen={attached()}\n\t\t\tfallback={\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => attached.set(true)}>\n\t\t\t\t\tAttach Q3-report.pdf\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<FileCard\n\t\t\t\tname=\"Q3-report.pdf\"\n\t\t\t\tmeta=\"2.4 MB · PDF\"\n\t\t\t\tonRemove={() => attached.set(false)}\n\t\t\t/>\n\t\t</Show>\n\t);\n}",
 		"interactive": false
 	},
 	{
@@ -11963,7 +11963,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Optional section title above the example (e.g. \"Colors\")."
 			}
 		],
-		"code": "<DocExample title=\"Primary button\" code={\"<Button>Save</Button>\"}>\n\t<Button>Save</Button>\n</DocExample>",
+		"code": "<DocExample title=\"Primary button\" code={\"<Button>Save</Button>\"}>\n\t<Button onClick={() => {}}>Save</Button>\n</DocExample>",
 		"interactive": false
 	},
 	{
@@ -12019,7 +12019,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Accessible name (default \"Documentation\")."
 			}
 		],
-		"code": "<DocMenu\n\tlabel=\"Documentation pages\"\n\tsections={[\n\t\t{\n\t\t\tid: \"start\",\n\t\t\tlabel: \"Getting started\",\n\t\t\titems: [\n\t\t\t\t{ id: \"install\", label: \"Installation\" },\n\t\t\t\t{ id: \"theming\", label: \"Theming\" },\n\t\t\t],\n\t\t},\n\t\t{ id: \"changelog\", label: \"Changelog\" },\n\t]}\n\tdefaultOpen={[\"start\"]}\n\tvalue=\"install\"\n\tonChange={() => {}}\n/>",
+		"code": "const sections = [\n\t{ id: \"overview\", label: \"Overview\" },\n\t{ id: \"deploys\", label: \"Deploys\" },\n\t{ id: \"settings\", label: \"Settings\" },\n];\n\nfunction Example() {\n\tconst page = signal(\"install\");\n\treturn (\n\t\t<DocMenu\n\t\t\tlabel=\"Documentation pages\"\n\t\t\tsections={[\n\t\t\t\t{\n\t\t\t\t\tid: \"start\",\n\t\t\t\t\tlabel: \"Getting started\",\n\t\t\t\t\titems: [\n\t\t\t\t\t\t{ id: \"install\", label: \"Installation\" },\n\t\t\t\t\t\t{ id: \"theming\", label: \"Theming\" },\n\t\t\t\t\t],\n\t\t\t\t},\n\t\t\t\t{ id: \"changelog\", label: \"Changelog\" },\n\t\t\t]}\n\t\t\tdefaultOpen={[\"start\"]}\n\t\t\tvalue={page()}\n\t\t\tonChange={page.set}\n\t\t/>\n\t);\n}",
 		"interactive": false
 	}
 ];

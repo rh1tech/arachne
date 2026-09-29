@@ -8,16 +8,24 @@
 Product tile.
 
 ```tsx
-<ProductCard
-	title="Stoneware mug"
-	order={3}
-	price={24}
-	strike={32}
-	badge="Sale"
-	image="/images/mug.jpg"
-	imageAlt="Terracotta stoneware mug"
-	onAdd={() => {}}
-/>
+function Example() {
+	const inCart = signal(0);
+	return (
+		<Stack gap="0.5rem">
+			<ProductCard
+				title="Stoneware mug"
+				order={3}
+				price={24}
+				strike={32}
+				badge="Sale"
+				image="/images/mug.jpg"
+				imageAlt="Terracotta stoneware mug"
+				onAdd={() => inCart.set(inCart() + 1)}
+			/>
+			<Text muted>In cart: {inCart()}</Text>
+		</Stack>
+	);
+}
 ```
 
 **Slots:** `root` `badge` `body` `footer` `image` `media` `title`
@@ -42,14 +50,29 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Cart row.
 
 ```tsx
-<CartLine
-	title="Stoneware mug"
-	price={24}
-	quantity={2}
-	image="/images/mug.jpg"
-	onQuantityChange={() => {}}
-	onRemove={() => {}}
-/>
+function Example() {
+	const quantity = signal(2);
+	const removed = signal(false);
+	return (
+		<Show
+			when={!removed()}
+			fallback={
+				<Button size="sm" variant="outline" onClick={() => removed.set(false)}>
+					Undo remove
+				</Button>
+			}
+		>
+			<CartLine
+				title="Stoneware mug"
+				price={24}
+				quantity={quantity()}
+				image="/images/mug.jpg"
+				onQuantityChange={quantity.set}
+				onRemove={() => removed.set(true)}
+			/>
+		</Show>
+	);
+}
 ```
 
 **Slots:** `root` `body` `image` `quantity` `remove` `title`
@@ -104,7 +127,7 @@ Pricing plan card with price, features and a call to action.
 	description="For growing teams."
 	features={["Unlimited projects", "10,000 build minutes", "Email support"]}
 	highlighted
-	action={<Button>Start trial</Button>}
+	action={<Button onClick={() => {}}>Start trial</Button>}
 />
 ```
 
@@ -188,7 +211,13 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Invoice row with number, date, amount and status.
 
 ```tsx
-<InvoiceRow id="INV-2026-014" date="Sep 1, 2026" amount="$49.00" status="paid" />
+<InvoiceRow
+	id="INV-2026-014"
+	date="Sep 1, 2026"
+	amount="$49.00"
+	status="paid"
+	onClick={() => {}}
+/>
 ```
 
 **Slots:** `root` `amount` `date` `number` `status`

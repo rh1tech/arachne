@@ -8,13 +8,25 @@
 Labelled form control wrapper: label, control, help or error text, with `aria-describedby` / `aria-invalid` wired to the control.
 
 ```tsx
-<FormField
-	label="Project name"
-	labelFor="field-project"
-	help="Lowercase letters, numbers and dashes."
->
-	<TextInput id="field-project" value="marketing-site" />
-</FormField>
+function Example() {
+	const project = signal("marketing-site");
+	const invalid = () => !/^[a-z0-9-]+$/.test(project());
+	return (
+		<FormField
+			label="Project name"
+			labelFor="field-project"
+			help="Lowercase letters, numbers and dashes."
+			error={invalid() ? "Use only lowercase letters, numbers and dashes." : undefined}
+		>
+			<TextInput
+				id="field-project"
+				invalid={invalid()}
+				value={project()}
+				onInput={(e) => project.set((e.target as HTMLInputElement).value)}
+			/>
+		</FormField>
+	);
+}
 ```
 
 **Slots:** `root` `body` `help` `inner` `label`
@@ -42,11 +54,22 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Single control wrapper (Bulma `control`).
 
 ```tsx
-<FormField label="Email" labelFor="control-email">
-	<Control expanded>
-		<TextInput id="control-email" type="email" value="" placeholder="you@example.com" />
-	</Control>
-</FormField>
+function Example() {
+	const email = signal("");
+	return (
+		<FormField label="Email" labelFor="control-email">
+			<Control expanded>
+				<TextInput
+					id="control-email"
+					type="email"
+					placeholder="you@example.com"
+					value={email()}
+					onInput={(e) => email.set((e.target as HTMLInputElement).value)}
+				/>
+			</Control>
+		</FormField>
+	);
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -61,12 +84,22 @@ Single control wrapper (Bulma `control`).
 Field help / validation text (Bulma `help`).
 
 ```tsx
-<FormField label="Username" labelFor="help-user">
-	<TextInput id="help-user" value="ada" />
-	<Help tone="success">
-		This username is available.
-	</Help>
-</FormField>
+function Example() {
+	const user = signal("ada");
+	const taken = () => ["admin", "root"].includes(user());
+	return (
+		<FormField label="Username" labelFor="help-user">
+			<TextInput
+				id="help-user"
+				value={user()}
+				onInput={(e) => user.set((e.target as HTMLInputElement).value)}
+			/>
+			<Help tone={taken() ? "danger" : "success"}>
+				{taken() ? "That username is taken." : "This username is available."}
+			</Help>
+		</FormField>
+	);
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -96,14 +129,28 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Native fieldset with optional legend.
 
 ```tsx
-<Fieldset legend="Shipping address">
-	<FormField label="Street" labelFor="fs-street">
-		<TextInput id="fs-street" value="" />
-	</FormField>
-	<FormField label="City" labelFor="fs-city">
-		<TextInput id="fs-city" value="" />
-	</FormField>
-</Fieldset>
+function Example() {
+	const street = signal("");
+	const city = signal("");
+	return (
+		<Fieldset legend="Shipping address">
+			<FormField label="Street" labelFor="fs-street">
+				<TextInput
+					id="fs-street"
+					value={street()}
+					onInput={(e) => street.set((e.target as HTMLInputElement).value)}
+				/>
+			</FormField>
+			<FormField label="City" labelFor="fs-city">
+				<TextInput
+					id="fs-city"
+					value={city()}
+					onInput={(e) => city.set((e.target as HTMLInputElement).value)}
+				/>
+			</FormField>
+		</Fieldset>
+	);
+}
 ```
 
 **Slots:** `root` `legend`
@@ -121,11 +168,20 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Titled form region (grouping of related fields).
 
 ```tsx
-<FormSection title="Profile" description="Shown on your public page.">
-	<FormField label="Display name" labelFor="section-name">
-		<TextInput id="section-name" value="Ada Lovelace" />
-	</FormField>
-</FormSection>
+function Example() {
+	const name = signal("Ada Lovelace");
+	return (
+		<FormSection title="Profile" description="Shown on your public page.">
+			<FormField label="Display name" labelFor="section-name">
+				<TextInput
+					id="section-name"
+					value={name()}
+					onInput={(e) => name.set((e.target as HTMLInputElement).value)}
+				/>
+			</FormField>
+		</FormSection>
+	);
+}
 ```
 
 **Slots:** `root` `body` `description` `header` `title`
@@ -144,15 +200,29 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Grouped form area / panel (related fields in a boxed region).
 
 ```tsx
-<FormArea
-	order={3}
-	title="Notifications"
-	description="Choose what we email you about."
-	bordered
->
-	<Checkbox label="Failed deploys" checked />
-	<Checkbox label="Weekly summary" />
-</FormArea>
+function Example() {
+	const failed = signal(true);
+	const weekly = signal(false);
+	return (
+		<FormArea
+			order={3}
+			title="Notifications"
+			description="Choose what we email you about."
+			bordered
+		>
+			<Checkbox
+				label="Failed deploys"
+				checked={failed()}
+				onChange={(e) => failed.set((e.target as HTMLInputElement).checked)}
+			/>
+			<Checkbox
+				label="Weekly summary"
+				checked={weekly()}
+				onChange={(e) => weekly.set((e.target as HTMLInputElement).checked)}
+			/>
+		</FormArea>
+	);
+}
 ```
 
 **Slots:** `root` `body` `description` `header` `title`
@@ -172,10 +242,19 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Right-aligned form actions row.
 
 ```tsx
-<FormFooter>
-	<Button variant="ghost">Cancel</Button>
-	<Button type="submit">Save changes</Button>
-</FormFooter>
+<form
+	onSubmit={(e: SubmitEvent) => {
+		e.preventDefault();
+		() => {}();
+	}}
+>
+	<FormFooter>
+		<Button variant="ghost" onClick={() => {}}>
+			Cancel
+		</Button>
+		<Button type="submit">Save changes</Button>
+	</FormFooter>
+</form>
 ```
 
 | Prop | Type | Required | Description |
@@ -213,12 +292,17 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 SettingsRow with a Switch.
 
 ```tsx
-<ToggleRow
-	label="Preview deploys"
-	description="Deploy every pull request to a unique URL."
-	checked
-	onChange={() => {}}
-/>
+function Example() {
+	const previews = signal(true);
+	return (
+		<ToggleRow
+			label="Preview deploys"
+			description="Deploy every pull request to a unique URL."
+			checked={previews()}
+			onChange={previews.set}
+		/>
+	);
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -240,7 +324,9 @@ Destructive-settings section.
 	title="Delete project"
 	description="This permanently removes all deploys and domains."
 >
-	<Button variant="outline">Delete marketing-site</Button>
+	<Button variant="outline" onClick={() => {}}>
+		Delete marketing-site
+	</Button>
 </DangerZone>
 ```
 
@@ -259,7 +345,24 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Back / Continue footer for multi-step flows.
 
 ```tsx
-<WizardNav canBack canNext onBack={() => {}} onNext={() => {}} />
+function Example() {
+	const steps = ["Account", "Team", "Billing", "Done"];
+	const step = signal(0);
+	return (
+		<Stack gap="0.75rem">
+			<Text>
+				Step {step() + 1} of {steps.length}: <strong>{steps[step()]}</strong>
+			</Text>
+			<WizardNav
+				canBack={step() > 0}
+				canNext={step() < steps.length - 1}
+				nextLabel={step() === steps.length - 2 ? "Finish" : "Continue"}
+				onBack={() => step.set(step() - 1)}
+				onNext={() => step.set(step() + 1)}
+			/>
+		</Stack>
+	);
+}
 ```
 
 **Slots:** `root` `back` `next`

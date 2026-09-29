@@ -52,3 +52,11 @@ Component reference, real implementations for promised behaviours, and duplicate
 - `Field` → `FormField`, using `labelFor` / `help`. `FormField` also links the help text with `aria-describedby`.
 
 The deprecated components still work; each is now a thin alias of its replacement.
+
+**Interactive examples**
+
+- Every example now holds real state: controlled components (tabs, inputs, pickers, trees, kanban, …) update when used, and dismissible components can be dismissed and restored.
+- Callback-only props use `action()` (`examples/actions.ts`), and the playground shows the calls under each preview.
+- Generated snippets are self-contained: they include the helper component, the module-level data it uses, and plain `() => {}` handlers.
+- `ScrollSpy` follows sections inside a scroll container (not just the window), activates the last section at the end of the scroll, and highlights a clicked item immediately.
+- `Lightbox` demo: arrow keys now change the image (the demo passed `onIndexChange` instead of `onChange`).

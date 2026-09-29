@@ -49,12 +49,26 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Colored message block for longer contextual notes.
 
 ```tsx
-<Message tone="info">
-	<MessageHeader onClose={() => {}}>Scheduled maintenance</MessageHeader>
-	<MessageBody>
-		Builds pause on Sunday 02:00–03:00 UTC while we upgrade the runners.
-	</MessageBody>
-</Message>
+function Example() {
+	const visible = signal(true);
+	return (
+		<Show
+			when={visible()}
+			fallback={
+				<Button size="sm" variant="outline" onClick={() => visible.set(true)}>
+					Show message
+				</Button>
+			}
+		>
+			<Message tone="info">
+				<MessageHeader onClose={() => visible.set(false)}>Scheduled maintenance</MessageHeader>
+				<MessageBody>
+					Builds pause on Sunday 02:00–03:00 UTC while we upgrade the runners.
+				</MessageBody>
+			</Message>
+		</Show>
+	);
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -71,12 +85,26 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Message title bar, with an optional close button.
 
 ```tsx
-<Message tone="warning">
-	<MessageHeader onClose={() => {}}>
-		Usage limit
-	</MessageHeader>
-	<MessageBody>You've used 92% of this month's build minutes.</MessageBody>
-</Message>
+function Example() {
+	const visible = signal(true);
+	return (
+		<Show
+			when={visible()}
+			fallback={
+				<Button size="sm" variant="outline" onClick={() => visible.set(true)}>
+					Show message
+				</Button>
+			}
+		>
+			<Message tone="warning">
+				<MessageHeader onClose={() => visible.set(false)}>
+					Usage limit
+				</MessageHeader>
+				<MessageBody>You've used 92% of this month's build minutes.</MessageBody>
+			</Message>
+		</Show>
+	);
+}
 ```
 
 **Slots:** `root` `close` `text`
@@ -106,9 +134,23 @@ Body text of a message.
 Inline notification (distinct from toast host). Danger / warning announce assertively.
 
 ```tsx
-<Notification tone="info" title="New sign-in" onClose={() => {}}>
-	Chrome on macOS, Berlin — just now.
-</Notification>
+function Example() {
+	const visible = signal(true);
+	return (
+		<Show
+			when={visible()}
+			fallback={
+				<Button size="sm" variant="outline" onClick={() => visible.set(true)}>
+					Show notification
+				</Button>
+			}
+		>
+			<Notification tone="info" title="New sign-in" onClose={() => visible.set(false)}>
+				Chrome on macOS, Berlin — just now.
+			</Notification>
+		</Show>
+	);
+}
 ```
 
 **Slots:** `root` `body` `close` `content` `title`
@@ -175,14 +217,32 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Full-width page banner.
 
 ```tsx
-<Banner
-	tone="warning"
-	title="Payment failed"
-	action={<Button size="sm">Update card</Button>}
-	onClose={() => {}}
->
-	Your card ending in 4242 was declined.
-</Banner>
+function Example() {
+	const visible = signal(true);
+	return (
+		<Show
+			when={visible()}
+			fallback={
+				<Button size="sm" variant="outline" onClick={() => visible.set(true)}>
+					Show banner
+				</Button>
+			}
+		>
+			<Banner
+				tone="warning"
+				title="Payment failed"
+				action={
+					<Button size="sm" onClick={() => visible.set(false)}>
+						Update card
+					</Button>
+				}
+				onClose={() => visible.set(false)}
+			>
+				Your card ending in 4242 was declined.
+			</Banner>
+		</Show>
+	);
+}
 ```
 
 **Slots:** `root` `action` `body` `close` `content` `title`
@@ -202,9 +262,23 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Site-wide notice strip.
 
 ```tsx
-<AnnouncementBar tone="accent" dismissible onDismiss={() => {}}>
-	Arachne 2.4 is out — dark theme and a new component reference.
-</AnnouncementBar>
+function Example() {
+	const visible = signal(true);
+	return (
+		<Show
+			when={visible()}
+			fallback={
+				<Button size="sm" variant="outline" onClick={() => visible.set(true)}>
+					Show announcement again
+				</Button>
+			}
+		>
+			<AnnouncementBar tone="accent" dismissible onDismiss={() => visible.set(false)}>
+				Arachne 2.4 is out — dark theme and a new component reference.
+			</AnnouncementBar>
+		</Show>
+	);
+}
 ```
 
 **Slots:** `root` `body` `close`
@@ -225,7 +299,7 @@ Upsell banner with a call to action.
 ```tsx
 <UpgradeBanner
 	title="You're at 92% of your build minutes"
-	action={<Button>Upgrade</Button>}
+	action={<Button onClick={() => {}}>Upgrade</Button>}
 >
 	Pro includes 10,000 minutes and concurrent builds.
 </UpgradeBanner>
@@ -246,12 +320,27 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Cookie consent banner with accept / decline.
 
 ```tsx
-<CookieConsent
-	open
-	message="We use cookies to keep you signed in and to measure usage."
-	onAccept={() => {}}
-	onDecline={() => {}}
-/>
+function Example() {
+	const choice = signal<"accepted" | "declined" | null>(null);
+	return (
+		<>
+			<CookieConsent
+				open={choice() === null}
+				message="We use cookies to keep you signed in and to measure usage."
+				onAccept={() => choice.set("accepted")}
+				onDecline={() => choice.set("declined")}
+			/>
+			<Show when={choice()}>
+				<Group gap="0.75rem">
+					<Text muted>Cookies {choice()}.</Text>
+					<Button size="sm" variant="outline" onClick={() => choice.set(null)}>
+						Ask again
+					</Button>
+				</Group>
+			</Show>
+		</>
+	);
+}
 ```
 
 **Slots:** `root` `actions` `body` `message` `title`
@@ -518,7 +607,7 @@ Placeholder for empty lists.
 <EmptyState
 	title="No projects yet"
 	description="Create a project to start deploying."
-	action={<Button>New project</Button>}
+	action={<Button onClick={() => {}}>New project</Button>}
 />
 ```
 
@@ -560,7 +649,11 @@ Error state with description and a recovery action.
 ```tsx
 <ErrorState
 	description="We couldn't load your deploys. Check your connection and try again."
-	action={<Button variant="outline">Retry</Button>}
+	action={
+		<Button variant="outline" onClick={() => {}}>
+			Retry
+		</Button>
+	}
 />
 ```
 
@@ -596,7 +689,9 @@ Corner badge / dot over its children.
 
 ```tsx
 <Indicator label={3}>
-	<Button variant="outline">Inbox</Button>
+	<Button variant="outline" onClick={() => {}}>
+		Inbox
+	</Button>
 </Indicator>
 ```
 

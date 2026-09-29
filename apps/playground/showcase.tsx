@@ -233,31 +233,68 @@ const paletteMeta: Record<PaletteName, { title: string; blurb: string }> = {
 	rose: { title: "Rose", blurb: "Soft pinks with forest green ink." },
 };
 
-const navItems = (): NavMenuItem[] => [
-	{
-		id: "product",
-		label: "Product",
-		children: [
-			{ id: "signals", label: "Signals" },
-			{ id: "jsx", label: "JSX" },
-		],
-	},
-	{ id: "docs", label: "Docs" },
-];
+const navActive = signal("docs");
+const navOverflowActive = signal("overview");
 
-const navOverflowItems: NavMenuItem[] = [
-	{ id: "overview", label: "Overview" },
-	{ id: "components", label: "Components" },
-	{ id: "patterns", label: "Patterns" },
-	{ id: "forms", label: "Forms" },
-	{ id: "layout", label: "Layout" },
-	{ id: "feedback", label: "Feedback" },
-	{ id: "navigation", label: "Navigation" },
-	{ id: "data", label: "Data display" },
-	{ id: "overlays", label: "Overlays" },
-	{ id: "utils", label: "Utilities" },
-	{ id: "theming", label: "Theming" },
-];
+/** Marks the chosen item active (recursively) so the demos respond to clicks. */
+function withActive(
+	items: NavMenuItem[],
+	active: () => string,
+	choose: (id: string) => void,
+): NavMenuItem[] {
+	return items.map((item) =>
+		item.children
+			? {
+					...item,
+					active: item.children.some((c) => c.id === active()),
+					children: withActive(item.children, active, choose),
+				}
+			: { ...item, active: item.id === active(), onSelect: () => choose(item.id) },
+	);
+}
+
+const navItems = (): NavMenuItem[] =>
+	withActive(
+		[
+			{
+				id: "product",
+				label: "Product",
+				children: [
+					{ id: "signals", label: "Signals" },
+					{ id: "jsx", label: "JSX" },
+				],
+			},
+			{ id: "docs", label: "Docs" },
+		],
+		navActive,
+		navActive.set,
+	);
+
+const navOverflowItems = (): NavMenuItem[] =>
+	withActive(
+		[
+			{ id: "overview", label: "Overview" },
+			{ id: "components", label: "Components" },
+			{ id: "patterns", label: "Patterns" },
+			{ id: "forms", label: "Forms" },
+			{ id: "layout", label: "Layout" },
+			{ id: "feedback", label: "Feedback" },
+			{ id: "navigation", label: "Navigation" },
+			{ id: "data", label: "Data display" },
+			{ id: "overlays", label: "Overlays" },
+			{ id: "utils", label: "Utilities" },
+			{ id: "theming", label: "Theming" },
+		],
+		navOverflowActive,
+		navOverflowActive.set,
+	);
+
+const tagVisible = signal(true);
+const crumbTrail = ["Arachne", "Docs", "Breadcrumb"];
+const crumbDepth = signal(crumbTrail.length - 1);
+const layoutRole = signal("engineer");
+const layoutDigests = signal(true);
+const layoutPush = signal(false);
 
 export function ShowcaseContent(props: { page: string }) {
 	effect(() => {
@@ -536,9 +573,18 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
   signals
 </Tag>`}
 			>
-				<Tag color="primary" onRemove={() => {}}>
-					signals
-				</Tag>
+				<Show
+					when={tagVisible()}
+					fallback={
+						<Button size="sm" variant="outline" onClick={() => tagVisible.set(true)}>
+							Restore tag
+						</Button>
+					}
+				>
+					<Tag color="primary" onRemove={() => tagVisible.set(false)}>
+						signals
+					</Tag>
+				</Show>
 			</DocExample>
 		</DocPage>
 	),
@@ -809,13 +855,20 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
   ]}
 />`}
 			>
-				<Breadcrumb
-					items={[
-						{ label: "Arachne", onClick: () => {} },
-						{ label: "Docs", onClick: () => {} },
-						{ label: "Breadcrumb" },
-					]}
-				/>
+				<Stack gap="0.5rem">
+					<Breadcrumb
+						items={crumbTrail
+							.slice(0, crumbDepth() + 1)
+							.map((label, i) =>
+								i < crumbDepth() ? { label, onClick: () => crumbDepth.set(i) } : { label },
+							)}
+					/>
+					<Show when={crumbDepth() < crumbTrail.length - 1}>
+						<Button size="sm" variant="ghost" onClick={() => crumbDepth.set(crumbTrail.length - 1)}>
+							Back to “Breadcrumb”
+						</Button>
+					</Show>
+				</Stack>
 			</DocExample>
 		</DocPage>
 	),
@@ -1046,7 +1099,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 					label="Overflow demo"
 					placement="sticky"
 					brand={<span>Arachne</span>}
-					items={navOverflowItems}
+					items={navOverflowItems()}
 					end={<Button size="sm">Sign in</Button>}
 				/>
 			</DocExample>
@@ -1320,7 +1373,8 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 					<FormField horizontal label="Role" labelFor="h-role">
 						<Select
 							id="h-role"
-							value="engineer"
+							value={layoutRole()}
+							onChange={(e: Event) => layoutRole.set((e.target as HTMLSelectElement).value)}
 							options={[
 								{ value: "engineer", label: "Engineer" },
 								{ value: "designer", label: "Designer" },
@@ -1342,8 +1396,16 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 				<Stack gap="0.85rem">
 					<Fieldset legend="Notifications">
 						<Stack gap="0.5rem">
-							<Checkbox label="Email digests" checked />
-							<Checkbox label="Push alerts" />
+							<Checkbox
+								label="Email digests"
+								checked={layoutDigests()}
+								onChange={(e: Event) => layoutDigests.set((e.target as HTMLInputElement).checked)}
+							/>
+							<Checkbox
+								label="Push alerts"
+								checked={layoutPush()}
+								onChange={(e: Event) => layoutPush.set((e.target as HTMLInputElement).checked)}
+							/>
 						</Stack>
 					</Fieldset>
 					<Fieldset legend="Billing (disabled)" disabled>

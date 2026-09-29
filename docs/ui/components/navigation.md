@@ -71,13 +71,24 @@ Standalone navbar link (renders `<a>` when `href` is set).
 Application chrome: optional sidebar + header around main content.
 
 ```tsx
-<AppShell
-	contentAs="div"
-	header={<strong>Acme Console</strong>}
-	sidebar={<SidebarNav label="Main" items={sections} value="deploys" />}
->
-	<Text>Main content</Text>
-</AppShell>
+const sections = [
+	{ id: "overview", label: "Overview" },
+	{ id: "deploys", label: "Deploys" },
+	{ id: "settings", label: "Settings" },
+];
+
+function Example() {
+	const page = signal("deploys");
+	return (
+		<AppShell
+			contentAs="div"
+			header={<strong>Acme Console</strong>}
+			sidebar={<SidebarNav label="Main" items={sections} value={page()} onChange={page.set} />}
+		>
+			<Text>{sections.find((s) => s.id === page())?.label} page</Text>
+		</AppShell>
+	);
+}
 ```
 
 **Slots:** `root` `content` `header` `main` `sidebar`
@@ -96,7 +107,16 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Vertical nav list.
 
 ```tsx
-<SidebarNav label="Project" items={sections} value="deploys" onChange={() => {}} />
+const sections = [
+	{ id: "overview", label: "Overview" },
+	{ id: "deploys", label: "Deploys" },
+	{ id: "settings", label: "Settings" },
+];
+
+function Example() {
+	const page = signal("deploys");
+	return <SidebarNav label="Project" items={sections} value={page()} onChange={page.set} />;
+}
 ```
 
 **Slots:** `root` `link`
@@ -138,16 +158,26 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 WAI-ARIA tabs: roving tabindex, ← → Home End, linked panels, animated indicator (transform only), overflow scroll buttons.
 
 ```tsx
-<Tabs
-	label="Project"
-	value="deploys"
-	onChange={() => {}}
-	items={[
-		{ id: "overview", label: "Overview" },
-		{ id: "deploys", label: "Deploys", badge: "12" },
-		{ id: "settings", label: "Settings" },
-	]}
-/>
+function Example() {
+	const tab = signal("deploys");
+	return (
+		<Tabs
+			label="Project"
+			value={tab()}
+			onChange={tab.set}
+			items={[
+				{ id: "overview", label: "Overview", panel: <Text>Traffic and status at a glance.</Text> },
+				{
+					id: "deploys",
+					label: "Deploys",
+					badge: "12",
+					panel: <Text>Every push creates a deploy.</Text>,
+				},
+				{ id: "settings", label: "Settings", panel: <Text>Domains, builds and access.</Text> },
+			]}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `badge` `icon` `indicator` `list` `panel` `scroll` `tab` `viewport`
@@ -170,15 +200,21 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Step indicator.
 
 ```tsx
-<Steps
-	label="Checkout"
-	items={[
-		{ id: "cart", label: "Cart" },
-		{ id: "shipping", label: "Shipping", description: "Address and method" },
-		{ id: "payment", label: "Payment" },
-	]}
-	value="shipping"
-/>
+function Example() {
+	const step = signal("shipping");
+	return (
+		<Steps
+			label="Checkout"
+			items={[
+				{ id: "cart", label: "Cart" },
+				{ id: "shipping", label: "Shipping", description: "Address and method" },
+				{ id: "payment", label: "Payment" },
+			]}
+			value={step()}
+			onChange={step.set}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `button` `copy` `description` `index` `label` `step`
@@ -197,7 +233,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Page navigation with previous/next controls and numbered pages (`variant="simple"` shows a status instead). Collapses to arrows on narrow screens.
 
 ```tsx
-<Pagination page={3} pageCount={12} onChange={() => {}} />
+function Example() {
+	const page = signal(3);
+	return <Pagination page={page()} pageCount={12} onChange={page.set} />;
+}
 ```
 
 **Slots:** `root` `control` `ellipsis` `page` `pages` `status`
@@ -219,7 +258,15 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Dot indicators for carousels and slides.
 
 ```tsx
-<DotPagination count={5} value={1} onChange={() => {}} />
+function Example() {
+	const slide = signal(1);
+	return (
+		<Stack gap="0.5rem">
+			<DotPagination count={5} value={slide()} onChange={slide.set} />
+			<Text muted>Slide {slide() + 1} of 5</Text>
+		</Stack>
+	);
+}
 ```
 
 **Slots:** `root` `dot`
@@ -238,7 +285,25 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Previous / next navigation pair.
 
 ```tsx
-<NextPrev prevLabel="Installation" nextLabel="Theming" onPrev={() => {}} onNext={() => {}} />
+function Example() {
+	const pages = ["Installation", "Theming", "Customization", "Accessibility"];
+	const page = signal(1);
+	return (
+		<Stack gap="0.5rem">
+			<Text>
+				Reading: <strong>{pages[page()]}</strong>
+			</Text>
+			<NextPrev
+				prevLabel={pages[page() - 1] ?? "Start"}
+				nextLabel={pages[page() + 1] ?? "End"}
+				prevDisabled={page() === 0}
+				nextDisabled={page() === pages.length - 1}
+				onPrev={() => page.set(page() - 1)}
+				onNext={() => page.set(page() + 1)}
+			/>
+		</Stack>
+	);
+}
 ```
 
 **Slots:** `root` `next` `prev`
@@ -279,16 +344,21 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Compact pill/sub navigation (UIkit subnav).
 
 ```tsx
-<Subnav
-	label="Filter"
-	value="all"
-	onChange={() => {}}
-	items={[
-		{ id: "all", label: "All" },
-		{ id: "production", label: "Production" },
-		{ id: "preview", label: "Preview" },
-	]}
-/>
+function Example() {
+	const filter = signal("all");
+	return (
+		<Subnav
+			label="Filter"
+			value={filter()}
+			onChange={filter.set}
+			items={[
+				{ id: "all", label: "All" },
+				{ id: "production", label: "Production" },
+				{ id: "preview", label: "Preview" },
+			]}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `item`
@@ -307,16 +377,21 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Icon-only navigation.
 
 ```tsx
-<Iconnav
-	label="Workspace"
-	value="home"
-	onChange={() => {}}
-	items={[
-		{ id: "home", icon: "home", label: "Home" },
-		{ id: "alerts", icon: "bell", label: "Alerts" },
-		{ id: "settings", icon: "settings", label: "Settings" },
-	]}
-/>
+function Example() {
+	const section = signal("home");
+	return (
+		<Iconnav
+			label="Workspace"
+			value={section()}
+			onChange={section.set}
+			items={[
+				{ id: "home", icon: "home", label: "Home" },
+				{ id: "alerts", icon: "bell", label: "Alerts" },
+				{ id: "settings", icon: "settings", label: "Settings" },
+			]}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `item`
@@ -376,14 +451,24 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 "On this page" navigation.
 
 ```tsx
-<TableOfContents
-	title="On this page"
-	items={[
-		{ id: "install", label: "Installation", active: true },
+function Example() {
+	const current = signal("install");
+	const sections = [
+		{ id: "install", label: "Installation" },
 		{ id: "usage", label: "Usage" },
 		{ id: "theming", label: "Theming" },
-	]}
-/>
+	];
+	return (
+		<TableOfContents
+			title="On this page"
+			items={sections.map((s) => ({
+				...s,
+				active: current() === s.id,
+				onSelect: () => current.set(s.id),
+			}))}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `link` `list` `title`
@@ -397,17 +482,35 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 ## ScrollSpy
 
-Highlights the section currently in view.
+Highlights the section currently in view, in the page or in the sections' scroll container.
 
 ```tsx
-<ScrollSpy
-	label="On this page"
-	items={[
-		{ id: "intro", label: "Introduction" },
-		{ id: "install", label: "Installation" },
-		{ id: "usage", label: "Usage" },
-	]}
-/>
+function Example() {
+	const sections = [
+		{ id: "spy-intro", label: "Introduction", text: "What Arachne UI is and when to use it." },
+		{
+			id: "spy-install",
+			label: "Installation",
+			text: "Add the package and import the stylesheet.",
+		},
+		{ id: "spy-usage", label: "Usage", text: "Render components and wire their state." },
+	];
+	return (
+		<Group align="start" gap="1.5rem">
+			<ScrollSpy label="On this page" offset={8} items={sections} />
+			<ScrollArea maxHeight="9rem" aria-label="Article">
+				<For each={sections}>
+					{(section) => (
+						<section id={section.id} style={{ "min-height": "7rem" }}>
+							<strong>{section.label}</strong>
+							<Text muted>{section.text}</Text>
+						</section>
+					)}
+				</For>
+			</ScrollArea>
+		</Group>
+	);
+}
 ```
 
 **Slots:** `root` `item`
@@ -442,16 +545,21 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Mobile tab bar.
 
 ```tsx
-<BottomNav
-	label="Primary"
-	items={[
-		{ id: "home", label: "Home", icon: "home" },
-		{ id: "search", label: "Search", icon: "search" },
-		{ id: "inbox", label: "Inbox", icon: "bell" },
-	]}
-	value="home"
-	onChange={() => {}}
-/>
+function Example() {
+	const tab = signal("home");
+	return (
+		<BottomNav
+			label="Primary"
+			items={[
+				{ id: "home", label: "Home", icon: "home" },
+				{ id: "search", label: "Search", icon: "search" },
+				{ id: "inbox", label: "Inbox", icon: "bell" },
+			]}
+			value={tab()}
+			onChange={tab.set}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `icon` `item` `label`
@@ -470,16 +578,21 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Thumbnail picker.
 
 ```tsx
-<Thumbnav
-	label="Photos"
-	items={[
-		{ id: "1", src: "/images/1.jpg", alt: "Photo 1" },
-		{ id: "2", src: "/images/2.jpg", alt: "Photo 2" },
-		{ id: "3", src: "/images/3.jpg", alt: "Photo 3" },
-	]}
-	value="2"
-	onChange={() => {}}
-/>
+function Example() {
+	const photo = signal("2");
+	return (
+		<Thumbnav
+			label="Photos"
+			items={[
+				{ id: "1", src: "/images/1.jpg", alt: "Photo 1" },
+				{ id: "2", src: "/images/2.jpg", alt: "Photo 2" },
+				{ id: "3", src: "/images/3.jpg", alt: "Photo 3" },
+			]}
+			value={photo()}
+			onChange={photo.set}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `image` `item`
@@ -517,7 +630,9 @@ Viewport-pinned container.
 
 ```tsx
 <Affix position="bottom-right" offset="1rem">
-	<Button size="sm">Feedback</Button>
+	<Button size="sm" onClick={() => {}}>
+		Feedback
+	</Button>
 </Affix>
 ```
 
@@ -554,7 +669,9 @@ Bar pinned to the top/bottom of its scroll container.
 ```tsx
 <StickyBar position="bottom">
 	<Text>You have unsaved changes.</Text>
-	<Button size="sm">Save</Button>
+	<Button size="sm" onClick={() => {}}>
+		Save
+	</Button>
 </StickyBar>
 ```
 
@@ -590,16 +707,21 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Inline language picker.
 
 ```tsx
-<LocaleSwitcher
-	label="Language"
-	value="en"
-	options={[
-		{ value: "en", label: "English" },
-		{ value: "de", label: "Deutsch" },
-		{ value: "ja", label: "日本語" },
-	]}
-	onChange={() => {}}
-/>
+function Example() {
+	const locale = signal("en");
+	return (
+		<LocaleSwitcher
+			label="Language"
+			value={locale()}
+			options={[
+				{ value: "en", label: "English" },
+				{ value: "de", label: "Deutsch" },
+				{ value: "ja", label: "日本語" },
+			]}
+			onChange={locale.set}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `option`
@@ -618,7 +740,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Workspace switcher button.
 
 ```tsx
-<OrgSwitcher org={{ id: "acme", name: "Acme Inc.", plan: "Pro" }} onClick={() => {}} />
+<OrgSwitcher
+	org={{ id: "acme", name: "Acme Inc.", plan: "Pro" }}
+	onClick={() => {}}
+/>
 ```
 
 **Slots:** `root` `avatar` `chevron` `meta` `name` `plan`

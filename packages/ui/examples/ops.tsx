@@ -1,3 +1,5 @@
+import { For, Show } from "@arachne/render";
+import { signal } from "@arachne/signals";
 import { Button } from "../src/button.tsx";
 import { FileInput, InputAddon, InputGroup, Skeleton, Tag, Tags } from "../src/extras.tsx";
 import { TextInput } from "../src/input.tsx";
@@ -6,6 +8,7 @@ import {
 	BackLink,
 	Bleed,
 	Checklist,
+	type ChecklistItemData,
 	CookieConsent,
 	CopyField,
 	DotPagination,
@@ -34,6 +37,7 @@ import {
 	ChangelogItem,
 	CommitChip,
 	CreditCardPreview,
+	type Density,
 	DensityToggle,
 	EndpointRow,
 	ErrorState,
@@ -63,12 +67,11 @@ import {
 	UsageMeter,
 	VersionTag,
 } from "../src/kit-ops.tsx";
-import { Text } from "../src/layout.tsx";
+import { Stack, Text } from "../src/layout.tsx";
 import { CopyButton, DescriptionList, Stat } from "../src/meta.tsx";
 import { Group } from "../src/widgets.tsx";
-import type { Example } from "./types.ts";
-
-const noop = () => {};
+import { action } from "./actions.ts";
+import type { Example, ExampleProps } from "./types.ts";
 
 const configJson: JsonNode = {
 	kind: "object",
@@ -101,6 +104,220 @@ const repoTree: FileTreeNode[] = [
 	{ id: "package.json", name: "package.json", kind: "file" },
 ];
 
+function MemberRowExample(p: ExampleProps) {
+	const members = signal([
+		{ name: "Grace Hopper", email: "grace@navy.mil" },
+		{ name: "Alan Turing", email: "alan@bletchley.uk" },
+	]);
+	return (
+		<Stack gap="0.25rem">
+			<For each={members()}>
+				{(member) => (
+					<MemberRow
+						{...p}
+						name={member.name}
+						email={member.email}
+						onRemove={() => members.set(members().filter((m) => m !== member))}
+					/>
+				)}
+			</For>
+			<Show when={members().length === 0}>
+				<Text muted>No members left.</Text>
+			</Show>
+		</Stack>
+	);
+}
+
+function DensityToggleExample(p: ExampleProps) {
+	const density = signal<Density>("compact");
+	return (
+		<Group gap="0.75rem">
+			<DensityToggle {...p} value={density()} onChange={density.set} />
+			<Text muted>Density: {density()}</Text>
+		</Group>
+	);
+}
+
+function InviteCardExample(p: ExampleProps) {
+	const status = signal("Invitation pending");
+	return (
+		<Stack gap="0.5rem">
+			<InviteCard
+				{...p}
+				email="linus@example.com"
+				onResend={() => status.set("Invitation re-sent just now")}
+				onRevoke={() => status.set("Invitation revoked")}
+			/>
+			<Text muted>{status()}</Text>
+		</Stack>
+	);
+}
+
+function CookieConsentExample(p: ExampleProps) {
+	const choice = signal<"accepted" | "declined" | null>(null);
+	return (
+		<>
+			<CookieConsent
+				{...p}
+				open={choice() === null}
+				message="We use cookies to keep you signed in and to measure usage."
+				onAccept={() => choice.set("accepted")}
+				onDecline={() => choice.set("declined")}
+			/>
+			<Show when={choice()}>
+				<Group gap="0.75rem">
+					<Text muted>Cookies {choice()}.</Text>
+					<Button size="sm" variant="outline" onClick={() => choice.set(null)}>
+						Ask again
+					</Button>
+				</Group>
+			</Show>
+		</>
+	);
+}
+
+function InlineEditExample(p: ExampleProps) {
+	const name = signal("Marketing site");
+	return <InlineEdit {...p} label="Project name" value={name()} onChange={name.set} />;
+}
+
+function ChecklistExample(p: ExampleProps) {
+	const items = signal<ChecklistItemData[]>([
+		{ id: "domain", label: "Connect a domain", done: true },
+		{ id: "invite", label: "Invite your team", done: true },
+		{ id: "deploy", label: "Ship your first deploy" },
+	]);
+	const done = () => items().filter((i) => i.done).length;
+	return (
+		<Stack gap="0.5rem">
+			<Checklist {...p} items={items()} onChange={items.set} />
+			<Text muted>
+				{done()} of {items().length} done
+			</Text>
+		</Stack>
+	);
+}
+
+function DotPaginationExample(p: ExampleProps) {
+	const slide = signal(1);
+	return (
+		<Stack gap="0.5rem">
+			<DotPagination {...p} count={5} value={slide()} onChange={slide.set} />
+			<Text muted>Slide {slide() + 1} of 5</Text>
+		</Stack>
+	);
+}
+
+function NextPrevExample(p: ExampleProps) {
+	const pages = ["Installation", "Theming", "Customization", "Accessibility"];
+	const page = signal(1);
+	return (
+		<Stack gap="0.5rem">
+			<Text>
+				Reading: <strong>{pages[page()]}</strong>
+			</Text>
+			<NextPrev
+				{...p}
+				prevLabel={pages[page() - 1] ?? "Start"}
+				nextLabel={pages[page() + 1] ?? "End"}
+				prevDisabled={page() === 0}
+				nextDisabled={page() === pages.length - 1}
+				onPrev={() => page.set(page() - 1)}
+				onNext={() => page.set(page() + 1)}
+			/>
+		</Stack>
+	);
+}
+
+function FileCardExample(p: ExampleProps) {
+	const attached = signal(true);
+	return (
+		<Show
+			when={attached()}
+			fallback={
+				<Button size="sm" variant="outline" onClick={() => attached.set(true)}>
+					Attach Q3-report.pdf
+				</Button>
+			}
+		>
+			<FileCard
+				{...p}
+				name="Q3-report.pdf"
+				meta="2.4 MB · PDF"
+				onRemove={() => attached.set(false)}
+			/>
+		</Show>
+	);
+}
+
+function AngleSliderExample(p: ExampleProps) {
+	const angle = signal(135);
+	return (
+		<Group gap="0.75rem">
+			<AngleSlider {...p} value={angle()} onChange={angle.set} />
+			<Text muted>{angle()}°</Text>
+		</Group>
+	);
+}
+
+function KanbanBoardExample(p: ExampleProps) {
+	type Card = { id: string; title: string; meta: string; column: string };
+	const columns = [
+		{ id: "todo", title: "Todo" },
+		{ id: "doing", title: "In progress" },
+		{ id: "done", title: "Done" },
+	];
+	const cards = signal<Card[]>([
+		{ id: "c-1", title: "Audit form labels", meta: "#418", column: "todo" },
+		{ id: "c-2", title: "Toast pause on hover", meta: "#421", column: "todo" },
+		{ id: "c-3", title: "Kanban keyboard moves", meta: "#402", column: "doing" },
+		{ id: "c-4", title: "Dark theme tokens", meta: "#389", column: "done" },
+	]);
+	const move = (cardId: string, toColumn: string, index: number) => {
+		const card = cards().find((c) => c.id === cardId);
+		if (!card) return;
+		const rest = cards().filter((c) => c.id !== cardId);
+		const target = rest.filter((c) => c.column === toColumn);
+		const before = target[index];
+		const at = before ? rest.indexOf(before) : rest.length;
+		cards.set([...rest.slice(0, at), { ...card, column: toColumn }, ...rest.slice(at)]);
+	};
+	return (
+		<KanbanBoard {...p} label="Sprint 14" onMove={move}>
+			<For each={columns}>
+				{(column) => (
+					<KanbanColumn
+						title={column.title}
+						columnId={column.id}
+						count={cards().filter((c) => c.column === column.id).length}
+					>
+						<For each={cards().filter((c) => c.column === column.id)}>
+							{(card) => (
+								<KanbanCard
+									cardId={card.id}
+									title={card.title}
+									meta={card.meta}
+									onClick={action("open card")}
+								/>
+							)}
+						</For>
+					</KanbanColumn>
+				)}
+			</For>
+		</KanbanBoard>
+	);
+}
+
+function FileTreeExample(p: ExampleProps) {
+	const file = signal("src/button.tsx");
+	return (
+		<Stack gap="0.5rem">
+			<FileTree {...p} label="Repository" nodes={repoTree} selected={file()} onSelect={file.set} />
+			<Text muted>Open: {file()}</Text>
+		</Stack>
+	);
+}
+
 /** One example per exported component of this group (showcase, docs and contract tests use these). */
 export const examples: Example[] = [
 	// kit-ops
@@ -125,7 +342,13 @@ export const examples: Example[] = [
 	{
 		name: "EndpointRow",
 		render: (p) => (
-			<EndpointRow {...p} method="POST" path="/v1/projects/{id}/deploys" summary="Start a deploy" />
+			<EndpointRow
+				{...p}
+				method="POST"
+				path="/v1/projects/{id}/deploys"
+				summary="Start a deploy"
+				onClick={action("open endpoint")}
+			/>
 		),
 	},
 	{ name: "JsonTree", render: (p) => <JsonTree {...p} data={configJson} /> },
@@ -166,7 +389,7 @@ export const examples: Example[] = [
 			<UpgradeBanner
 				{...p}
 				title="You're at 92% of your build minutes"
-				action={<Button>Upgrade</Button>}
+				action={<Button onClick={action("Upgrade")}>Upgrade</Button>}
 			>
 				Pro includes 10,000 minutes and concurrent builds.
 			</UpgradeBanner>
@@ -180,19 +403,30 @@ export const examples: Example[] = [
 				name="Ada Lovelace"
 				handle="@ada"
 				bio="Analyst of engines. Writes the first programs."
-				actions={<Button variant="outline">Follow</Button>}
+				actions={
+					<Button variant="outline" onClick={action("Follow")}>
+						Follow
+					</Button>
+				}
 			/>
 		),
 	},
-	{
-		name: "MemberRow",
-		render: (p) => <MemberRow {...p} name="Grace Hopper" email="grace@navy.mil" onRemove={noop} />,
-	},
+	{ name: "MemberRow", render: (p) => <MemberRowExample {...p} /> },
 	// biome-ignore lint/a11y/useValidAriaRole: RoleBadge `role` is the member role label, not an ARIA role
 	{ name: "RoleBadge", render: (p) => <RoleBadge {...p} role="Admin" /> },
 	{ name: "PriorityBadge", render: (p) => <PriorityBadge {...p} priority="urgent" /> },
 	{ name: "SeverityBadge", render: (p) => <SeverityBadge {...p} severity="critical" /> },
-	{ name: "CommitChip", render: (p) => <CommitChip {...p} sha="3f9c2e7a41d0b8" /> },
+	{
+		name: "CommitChip",
+		render: (p) => (
+			<CommitChip
+				{...p}
+				sha="3f9c2e7a41d0b8"
+				message="Fix toast focus"
+				onClick={action("open commit")}
+			/>
+		),
+	},
 	{ name: "BranchBadge", render: (p) => <BranchBadge {...p} name="feat/ui-kit" /> },
 	{ name: "BuildStatus", render: (p) => <BuildStatus {...p} status="running" /> },
 	{
@@ -216,22 +450,19 @@ export const examples: Example[] = [
 		name: "FloatingToolbar",
 		render: (p) => (
 			<FloatingToolbar {...p} label="Text formatting">
-				<Button size="sm" variant="ghost">
+				<Button size="sm" variant="ghost" onClick={action("Bold")}>
 					Bold
 				</Button>
-				<Button size="sm" variant="ghost">
+				<Button size="sm" variant="ghost" onClick={action("Italic")}>
 					Italic
 				</Button>
-				<Button size="sm" variant="ghost">
+				<Button size="sm" variant="ghost" onClick={action("Link")}>
 					Link
 				</Button>
 			</FloatingToolbar>
 		),
 	},
-	{
-		name: "DensityToggle",
-		render: (p) => <DensityToggle {...p} value="compact" onChange={noop} />,
-	},
+	{ name: "DensityToggle", render: (p) => <DensityToggleExample {...p} /> },
 	{
 		name: "NoResults",
 		render: (p) => (
@@ -246,7 +477,11 @@ export const examples: Example[] = [
 			<ErrorState
 				{...p}
 				description="We couldn't load your deploys. Check your connection and try again."
-				action={<Button variant="outline">Retry</Button>}
+				action={
+					<Button variant="outline" onClick={action("Retry")}>
+						Retry
+					</Button>
+				}
 			/>
 		),
 	},
@@ -259,63 +494,33 @@ export const examples: Example[] = [
 	{
 		name: "InvoiceRow",
 		render: (p) => (
-			<InvoiceRow id="INV-2026-014" {...p} date="Sep 1, 2026" amount="$49.00" status="paid" />
+			<InvoiceRow
+				id="INV-2026-014"
+				{...p}
+				date="Sep 1, 2026"
+				amount="$49.00"
+				status="paid"
+				onClick={action("open invoice")}
+			/>
 		),
 	},
 	{
 		name: "StorageBar",
 		render: (p) => <StorageBar {...p} label="Storage" usedGb={38.2} totalGb={50} />,
 	},
-	{
-		name: "FileTree",
-		render: (p) => (
-			<FileTree {...p} label="Repository" nodes={repoTree} selected="src/button.tsx" />
-		),
-	},
+	{ name: "FileTree", render: (p) => <FileTreeExample {...p} /> },
 	{ name: "Gauge", render: (p) => <Gauge {...p} label="CPU" value={72} /> },
-	{
-		name: "InviteCard",
-		render: (p) => <InviteCard {...p} email="linus@example.com" onResend={noop} onRevoke={noop} />,
-	},
+	{ name: "InviteCard", render: (p) => <InviteCardExample {...p} /> },
 	// kit-more
-	{
-		name: "CookieConsent",
-		render: (p) => (
-			<CookieConsent
-				{...p}
-				open
-				message="We use cookies to keep you signed in and to measure usage."
-				onAccept={noop}
-				onDecline={noop}
-			/>
-		),
-	},
+	{ name: "CookieConsent", render: (p) => <CookieConsentExample {...p} /> },
 	{ name: "OfflineNotice", render: (p) => <OfflineNotice {...p} offline /> },
 	{ name: "Hotkey", render: (p) => <Hotkey {...p} keys={["⌘", "K"]} /> },
-	{
-		name: "InlineEdit",
-		render: (p) => (
-			<InlineEdit {...p} label="Project name" value="Marketing site" onChange={noop} />
-		),
-	},
+	{ name: "InlineEdit", render: (p) => <InlineEditExample {...p} /> },
 	{
 		name: "CopyField",
 		render: (p) => <CopyField {...p} label="API key" value="sk_live_51Hx…9fQ2" />,
 	},
-	{
-		name: "Checklist",
-		render: (p) => (
-			<Checklist
-				{...p}
-				items={[
-					{ id: "domain", label: "Connect a domain", done: true },
-					{ id: "invite", label: "Invite your team", done: true },
-					{ id: "deploy", label: "Ship your first deploy" },
-				]}
-				onChange={noop}
-			/>
-		),
-	},
+	{ name: "Checklist", render: (p) => <ChecklistExample {...p} /> },
 	{
 		name: "FeatureList",
 		render: (p) => (
@@ -333,7 +538,7 @@ export const examples: Example[] = [
 				description="For growing teams."
 				features={["Unlimited projects", "10,000 build minutes", "Email support"]}
 				highlighted
-				action={<Button>Start trial</Button>}
+				action={<Button onClick={action("Start trial")}>Start trial</Button>}
 			/>
 		),
 	},
@@ -347,10 +552,7 @@ export const examples: Example[] = [
 			</StatGroup>
 		),
 	},
-	{
-		name: "DotPagination",
-		render: (p) => <DotPagination {...p} count={5} value={1} onChange={noop} />,
-	},
+	{ name: "DotPagination", render: (p) => <DotPaginationExample {...p} /> },
 	{
 		name: "BackLink",
 		render: (p) => (
@@ -359,16 +561,8 @@ export const examples: Example[] = [
 			</BackLink>
 		),
 	},
-	{
-		name: "NextPrev",
-		render: (p) => (
-			<NextPrev {...p} prevLabel="Installation" nextLabel="Theming" onPrev={noop} onNext={noop} />
-		),
-	},
-	{
-		name: "FileCard",
-		render: (p) => <FileCard {...p} name="Q3-report.pdf" meta="2.4 MB · PDF" onRemove={noop} />,
-	},
+	{ name: "NextPrev", render: (p) => <NextPrevExample {...p} /> },
+	{ name: "FileCard", render: (p) => <FileCardExample {...p} /> },
 	{
 		name: "VideoFrame",
 		render: (p) => <VideoFrame {...p} title="Product tour" src="about:blank" ratio={16 / 9} />,
@@ -390,7 +584,7 @@ export const examples: Example[] = [
 			/>
 		),
 	},
-	{ name: "AngleSlider", render: (p) => <AngleSlider {...p} value={135} onChange={noop} /> },
+	{ name: "AngleSlider", render: (p) => <AngleSliderExample {...p} /> },
 	{
 		name: "Prose",
 		render: (p) => (
@@ -443,23 +637,7 @@ export const examples: Example[] = [
 			</KanbanBoard>
 		),
 	},
-	{
-		name: "KanbanBoard",
-		render: (p) => (
-			<KanbanBoard {...p} label="Sprint 14" onMove={noop}>
-				<KanbanColumn title="Todo" columnId="todo" count={2}>
-					<KanbanCard cardId="c-1" title="Audit form labels" meta="#418" />
-					<KanbanCard cardId="c-2" title="Toast pause on hover" meta="#421" />
-				</KanbanColumn>
-				<KanbanColumn title="In progress" columnId="doing" count={1}>
-					<KanbanCard cardId="c-3" title="Kanban keyboard moves" meta="#402" />
-				</KanbanColumn>
-				<KanbanColumn title="Done" columnId="done" count={1}>
-					<KanbanCard cardId="c-4" title="Dark theme tokens" meta="#389" />
-				</KanbanColumn>
-			</KanbanBoard>
-		),
-	},
+	{ name: "KanbanBoard", render: (p) => <KanbanBoardExample {...p} /> },
 	// extras
 	{
 		name: "Tag",

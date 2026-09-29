@@ -8,7 +8,10 @@
 Native date field; forwarded attributes land on the `<input>`.
 
 ```tsx
-<DateInput aria-label="Start date" value="2026-10-01" onChange={() => {}} />
+function Example() {
+	const date = signal("2026-10-01");
+	return <DateInput aria-label="Start date" value={date()} onChange={date.set} />;
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -26,7 +29,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Native time field; forwarded attributes land on the `<input>`.
 
 ```tsx
-<TimeInput aria-label="Start time" value="09:30" onChange={() => {}} />
+function Example() {
+	const time = signal("09:30");
+	return <TimeInput aria-label="Start time" value={time()} onChange={time.set} />;
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -44,7 +50,15 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Month grid (WAI-ARIA date grid): one tab stop, ← → ↑ ↓ by day/week, PageUp/PageDown by month (Shift = year), Home/End week edges, full-date labels, `aria-selected` / `aria-current="date"`, `min` / `max` / `isDateDisabled`.
 
 ```tsx
-<Calendar value="2026-09-29" />
+function Example() {
+	const date = signal("2026-09-29");
+	return (
+		<Stack gap="0.5rem">
+			<Calendar value={date()} onChange={date.set} />
+			<Text muted>Selected: {date()}</Text>
+		</Stack>
+	);
+}
 ```
 
 **Slots:** `root` `cell` `day` `grid` `header` `label` `nav` `row` `table` `weekday` `weekdays`
@@ -67,7 +81,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Trigger + calendar dropdown. Opening focuses the active day; picking a day or Escape closes and returns focus to the trigger.
 
 ```tsx
-<DatePicker value="2026-09-29" label="Due date" />
+function Example() {
+	const due = signal("2026-09-29");
+	return <DatePicker value={due()} onChange={due.set} label="Due date" />;
+}
 ```
 
 **Slots:** `root` `calendar` `dropdown` `label` `trigger` `value`
@@ -91,11 +108,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Two-step date range picker (start → end).
 
 ```tsx
-<DateRangePicker
-	placeholder="Select dates"
-	value={{ start: "2026-10-05", end: "2026-10-09" }}
-	onChange={() => {}}
-/>
+function Example() {
+	const range = signal<DateRange>({ start: "2026-10-05", end: "2026-10-09" });
+	return <DateRangePicker placeholder="Select dates" value={range()} onChange={range.set} />;
+}
 ```
 
 **Slots:** `root` `cell` `dropdown` `summary` `trigger`
@@ -113,7 +129,15 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Month/year picker.
 
 ```tsx
-<MonthPicker value="2026-10" />
+function Example() {
+	const month = signal("2026-10");
+	return (
+		<>
+			<MonthPicker value={month()} onChange={month.set} />
+			<Text muted>Selected: {month()}</Text>
+		</>
+	);
+}
 ```
 
 **Slots:** `root` `cell` `grid` `header` `title`
@@ -131,7 +155,15 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Twelve-year grid with paging.
 
 ```tsx
-<YearPicker value={2026} onChange={() => {}} />
+function Example() {
+	const year = signal(2026);
+	return (
+		<>
+			<YearPicker value={year()} onChange={year.set} />
+			<Text muted>Selected: {year()}</Text>
+		</>
+	);
+}
 ```
 
 **Slots:** `root` `cell` `grid` `header` `title`
@@ -148,7 +180,15 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Hours/minutes picker.
 
 ```tsx
-<TimePicker value="09:30" />
+function Example() {
+	const time = signal("09:30");
+	return (
+		<>
+			<TimePicker value={time()} onChange={time.set} />
+			<Text muted>Selected: {time()}</Text>
+		</>
+	);
+}
 ```
 
 **Slots:** `root` `cell` `column` `header` `value`
@@ -166,7 +206,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Color swatch + hex text field. The text `<input>` is the host; `classes.root` styles the wrapper.
 
 ```tsx
-<ColorInput aria-label="Brand colour" value="#4f46e5" onChange={() => {}} />
+function Example() {
+	const color = signal("#4f46e5");
+	return <ColorInput aria-label="Brand colour" value={color()} onChange={color.set} />;
+}
 ```
 
 **Slots:** `root` `input` `swatch`
@@ -187,7 +230,17 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Native color input + swatches.
 
 ```tsx
-<ColorPicker value="#1e87f0" onChange={() => {}} />
+function Example() {
+	const color = signal("#1e87f0");
+	return (
+		<Stack gap="0.5rem">
+			<ColorPicker value={color()} onChange={color.set} />
+			<Text muted>
+				Selected: <code>{color()}</code>
+			</Text>
+		</Stack>
+	);
+}
 ```
 
 **Slots:** `root` `native` `swatch` `swatches` `value`

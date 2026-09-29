@@ -8,7 +8,17 @@
 Text field. Every other attribute (`id`, `name`, `autocomplete`, `aria-*`, …) lands on the `<input>`.
 
 ```tsx
-<TextInput aria-label="Full name" placeholder="Ada Lovelace" value="" />
+function Example() {
+	const name = signal("");
+	return (
+		<TextInput
+			aria-label="Full name"
+			placeholder="Ada Lovelace"
+			value={name()}
+			onInput={(e) => name.set((e.target as HTMLInputElement).value)}
+		/>
+	);
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -31,12 +41,18 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Multi-line text field.
 
 ```tsx
-<TextArea
-	aria-label="Message"
-	rows={3}
-	placeholder="Tell us what happened…"
-	value=""
-/>
+function Example() {
+	const message = signal("");
+	return (
+		<TextArea
+			aria-label="Message"
+			rows={3}
+			placeholder="Tell us what happened…"
+			value={message()}
+			onInput={(e) => message.set((e.target as HTMLInputElement).value)}
+		/>
+	);
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -57,7 +73,12 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Numeric field. Typing keeps a free-form draft (so `15` can be typed with `min=10`); values commit when in range and clamp on blur / Enter / step. Results are rounded to the precision of `step` (no `0.30000000000000004`). The `<input>` is the host (`class`, `style`, `id`, `aria-*` land on it); `classes.root` styles the wrapper.
 
 ```tsx
-<NumberInput aria-label="Seats" value={5} onChange={() => {}} />
+function Example() {
+	const seats = signal(5);
+	return (
+		<NumberInput aria-label="Seats" min={1} max={50} value={seats()} onChange={seats.set} />
+	);
+}
 ```
 
 **Slots:** `root` `decrement` `increment` `input`
@@ -82,7 +103,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Password field with visibility toggle. The `<input>` is the host (`class`, `id`, `autocomplete`, `aria-*` land on it); `classes.root` styles the wrapper.
 
 ```tsx
-<PasswordInput aria-label="Password" value="" onChange={() => {}} />
+function Example() {
+	const password = signal("");
+	return <PasswordInput aria-label="Password" value={password()} onChange={password.set} />;
+}
 ```
 
 **Slots:** `root` `input` `toggle`
@@ -122,7 +146,17 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Search field with clear button. The `<input>` is the host; `classes.root` styles the wrapper.
 
 ```tsx
-<SearchInput aria-label="Search projects" value="" onChange={() => {}} />
+function Example() {
+	const query = signal("");
+	return (
+		<SearchInput
+			aria-label="Search projects"
+			placeholder="Search projects"
+			value={query()}
+			onChange={query.set}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `clear` `icon` `input`
@@ -144,7 +178,20 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 One-time-code input: one cell per digit, paste fills all cells. Forwarded attributes land on the group.
 
 ```tsx
-<PinInput aria-label="Verification code" length={6} value="42" onChange={() => {}} />
+function Example() {
+	const code = signal("");
+	return (
+		<>
+			<PinInput
+				aria-label="Verification code"
+				length={6}
+				value={code()}
+				onChange={code.set}
+			/>
+			<Text muted>{code().length === 6 ? `Verifying ${code()}…` : "Enter the 6-digit code."}</Text>
+		</>
+	);
+}
 ```
 
 **Slots:** `root` `cell`
@@ -199,7 +246,16 @@ Static addon (text, icon) attached to an input.
 Checkbox. The native `<input>` is the host: `class`, `style` and forwarded attributes (`id`, `name`, `required`, `aria-*`) land on it; `classes.root` styles the label row.
 
 ```tsx
-<Checkbox label="Email me about product updates" checked />
+function Example() {
+	const updates = signal(true);
+	return (
+		<Checkbox
+			label="Email me about product updates"
+			checked={updates()}
+			onChange={(e) => updates.set((e.target as HTMLInputElement).checked)}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `input` `label`
@@ -221,7 +277,23 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Multiple-choice checkboxes in a fieldset.
 
 ```tsx
-<CheckboxGroup legend="Regions" options={regions} value={["fra1"]} onChange={() => {}} />
+const regions = [
+	{ value: "fra1", label: "Frankfurt" },
+	{ value: "iad1", label: "Washington, D.C." },
+	{ value: "hnd1", label: "Tokyo" },
+];
+
+function Example() {
+	const selected = signal(["fra1"]);
+	return (
+		<CheckboxGroup
+			legend="Regions"
+			options={regions}
+			value={selected()}
+			onChange={selected.set}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `legend` `option`
@@ -241,14 +313,22 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Checklist of items with checkboxes.
 
 ```tsx
-<Checklist
-	items={[
+function Example() {
+	const items = signal<ChecklistItemData[]>([
 		{ id: "domain", label: "Connect a domain", done: true },
 		{ id: "invite", label: "Invite your team", done: true },
 		{ id: "deploy", label: "Ship your first deploy" },
-	]}
-	onChange={() => {}}
-/>
+	]);
+	const done = () => items().filter((i) => i.done).length;
+	return (
+		<Stack gap="0.5rem">
+			<Checklist items={items()} onChange={items.set} />
+			<Text muted>
+				{done()} of {items().length} done
+			</Text>
+		</Stack>
+	);
+}
 ```
 
 **Slots:** `root` `checkbox` `item` `label`
@@ -265,7 +345,16 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Toggle switch (`role="switch"`). Like {@link Checkbox}, the `<input>` (the visible track) is the host; `classes.root` styles the label row.
 
 ```tsx
-<Switch label="Preview deploys" checked />
+function Example() {
+	const previews = signal(true);
+	return (
+		<Switch
+			label="Preview deploys"
+			checked={previews()}
+			onChange={(e) => previews.set((e.target as HTMLInputElement).checked)}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `input` `label`
@@ -285,7 +374,24 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Radio group (`role="radiogroup"`). Forwarded attributes land on the group.
 
 ```tsx
-<RadioGroup label="Plan" name="plan" options={plans} value="pro" />
+const plans = [
+	{ value: "free", label: "Free" },
+	{ value: "pro", label: "Pro" },
+	{ value: "team", label: "Team" },
+];
+
+function Example() {
+	const plan = signal("pro");
+	return (
+		<RadioGroup
+			label="Plan"
+			name="plan"
+			options={plans}
+			value={plan()}
+			onChange={(e) => plan.set((e.target as HTMLInputElement).value)}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `input` `label` `option`
@@ -307,15 +413,31 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Selectable card wrapping a native radio/checkbox.
 
 ```tsx
-<ChoiceCard
-	type="radio"
-	name="plan"
-	value="pro"
-	checked
-	label="Pro"
-	description="$20 per seat / month"
-	onChange={() => {}}
-/>
+function Example() {
+	const plan = signal("pro");
+	return (
+		<Group gap="0.75rem">
+			<ChoiceCard
+				type="radio"
+				name="plan"
+				value="free"
+				checked={plan() === "free"}
+				label="Free"
+				description="For side projects"
+				onChange={(checked) => checked && plan.set("free")}
+			/>
+			<ChoiceCard
+				type="radio"
+				name="plan"
+				value="pro"
+				checked={plan() === "pro"}
+				label="Pro"
+				description="$20 per seat / month"
+				onChange={(checked) => checked && plan.set("pro")}
+			/>
+		</Group>
+	);
+}
 ```
 
 **Slots:** `root` `body` `description` `input` `label`
@@ -338,7 +460,23 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Native select; forwarded attributes land on `<select>`.
 
 ```tsx
-<Select aria-label="Plan" options={plans} value="pro" />
+const plans = [
+	{ value: "free", label: "Free" },
+	{ value: "pro", label: "Pro" },
+	{ value: "team", label: "Team" },
+];
+
+function Example() {
+	const plan = signal("pro");
+	return (
+		<Select
+			aria-label="Plan"
+			options={plans}
+			value={plan()}
+			onChange={(e) => plan.set((e.target as HTMLInputElement).value)}
+		/>
+	);
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -358,7 +496,23 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Native `<select>` with a value callback.
 
 ```tsx
-<NativeSelect aria-label="Region" options={regions} value="fra1" onChange={() => {}} />
+const regions = [
+	{ value: "fra1", label: "Frankfurt" },
+	{ value: "iad1", label: "Washington, D.C." },
+	{ value: "hnd1", label: "Tokyo" },
+];
+
+function Example() {
+	const region = signal("fra1");
+	return (
+		<NativeSelect
+			aria-label="Region"
+			options={regions}
+			value={region()}
+			onChange={region.set}
+		/>
+	);
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -378,12 +532,23 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Multi-choice listbox dropdown.
 
 ```tsx
-<MultiSelect
-	aria-label="Regions"
-	options={regions}
-	value={["fra1", "iad1"]}
-	onChange={() => {}}
-/>
+const regions = [
+	{ value: "fra1", label: "Frankfurt" },
+	{ value: "iad1", label: "Washington, D.C." },
+	{ value: "hnd1", label: "Tokyo" },
+];
+
+function Example() {
+	const selected = signal(["fra1", "iad1"]);
+	return (
+		<MultiSelect
+			aria-label="Regions"
+			options={regions}
+			value={selected()}
+			onChange={selected.set}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `control` `menu` `option`
@@ -403,12 +568,18 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Combobox with suggestion list (↑ ↓ Enter Escape, `aria-activedescendant`). The `<input>` is the host; `classes.root` styles the wrapper.
 
 ```tsx
-<Autocomplete
-	aria-label="Country"
-	value=""
-	options={["Germany", "Japan", "United Kingdom", "United States"]}
-	onChange={() => {}}
-/>
+function Example() {
+	const country = signal("");
+	return (
+		<Autocomplete
+			aria-label="Country"
+			placeholder="Start typing a country"
+			value={country()}
+			options={["Germany", "Japan", "United Kingdom", "United States"]}
+			onChange={country.set}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `input` `menu` `option`
@@ -432,12 +603,17 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Free-form tag entry (Enter / comma / paste lists, case-insensitive dedupe).
 
 ```tsx
-<TagsInput
-	aria-label="Topics"
-	placeholder="Add a topic"
-	value={["signals", "ssr"]}
-	onChange={() => {}}
-/>
+function Example() {
+	const topics = signal(["signals", "ssr"]);
+	return (
+		<TagsInput
+			aria-label="Topics"
+			placeholder="Add a topic and press Enter"
+			value={topics()}
+			onChange={topics.set}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `input` `remove` `tag`
@@ -457,17 +633,22 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Single or multiple choice chips.
 
 ```tsx
-<ChipGroup
-	legend="Frameworks"
-	multiple
-	options={[
-		{ value: "arachne", label: "Arachne" },
-		{ value: "solid", label: "Solid" },
-		{ value: "svelte", label: "Svelte" },
-	]}
-	value={["arachne"]}
-	onChange={() => {}}
-/>
+function Example() {
+	const frameworks = signal(["arachne"]);
+	return (
+		<ChipGroup
+			legend="Frameworks"
+			multiple
+			options={[
+				{ value: "arachne", label: "Arachne" },
+				{ value: "solid", label: "Solid" },
+				{ value: "svelte", label: "Svelte" },
+			]}
+			value={frameworks()}
+			onChange={frameworks.set}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `chip` `legend`
@@ -488,9 +669,14 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Toggleable pill (`aria-pressed`).
 
 ```tsx
-<Chip checked onChange={() => {}}>
-	TypeScript
-</Chip>
+function Example() {
+	const on = signal(true);
+	return (
+		<Chip checked={on()} onChange={on.set}>
+			TypeScript
+		</Chip>
+	);
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -508,7 +694,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Star rating (radio pattern with roving tabindex, arrow keys).
 
 ```tsx
-<Rating aria-label="Rating" value={4} onChange={() => {}} />
+function Example() {
+	const stars = signal(4);
+	return <Rating aria-label="Rating" value={stars()} onChange={stars.set} />;
+}
 ```
 
 **Slots:** `root` `star`
@@ -529,7 +718,15 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Range input; forwarded attributes land on `<input type="range">`.
 
 ```tsx
-<Slider aria-label="Volume" value={60} onChange={() => {}} />
+function Example() {
+	const volume = signal(60);
+	return (
+		<>
+			<Slider aria-label="Volume" value={volume()} onChange={volume.set} />
+			<Text muted>Volume: {volume()}</Text>
+		</>
+	);
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -548,13 +745,23 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Two-thumb range.
 
 ```tsx
-<RangeSlider
-	aria-label="Price range"
-	min={0}
-	max={200}
-	value={[40, 120]}
-	onChange={() => {}}
-/>
+function Example() {
+	const range = signal<[number, number]>([40, 120]);
+	return (
+		<>
+			<RangeSlider
+				aria-label="Price range"
+				min={0}
+				max={200}
+				value={range()}
+				onChange={range.set}
+			/>
+			<Text muted>
+				${range()[0]} – ${range()[1]}
+			</Text>
+		</>
+	);
+}
 ```
 
 **Slots:** `root` `end` `start`
@@ -577,7 +784,15 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Circular slider for an angle.
 
 ```tsx
-<AngleSlider value={135} onChange={() => {}} />
+function Example() {
+	const angle = signal(135);
+	return (
+		<Group gap="0.75rem">
+			<AngleSlider value={angle()} onChange={angle.set} />
+			<Text muted>{angle()}°</Text>
+		</Group>
+	);
+}
 ```
 
 **Slots:** `root` `arm` `knob` `label` `svg` `track`
@@ -597,7 +812,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 − value + stepper.
 
 ```tsx
-<QuantityInput value={2} onChange={() => {}} />
+function Example() {
+	const quantity = signal(2);
+	return <QuantityInput min={1} max={10} value={quantity()} onChange={quantity.set} />;
+}
 ```
 
 **Slots:** `root` `button` `value`
@@ -618,7 +836,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Click-to-edit text.
 
 ```tsx
-<InlineEdit label="Project name" value="Marketing site" onChange={() => {}} />
+function Example() {
+	const name = signal("Marketing site");
+	return <InlineEdit label="Project name" value={name()} onChange={name.set} />;
+}
 ```
 
 **Slots:** `root` `display` `icon` `input`
@@ -671,11 +892,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 JSON text area that flags invalid JSON (`aria-invalid`, `data-invalid`).
 
 ```tsx
-<JsonInput
-	aria-label="Config JSON"
-	value={'{\n  "region": "fra1",\n  "replicas": 2\n}'}
-	onChange={() => {}}
-/>
+function Example() {
+	const config = signal('{\n  "region": "fra1",\n  "replicas": 2\n}');
+	return <JsonInput aria-label="Config JSON" value={config()} onChange={config.set} />;
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -713,9 +933,17 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Hidden file input triggered by a button (Mantine FileButton).
 
 ```tsx
-<FileButton accept="image/*" onChange={() => {}}>
-	Upload avatar
-</FileButton>
+function Example() {
+	const file = signal("");
+	return (
+		<Group gap="0.75rem">
+			<FileButton accept="image/*" onChange={(files) => file.set(files[0]?.name ?? "")}>
+				Upload avatar
+			</FileButton>
+			<Text muted>{file() || "No file chosen"}</Text>
+		</Group>
+	);
+}
 ```
 
 **Slots:** `root` `input` `label`
@@ -735,9 +963,21 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Drag-and-drop file target (also a click-to-browse file input).
 
 ```tsx
-<Dropzone multiple accept=".csv" onDrop={() => {}}>
-	Drop CSV files here, or click to browse
-</Dropzone>
+function Example() {
+	const files = signal<string[]>([]);
+	return (
+		<Stack gap="0.5rem">
+			<Dropzone
+				multiple
+				accept=".csv"
+				onDrop={(dropped) => files.set(dropped.map((f) => f.name))}
+			>
+				Drop CSV files here, or click to browse
+			</Dropzone>
+			<Text muted>{files().length ? files().join(", ") : "No files yet"}</Text>
+		</Stack>
+	);
+}
 ```
 
 **Slots:** `root` `input` `label`
@@ -757,7 +997,40 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 File upload row with progress.
 
 ```tsx
-<UploadItem name="hero@2x.png" progress={64} onCancel={() => {}} />
+function Example() {
+	const progress = signal(12);
+	const cancelled = signal(false);
+	// Simulated upload; effects run only in the browser.
+	effect(() => {
+		const timer = setInterval(() => {
+			if (!cancelled() && progress() < 100) progress.set(Math.min(100, progress() + 8));
+		}, 400);
+		return () => clearInterval(timer);
+	});
+	return (
+		<Show
+			when={!cancelled()}
+			fallback={
+				<Button
+					size="sm"
+					variant="outline"
+					onClick={() => {
+						progress.set(0);
+						cancelled.set(false);
+					}}
+				>
+					Upload again
+				</Button>
+			}
+		>
+			<UploadItem
+				name="hero@2x.png"
+				progress={progress()}
+				onCancel={() => cancelled.set(true)}
+			/>
+		</Show>
+	);
+}
 ```
 
 **Slots:** `root` `bar` `cancel` `name` `row` `status` `track`

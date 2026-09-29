@@ -1,4 +1,4 @@
-import { effect } from "@arachne/signals";
+import { effect, signal } from "@arachne/signals";
 import {
 	Calendar,
 	Carousel,
@@ -12,9 +12,11 @@ import {
 	NavbarLink,
 	Paper,
 	Spotlight,
+	Stack,
 	Table,
 	Tbody,
 	Td,
+	Text,
 	Tfoot,
 	Th,
 	Thead,
@@ -22,10 +24,9 @@ import {
 	TransferList,
 	Tree,
 } from "../src/index.ts";
+import { action } from "./actions.ts";
 import { swatch } from "./placeholder.ts";
-import type { Example } from "./types.ts";
-
-const noop = () => {};
+import type { Example, ExampleProps } from "./types.ts";
 
 function NavbarCase(p: Record<string, unknown>) {
 	const ctrl = createNavbarController();
@@ -48,6 +49,74 @@ function NavbarCase(p: Record<string, unknown>) {
 				},
 				{ id: "pricing", label: "Pricing", href: "#pricing" },
 			]}
+		/>
+	);
+}
+
+function TreeExample(p: ExampleProps) {
+	const selected = signal("web");
+	return (
+		<Stack gap="0.5rem">
+			<Tree
+				{...p}
+				label="Workspace"
+				defaultExpanded={["apps"]}
+				value={selected()}
+				onChange={selected.set}
+				data={[
+					{
+						id: "apps",
+						label: "apps",
+						children: [
+							{ id: "web", label: "web" },
+							{ id: "admin", label: "admin" },
+						],
+					},
+					{ id: "packages", label: "packages", children: [{ id: "ui", label: "ui" }] },
+				]}
+			/>
+			<Text muted>Selected: {selected()}</Text>
+		</Stack>
+	);
+}
+
+function CalendarExample(p: ExampleProps) {
+	const date = signal("2026-09-29");
+	return (
+		<Stack gap="0.5rem">
+			<Calendar {...p} value={date()} onChange={date.set} />
+			<Text muted>Selected: {date()}</Text>
+		</Stack>
+	);
+}
+
+function DatePickerExample(p: ExampleProps) {
+	const due = signal("2026-09-29");
+	return <DatePicker {...p} value={due()} onChange={due.set} label="Due date" />;
+}
+
+function ColorPickerExample(p: ExampleProps) {
+	const color = signal("#1e87f0");
+	return (
+		<Stack gap="0.5rem">
+			<ColorPicker {...p} value={color()} onChange={color.set} />
+			<Text muted>
+				Selected: <code>{color()}</code>
+			</Text>
+		</Stack>
+	);
+}
+
+function TransferListExample(p: ExampleProps) {
+	const lists = signal({ left: ["Frankfurt", "Tokyo", "São Paulo"], right: ["Washington, D.C."] });
+	return (
+		<TransferList
+			{...p}
+			leftTitle="Available"
+			rightTitle="Selected"
+			left={lists().left}
+			right={lists().right}
+			onChange={lists.set}
 		/>
 	);
 }
@@ -149,28 +218,7 @@ export const examples: Example[] = [
 			</Table>
 		),
 	},
-	{
-		name: "Tree",
-		render: (p) => (
-			<Tree
-				{...p}
-				label="Workspace"
-				defaultExpanded={["apps"]}
-				value="web"
-				data={[
-					{
-						id: "apps",
-						label: "apps",
-						children: [
-							{ id: "web", label: "web" },
-							{ id: "admin", label: "admin" },
-						],
-					},
-					{ id: "packages", label: "packages", children: [{ id: "ui", label: "ui" }] },
-				]}
-			/>
-		),
-	},
+	{ name: "Tree", render: (p) => <TreeExample {...p} /> },
 	{
 		name: "Carousel",
 		render: (p) => (
@@ -198,27 +246,24 @@ export const examples: Example[] = [
 			/>
 		),
 	},
-	{ name: "Calendar", render: (p) => <Calendar {...p} value="2026-09-29" /> },
-	{ name: "DatePicker", render: (p) => <DatePicker {...p} value="2026-09-29" label="Due date" /> },
+	{ name: "Calendar", render: (p) => <CalendarExample {...p} /> },
+	{ name: "DatePicker", render: (p) => <DatePickerExample {...p} /> },
 	{
 		name: "ContextMenu",
 		render: (p) => (
 			<ContextMenu
 				{...p}
 				items={[
-					{ id: "open", label: "Open", onSelect: noop },
-					{ id: "rename", label: "Rename", onSelect: noop },
-					{ id: "delete", label: "Delete", danger: true, onSelect: noop },
+					{ id: "open", label: "Open", onSelect: action("onSelect") },
+					{ id: "rename", label: "Rename", onSelect: action("onSelect") },
+					{ id: "delete", label: "Delete", danger: true, onSelect: action("onSelect") },
 				]}
 			>
 				<Paper withBorder>Right-click this file card</Paper>
 			</ContextMenu>
 		),
 	},
-	{
-		name: "ColorPicker",
-		render: (p) => <ColorPicker {...p} value="#1e87f0" onChange={noop} />,
-	},
+	{ name: "ColorPicker", render: (p) => <ColorPickerExample {...p} /> },
 	{
 		name: "Lightbox",
 		render: (p) => (
@@ -226,23 +271,11 @@ export const examples: Example[] = [
 				{...p}
 				images={[{ src: swatch(210, "Photo"), alt: "Photo" }]}
 				index={0}
-				onClose={noop}
+				onClose={action("onClose")}
 			/>
 		),
 	},
-	{
-		name: "TransferList",
-		render: (p) => (
-			<TransferList
-				{...p}
-				leftTitle="Available"
-				rightTitle="Selected"
-				left={["Frankfurt", "Tokyo", "São Paulo"]}
-				right={["Washington, D.C."]}
-				onChange={noop}
-			/>
-		),
-	},
+	{ name: "TransferList", render: (p) => <TransferListExample {...p} /> },
 	{
 		name: "Spotlight",
 		render: (p) => (
@@ -255,12 +288,12 @@ export const examples: Example[] = [
 						id: "new",
 						label: "New project",
 						description: "Create a project from a template",
-						onSelect: noop,
+						onSelect: action("onSelect"),
 					},
-					{ id: "deploy", label: "Deploy", onSelect: noop },
-					{ id: "theme", label: "Toggle theme", onSelect: noop },
+					{ id: "deploy", label: "Deploy", onSelect: action("onSelect") },
+					{ id: "theme", label: "Toggle theme", onSelect: action("onSelect") },
 				]}
-				onClose={noop}
+				onClose={action("onClose")}
 			/>
 		),
 	},
@@ -275,8 +308,8 @@ export const examples: Example[] = [
 				title="Delete project?"
 				message="This removes marketing-site and all of its deploys."
 				confirmLabel="Delete"
-				onConfirm={noop}
-				onCancel={noop}
+				onConfirm={action("onConfirm")}
+				onCancel={action("onCancel")}
 			/>
 		),
 	},

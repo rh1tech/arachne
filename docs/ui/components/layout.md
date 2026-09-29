@@ -29,8 +29,10 @@ Horizontal flex group (Mantine Group / Bootstrap btn-group row).
 
 ```tsx
 <Group gap="0.5rem">
-	<Button variant="ghost">Cancel</Button>
-	<Button>Save</Button>
+	<Button variant="ghost" onClick={() => {}}>
+		Cancel
+	</Button>
+	<Button onClick={() => {}}>Save</Button>
 </Group>
 ```
 
@@ -52,7 +54,9 @@ Flexbox layout primitive (direction, gap, align, justify, wrap).
 ```tsx
 <Flex justify="space-between" align="center">
 	<Text>Invoices</Text>
-	<Button size="sm">Export</Button>
+	<Button size="sm" onClick={() => {}}>
+		Export
+	</Button>
 </Flex>
 ```
 
@@ -188,6 +192,8 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Content card (Bulma/Mantine/Bootstrap).
 
 ```tsx
+const cardImage = "/images/cover.jpg";
+
 <Card style={{ "max-width": "22rem" }}>
 	<CardImage>
 		<img src={cardImage} alt="Project cover" width="640" height="280" />
@@ -249,6 +255,8 @@ Title text inside a card header.
 Full-bleed media at the top of a card.
 
 ```tsx
+const cardImage = "/images/cover.jpg";
+
 <Card style={{ "max-width": "22rem" }}>
 	<CardImage>
 		<img src={cardImage} alt="Project cover" width="640" height="280" />
@@ -317,18 +325,37 @@ One action cell in a card footer (a button when `onClick` is set).
 Side panel / filter panel (Bulma).
 
 ```tsx
-<Panel label="Repositories" style={{ "max-width": "22rem" }}>
-	<PanelHeading>Repositories</PanelHeading>
-	<PanelTabs>
-		<PanelTab active>All</PanelTab>
-		<PanelTab>Public</PanelTab>
-		<PanelTab>Private</PanelTab>
-	</PanelTabs>
-	<PanelBlock active onClick={() => {}}>
-		arachne
-	</PanelBlock>
-	<PanelBlock onClick={() => {}}>marketing-site</PanelBlock>
-</Panel>
+function Example() {
+	const repos = [
+		{ name: "arachne", visibility: "public" },
+		{ name: "marketing-site", visibility: "private" },
+		{ name: "design-tokens", visibility: "public" },
+	];
+	const tab = signal("all");
+	const active = signal("arachne");
+	const shown = () => repos.filter((r) => tab() === "all" || r.visibility === tab());
+	return (
+		<Panel label="Repositories" style={{ "max-width": "22rem" }}>
+			<PanelHeading>Repositories</PanelHeading>
+			<PanelTabs>
+				<For each={["all", "public", "private"]}>
+					{(id) => (
+						<PanelTab active={tab() === id} onClick={() => tab.set(id)}>
+							{id[0]?.toUpperCase() + id.slice(1)}
+						</PanelTab>
+					)}
+				</For>
+			</PanelTabs>
+			<For each={shown()}>
+				{(repo) => (
+					<PanelBlock active={active() === repo.name} onClick={() => active.set(repo.name)}>
+						{repo.name}
+					</PanelBlock>
+				)}
+			</For>
+		</Panel>
+	);
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -360,12 +387,21 @@ Heading row of a panel.
 Tab row inside a panel.
 
 ```tsx
-<Panel label="Filter tabs">
-	<PanelTabs>
-		<PanelTab active>All</PanelTab>
-		<PanelTab>Forks</PanelTab>
-	</PanelTabs>
-</Panel>
+function Example() {
+	const tab = signal("all");
+	return (
+		<Panel label="Filter tabs">
+			<PanelTabs>
+				<PanelTab active={tab() === "all"} onClick={() => tab.set("all")}>
+					All
+				</PanelTab>
+				<PanelTab active={tab() === "forks"} onClick={() => tab.set("forks")}>
+					Forks
+				</PanelTab>
+			</PanelTabs>
+		</Panel>
+	);
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -377,14 +413,21 @@ Tab row inside a panel.
 One tab in a panel's tab row.
 
 ```tsx
-<Panel label="Sources">
-	<PanelTabs>
-		<PanelTab active onClick={() => {}}>
-			All
-		</PanelTab>
-		<PanelTab onClick={() => {}}>Forks</PanelTab>
-	</PanelTabs>
-</Panel>
+function Example() {
+	const tab = signal("all");
+	return (
+		<Panel label="Sources">
+			<PanelTabs>
+				<PanelTab active={tab() === "all"} onClick={() => tab.set("all")}>
+					All
+				</PanelTab>
+				<PanelTab active={tab() === "forks"} onClick={() => tab.set("forks")}>
+					Forks
+				</PanelTab>
+			</PanelTabs>
+		</Panel>
+	);
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -398,11 +441,22 @@ One tab in a panel's tab row.
 Panel row; renders a `<button>` when `onClick` is set.
 
 ```tsx
-<Panel label="Recent projects">
-	<PanelBlock onClick={() => {}}>
-		marketing-site
-	</PanelBlock>
-</Panel>
+function Example() {
+	const active = signal("marketing-site");
+	return (
+		<Panel label="Recent projects">
+			<PanelBlock
+				active={active() === "marketing-site"}
+				onClick={() => active.set("marketing-site")}
+			>
+				marketing-site
+			</PanelBlock>
+			<PanelBlock active={active() === "docs"} onClick={() => active.set("docs")}>
+				docs
+			</PanelBlock>
+		</Panel>
+	);
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -590,7 +644,9 @@ Horizontal level bar (Bulma `level`).
 	</LevelLeft>
 	<LevelRight>
 		<LevelItem>
-			<Button size="sm">New deploy</Button>
+			<Button size="sm" onClick={() => {}}>
+				New deploy
+			</Button>
 		</LevelItem>
 	</LevelRight>
 </Level>
@@ -797,7 +853,7 @@ Trailing content of a media object (actions).
 <Media>
 	<MediaContent>Row content</MediaContent>
 	<MediaRight>
-		<Button size="sm" variant="ghost">
+		<Button size="sm" variant="ghost" onClick={() => {}}>
 			Reply
 		</Button>
 	</MediaRight>
@@ -1008,11 +1064,26 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Horizontal toolbar for filters and chips.
 
 ```tsx
-<FilterBar>
-	<SearchInput aria-label="Search deploys" value="" onChange={() => {}} />
-	<Button variant="outline">Status</Button>
-	<Button variant="outline">Branch</Button>
-</FilterBar>
+function Example() {
+	const query = signal("");
+	const deploys = ["marketing-site #128", "docs #127", "marketing-site #126", "api #125"];
+	return (
+		<Stack gap="0.5rem">
+			<FilterBar>
+				<SearchInput
+					aria-label="Search deploys"
+					placeholder="Search deploys"
+					value={query()}
+					onChange={query.set}
+				/>
+				<Button variant="outline" onClick={() => query.set("")}>
+					Clear
+				</Button>
+			</FilterBar>
+			<For each={deploys.filter((d) => d.includes(query()))}>{(d) => <Text>{d}</Text>}</For>
+		</Stack>
+	);
+}
 ```
 
 | Prop | Type | Required | Description |

@@ -396,27 +396,32 @@ Timeline entry with a bullet, title and content.
 Disclosure list. Panels stay mounted (state and focus survive toggling) and animate height via `grid-template-rows`.
 
 ```tsx
-<Accordion
-	value="billing"
-	onChange={() => {}}
-	items={[
-		{
-			id: "billing",
-			title: "How does billing work?",
-			content: "You're billed monthly per seat.",
-		},
-		{
-			id: "cancel",
-			title: "Can I cancel anytime?",
-			content: "Yes — your plan ends at the period's close.",
-		},
-		{
-			id: "data",
-			title: "Where is my data stored?",
-			content: "In the EU (Frankfurt) by default.",
-		},
-	]}
-/>
+function Example() {
+	const openItem = signal<string | null>("billing");
+	return (
+		<Accordion
+			value={openItem() ?? ""}
+			onChange={(id: string | null) => openItem.set(id)}
+			items={[
+				{
+					id: "billing",
+					title: "How does billing work?",
+					content: "You're billed monthly per seat.",
+				},
+				{
+					id: "cancel",
+					title: "Can I cancel anytime?",
+					content: "Yes — your plan ends at the period's close.",
+				},
+				{
+					id: "data",
+					title: "Where is my data stored?",
+					content: "In the EU (Frankfurt) by default.",
+				},
+			]}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `chevron` `content` `icon` `item` `panel` `subtitle` `title` `trigger`
@@ -437,9 +442,19 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Show/hide region.
 
 ```tsx
-<Collapse open>
-	<Text>Collapsible content animates its height when toggled.</Text>
-</Collapse>
+function Example() {
+	const open = signal(true);
+	return (
+		<Stack gap="0.5rem">
+			<Button size="sm" variant="outline" aria-expanded={open()} onClick={() => open.set(!open())}>
+				{open() ? "Hide details" : "Show details"}
+			</Button>
+			<Collapse open={open()}>
+				<Text>Collapsible content animates its height when toggled.</Text>
+			</Collapse>
+		</Stack>
+	);
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -497,22 +512,31 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 WAI-ARIA tree: one tab stop, ↑ ↓ move, → expands / enters, ← collapses / goes to parent, Home End, Enter/Space select.
 
 ```tsx
-<Tree
-	label="Workspace"
-	defaultExpanded={["apps"]}
-	value="web"
-	data={[
-		{
-			id: "apps",
-			label: "apps",
-			children: [
-				{ id: "web", label: "web" },
-				{ id: "admin", label: "admin" },
-			],
-		},
-		{ id: "packages", label: "packages", children: [{ id: "ui", label: "ui" }] },
-	]}
-/>
+function Example() {
+	const selected = signal("web");
+	return (
+		<Stack gap="0.5rem">
+			<Tree
+				label="Workspace"
+				defaultExpanded={["apps"]}
+				value={selected()}
+				onChange={selected.set}
+				data={[
+					{
+						id: "apps",
+						label: "apps",
+						children: [
+							{ id: "web", label: "web" },
+							{ id: "admin", label: "admin" },
+						],
+					},
+					{ id: "packages", label: "packages", children: [{ id: "ui", label: "ui" }] },
+				]}
+			/>
+			<Text muted>Selected: {selected()}</Text>
+		</Stack>
+	);
+}
 ```
 
 **Slots:** `root` `group` `item` `label` `row` `toggle`
@@ -532,7 +556,28 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 File / folder tree. Rows expose `data-kind`.
 
 ```tsx
-<FileTree label="Repository" nodes={repoTree} selected="src/button.tsx" />
+const repoTree: FileTreeNode[] = [
+	{
+		id: "src",
+		name: "src",
+		kind: "folder",
+		children: [
+			{ id: "src/index.ts", name: "index.ts", kind: "file" },
+			{ id: "src/button.tsx", name: "button.tsx", kind: "file" },
+		],
+	},
+	{ id: "package.json", name: "package.json", kind: "file" },
+];
+
+function Example() {
+	const file = signal("src/button.tsx");
+	return (
+		<Stack gap="0.5rem">
+			<FileTree label="Repository" nodes={repoTree} selected={file()} onSelect={file.set} />
+			<Text muted>Open: {file()}</Text>
+		</Stack>
+	);
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -549,6 +594,24 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Collapsible JSON tree.
 
 ```tsx
+const configJson: JsonNode = {
+	kind: "object",
+	entries: [
+		{ key: "name", value: { kind: "primitive", value: "arachne" } },
+		{ key: "private", value: { kind: "primitive", value: true } },
+		{
+			key: "workspaces",
+			value: {
+				kind: "array",
+				items: [
+					{ kind: "primitive", value: "packages/*" },
+					{ kind: "primitive", value: "apps/*" },
+				],
+			},
+		},
+	],
+};
+
 <JsonTree data={configJson} />
 ```
 
@@ -577,13 +640,18 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Dual-list mover (Mantine TransferList). Rows keep their DOM between moves.
 
 ```tsx
-<TransferList
-	leftTitle="Available"
-	rightTitle="Selected"
-	left={["Frankfurt", "Tokyo", "São Paulo"]}
-	right={["Washington, D.C."]}
-	onChange={() => {}}
-/>
+function Example() {
+	const lists = signal({ left: ["Frankfurt", "Tokyo", "São Paulo"], right: ["Washington, D.C."] });
+	return (
+		<TransferList
+			leftTitle="Available"
+			rightTitle="Selected"
+			left={lists().left}
+			right={lists().right}
+			onChange={lists.set}
+		/>
+	);
+}
 ```
 
 **Slots:** `root` `actions` `item` `list` `pane` `title`
@@ -603,14 +671,14 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Reorderable list with keyboard-accessible move buttons.
 
 ```tsx
-<SortableList
-	items={[
+function Example() {
+	const steps = signal([
 		{ id: "install", label: "Install" },
 		{ id: "test", label: "Test" },
 		{ id: "deploy", label: "Deploy" },
-	]}
-	onChange={() => {}}
-/>
+	]);
+	return <SortableList items={steps()} onChange={steps.set} />;
+}
 ```
 
 **Slots:** `root` `actions` `item` `label`
@@ -627,18 +695,53 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Horizontal board of kanban columns. With `onMove`, cards (`cardId`) can be dragged between columns (`columnId`) or moved with Alt+←/→ (column) and Alt+↑/↓ (position); moves are announced to screen readers.
 
 ```tsx
-<KanbanBoard label="Sprint 14" onMove={() => {}}>
-	<KanbanColumn title="Todo" columnId="todo" count={2}>
-		<KanbanCard cardId="c-1" title="Audit form labels" meta="#418" />
-		<KanbanCard cardId="c-2" title="Toast pause on hover" meta="#421" />
-	</KanbanColumn>
-	<KanbanColumn title="In progress" columnId="doing" count={1}>
-		<KanbanCard cardId="c-3" title="Kanban keyboard moves" meta="#402" />
-	</KanbanColumn>
-	<KanbanColumn title="Done" columnId="done" count={1}>
-		<KanbanCard cardId="c-4" title="Dark theme tokens" meta="#389" />
-	</KanbanColumn>
-</KanbanBoard>
+function Example() {
+	type Card = { id: string; title: string; meta: string; column: string };
+	const columns = [
+		{ id: "todo", title: "Todo" },
+		{ id: "doing", title: "In progress" },
+		{ id: "done", title: "Done" },
+	];
+	const cards = signal<Card[]>([
+		{ id: "c-1", title: "Audit form labels", meta: "#418", column: "todo" },
+		{ id: "c-2", title: "Toast pause on hover", meta: "#421", column: "todo" },
+		{ id: "c-3", title: "Kanban keyboard moves", meta: "#402", column: "doing" },
+		{ id: "c-4", title: "Dark theme tokens", meta: "#389", column: "done" },
+	]);
+	const move = (cardId: string, toColumn: string, index: number) => {
+		const card = cards().find((c) => c.id === cardId);
+		if (!card) return;
+		const rest = cards().filter((c) => c.id !== cardId);
+		const target = rest.filter((c) => c.column === toColumn);
+		const before = target[index];
+		const at = before ? rest.indexOf(before) : rest.length;
+		cards.set([...rest.slice(0, at), { ...card, column: toColumn }, ...rest.slice(at)]);
+	};
+	return (
+		<KanbanBoard label="Sprint 14" onMove={move}>
+			<For each={columns}>
+				{(column) => (
+					<KanbanColumn
+						title={column.title}
+						columnId={column.id}
+						count={cards().filter((c) => c.column === column.id).length}
+					>
+						<For each={cards().filter((c) => c.column === column.id)}>
+							{(card) => (
+								<KanbanCard
+									cardId={card.id}
+									title={card.title}
+									meta={card.meta}
+									onClick={() => {}}
+								/>
+							)}
+						</For>
+					</KanbanColumn>
+				)}
+			</For>
+		</KanbanBoard>
+	);
+}
 ```
 
 | Prop | Type | Required | Description |
@@ -800,7 +903,30 @@ Group of tags — wraps evenly and supports addon pairs.
 Active filter with a remove button.
 
 ```tsx
-<FilterChip label="Status: failed" onRemove={() => {}} />
+function Example() {
+	const filters = signal(["Status: failed", "Branch: main", "Author: ada"]);
+	return (
+		<Group gap="0.5rem">
+			<For each={filters()}>
+				{(filter) => (
+					<FilterChip
+						label={filter}
+						onRemove={() => filters.set(filters().filter((f) => f !== filter))}
+					/>
+				)}
+			</For>
+			<Show when={filters().length < 3}>
+				<Button
+					size="sm"
+					variant="ghost"
+					onClick={() => filters.set(["Status: failed", "Branch: main", "Author: ada"])}
+				>
+					Reset filters
+				</Button>
+			</Show>
+		</Group>
+	);
+}
 ```
 
 **Slots:** `root` `remove`
@@ -930,7 +1056,7 @@ Highlighted code with copy button.
 <CodeBlock
 	language="tsx"
 	code={
-		'import { Button } from "@arachne/ui";\n\nexport const Save = () => <Button>Save</Button>;'
+		'import { Button } from "@arachne/ui";\n\nexport const Save = () => <Button onClick={() => {}}>Save</Button>;'
 	}
 />
 ```
@@ -1151,9 +1277,32 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 "Load more" button that shows loading and end-of-list states.
 
 ```tsx
-<LoadMore onLoad={() => {}} hasMore>
-	Load 20 more
-</LoadMore>
+function Example() {
+	const count = signal(3);
+	const loading = signal(false);
+	const load = () => {
+		loading.set(true);
+		setTimeout(() => {
+			count.set(count() + 3);
+			loading.set(false);
+		}, 500);
+	};
+	return (
+		<Stack gap="0.5rem">
+			<For each={Array.from({ length: count() }, (_, i) => i + 1)}>
+				{(n) => <Text>Activity #{n}</Text>}
+			</For>
+			<LoadMore
+				onLoad={load}
+				loading={loading()}
+				hasMore={count() < 12}
+				endLabel="That's everything."
+			>
+				Load 3 more
+			</LoadMore>
+		</Stack>
+	);
+}
 ```
 
 **Slots:** `root` `button` `end`
@@ -1173,12 +1322,29 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Content followed by a "Load more" control.
 
 ```tsx
-<InfiniteScroll onLoadMore={() => {}} hasMore>
-	<Stack gap="0.5rem">
-		<Text>Deploy #128 — production</Text>
-		<Text>Deploy #127 — preview</Text>
-	</Stack>
-</InfiniteScroll>
+function Example() {
+	const deploys = signal(Array.from({ length: 6 }, (_, i) => 128 - i));
+	const loading = signal(false);
+	const hasMore = () => deploys().length < 30;
+	const loadMore = () => {
+		if (loading() || !hasMore()) return;
+		loading.set(true);
+		setTimeout(() => {
+			const last = deploys()[deploys().length - 1] ?? 128;
+			deploys.set([...deploys(), ...Array.from({ length: 6 }, (_, i) => last - 1 - i)]);
+			loading.set(false);
+		}, 600);
+	};
+	return (
+		<ScrollArea maxHeight="12rem">
+			<InfiniteScroll onLoadMore={loadMore} hasMore={hasMore()} loading={loading()}>
+				<Stack gap="0.5rem">
+					<For each={deploys()}>{(n) => <Text>Deploy #{n}</Text>}</For>
+				</Stack>
+			</InfiniteScroll>
+		</ScrollArea>
+	);
+}
 ```
 
 **Slots:** `root` `sentinel`

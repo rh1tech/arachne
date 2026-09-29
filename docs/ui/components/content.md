@@ -178,7 +178,7 @@ Page title block with breadcrumb, description and actions.
 <PageHeader
 	title="Deploys"
 	description="Every push to a branch creates a deploy."
-	actions={<Button>New deploy</Button>}
+	actions={<Button onClick={() => {}}>New deploy</Button>}
 />
 ```
 
@@ -365,7 +365,7 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Screen-reader-only text.
 
 ```tsx
-<Button variant="ghost">
+<Button variant="ghost" onClick={() => {}}>
 	★<VisuallyHidden>Add to favourites</VisuallyHidden>
 </Button>
 ```
@@ -382,7 +382,7 @@ Inline
 
 ```tsx
 <Text>
-	Thanks <Mention name="ada" />, merging now.
+	Thanks <Mention name="ada" onClick={() => {}} />, merging now.
 </Text>
 ```
 
@@ -494,14 +494,20 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 Emoji reaction toggles.
 
 ```tsx
-<ReactionBar
-	reactions={[
+function Example() {
+	const reactions = signal([
 		{ emoji: "👍", count: 12, active: true },
-		{ emoji: "🎉", count: 4 },
-		{ emoji: "👀", count: 2 },
-	]}
-	onToggle={() => {}}
-/>
+		{ emoji: "🎉", count: 4, active: false },
+		{ emoji: "👀", count: 2, active: false },
+	]);
+	const toggle = (emoji: string) =>
+		reactions.set(
+			reactions().map((r) =>
+				r.emoji === emoji ? { ...r, active: !r.active, count: r.count + (r.active ? -1 : 1) } : r,
+			),
+		);
+	return <ReactionBar reactions={reactions()} onToggle={toggle} />;
+}
 ```
 
 **Slots:** `root` `reaction`
