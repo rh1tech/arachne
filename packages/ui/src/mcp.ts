@@ -29,7 +29,7 @@ export const mcpModule = defineMcpModule({
 						"Modal, Drawer, Tabs, Menu, Popover, Breadcrumb, Pagination, Accordion, Tooltip",
 						"Navbar + createNavbarController, AppShell, SidebarNav, Segmented, Steps",
 						"ToastHost + createToaster, Spinner, Progress, Box, Table, Alert",
-						"Divider, Heading, Badge, Label, Field, FormField, Control, Help, FormSection, FormArea",
+						"Divider, Heading, Badge, Label, FormField, Control, Help, FormSection, FormArea",
 						"Stack, Columns/Column, Grid/GridItem, Container, Section, Level, Group, Flex, Center",
 						"Card, Panel, Tile, Paper, Message, Hero, Footer, Media, Article, Figure, Image",
 						"Icon (+ IconBadge, ActionIcon, CloseButton), List/ListGroup, Timeline, NavLink",

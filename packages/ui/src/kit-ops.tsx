@@ -2,9 +2,10 @@
  * Ops / docs / team / billing widgets.
  */
 import { For, Show } from "@arachne/render";
-import { signal } from "@arachne/signals";
+import { effect, signal } from "@arachne/signals";
 import { Button } from "./button.tsx";
 import { cx } from "./cx.ts";
+import { focusableIn, rovingToolbarKey, setToolbarStop, whenConnected } from "./focus.ts";
 import { Icon, type IconName } from "./icons.tsx";
 import { StatusDot } from "./patterns.tsx";
 import { Avatar } from "./presence.tsx";
@@ -36,7 +37,10 @@ function fraction(value: number, max: number): number {
 	return Math.min(1, Math.max(0, value / max));
 }
 
-/** Slots: `root` `icon` `body` `title` `content`. */
+/**
+ * Highlighted note block with icon and tone (info, success, warning, danger).
+ * Slots: `root` `icon` `body` `title` `content`.
+ */
 export function Callout(input: CalloutProps) {
 	const [props, rest, slot] = setup(
 		"Callout",
@@ -86,7 +90,10 @@ export type ChangelogItemProps = SlotProps<ChangelogItemSlot> & {
 	children?: unknown;
 };
 
-/** Slots: `root` `header` `date` `title` `body`. */
+/**
+ * One release entry in a changelog.
+ * Slots: `root` `header` `date` `title` `body`.
+ */
 export function ChangelogItem(input: ChangelogItemProps) {
 	const [props, rest, slot] = setup(
 		"ChangelogItem",
@@ -123,7 +130,10 @@ export type VersionTagProps = BaseProps & {
 	version: string;
 };
 
-/** Slots: `root`. */
+/**
+ * Version label (e.g. `v1.2.0`).
+ * Slots: `root`.
+ */
 export function VersionTag(input: VersionTagProps) {
 	const [props, rest, slot] = setup("VersionTag", input, {}, ["version"]);
 	return (
@@ -139,7 +149,10 @@ export type HttpMethodBadgeProps = BaseProps & {
 	method: HttpMethod;
 };
 
-/** Slots: `root`. State: `data-method`. */
+/**
+ * Coloured HTTP method label (GET, POST, …).
+ * Slots: `root`. State: `data-method`.
+ */
 export function HttpMethodBadge(input: HttpMethodBadgeProps) {
 	const [props, rest, slot] = setup("HttpMethodBadge", input, {}, ["method"]);
 	return (
@@ -163,7 +176,10 @@ export type EndpointRowProps = SlotProps<EndpointRowSlot> & {
 	onClick?: (() => void) | undefined;
 };
 
-/** Slots: `root` `path` `summary`. */
+/**
+ * API endpoint row: method, path and summary.
+ * Slots: `root` `path` `summary`.
+ */
 export function EndpointRow(input: EndpointRowProps) {
 	const [props, rest, slot] = setup(
 		"EndpointRow",
@@ -290,7 +306,10 @@ export type LogViewerProps = SlotProps<LogViewerSlot> & {
 	lines: LogLineData[];
 };
 
-/** Slots: `root` `line` `time` `level` `message`. Lines expose `data-level`. */
+/**
+ * Monospace log output with levels and timestamps.
+ * Slots: `root` `line` `time` `level` `message`. Lines expose `data-level`.
+ */
 export function LogViewer(input: LogViewerProps) {
 	const [props, rest, slot] = setup("LogViewer", input, {}, ["lines"], "root" as LogViewerSlot);
 	return (
@@ -330,7 +349,10 @@ const SERVICE_TONES: Record<ServiceStatusKind, "success" | "warning" | "accent" 
 	outage: "danger",
 };
 
-/** Slots: `root` `name` `status`. State: `data-status`. */
+/**
+ * Service name with its operational status.
+ * Slots: `root` `name` `status`. State: `data-status`.
+ */
 export function ServiceStatus(input: ServiceStatusProps) {
 	const [props, rest, slot] = setup(
 		"ServiceStatus",
@@ -375,7 +397,10 @@ function uptimeTone(d: number): "ok" | "warn" | "bad" {
 	return "bad";
 }
 
-/** Slots: `root` `day`. Days expose `data-tone` (`ok` / `warn` / `bad`). */
+/**
+ * Daily uptime history bar.
+ * Slots: `root` `day`. Days expose `data-tone` (`ok` / `warn` / `bad`).
+ */
 export function UptimeBar(input: UptimeBarProps) {
 	const [props, rest, slot] = setup(
 		"UptimeBar",
@@ -415,7 +440,10 @@ export type UsageMeterProps = SlotProps<UsageMeterSlot> & {
 	unit?: string | undefined;
 };
 
-/** Slots: `root` `header` `label` `meta` `track` `fill`. State: `data-over` at/over the limit. */
+/**
+ * Usage of a quota (used / limit) with a meter.
+ * Slots: `root` `header` `label` `meta` `track` `fill`. State: `data-over` at/over the limit.
+ */
 export function UsageMeter(input: UsageMeterProps) {
 	const [props, rest, slot] = setup(
 		"UsageMeter",
@@ -468,7 +496,10 @@ export type UpgradeBannerProps = SlotProps<UpgradeBannerSlot> & {
 	action?: unknown;
 };
 
-/** Slots: `root` `body` `title` `content` `action`. */
+/**
+ * Upsell banner with a call to action.
+ * Slots: `root` `body` `title` `content` `action`.
+ */
 export function UpgradeBanner(input: UpgradeBannerProps) {
 	const [props, rest, slot] = setup(
 		"UpgradeBanner",
@@ -516,7 +547,10 @@ export type ProfileHeaderProps = SlotProps<ProfileHeaderSlot> & {
 	actions?: unknown;
 };
 
-/** Slots: `root` `cover` `main` `avatar` `meta` `name` `handle` `bio` `actions`. */
+/**
+ * Profile header with cover, avatar, name, handle, bio and actions.
+ * Slots: `root` `cover` `main` `avatar` `meta` `name` `handle` `bio` `actions`.
+ */
 export function ProfileHeader(input: ProfileHeaderProps) {
 	const [props, rest, slot] = setup(
 		"ProfileHeader",
@@ -571,7 +605,10 @@ export type MemberRowProps = SlotProps<MemberRowSlot> & {
 	onRemove?: (() => void) | undefined;
 };
 
-/** Slots: `root` `avatar` `meta` `name` `email` `remove`. */
+/**
+ * Team member row with avatar, email and remove action.
+ * Slots: `root` `avatar` `meta` `name` `email` `remove`.
+ */
 export function MemberRow(input: MemberRowProps) {
 	const [props, rest, slot] = setup(
 		"MemberRow",
@@ -612,7 +649,10 @@ export type RoleBadgeProps = BaseProps & {
 	role: string;
 };
 
-/** Slots: `root`. State: `data-role`. */
+/**
+ * Member role label (admin, member, …).
+ * Slots: `root`. State: `data-role`.
+ */
 export function RoleBadge(input: RoleBadgeProps) {
 	const [props, rest, slot] = setup("RoleBadge", input, {}, ["role"]);
 	return (
@@ -633,7 +673,10 @@ export type PriorityBadgeProps = BaseProps & {
 	priority: Priority;
 };
 
-/** Slots: `root`. State: `data-priority`. */
+/**
+ * Issue priority label.
+ * Slots: `root`. State: `data-priority`.
+ */
 export function PriorityBadge(input: PriorityBadgeProps) {
 	const [props, rest, slot] = setup("PriorityBadge", input, {}, ["priority"]);
 	return (
@@ -654,7 +697,10 @@ export type SeverityBadgeProps = BaseProps & {
 	severity: Severity;
 };
 
-/** Slots: `root`. State: `data-severity`. */
+/**
+ * Incident severity label.
+ * Slots: `root`. State: `data-severity`.
+ */
 export function SeverityBadge(input: SeverityBadgeProps) {
 	const [props, rest, slot] = setup("SeverityBadge", input, {}, ["severity"]);
 	return (
@@ -677,7 +723,10 @@ export type CommitChipProps = SlotProps<CommitChipSlot> & {
 	onClick?: (() => void) | undefined;
 };
 
-/** Slots: `root` `sha` `message`. */
+/**
+ * Commit SHA and message chip.
+ * Slots: `root` `sha` `message`.
+ */
 export function CommitChip(input: CommitChipProps) {
 	const [props, rest, slot] = setup(
 		"CommitChip",
@@ -706,7 +755,10 @@ export type BranchBadgeProps = BaseProps & {
 	name: string;
 };
 
-/** Slots: `root`. */
+/**
+ * Git branch name label.
+ * Slots: `root`.
+ */
 export function BranchBadge(input: BranchBadgeProps) {
 	const [props, rest, slot] = setup("BranchBadge", input, {}, ["name"]);
 	return (
@@ -732,7 +784,10 @@ const BUILD_ICONS: Record<BuildStatusKind, IconName> = {
 	queued: "clock",
 };
 
-/** Slots: `root`. State: `data-status`. */
+/**
+ * CI build status (running, success, failed …).
+ * Slots: `root`. State: `data-status`.
+ */
 export function BuildStatus(input: BuildStatusProps) {
 	const [props, rest, slot] = setup("BuildStatus", input, {}, ["status", "label"]);
 	return (
@@ -764,7 +819,10 @@ export type PipelineProps = SlotProps<PipelineSlot> & {
 	steps: PipelineStep[];
 };
 
-/** Slots: `root` `step` `line`. Steps expose `data-status`. */
+/**
+ * CI pipeline of steps with their statuses.
+ * Slots: `root` `step` `line`. Steps expose `data-status`.
+ */
 export function Pipeline(input: PipelineProps) {
 	const [props, rest, slot] = setup("Pipeline", input, {}, ["steps"], "root" as PipelineSlot);
 	return (
@@ -801,7 +859,10 @@ const SYNC_ICONS: Record<SyncState, IconName> = {
 	error: "error",
 };
 
-/** Slots: `root`. State: `data-state`. */
+/**
+ * Sync state indicator (synced, syncing, offline, error).
+ * Slots: `root`. State: `data-state`.
+ */
 export function SyncStatus(input: SyncStatusProps) {
 	const [props, rest, slot] = setup("SyncStatus", input, {}, ["state", "label"]);
 	return (
@@ -836,7 +897,10 @@ const AUTOSAVE_TEXT: Record<AutosaveState, string> = {
 	error: "Save failed",
 };
 
-/** Slots: `root`. State: `data-state`. */
+/**
+ * Autosave state (saving, saved, error).
+ * Slots: `root`. State: `data-state`.
+ */
 export function AutosaveIndicator(input: AutosaveIndicatorProps) {
 	const [props, rest, slot] = setup("AutosaveIndicator", input, {}, ["state", "labels"]);
 	return (
@@ -858,7 +922,10 @@ export type LastSavedProps = BaseProps & {
 	label?: string | undefined;
 };
 
-/** Slots: `root`. */
+/**
+ * "Last saved" timestamp.
+ * Slots: `root`.
+ */
 export function LastSaved(input: LastSavedProps) {
 	const [props, rest, slot] = setup("LastSaved", input, {}, ["at", "label"]);
 	return (
@@ -869,22 +936,46 @@ export function LastSaved(input: LastSavedProps) {
 }
 
 export type FloatingToolbarProps = BaseProps & {
+	/** Accessible name for the toolbar. */
+	label?: string | undefined;
 	children?: unknown;
 };
 
-/** Slots: `root`. */
+/**
+ * Floating toolbar for contextual actions (e.g. over a selection): a WAI-ARIA
+ * toolbar with one Tab stop and arrow-key focus. Slots: `root`.
+ */
 export function FloatingToolbar(input: FloatingToolbarProps) {
-	const [props, rest, slot] = setup("FloatingToolbar", input, {}, ["children"]);
-	return (
+	const [props, rest, slot] = setup("FloatingToolbar", input, {}, ["label", "children"]);
+	let root: HTMLElement | undefined;
+	const view = (
 		<div
+			aria-label={props.label}
 			{...rest}
+			ref={(el: HTMLElement) => {
+				root = el;
+			}}
 			class={slot.class("root", "a-float-toolbar")}
 			style={slot.style("root")}
 			role="toolbar"
+			onKeyDown={(e: KeyboardEvent) => {
+				if (root) rovingToolbarKey(e, root, "horizontal");
+			}}
+			onFocusIn={(e: FocusEvent) => {
+				if (root) setToolbarStop(root, e.target as HTMLElement);
+			}}
 		>
 			{props.children}
 		</div>
 	);
+	effect(() => {
+		props.children;
+		return whenConnected(
+			() => root,
+			(el) => setToolbarStop(el, focusableIn(el)[0]),
+		);
+	});
+	return view;
 }
 
 export type Density = "comfortable" | "compact";
@@ -903,7 +994,10 @@ const DENSITIES: Array<{ value: Density; label: string }> = [
 	{ value: "compact", label: "Compact" },
 ];
 
-/** Slots: `root` `option`. Options expose `aria-pressed` + `data-state`. */
+/**
+ * Compact / comfortable density switch.
+ * Slots: `root` `option`. Options expose `aria-pressed` + `data-state`.
+ */
 export function DensityToggle(input: DensityToggleProps) {
 	const [props, rest, slot] = setup(
 		"DensityToggle",
@@ -951,7 +1045,10 @@ export type NoResultsProps = SlotProps<NoResultsSlot> & {
 	children?: unknown;
 };
 
-/** Slots: `root` `icon` `title`. */
+/**
+ * Empty search results state.
+ * Slots: `root` `icon` `title`.
+ */
 export function NoResults(input: NoResultsProps) {
 	const [props, rest, slot] = setup(
 		"NoResults",
@@ -986,7 +1083,10 @@ export type ErrorStateProps = SlotProps<ErrorStateSlot> & {
 	action?: unknown;
 };
 
-/** Slots: `root` `icon` `title` `description` `action`. */
+/**
+ * Error state with description and a recovery action.
+ * Slots: `root` `icon` `title` `description` `action`.
+ */
 export function ErrorState(input: ErrorStateProps) {
 	const [props, rest, slot] = setup(
 		"ErrorState",
@@ -1027,7 +1127,10 @@ export type CreditCardPreviewProps = SlotProps<CreditCardPreviewSlot> & {
 	name?: string | undefined;
 };
 
-/** Slots: `root` `top` `brand` `number` `bottom`. State: `data-brand`. */
+/**
+ * Masked payment card preview.
+ * Slots: `root` `top` `brand` `number` `bottom`. State: `data-brand`.
+ */
 export function CreditCardPreview(input: CreditCardPreviewProps) {
 	const [props, rest, slot] = setup(
 		"CreditCardPreview",
@@ -1071,7 +1174,10 @@ export type InvoiceRowProps = SlotProps<InvoiceRowSlot> & {
 	onClick?: (() => void) | undefined;
 };
 
-/** Slots: `root` `number` `date` `status` `amount`. State: `data-status`. */
+/**
+ * Invoice row with number, date, amount and status.
+ * Slots: `root` `number` `date` `status` `amount`. State: `data-status`.
+ */
 export function InvoiceRow(input: InvoiceRowProps) {
 	const [props, rest, slot] = setup(
 		"InvoiceRow",
@@ -1226,7 +1332,10 @@ const GAUGE_C = 2 * Math.PI * GAUGE_R;
 const GAUGE_DASH = GAUGE_C * 0.75;
 const GAUGE_ARC = "M14 64 A36 36 0 1 1 86 64";
 
-/** Slots: `root` `svg` `track` `bar` `label`. Size via `size` or CSS `width`/`height`. */
+/**
+ * Semicircle gauge for a value within a range.
+ * Slots: `root` `svg` `track` `bar` `label`. Size via `size` or CSS `width`/`height`.
+ */
 export function Gauge(input: GaugeProps) {
 	const [props, rest, slot] = setup(
 		"Gauge",
@@ -1291,7 +1400,10 @@ export type InviteCardProps = SlotProps<InviteCardSlot> & {
 	revokeLabel?: string | undefined;
 };
 
-/** Slots: `root` `meta` `email` `actions`. */
+/**
+ * Pending invitation with resend and revoke actions.
+ * Slots: `root` `meta` `email` `actions`.
+ */
 export function InviteCard(input: InviteCardProps) {
 	const [props, rest, slot] = setup(
 		"InviteCard",

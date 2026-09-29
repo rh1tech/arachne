@@ -32,7 +32,10 @@ export type TagProps = SlotProps<TagSlot> & {
 	children?: unknown;
 };
 
-/** Slots: `root` `label` `remove`. */
+/**
+ * Small label for categories and filters, optionally removable.
+ * Slots: `root` `label` `remove`.
+ */
 export function Tag(input: TagProps) {
 	const [props, rest, slot] = setup(
 		"Tag",
@@ -164,7 +167,10 @@ export type InputGroupProps = BaseProps & {
 	children?: unknown;
 };
 
-/** Slots: `root`. */
+/**
+ * Joins inputs and addons into one control.
+ * Slots: `root`.
+ */
 export function InputGroup(input: InputGroupProps) {
 	const [props, rest, slot] = setup("InputGroup", input, {}, ["children"]);
 	return (
@@ -178,7 +184,10 @@ export type InputAddonProps = BaseProps & {
 	children?: unknown;
 };
 
-/** Slots: `root`. */
+/**
+ * Static addon (text, icon) attached to an input.
+ * Slots: `root`.
+ */
 export function InputAddon(input: InputAddonProps) {
 	const [props, rest, slot] = setup("InputAddon", input, {}, ["children"]);
 	return (

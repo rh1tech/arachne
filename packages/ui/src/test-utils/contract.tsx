@@ -4,6 +4,7 @@
  * renders every case twice (styled / `unstyled`) and checks pass-through.
  */
 import { render } from "@arachne/render";
+import type { Example } from "../../examples/types.ts";
 import { configureUI } from "../system.ts";
 
 export type ContractProbe = {
@@ -15,13 +16,8 @@ export type ContractProbe = {
 	"aria-label": string;
 };
 
-export type ContractCase = {
-	/** Theme key (component name used with `configureUI`). */
-	name: string;
-	/** Slot that receives `class` / `style` / forwarded attrs (default `root`). */
-	host?: string;
-	render: (probe: ContractProbe) => unknown;
-};
+/** Contract cases are the shared component examples (`packages/ui/examples`). */
+export type ContractCase = Example;
 
 export const THEME_CLASS = "theme-probe";
 

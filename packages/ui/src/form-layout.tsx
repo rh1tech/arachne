@@ -1,5 +1,6 @@
 import { Show } from "@arachne/render";
 import { effect } from "@arachne/signals";
+import { ButtonGroup } from "./composite.tsx";
 import { Label } from "./layout.tsx";
 import { type BaseProps, createId, type SlotProps, setup } from "./system.ts";
 import { DynamicHeading } from "./widgets.tsx";
@@ -112,6 +113,8 @@ export function FormSection(input: FormSectionProps) {
 
 export type FormAreaProps = SlotProps<FormRegionSlot> & {
 	title?: unknown;
+	/** Heading level of the title, to fit the page outline. Default 4. */
+	order?: 2 | 3 | 4 | 5 | 6 | undefined;
 	description?: unknown;
 	/** Visually emphasize as a bordered panel. Default true. */
 	bordered?: boolean | undefined;
@@ -127,7 +130,7 @@ export function FormArea(input: FormAreaProps) {
 		"FormArea",
 		input,
 		{ bordered: true },
-		["title", "description", "bordered", "children"],
+		["title", "description", "order", "bordered", "children"],
 		"root" as FormRegionSlot,
 	);
 	return (
@@ -139,7 +142,13 @@ export function FormArea(input: FormAreaProps) {
 			{props.title || props.description ? (
 				<header class={slot.class("header", "a-form-area-header")} style={slot.style("header")}>
 					{props.title ? (
-						<h4 class={slot.class("title", "a-form-area-title")}>{props.title}</h4>
+						<DynamicHeading
+							level={props.order ?? 4}
+							class={slot.class("title", "a-form-area-title")}
+							style={slot.style("title")}
+						>
+							{props.title}
+						</DynamicHeading>
 					) : null}
 					{props.description ? (
 						<p class={slot.class("description", "a-form-area-desc")}>{props.description}</p>
@@ -187,6 +196,7 @@ function linkHelp(control: HTMLElement, helpId: string, hasText: boolean, invali
 	else if (!control.classList.contains("a-input-invalid")) control.removeAttribute("aria-invalid");
 }
 
+/** Labelled form control wrapper: label, control, help or error text, with `aria-describedby` / `aria-invalid` wired to the control. */
 export function FormField(input: FormFieldProps) {
 	const [props, rest, slot] = setup(
 		"FormField",
@@ -288,12 +298,25 @@ export type ButtonsProps = BaseProps & {
 	children?: unknown;
 };
 
-/** Multiline button list (Bulma `buttons`). Slots: `root`. */
+/** @deprecated Use `<ButtonGroup attached={false}>`. */
 export function Buttons(input: ButtonsProps) {
-	const [props, rest, slot] = setup("Buttons", input, {}, ["children"]);
-	return (
-		<div {...rest} class={slot.class("root", "a-buttons")} style={slot.style("root")}>
-			{props.children}
-		</div>
-	);
+	return ButtonGroup({ attached: false, ...input });
+}
+
+export type FieldSlot = "root" | "label" | "control" | "hint";
+
+export type FieldProps = SlotProps<FieldSlot> & {
+	label?: string | undefined;
+	htmlFor?: string | undefined;
+	hint?: string | undefined;
+	children?: unknown;
+};
+
+/**
+ * @deprecated Use `FormField` (`labelFor` / `help`), which also links the help
+ * text to the control with `aria-describedby`.
+ */
+export function Field(input: FieldProps) {
+	const { htmlFor, hint, classes, styles, ...rest } = input;
+	return FormField({ ...rest, labelFor: htmlFor, help: hint });
 }

@@ -11,7 +11,7 @@
 		--a-ink: #0f172a;
 		--a-paper: #ffffff;
 		--a-canvas: #e5e5e5;
-		--a-muted: #64748b;
+		--a-muted: #56627a;
 		--a-accent: #14213d;
 		--a-accent-ink: #ffffff;
 		--a-accent-soft: #e8ebf0;
@@ -798,7 +798,7 @@
 		display: block;
 		margin-bottom: 0.2rem;
 		font-weight: 500;
-		color: color-mix(in oklab, var(--a-alert-tone) 78%, var(--a-ink));
+		color: var(--a-alert-heading, color-mix(in oklab, var(--a-alert-tone) 78%, var(--a-ink)));
 	}
 
 	.a-alert-info {
@@ -812,6 +812,7 @@
 
 	.a-alert-warning {
 		--a-alert-tone: var(--a-warning);
+		--a-alert-heading: color-mix(in oklab, var(--a-warning) 48%, var(--a-ink));
 	}
 
 	.a-alert-danger {
@@ -1306,6 +1307,14 @@
 	.a-tabs-panel:focus-visible {
 		outline: 2px solid var(--a-ring);
 		outline-offset: 4px;
+	}
+
+	/* Keyboard-scrollable regions. */
+	.a-scroll-area:focus-visible,
+	.a-reel:focus-visible,
+	.a-codeblock-pre:focus-visible {
+		outline: 2px solid var(--a-ring);
+		outline-offset: 2px;
 	}
 
 	.a-breadcrumb-list {
@@ -4121,12 +4130,6 @@
 		}
 	}
 
-	.a-buttons {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-	}
-
 	/* —— Surfaces: card / panel / tile / message / paper —— */
 	.a-card {
 		background: var(--a-paper);
@@ -4381,7 +4384,8 @@
 		gap: 0.75rem;
 		padding: 0.8rem 1rem 0.2rem;
 		font-weight: 500;
-		color: color-mix(in oklab, var(--a-message-tone) 82%, var(--a-ink));
+		/* Amber is too light for text at 82%: tones can override the heading colour. */
+		color: var(--a-message-heading, color-mix(in oklab, var(--a-message-tone) 82%, var(--a-ink)));
 		background: transparent;
 	}
 
@@ -4410,6 +4414,7 @@
 
 	.a-message-warning {
 		--a-message-tone: var(--a-warning);
+		--a-message-heading: color-mix(in oklab, var(--a-warning) 48%, var(--a-ink));
 	}
 
 	.a-message-danger {
@@ -4422,30 +4427,6 @@
 
 	.a-block {
 		margin-bottom: 1.25rem;
-	}
-
-	.a-content {
-		font-family: var(--a-font);
-		color: var(--a-ink);
-		line-height: 1.65;
-	}
-
-	.a-content h1,
-	.a-content h2,
-	.a-content h3,
-	.a-content h4 {
-		margin: 1.25em 0 0.5em;
-		line-height: 1.25;
-	}
-
-	.a-content p,
-	.a-content ul,
-	.a-content ol {
-		margin: 0 0 0.85em;
-	}
-
-	.a-content a {
-		color: var(--a-accent);
 	}
 
 	.a-paper {
@@ -8349,18 +8330,29 @@
 	}
 
 	.a-prose {
+		max-width: 40rem;
+		color: var(--a-ink);
+		font-family: var(--a-font);
 		font-size: 0.95rem;
 		line-height: 1.65;
-		max-width: 40rem;
+	}
+
+	.a-prose-full {
+		max-width: none;
 	}
 
 	.a-prose :where(p, ul, ol) {
-		margin: 0 0 0.85rem;
+		margin: 0 0 0.85em;
 	}
 
-	.a-prose :where(h3, h4) {
-		margin: 1.25rem 0 0.5rem;
+	.a-prose :where(h1, h2, h3, h4) {
+		margin: 1.25em 0 0.5em;
+		line-height: 1.25;
 		letter-spacing: -0.02em;
+	}
+
+	.a-prose :where(a) {
+		color: color-mix(in oklab, var(--a-accent) 85%, var(--a-ink));
 	}
 
 	.a-bleed {
@@ -8572,7 +8564,7 @@
 		color: var(--a-success);
 	}
 	.a-trend-down {
-		color: #e74c3c;
+		color: var(--a-danger);
 	}
 
 	.a-donut {
@@ -8910,7 +8902,6 @@
 		font-weight: 700;
 		letter-spacing: -0.02em;
 		color: var(--a-muted);
-		opacity: 0.85;
 	}
 
 	.a-upload-item {
@@ -9194,10 +9185,10 @@
 	}
 
 	.a-stat-card-up {
-		color: #16a34a;
+		color: var(--a-success);
 	}
 	.a-stat-card-down {
-		color: #dc2626;
+		color: var(--a-danger);
 	}
 
 	.a-qty {
@@ -9286,7 +9277,7 @@
 		padding: 0.15rem 0.4rem;
 		border-radius: 999px;
 		background: var(--a-accent);
-		color: #fff;
+		color: var(--a-accent-ink);
 	}
 
 	.a-product-body {
@@ -9350,7 +9341,7 @@
 	}
 
 	.a-cart-line-remove:hover {
-		color: #dc2626;
+		color: var(--a-danger);
 	}
 
 	.a-order {
@@ -9465,7 +9456,7 @@
 
 	.a-locale-btn-active {
 		background: var(--a-accent);
-		color: #fff;
+		color: var(--a-accent-ink);
 		font-weight: 600;
 	}
 
@@ -9739,7 +9730,7 @@
 		color: var(--a-ink);
 	}
 	.a-compare-yes {
-		color: #16a34a;
+		color: var(--a-success);
 	}
 	.a-compare-no {
 		color: var(--a-muted);
@@ -9838,7 +9829,7 @@
 		font-weight: 700;
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
-		color: #dc2626;
+		color: var(--a-danger);
 	}
 
 	.a-live-dot {
@@ -10020,7 +10011,7 @@
 	}
 	.a-http-post {
 		background: color-mix(in oklab, #2563eb 13%, var(--a-paper));
-		color: color-mix(in oklab, #2563eb 78%, var(--a-ink));
+		color: color-mix(in oklab, #2563eb 68%, var(--a-ink));
 	}
 	.a-http-put {
 		background: color-mix(in oklab, #ea580c 13%, var(--a-paper));
@@ -10028,7 +10019,7 @@
 	}
 	.a-http-patch {
 		background: color-mix(in oklab, #9333ea 13%, var(--a-paper));
-		color: color-mix(in oklab, #9333ea 78%, var(--a-ink));
+		color: color-mix(in oklab, #9333ea 68%, var(--a-ink));
 	}
 	.a-http-delete {
 		background: color-mix(in oklab, #dc2626 13%, var(--a-paper));
@@ -10111,13 +10102,14 @@
 		color: var(--a-muted);
 	}
 	.a-json-str {
-		color: #16a34a;
+		/* Mixed toward ink: plain success green is under 4.5:1 on the canvas background. */
+		color: color-mix(in oklab, var(--a-success) 80%, var(--a-ink));
 	}
 	.a-json-num {
 		color: color-mix(in oklab, #ea580c 72%, var(--a-ink));
 	}
 	.a-json-bool {
-		color: color-mix(in oklab, #9333ea 78%, var(--a-ink));
+		color: color-mix(in oklab, #9333ea 68%, var(--a-ink));
 	}
 	.a-json-null {
 		color: var(--a-muted);
@@ -10144,7 +10136,8 @@
 		gap: 0.65rem;
 	}
 	.a-log-time {
-		color: #64748b;
+		/* Always on the dark log surface: slate-400 keeps 4.5:1 there. */
+		color: #94a3b8;
 		flex-shrink: 0;
 	}
 	.a-log-level {
@@ -10363,7 +10356,7 @@
 	}
 
 	.a-member-remove:hover {
-		color: #dc2626;
+		color: var(--a-danger);
 	}
 
 	.a-role-badge {
@@ -10462,10 +10455,10 @@
 	}
 
 	.a-build-success {
-		color: #16a34a;
+		color: var(--a-success);
 	}
 	.a-build-failed {
-		color: #dc2626;
+		color: var(--a-danger);
 	}
 	.a-build-running {
 		color: var(--a-accent);
@@ -10519,13 +10512,13 @@
 	}
 
 	.a-sync-synced {
-		color: #16a34a;
+		color: var(--a-success);
 	}
 	.a-sync-syncing {
 		color: var(--a-accent);
 	}
 	.a-sync-error {
-		color: #dc2626;
+		color: var(--a-danger);
 	}
 	.a-sync-offline {
 		color: var(--a-muted);
@@ -10539,10 +10532,10 @@
 		color: var(--a-accent);
 	}
 	.a-autosave-saved {
-		color: #16a34a;
+		color: var(--a-success);
 	}
 	.a-autosave-error {
-		color: #dc2626;
+		color: var(--a-danger);
 	}
 
 	.a-last-saved {
@@ -10675,7 +10668,7 @@
 		text-transform: uppercase;
 	}
 	.a-invoice-paid {
-		color: #16a34a;
+		color: var(--a-success);
 	}
 	.a-invoice-open {
 		color: var(--a-accent);
@@ -10684,7 +10677,7 @@
 		color: var(--a-muted);
 	}
 	.a-invoice-past_due {
-		color: #dc2626;
+		color: var(--a-danger);
 	}
 	.a-invoice-amount {
 		font-size: 0.875rem;
@@ -10880,8 +10873,10 @@
 	}
 
 	/* —— Doc page / example (Bulma-style component docs) —— */
+	/* minmax(0, 1fr): wide code or tables scroll inside their block instead of widening the page. */
 	.a-doc-page {
 		display: grid;
+		grid-template-columns: minmax(0, 1fr);
 		gap: 2rem;
 	}
 
@@ -10910,12 +10905,14 @@
 
 	.a-doc-page-body {
 		display: grid;
+		grid-template-columns: minmax(0, 1fr);
 		gap: 2.5rem;
 	}
 
 	.a-doc-example {
 		--a-doc-example-gap: 0.75rem;
 		display: grid;
+		grid-template-columns: minmax(0, 1fr);
 		gap: var(--a-doc-example-gap);
 	}
 

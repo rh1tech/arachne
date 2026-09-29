@@ -134,6 +134,7 @@ export function pageList(current: number, total: number, siblings = 1): Array<nu
 	return pages;
 }
 
+/** Page navigation with previous/next controls and numbered pages (`variant="simple"` shows a status instead). Collapses to arrows on narrow screens. */
 export function Pagination(input: PaginationProps) {
 	const props = withDefaults("Pagination", { variant: "pages", siblings: 1 }, input);
 	const rest = omitProps(props, PAGINATION_KEYS);

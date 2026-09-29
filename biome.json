@@ -29,7 +29,9 @@
 			"complexity": {
 				"noExcessiveCognitiveComplexity": {
 					"level": "warn",
-					"options": { "maxAllowedComplexity": 15 }
+					"options": {
+						"maxAllowedComplexity": 15
+					}
 				},
 				"noArguments": "off",
 				"useLiteralKeys": "off"
@@ -62,6 +64,18 @@
 						"noUnusedVariables": "off"
 					}
 				}
+			}
+		},
+		{
+			"includes": ["**/*.generated.ts"],
+			"linter": {
+				"enabled": false
+			},
+			"formatter": {
+				"enabled": false
+			},
+			"assist": {
+				"enabled": false
 			}
 		}
 	]

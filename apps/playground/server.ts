@@ -6,7 +6,7 @@ import { db, notes } from "./db.ts";
 const root = import.meta.dir;
 const port = Number(process.env["PORT"] ?? 3920);
 
-async function bundleClient(): Promise<Uint8Array> {
+async function bundleClient(): Promise<Uint8Array<ArrayBuffer>> {
 	const result = await Bun.build({
 		entrypoints: [join(root, "client.tsx")],
 		target: "browser",

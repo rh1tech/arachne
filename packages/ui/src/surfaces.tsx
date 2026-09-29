@@ -1,4 +1,5 @@
 import { Show } from "@arachne/render";
+import { Prose } from "./kit-more.tsx";
 import { type BaseProps, type SlotProps, setup } from "./system.ts";
 
 export type CardProps = BaseProps & {
@@ -19,6 +20,7 @@ export type CardPartProps = BaseProps & {
 	children?: unknown;
 };
 
+/** Card header row. */
 export function CardHeader(input: CardPartProps) {
 	const [props, rest, slot] = setup("CardHeader", input, {}, ["children"]);
 	return (
@@ -28,6 +30,7 @@ export function CardHeader(input: CardPartProps) {
 	);
 }
 
+/** Title text inside a card header. */
 export function CardHeaderTitle(input: CardPartProps) {
 	const [props, rest, slot] = setup("CardHeaderTitle", input, {}, ["children"]);
 	return (
@@ -37,6 +40,7 @@ export function CardHeaderTitle(input: CardPartProps) {
 	);
 }
 
+/** Full-bleed media at the top of a card. */
 export function CardImage(input: CardPartProps) {
 	const [props, rest, slot] = setup("CardImage", input, {}, ["children"]);
 	return (
@@ -46,6 +50,7 @@ export function CardImage(input: CardPartProps) {
 	);
 }
 
+/** Padded body of a card. */
 export function CardContent(input: CardPartProps) {
 	const [props, rest, slot] = setup("CardContent", input, {}, ["children"]);
 	return (
@@ -55,6 +60,7 @@ export function CardContent(input: CardPartProps) {
 	);
 }
 
+/** Card footer row of actions. */
 export function CardFooter(input: CardPartProps) {
 	const [props, rest, slot] = setup("CardFooter", input, {}, ["children"]);
 	return (
@@ -68,6 +74,7 @@ export type CardFooterItemProps = CardPartProps & {
 	onClick?: ((e: MouseEvent) => void) | undefined;
 };
 
+/** One action cell in a card footer (a button when `onClick` is set). */
 export function CardFooterItem(input: CardFooterItemProps) {
 	const [props, rest, slot] = setup("CardFooterItem", input, {}, ["children", "onClick"]);
 	return (
@@ -84,19 +91,27 @@ export function CardFooterItem(input: CardFooterItemProps) {
 }
 
 export type PanelProps = BaseProps & {
+	/** Accessible name of the panel's `<nav>` landmark; set it when a page has several panels. */
+	label?: string | undefined;
 	children?: unknown;
 };
 
 /** Side panel / filter panel (Bulma). Slots: `root`. */
 export function Panel(input: PanelProps) {
-	const [props, rest, slot] = setup("Panel", input, {}, ["children"]);
+	const [props, rest, slot] = setup("Panel", input, {}, ["label", "children"]);
 	return (
-		<nav {...rest} class={slot.class("root", "a-panel")} style={slot.style("root")}>
+		<nav
+			aria-label={props.label}
+			{...rest}
+			class={slot.class("root", "a-panel")}
+			style={slot.style("root")}
+		>
 			{props.children}
 		</nav>
 	);
 }
 
+/** Heading row of a panel. */
 export function PanelHeading(input: CardPartProps) {
 	const [props, rest, slot] = setup("PanelHeading", input, {}, ["children"]);
 	return (
@@ -106,6 +121,7 @@ export function PanelHeading(input: CardPartProps) {
 	);
 }
 
+/** Tab row inside a panel. */
 export function PanelTabs(input: CardPartProps) {
 	const [props, rest, slot] = setup("PanelTabs", input, {}, ["children"]);
 	return (
@@ -121,6 +137,7 @@ export type PanelTabProps = BaseProps & {
 	children?: unknown;
 };
 
+/** One tab in a panel's tab row. */
 export function PanelTab(input: PanelTabProps) {
 	const [props, rest, slot] = setup("PanelTab", input, {}, ["active", "onClick", "children"]);
 	return (
@@ -242,7 +259,10 @@ export type MessageHeaderProps = SlotProps<MessageHeaderSlot> & {
 	children?: unknown;
 };
 
-/** Slots: `root` `text` `close`. */
+/**
+ * Message title bar, with an optional close button.
+ * Slots: `root` `text` `close`.
+ */
 export function MessageHeader(input: MessageHeaderProps) {
 	const [props, rest, slot] = setup(
 		"MessageHeader",
@@ -269,6 +289,7 @@ export function MessageHeader(input: MessageHeaderProps) {
 	);
 }
 
+/** Body text of a message. */
 export function MessageBody(input: CardPartProps) {
 	const [props, rest, slot] = setup("MessageBody", input, {}, ["children"]);
 	return (
@@ -296,14 +317,11 @@ export type ContentProps = BaseProps & {
 	children?: unknown;
 };
 
-/** Prose content wrapper (Bulma content). Slots: `root`. */
+/**
+ * @deprecated Use `Prose` (`<Prose measure={false}>` matches the old full-width layout).
+ */
 export function Content(input: ContentProps) {
-	const [props, rest, slot] = setup("Content", input, {}, ["children"]);
-	return (
-		<div {...rest} class={slot.class("root", "a-content")} style={slot.style("root")}>
-			{props.children}
-		</div>
-	);
+	return Prose({ measure: false, ...input });
 }
 
 export type PaperProps = BaseProps & {

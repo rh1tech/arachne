@@ -1,5 +1,6 @@
 import { Show } from "@arachne/render";
 import { type BaseProps, type SlotProps, setup } from "./system.ts";
+import { DynamicHeading, type HeadingLevel } from "./widgets.tsx";
 
 export type HeroSize = "sm" | "md" | "lg" | "half" | "full";
 export type HeroTone = "default" | "accent" | "dark" | "light";
@@ -35,6 +36,7 @@ export type HeroPartProps = BaseProps & {
 	children?: unknown;
 };
 
+/** Top area of a hero (e.g. navigation). */
 export function HeroHead(input: HeroPartProps) {
 	const [props, rest, slot] = setup("HeroHead", input, {}, ["children"]);
 	return (
@@ -44,6 +46,7 @@ export function HeroHead(input: HeroPartProps) {
 	);
 }
 
+/** Main content area of a hero. */
 export function HeroBody(input: HeroPartProps) {
 	const [props, rest, slot] = setup("HeroBody", input, {}, ["children"]);
 	return (
@@ -53,6 +56,7 @@ export function HeroBody(input: HeroPartProps) {
 	);
 }
 
+/** Bottom area of a hero (e.g. tabs). */
 export function HeroFoot(input: HeroPartProps) {
 	const [props, rest, slot] = setup("HeroFoot", input, {}, ["children"]);
 	return (
@@ -66,7 +70,10 @@ export type FooterProps = BaseProps & {
 	children?: unknown;
 };
 
-/** Slots: `root`. */
+/**
+ * Page footer region.
+ * Slots: `root`.
+ */
 export function Footer(input: FooterProps) {
 	const [props, rest, slot] = setup("Footer", input, {}, ["children"]);
 	return (
@@ -90,6 +97,7 @@ export function Media(input: MediaProps) {
 	);
 }
 
+/** Leading figure of a media object (avatar, thumbnail). */
 export function MediaLeft(input: HeroPartProps) {
 	const [props, rest, slot] = setup("MediaLeft", input, {}, ["children"]);
 	return (
@@ -99,6 +107,7 @@ export function MediaLeft(input: HeroPartProps) {
 	);
 }
 
+/** Main content of a media object. */
 export function MediaContent(input: HeroPartProps) {
 	const [props, rest, slot] = setup("MediaContent", input, {}, ["children"]);
 	return (
@@ -108,6 +117,7 @@ export function MediaContent(input: HeroPartProps) {
 	);
 }
 
+/** Trailing content of a media object (actions). */
 export function MediaRight(input: HeroPartProps) {
 	const [props, rest, slot] = setup("MediaRight", input, {}, ["children"]);
 	return (
@@ -121,7 +131,10 @@ export type ArticleProps = BaseProps & {
 	children?: unknown;
 };
 
-/** Slots: `root`. */
+/**
+ * Article container with readable text styles.
+ * Slots: `root`.
+ */
 export function Article(input: ArticleProps) {
 	const [props, rest, slot] = setup("Article", input, {}, ["children"]);
 	return (
@@ -131,15 +144,27 @@ export function Article(input: ArticleProps) {
 	);
 }
 
-export function ArticleTitle(input: HeroPartProps) {
-	const [props, rest, slot] = setup("ArticleTitle", input, {}, ["children"]);
+export type ArticleTitleProps = HeroPartProps & {
+	/** Heading level, to fit the page outline. Default 1. */
+	order?: HeadingLevel | undefined;
+};
+
+/** Article heading. */
+export function ArticleTitle(input: ArticleTitleProps) {
+	const [props, rest, slot] = setup("ArticleTitle", input, {}, ["order", "children"]);
 	return (
-		<h1 {...rest} class={slot.class("root", "a-article-title")} style={slot.style("root")}>
+		<DynamicHeading
+			level={props.order ?? 1}
+			attrs={rest}
+			class={slot.class("root", "a-article-title")}
+			style={slot.style("root")}
+		>
 			{props.children}
-		</h1>
+		</DynamicHeading>
 	);
 }
 
+/** Article byline / metadata line. */
 export function ArticleMeta(input: HeroPartProps) {
 	const [props, rest, slot] = setup("ArticleMeta", input, {}, ["children"]);
 	return (
@@ -156,7 +181,10 @@ export type FigureProps = SlotProps<FigureSlot> & {
 	children?: unknown;
 };
 
-/** Slots: `root` `caption`. */
+/**
+ * Figure with an optional caption.
+ * Slots: `root` `caption`.
+ */
 export function Figure(input: FigureProps) {
 	const [props, rest, slot] = setup(
 		"Figure",
@@ -194,7 +222,10 @@ export type ImageProps = BaseProps & {
 	sizes?: string | undefined;
 };
 
-/** Slots: `root`. Radius is exposed as `--a-image-radius`. */
+/**
+ * Responsive image: lazy-loaded by default, with `fit`, radius, `srcset` and `sizes` support.
+ * Slots: `root`. Radius is exposed as `--a-image-radius`.
+ */
 export function Image(input: ImageProps) {
 	const [props, rest, slot] = setup("Image", input, { loading: "lazy", decoding: "async" }, [
 		"src",

@@ -19,7 +19,10 @@ export type CookieConsentProps = SlotProps<CookieConsentSlot> & {
 	onDecline?: (() => void) | undefined;
 };
 
-/** Slots: `root` `body` `title` `message` `actions`. */
+/**
+ * Cookie consent banner with accept / decline.
+ * Slots: `root` `body` `title` `message` `actions`.
+ */
 export function CookieConsent(input: CookieConsentProps) {
 	const [props, rest, slot] = setup(
 		"CookieConsent",
@@ -65,7 +68,10 @@ export type OfflineNoticeProps = BaseProps & {
 	children?: unknown;
 };
 
-/** Slots: `root`. */
+/**
+ * Banner shown while the browser is offline.
+ * Slots: `root`.
+ */
 export function OfflineNotice(input: OfflineNoticeProps) {
 	const [props, rest, slot] = setup("OfflineNotice", input, {}, ["offline", "children"]);
 	// Only an explicit `false` means offline; servers (and Bun's navigator) report nothing.
@@ -105,10 +111,48 @@ export function OfflineNotice(input: OfflineNoticeProps) {
 export type HotkeySlot = "root" | "part" | "separator" | "key";
 
 export type HotkeyProps = SlotProps<HotkeySlot> & {
+	/** Keys to show and (with `onTrigger`) listen for, e.g. `["Ctrl", "K"]` or `["⌘", "Shift", "P"]`. */
 	keys: string[];
 	/** Separator between keys (default `+`). */
 	separator?: unknown;
+	/** Bind the combination on `document`; called when it is pressed (default prevented). */
+	onTrigger?: ((e: KeyboardEvent) => void) | undefined;
+	/** Ignore the shortcut while typing in inputs (default true). */
+	ignoreInInputs?: boolean | undefined;
 };
+
+const MODIFIERS: Record<string, "ctrlKey" | "metaKey" | "altKey" | "shiftKey"> = {
+	ctrl: "ctrlKey",
+	control: "ctrlKey",
+	"⌃": "ctrlKey",
+	cmd: "metaKey",
+	meta: "metaKey",
+	"⌘": "metaKey",
+	alt: "altKey",
+	option: "altKey",
+	"⌥": "altKey",
+	shift: "shiftKey",
+	"⇧": "shiftKey",
+};
+
+/** Whether `e` is exactly the combination `keys` (all listed modifiers, no others). */
+export function matchesHotkey(e: KeyboardEvent, keys: string[]): boolean {
+	const wanted = new Set<string>();
+	let main: string | undefined;
+	for (const key of keys) {
+		const mod = MODIFIERS[key.toLowerCase()];
+		if (mod) wanted.add(mod);
+		else main = key.toLowerCase();
+	}
+	for (const mod of ["ctrlKey", "metaKey", "altKey", "shiftKey"] as const) {
+		if (e[mod] !== wanted.has(mod)) return false;
+	}
+	return main !== undefined && e.key.toLowerCase() === (main === "esc" ? "escape" : main);
+}
+
+const isTyping = (target: EventTarget | null) =>
+	target instanceof HTMLElement &&
+	(target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName));
 
 /** Display a key combo (⌘K, Ctrl+S). Slots: `root` `part` `separator` `key`. */
 export function Hotkey(input: HotkeyProps) {
@@ -116,9 +160,21 @@ export function Hotkey(input: HotkeyProps) {
 		"Hotkey",
 		input,
 		{},
-		["keys", "separator"],
+		["keys", "separator", "onTrigger", "ignoreInInputs"],
 		"root" as HotkeySlot,
 	);
+	effect(() => {
+		const trigger = props.onTrigger;
+		if (!trigger || typeof document === "undefined") return;
+		const onKey = (e: KeyboardEvent) => {
+			if (props.ignoreInInputs !== false && isTyping(e.target)) return;
+			if (!matchesHotkey(e, props.keys)) return;
+			e.preventDefault();
+			trigger(e);
+		};
+		document.addEventListener("keydown", onKey);
+		return () => document.removeEventListener("keydown", onKey);
+	});
 	return (
 		<span {...rest} class={slot.class("root", "a-hotkey")} style={slot.style("root")}>
 			<For each={props.keys}>
@@ -233,7 +289,10 @@ export type CopyFieldProps = SlotProps<CopyFieldSlot> & {
 
 const COPIED_MS = 1200;
 
-/** Slots: `root` `label` `value` `action`. State: `data-copied`. */
+/**
+ * Read-only value with a copy button.
+ * Slots: `root` `label` `value` `action`. State: `data-copied`.
+ */
 export function CopyField(input: CopyFieldProps) {
 	const [props, rest, slot] = setup(
 		"CopyField",
@@ -290,7 +349,10 @@ export type ChecklistProps = SlotProps<ChecklistSlot> & {
 	onChange: (items: ChecklistItemData[]) => void;
 };
 
-/** Slots: `root` `item` `checkbox` `label`. Items expose `data-state="done|todo"`. */
+/**
+ * Checklist of items with checkboxes.
+ * Slots: `root` `item` `checkbox` `label`. Items expose `data-state="done|todo"`.
+ */
 export function Checklist(input: ChecklistProps) {
 	const [props, rest, slot] = setup(
 		"Checklist",
@@ -338,7 +400,10 @@ export type FeatureListProps = SlotProps<FeatureListSlot> & {
 	icon?: IconName | undefined;
 };
 
-/** Slots: `root` `item` `icon` `label`. */
+/**
+ * List of features with check icons.
+ * Slots: `root` `item` `icon` `label`.
+ */
 export function FeatureList(input: FeatureListProps) {
 	const [props, rest, slot] = setup(
 		"FeatureList",
@@ -382,7 +447,10 @@ export type PricingCardProps = SlotProps<PricingCardSlot> & {
 	action?: unknown;
 };
 
-/** Slots: `root` `name` `price` `period` `description` `features` `action`. State: `data-highlighted`. */
+/**
+ * Pricing plan card with price, features and a call to action.
+ * Slots: `root` `name` `price` `period` `description` `features` `action`. State: `data-highlighted`.
+ */
 export function PricingCard(input: PricingCardProps) {
 	const [props, rest, slot] = setup(
 		"PricingCard",
@@ -422,7 +490,10 @@ export type StatGroupProps = BaseProps & {
 	children?: unknown;
 };
 
-/** Slots: `root`. */
+/**
+ * Row of statistics.
+ * Slots: `root`.
+ */
 export function StatGroup(input: StatGroupProps) {
 	const [props, rest, slot] = setup("StatGroup", input, {}, ["children"]);
 	return (
@@ -442,7 +513,10 @@ export type DotPaginationProps = SlotProps<DotPaginationSlot> & {
 	label?: string | undefined;
 };
 
-/** Slots: `root` `dot`. Dots expose `data-state="active|inactive"`. */
+/**
+ * Dot indicators for carousels and slides.
+ * Slots: `root` `dot`. Dots expose `data-state="active|inactive"`.
+ */
 export function DotPagination(input: DotPaginationProps) {
 	const [props, rest, slot] = setup(
 		"DotPagination",
@@ -487,7 +561,10 @@ export type BackLinkProps = SlotProps<BackLinkSlot> & {
 	children?: unknown;
 };
 
-/** Slots: `root` `icon` `label`. Renders `<a>` when `href` is set. */
+/**
+ * "Back" link with an arrow.
+ * Slots: `root` `icon` `label`. Renders `<a>` when `href` is set.
+ */
 export function BackLink(input: BackLinkProps) {
 	const [props, rest, slot] = setup(
 		"BackLink",
@@ -541,7 +618,10 @@ export type NextPrevProps = SlotProps<NextPrevSlot> & {
 	nextDisabled?: boolean | undefined;
 };
 
-/** Slots: `root` `prev` `next`. */
+/**
+ * Previous / next navigation pair.
+ * Slots: `root` `prev` `next`.
+ */
 export function NextPrev(input: NextPrevProps) {
 	const [props, rest, slot] = setup(
 		"NextPrev",
@@ -588,7 +668,10 @@ export type FileCardProps = SlotProps<FileCardSlot> & {
 	onRemove?: (() => void) | undefined;
 };
 
-/** Slots: `root` `icon` `text` `name` `meta` `remove`. */
+/**
+ * Attached file with icon, name, metadata and remove action.
+ * Slots: `root` `icon` `text` `name` `meta` `remove`.
+ */
 export function FileCard(input: FileCardProps) {
 	const [props, rest, slot] = setup(
 		"FileCard",
@@ -667,7 +750,10 @@ export type SteppedProgressProps = SlotProps<SteppedProgressSlot> & {
 	label?: string | undefined;
 };
 
-/** Slots: `root` `segment`. Segments expose `data-state="done|current|todo"`. */
+/**
+ * Progress split into discrete steps.
+ * Slots: `root` `segment`. Segments expose `data-state="done|current|todo"`.
+ */
 export function SteppedProgress(input: SteppedProgressProps) {
 	const [props, rest, slot] = setup(
 		"SteppedProgress",
@@ -723,7 +809,10 @@ export type HeatmapProps = SlotProps<HeatmapSlot> & {
 
 const HEAT_FLOOR = 0.15;
 
-/** Slots: `root` `cell`. Cells expose `--a-heat` (0–1 intensity) for custom colour ramps. */
+/**
+ * Grid heatmap of values (e.g. activity).
+ * Slots: `root` `cell`. Cells expose `--a-heat` (0–1 intensity) for custom colour ramps.
+ */
 export function Heatmap(input: HeatmapProps) {
 	const [props, rest, slot] = setup(
 		"Heatmap",
@@ -777,7 +866,10 @@ export type AngleSliderProps = SlotProps<AngleSliderSlot> & {
 const KNOB_RADIUS = 7;
 const TRACK_INSET = 8;
 
-/** Slots: `root` `svg` `track` `arm` `knob` `label`. */
+/**
+ * Circular slider for an angle.
+ * Slots: `root` `svg` `track` `arm` `knob` `label`.
+ */
 export function AngleSlider(input: AngleSliderProps) {
 	const [props, rest, slot] = setup(
 		"AngleSlider",
@@ -868,14 +960,23 @@ export function AngleSlider(input: AngleSliderProps) {
 }
 
 export type ProseProps = BaseProps & {
+	/** Cap the line length for readability (default true). */
+	measure?: boolean | undefined;
 	children?: unknown;
 };
 
-/** Long-form typography wrapper. Slots: `root`. */
+/**
+ * Typographic container for rich text (headings, paragraphs, lists, links),
+ * e.g. rendered Markdown. Slots: `root`.
+ */
 export function Prose(input: ProseProps) {
-	const [props, rest, slot] = setup("Prose", input, {}, ["children"]);
+	const [props, rest, slot] = setup("Prose", input, { measure: true }, ["measure", "children"]);
 	return (
-		<div {...rest} class={slot.class("root", "a-prose")} style={slot.style("root")}>
+		<div
+			{...rest}
+			class={slot.class("root", "a-prose", props.measure === false && "a-prose-full")}
+			style={slot.style("root")}
+		>
 			{props.children}
 		</div>
 	);
@@ -907,7 +1008,10 @@ export type InsetProps = BaseProps & {
 	children?: unknown;
 };
 
-/** Slots: `root`. */
+/**
+ * Recessed panel (canvas background, border) for secondary content inside a surface.
+ * Slots: `root`.
+ */
 export function Inset(input: InsetProps) {
 	const [props, rest, slot] = setup("Inset", input, {}, ["children"]);
 	return (
@@ -921,23 +1025,29 @@ export type KanbanColumnSlot = "root" | "header" | "title" | "count" | "body";
 
 export type KanbanColumnProps = SlotProps<KanbanColumnSlot> & {
 	title: string;
+	/** Column id reported to `KanbanBoard` `onMove`; enables dropping cards here. */
+	columnId?: string | undefined;
 	count?: number | undefined;
 	children?: unknown;
 };
 
-/** Slots: `root` `header` `title` `count` `body`. */
+/**
+ * Kanban column with title, count and cards.
+ * Slots: `root` `header` `title` `count` `body`.
+ */
 export function KanbanColumn(input: KanbanColumnProps) {
 	const [props, rest, slot] = setup(
 		"KanbanColumn",
 		input,
 		{},
-		["title", "count", "children"],
+		["title", "columnId", "count", "children"],
 		"root" as KanbanColumnSlot,
 	);
 	return (
 		<section
 			aria-label={props.title}
 			{...rest}
+			data-column-id={props.columnId}
 			class={slot.class("root", "a-kanban-col")}
 			style={slot.style("root")}
 		>
@@ -958,23 +1068,33 @@ export type KanbanCardSlot = "root" | "title" | "meta";
 
 export type KanbanCardProps = SlotProps<KanbanCardSlot> & {
 	title: string;
+	/** Card id reported to `KanbanBoard` `onMove`; makes the card draggable. */
+	cardId?: string | undefined;
 	meta?: string | undefined;
 	onClick?: ((e: MouseEvent) => void) | undefined;
 };
 
-/** Slots: `root` `title` `meta`. */
+/**
+ * Card in a kanban column.
+ * Slots: `root` `title` `meta`.
+ */
 export function KanbanCard(input: KanbanCardProps) {
 	const [props, rest, slot] = setup(
 		"KanbanCard",
 		input,
 		{},
-		["title", "meta", "onClick"],
+		["title", "cardId", "meta", "onClick"],
 		"root" as KanbanCardSlot,
 	);
 	return (
 		<button
+			aria-keyshortcuts={
+				props.cardId ? "Alt+ArrowLeft Alt+ArrowRight Alt+ArrowUp Alt+ArrowDown" : undefined
+			}
 			{...rest}
 			type="button"
+			data-card-id={props.cardId}
+			draggable={props.cardId ? "true" : undefined}
 			class={slot.class("root", "a-kanban-card")}
 			style={slot.style("root")}
 			onClick={(e: MouseEvent) => props.onClick?.(e)}
@@ -987,16 +1107,144 @@ export function KanbanCard(input: KanbanCardProps) {
 	);
 }
 
+/** Alt+arrow moves: across columns or within one. */
+const KANBAN_STEPS: Record<string, { axis: "column" | "position"; delta: 1 | -1 }> = {
+	ArrowLeft: { axis: "column", delta: -1 },
+	ArrowRight: { axis: "column", delta: 1 },
+	ArrowUp: { axis: "position", delta: -1 },
+	ArrowDown: { axis: "position", delta: 1 },
+};
+
 export type KanbanBoardProps = BaseProps & {
+	/**
+	 * Called when a card is dropped on a column or moved with Alt+arrow keys.
+	 * `index` is the position in the target column (without the moved card).
+	 * Update your data; the board keeps focus on the moved card.
+	 */
+	onMove?: ((cardId: string, toColumnId: string, index: number) => void) | undefined;
+	/** Accessible name for the board. Default "Board". */
+	label?: string | undefined;
 	children?: unknown;
 };
 
-/** Slots: `root`. */
+const columnOf = (el: Element | null) => el?.closest<HTMLElement>("[data-column-id]") ?? null;
+const cardsIn = (column: Element, except?: string) =>
+	[...column.querySelectorAll<HTMLElement>("[data-card-id]")].filter(
+		(c) => c.dataset["cardId"] !== except,
+	);
+
+/** Drop position from the pointer: before the first card whose middle is below it. */
+function dropIndex(column: Element, cardId: string, clientY: number | undefined): number {
+	const cards = cardsIn(column, cardId);
+	if (clientY === undefined) return cards.length;
+	const index = cards.findIndex((c) => {
+		const r = c.getBoundingClientRect();
+		return clientY < r.top + r.height / 2;
+	});
+	return index < 0 ? cards.length : index;
+}
+
+/**
+ * Horizontal board of kanban columns. With `onMove`, cards (`cardId`) can be
+ * dragged between columns (`columnId`) or moved with Alt+←/→ (column) and
+ * Alt+↑/↓ (position); moves are announced to screen readers. Slots: `root`.
+ */
 export function KanbanBoard(input: KanbanBoardProps) {
-	const [props, rest, slot] = setup("KanbanBoard", input, {}, ["children"]);
+	const [props, rest, slot] = setup("KanbanBoard", input, { label: "Board" }, [
+		"onMove",
+		"label",
+		"children",
+	]);
+	const announcement = signal("");
+	let root: HTMLElement | undefined;
+	let dragging: string | undefined;
+
+	const columns = () => (root ? [...root.querySelectorAll<HTMLElement>("[data-column-id]")] : []);
+	const move = (cardId: string, column: HTMLElement, index: number) => {
+		const to = column.dataset["columnId"];
+		if (!to || !props.onMove) return;
+		const title = root?.querySelector(`[data-card-id="${cardId}"]`)?.textContent?.trim() ?? cardId;
+		props.onMove(cardId, to, index);
+		announcement.set(
+			`Moved ${title} to ${column.getAttribute("aria-label") ?? to}, position ${index + 1}.`,
+		);
+		// The parent re-renders the card in its new column: keep focus on it.
+		queueMicrotask(() => root?.querySelector<HTMLElement>(`[data-card-id="${cardId}"]`)?.focus());
+	};
+
+	/** Alt+←/→ → neighbouring column (appended); Alt+↑/↓ → one position up/down. */
+	const keyTarget = (
+		key: string,
+		card: HTMLElement,
+		column: HTMLElement,
+		id: string,
+	): [HTMLElement, number] | undefined => {
+		const step = KANBAN_STEPS[key];
+		if (!step) return undefined;
+		if (step.axis === "column") {
+			const all = columns();
+			const target = all[all.indexOf(column) + step.delta];
+			return target ? [target, cardsIn(target, id).length] : undefined;
+		}
+		const next = cardsIn(column).indexOf(card) + step.delta;
+		return next >= 0 && next < cardsIn(column).length ? [column, next] : undefined;
+	};
+
+	const onKeyDown = (e: KeyboardEvent) => {
+		const card = (e.target as HTMLElement).closest<HTMLElement>("[data-card-id]");
+		const column = columnOf(card);
+		const id = card?.dataset["cardId"];
+		if (!e.altKey || !card || !column || !id || !props.onMove) return;
+		const target = keyTarget(e.key, card, column, id);
+		if (!target) return;
+		e.preventDefault();
+		move(id, ...target);
+	};
+
 	return (
-		<div {...rest} class={slot.class("root", "a-kanban")} style={slot.style("root")}>
+		// biome-ignore lint/a11y/useSemanticElements: a board of columns, not a form fieldset (no legend, no form semantics)
+		<div
+			aria-label={props.label}
+			{...rest}
+			ref={(el: HTMLElement) => {
+				root = el;
+			}}
+			role="group"
+			class={slot.class("root", "a-kanban")}
+			style={slot.style("root")}
+			onKeyDown={onKeyDown}
+			onDragStart={(e: DragEvent) => {
+				const card = (e.target as HTMLElement).closest<HTMLElement>("[data-card-id]");
+				dragging = card?.dataset["cardId"];
+				if (!dragging || !e.dataTransfer) return;
+				e.dataTransfer.setData("text/plain", dragging);
+				e.dataTransfer.effectAllowed = "move";
+				card?.setAttribute("data-dragging", "");
+			}}
+			onDragOver={(e: DragEvent) => {
+				const column = columnOf(e.target as Element);
+				if (!column || !dragging) return;
+				e.preventDefault();
+				if (e.dataTransfer) e.dataTransfer.dropEffect = "move";
+				for (const c of columns()) c.toggleAttribute("data-drop-target", c === column);
+			}}
+			onDrop={(e: DragEvent) => {
+				const column = columnOf(e.target as Element);
+				const id = e.dataTransfer?.getData("text/plain") || dragging;
+				if (!column || !id) return;
+				e.preventDefault();
+				move(id, column, dropIndex(column, id, e.clientY));
+			}}
+			onDragEnd={() => {
+				dragging = undefined;
+				for (const c of columns()) c.removeAttribute("data-drop-target");
+				root?.querySelector("[data-dragging]")?.removeAttribute("data-dragging");
+			}}
+		>
 			{props.children}
+			<div role="status" aria-live="polite" class="a-sr-only">
+				{announcement()}
+			</div>
 		</div>
 	);
 }

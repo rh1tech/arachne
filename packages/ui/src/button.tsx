@@ -67,6 +67,8 @@ export function Button(input: ButtonProps) {
 	const rest = omitProps(props, OWN_KEYS);
 	const slot = createSlots<ButtonSlot>("Button", props);
 	const inert = () => Boolean(props.disabled || props.loading);
+	/** Presence flags shared by the `<a>` and `<button>` renderings. */
+	const flag = (on: unknown) => (on ? "" : undefined);
 
 	const className = () =>
 		slot.class(
@@ -123,7 +125,8 @@ export function Button(input: ButtonProps) {
 				aria-busy={props.loading || undefined}
 				data-variant={props.variant}
 				data-size={props.size}
-				data-loading={props.loading ? "" : undefined}
+				data-loading={flag(props.loading)}
+				data-disabled={flag(inert())}
 				onClick={onClick}
 			>
 				{content}
@@ -142,7 +145,8 @@ export function Button(input: ButtonProps) {
 			aria-busy={props.loading || undefined}
 			data-variant={props.variant}
 			data-size={props.size}
-			data-loading={props.loading ? "" : undefined}
+			data-loading={flag(props.loading)}
+			data-disabled={flag(inert())}
 			onClick={onClick}
 		>
 			{content}

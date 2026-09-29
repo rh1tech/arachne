@@ -142,3 +142,28 @@ export function whenConnected(
 		cleanup?.();
 	};
 }
+
+/** Make `current` the toolbar's only Tab stop. */
+export function setToolbarStop(root: HTMLElement, current: HTMLElement | undefined): void {
+	for (const el of focusableIn(root)) el.setAttribute("tabindex", el === current ? "0" : "-1");
+}
+
+/** Arrow / Home / End navigation between a toolbar's controls. */
+export function rovingToolbarKey(
+	e: KeyboardEvent,
+	root: HTMLElement,
+	orientation: "horizontal" | "vertical",
+): void {
+	const items = [
+		...root.querySelectorAll<HTMLElement>("button, a[href], input, select, [tabindex]"),
+	].filter((el) => !(el as HTMLButtonElement).disabled && root.contains(el));
+	const current = items.indexOf(e.target as HTMLElement);
+	if (current < 0) return;
+	const next = rovingIndex(e.key, current, items.length, () => false, { orientation });
+	if (next === null) return;
+	e.preventDefault();
+	const target = items[next];
+	if (!target) return;
+	setToolbarStop(root, target);
+	target.focus();
+}

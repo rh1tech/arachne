@@ -71,7 +71,7 @@ export const defaultPalette: PaletteTokens = {
 	ink: "#0f172a",
 	paper: "#ffffff",
 	canvas: "#e5e5e5",
-	muted: "#64748b",
+	muted: "#56627a",
 	accent: "#14213d",
 	accentInk: "#ffffff",
 	accentSoft: "#e8ebf0",

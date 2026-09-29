@@ -50,6 +50,7 @@ export type CenterProps = BaseProps & {
 	children?: unknown;
 };
 
+/** Centres its content horizontally and vertically. */
 export function Center(input: CenterProps) {
 	const [props, rest, slot] = setup("Center", input, {}, ["inline", "children"]);
 	return (
@@ -93,6 +94,7 @@ export type FlexProps = BaseProps & {
 	children?: unknown;
 };
 
+/** Flexbox layout primitive (direction, gap, align, justify, wrap). */
 export function Flex(input: FlexProps) {
 	const [props, rest, slot] = setup("Flex", input, {}, [
 		"direction",
@@ -278,6 +280,7 @@ export type ListProps = BaseProps & {
 	children?: unknown;
 };
 
+/** Styled list (`ordered` for numbers). */
 export function List(input: ListProps) {
 	const [props, rest, slot] = setup("List", input, {}, ["ordered", "children"]);
 	if (props.ordered) {
@@ -305,7 +308,10 @@ export type ListItemProps = SlotProps<ListItemSlot> & {
 	children?: unknown;
 };
 
-/** Slots: `root` `icon` `body`. */
+/**
+ * List item with an optional icon.
+ * Slots: `root` `icon` `body`.
+ */
 export function ListItem(input: ListItemProps) {
 	const [props, rest, slot] = setup(
 		"ListItem",
@@ -331,6 +337,7 @@ export type ListGroupProps = BaseProps & {
 	children?: unknown;
 };
 
+/** Bordered group of list rows. */
 export function ListGroup(input: ListGroupProps) {
 	const [props, rest, slot] = setup("ListGroup", input, {}, ["flush", "children"]);
 	return (
@@ -403,6 +410,7 @@ export type TimelineProps = BaseProps & {
 	children?: unknown;
 };
 
+/** Vertical timeline. */
 export function Timeline(input: TimelineProps) {
 	const [props, rest, slot] = setup("Timeline", input, {}, ["children"]);
 	return (
@@ -421,7 +429,10 @@ export type TimelineItemProps = SlotProps<TimelineItemSlot> & {
 	children?: unknown;
 };
 
-/** Slots: `root` `bullet` `body` `title` `content`. State: `data-state`. */
+/**
+ * Timeline entry with a bullet, title and content.
+ * Slots: `root` `bullet` `body` `title` `content`. State: `data-state`.
+ */
 export function TimelineItem(input: TimelineItemProps) {
 	const [props, rest, slot] = setup(
 		"TimelineItem",
@@ -690,7 +701,10 @@ export type QuoteProps = SlotProps<QuoteSlot> & {
 	children?: unknown;
 };
 
-/** Slots: `root` `body` `cite`. */
+/**
+ * Block quote with an optional citation.
+ * Slots: `root` `body` `cite`.
+ */
 export function Quote(input: QuoteProps) {
 	const [props, rest, slot] = setup("Quote", input, {}, ["cite", "children"], "root" as QuoteSlot);
 	return (
@@ -712,10 +726,13 @@ export type ScrollAreaProps = BaseProps & {
 	children?: unknown;
 };
 
+/** Scrollable region with a max height. */
 export function ScrollArea(input: ScrollAreaProps) {
 	const [props, rest, slot] = setup("ScrollArea", input, {}, ["maxHeight", "children"]);
 	return (
+		// Focusable so keyboard users can scroll it; pass tabindex={-1} if the content is focusable.
 		<div
+			tabindex="0"
 			{...rest}
 			class={slot.class("root", "a-scroll-area")}
 			style={slot.style("root", props.maxHeight ? { "max-height": props.maxHeight } : undefined)}
@@ -758,7 +775,7 @@ export function Anchor(input: AnchorProps) {
 	);
 }
 
-type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
+export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 /** Heading whose level can change after mount (re-creates the element per level). */
 export function DynamicHeading(props: {
@@ -902,6 +919,7 @@ export function RingProgress(input: RingProgressProps) {
 	const offset = () => c() - (pct() / 100) * c();
 	return (
 		<div
+			aria-label="Progress"
 			{...rest}
 			class={slot.class("root", "a-ring")}
 			style={slot.style("root", { width: `${size()}px`, height: `${size()}px` })}

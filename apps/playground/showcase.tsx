@@ -25,7 +25,6 @@ import {
 	type DocMenuSection,
 	DocPage,
 	Drawer,
-	Field,
 	Fieldset,
 	FormField,
 	FormSection,
@@ -74,6 +73,7 @@ import {
 	TextInput,
 	Title,
 } from "@arachne/ui";
+import { CATALOG_PREFIX, CatalogPage, ComponentReference, catalogSections } from "./catalog.tsx";
 
 export const showcaseSections: DocMenuSection[] = [
 	{ id: "overview", label: "Overview" },
@@ -135,6 +135,8 @@ export const showcaseSections: DocMenuSection[] = [
 			{ id: "section", label: "Section" },
 		],
 	},
+	// Generated reference: every other component, by category (see catalog.tsx).
+	...catalogSections,
 ];
 
 export function flatShowcaseOptions(): Array<{ id: string; label: string }> {
@@ -1086,14 +1088,14 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			description="A composable side-list surface with a heading and block rows. Different from Menu, which is a dropdown."
 		>
 			<DocExample
-				code={`<Panel>
+				code={`<Panel label="Repositories">
   <PanelHeading>Repositories</PanelHeading>
   <PanelBlock active>arachne</PanelBlock>
   <PanelBlock>signals</PanelBlock>
   <PanelBlock>forms</PanelBlock>
 </Panel>`}
 			>
-				<Panel>
+				<Panel label="Repositories">
 					<PanelHeading>Repositories</PanelHeading>
 					<PanelBlock active>arachne</PanelBlock>
 					<PanelBlock>signals</PanelBlock>
@@ -1156,24 +1158,24 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			<DocExample
 				code={`<form onSubmit={...}>
   <FormSection order={2} title="Profile" description="Basic account details.">
-    <Field label="Name" htmlFor="name">
+    <FormField label="Name" labelFor="name">
       <TextInput id="name" value={name()} onInput={...} />
-    </Field>
-    <Field label="Email" htmlFor="email">
+    </FormField>
+    <FormField label="Email" labelFor="email">
       <TextInput id="email" type="email" value={email()} onInput={...} />
-    </Field>
-    <Field label="Password" htmlFor="password">
+    </FormField>
+    <FormField label="Password" labelFor="password">
       <PasswordInput id="password" value={password()} onChange={setPassword} />
-    </Field>
-    <Field label="Role" htmlFor="role">
+    </FormField>
+    <FormField label="Role" labelFor="role">
       <Select id="role" value={role()} options={...} onChange={...} />
-    </Field>
-    <Field label="Plan">
+    </FormField>
+    <FormField label="Plan">
       <RadioGroup name="plan" value={plan()} options={...} onChange={...} />
-    </Field>
-    <Field label="Bio" htmlFor="bio">
+    </FormField>
+    <FormField label="Bio" labelFor="bio">
       <TextArea id="bio" rows={3} value={bio()} onInput={...} />
-    </Field>
+    </FormField>
     <Checkbox checked={notify()} onChange={...} label="Email me updates" />
   </FormSection>
   <Button type="submit">Save profile</Button>
@@ -1190,30 +1192,30 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 					<Stack gap="1rem">
 						<FormSection order={2} title="Profile" description="Basic account details.">
 							<Stack gap="0.85rem">
-								<Field label="Name" htmlFor="form-name">
+								<FormField label="Name" labelFor="form-name">
 									<TextInput
 										id="form-name"
 										placeholder="Jane Doe"
 										value={formName()}
 										onInput={(e: InputEvent) => formName.set((e.target as HTMLInputElement).value)}
 									/>
-								</Field>
-								<Field label="Email" htmlFor="form-email">
+								</FormField>
+								<FormField label="Email" labelFor="form-email">
 									<TextInput
 										id="form-email"
 										placeholder="jane@example.com"
 										value={formEmail()}
 										onInput={(e: InputEvent) => formEmail.set((e.target as HTMLInputElement).value)}
 									/>
-								</Field>
-								<Field label="Password" htmlFor="form-password" hint="At least 8 characters.">
+								</FormField>
+								<FormField label="Password" labelFor="form-password" help="At least 8 characters.">
 									<PasswordInput
 										id="form-password"
 										value={formPassword()}
 										onChange={(v) => formPassword.set(v)}
 									/>
-								</Field>
-								<Field label="Role" htmlFor="form-role">
+								</FormField>
+								<FormField label="Role" labelFor="form-role">
 									<Select
 										id="form-role"
 										value={formRole()}
@@ -1224,8 +1226,8 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 											{ value: "ops", label: "Ops" },
 										]}
 									/>
-								</Field>
-								<Field label="Plan">
+								</FormField>
+								<FormField label="Plan">
 									<RadioGroup
 										name="form-plan"
 										value={formPlan()}
@@ -1236,8 +1238,8 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 											{ value: "team", label: "Team" },
 										]}
 									/>
-								</Field>
-								<Field label="Bio" htmlFor="form-bio">
+								</FormField>
+								<FormField label="Bio" labelFor="form-bio">
 									<TextArea
 										id="form-bio"
 										rows={3}
@@ -1247,7 +1249,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 											formBio.set((e.target as HTMLTextAreaElement).value)
 										}
 									/>
-								</Field>
+								</FormField>
 								<Checkbox
 									checked={formNotify()}
 									onChange={(e: Event) => formNotify.set((e.target as HTMLInputElement).checked)}
@@ -1286,20 +1288,20 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 		>
 			<DocExample
 				title="Vertical fields"
-				code={`<Field label="Username" htmlFor="user">
+				code={`<FormField label="Username" labelFor="user">
   <TextInput id="user" />
-</Field>
-<Field label="About" htmlFor="about" hint="Optional.">
+</FormField>
+<FormField label="About" labelFor="about" help="Optional.">
   <TextArea id="about" rows={3} />
-</Field>`}
+</FormField>`}
 			>
 				<Stack gap="0.85rem">
-					<Field label="Username" htmlFor="layout-user">
+					<FormField label="Username" labelFor="layout-user">
 						<TextInput id="layout-user" placeholder="arachne" />
-					</Field>
-					<Field label="About" htmlFor="layout-about" hint="Optional.">
+					</FormField>
+					<FormField label="About" labelFor="layout-about" help="Optional.">
 						<TextArea id="layout-about" rows={3} placeholder="Say hello…" />
-					</Field>
+					</FormField>
 				</Stack>
 			</DocExample>
 			<DocExample
@@ -1352,28 +1354,28 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			<DocExample
 				title="Login-style"
 				code={`<Stack gap="0.85rem">
-  <Field label="Email" htmlFor="login-email">
+  <FormField label="Email" labelFor="login-email">
     <TextInput id="login-email" type="email" />
-  </Field>
-  <Field label="Password" htmlFor="login-pass">
+  </FormField>
+  <FormField label="Password" labelFor="login-pass">
     <PasswordInput id="login-pass" value={...} onChange={...} />
-  </Field>
+  </FormField>
   <Button>Sign in</Button>
 </Stack>`}
 			>
 				<Box>
 					<Stack gap="0.85rem">
 						<Title size={4}>Sign in</Title>
-						<Field label="Email" htmlFor="login-email">
+						<FormField label="Email" labelFor="login-email">
 							<TextInput id="login-email" placeholder="you@example.com" />
-						</Field>
-						<Field label="Password" htmlFor="login-pass">
+						</FormField>
+						<FormField label="Password" labelFor="login-pass">
 							<PasswordInput
 								id="login-pass"
 								value={formPassword()}
 								onChange={(v) => formPassword.set(v)}
 							/>
-						</Field>
+						</FormField>
 						<Button>Sign in</Button>
 					</Stack>
 				</Box>
@@ -1383,31 +1385,31 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 	input: () => (
 		<DocPage title="Input" description="Text inputs with labels, invalid, and disabled states.">
 			<DocExample
-				code={`<Field label="Name" htmlFor="name">
+				code={`<FormField label="Name" labelFor="name">
   <TextInput id="name" placeholder="Jane Doe" />
-</Field>
-<Field label="Controlled" htmlFor="ctrl" hint="Updates as you type.">
+</FormField>
+<FormField label="Controlled" labelFor="ctrl" help="Updates as you type.">
   <TextInput id="ctrl" value={value()} onInput={...} />
-</Field>
-<Field label="Disabled" htmlFor="off">
+</FormField>
+<FormField label="Disabled" labelFor="off">
   <TextInput id="off" disabled placeholder="Disabled" />
-</Field>`}
+</FormField>`}
 			>
 				<Stack gap="0.85rem">
-					<Field label="Name" htmlFor="name">
+					<FormField label="Name" labelFor="name">
 						<TextInput id="name" placeholder="Jane Doe" />
-					</Field>
-					<Field label="Controlled" htmlFor="ctrl" hint="Updates as you type.">
+					</FormField>
+					<FormField label="Controlled" labelFor="ctrl" help="Updates as you type.">
 						<TextInput
 							id="ctrl"
 							value={textVal()}
 							placeholder="Controlled"
 							onInput={(e: InputEvent) => textVal.set((e.target as HTMLInputElement).value)}
 						/>
-					</Field>
-					<Field label="Disabled" htmlFor="off">
+					</FormField>
+					<FormField label="Disabled" labelFor="off">
 						<TextInput id="off" disabled placeholder="Disabled" />
-					</Field>
+					</FormField>
 				</Stack>
 			</DocExample>
 		</DocPage>
@@ -1415,20 +1417,20 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 	textarea: () => (
 		<DocPage title="Textarea" description="Multi-line text input for longer content.">
 			<DocExample
-				code={`<Field label="Notes" htmlFor="notes">
+				code={`<FormField label="Notes" labelFor="notes">
   <TextArea id="notes" placeholder="Write a note…" rows={4} />
-</Field>`}
+</FormField>`}
 			>
-				<Field label="Notes" htmlFor="notes">
+				<FormField label="Notes" labelFor="notes">
 					<TextArea id="notes" placeholder="Write a note…" rows={4} />
-				</Field>
+				</FormField>
 			</DocExample>
 		</DocPage>
 	),
 	select: () => (
 		<DocPage title="Select" description="Native-styled select for a single choice.">
 			<DocExample
-				code={`<Field label="Role" htmlFor="role">
+				code={`<FormField label="Role" labelFor="role">
   <Select
     id="role"
     value={role()}
@@ -1438,9 +1440,9 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
       { value: "designer", label: "Designer" },
     ]}
   />
-</Field>`}
+</FormField>`}
 			>
-				<Field label="Role" htmlFor="role">
+				<FormField label="Role" labelFor="role">
 					<Select
 						id="role"
 						value={selectVal()}
@@ -1451,7 +1453,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 							{ value: "ops", label: "Ops" },
 						]}
 					/>
-				</Field>
+				</FormField>
 			</DocExample>
 		</DocPage>
 	),
@@ -1703,8 +1705,15 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 };
 
 function renderShowcasePage(id: string) {
+	if (id.startsWith(CATALOG_PREFIX)) return <CatalogPage name={id.slice(CATALOG_PREFIX.length)} />;
 	const page = SHOWCASE_PAGES[id];
-	if (page) return page();
+	if (page)
+		return (
+			<>
+				{page()}
+				<ComponentReference pageId={id} />
+			</>
+		);
 	return (
 		<DocPage title="Not found" description={`No docs page for “${id}”.`}>
 			<Text muted>Pick another item from the sidebar.</Text>

@@ -733,6 +733,7 @@ export type NavbarLinkProps = BaseProps & {
 	children?: unknown;
 };
 
+/** Standalone navbar link (renders `<a>` when `href` is set). */
 export function NavbarLink(input: NavbarLinkProps) {
 	const [props, rest, slot] = setup("NavbarLink", input, {}, [
 		"active",

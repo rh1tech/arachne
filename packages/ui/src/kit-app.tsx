@@ -4,9 +4,10 @@
 import { For, Show } from "@arachne/render";
 import { effect, signal } from "@arachne/signals";
 import { Button } from "./button.tsx";
+import { focusableIn, rovingToolbarKey, setToolbarStop, whenConnected } from "./focus.ts";
 import { Icon, type IconName } from "./icons.tsx";
 import { type BaseProps, type SlotProps, setup } from "./system.ts";
-import { ActionIcon } from "./widgets.tsx";
+import { ActionIcon, DynamicHeading, type HeadingLevel } from "./widgets.tsx";
 
 const COPIED_RESET_MS = 1200;
 
@@ -74,16 +75,55 @@ export function AnnouncementBar(input: AnnouncementBarProps) {
 	);
 }
 
-export type CommandBarProps = BaseProps & { children?: unknown };
+export type CommandBarProps = BaseProps & {
+	/** Accessible name for the toolbar. */
+	label?: string | undefined;
+	orientation?: "horizontal" | "vertical" | undefined;
+	children?: unknown;
+};
 
-/** Toolbar row for page-level actions. Slots: `root`. */
+/**
+ * WAI-ARIA toolbar for page-level actions: one Tab stop, arrow keys (and
+ * Home / End) move focus between its controls. Slots: `root`.
+ */
 export function CommandBar(input: CommandBarProps) {
-	const [props, rest, slot] = setup("CommandBar", input, {}, ["children"]);
-	return (
-		<div {...rest} class={slot.class("root", "a-command-bar")} style={slot.style("root")}>
+	const [props, rest, slot] = setup("CommandBar", input, { orientation: "horizontal" }, [
+		"label",
+		"orientation",
+		"children",
+	]);
+	let root: HTMLElement | undefined;
+	const view = (
+		<div
+			aria-label={props.label}
+			{...rest}
+			ref={(el: HTMLElement) => {
+				root = el;
+			}}
+			role="toolbar"
+			aria-orientation={props.orientation}
+			class={slot.class("root", "a-command-bar")}
+			style={slot.style("root")}
+			onKeyDown={(e: KeyboardEvent) => {
+				if (root) rovingToolbarKey(e, root, props.orientation ?? "horizontal");
+			}}
+			onFocusIn={(e: FocusEvent) => {
+				if (root) setToolbarStop(root, e.target as HTMLElement);
+			}}
+		>
 			{props.children}
 		</div>
 	);
+	effect(() => {
+		props.children;
+		return whenConnected(
+			() => root,
+			(el) => {
+				setToolbarStop(el, focusableIn(el)[0]);
+			},
+		);
+	});
+	return view;
 }
 
 export type TocItem = {
@@ -360,6 +400,8 @@ export type ProductCardSlot = "root" | "media" | "image" | "badge" | "body" | "t
 
 export type ProductCardProps = SlotProps<ProductCardSlot> & {
 	title: unknown;
+	/** Heading level of the title, to fit the page outline. Default 4. */
+	order?: HeadingLevel | undefined;
 	image?: string | undefined;
 	/** Alt text for the product image (default: decorative). */
 	imageAlt?: string | undefined;
@@ -378,7 +420,18 @@ export function ProductCard(input: ProductCardProps) {
 		"ProductCard",
 		input,
 		{},
-		["title", "image", "imageAlt", "price", "strike", "currency", "badge", "onAdd", "addLabel"],
+		[
+			"title",
+			"order",
+			"image",
+			"imageAlt",
+			"price",
+			"strike",
+			"currency",
+			"badge",
+			"onAdd",
+			"addLabel",
+		],
 		"root" as ProductCardSlot,
 	);
 	return (
@@ -399,9 +452,13 @@ export function ProductCard(input: ProductCardProps) {
 				</div>
 			</Show>
 			<div class={slot.class("body", "a-product-body")} style={slot.style("body")}>
-				<h4 class={slot.class("title", "a-product-title")} style={slot.style("title")}>
+				<DynamicHeading
+					level={props.order ?? 4}
+					class={slot.class("title", "a-product-title")}
+					style={slot.style("title")}
+				>
 					{props.title}
-				</h4>
+				</DynamicHeading>
 				<div class={slot.class("footer", "a-product-row")} style={slot.style("footer")}>
 					<Price amount={props.price} currency={props.currency} strike={props.strike} />
 					<Show when={props.onAdd}>
@@ -525,14 +582,61 @@ export function OrderSummary(input: OrderSummaryProps) {
 }
 
 export type ShareButtonProps = BaseProps & {
+	/** Link to share (default: the current page URL). */
+	url?: string | undefined;
+	title?: string | undefined;
+	text?: string | undefined;
 	label?: unknown;
+	/** Label shown after the link was copied (fallback path). Default "Link copied". */
+	copiedLabel?: unknown;
 	size?: "sm" | "md" | undefined;
-	onClick?: (() => void) | undefined;
+	/** Called after sharing or copying; return `false` from `onClick` to handle sharing yourself. */
+	onClick?: (() => boolean | undefined | void) | undefined;
+	onShared?: ((method: "share" | "copy") => void) | undefined;
 };
 
-/** Ghost button with a share glyph. Slots: `root` (the Button). */
+/**
+ * Shares a link with the Web Share API, falling back to copying it to the
+ * clipboard (with confirmation). Slots: `root`.
+ */
+/** Open the native share sheet when there is one. */
+async function nativeShare(data: ShareData): Promise<"shared" | "dismissed" | "unavailable"> {
+	if (typeof navigator === "undefined" || typeof navigator.share !== "function")
+		return "unavailable";
+	try {
+		await navigator.share(data);
+		return "shared";
+	} catch (error) {
+		// The user dismissed the sheet (AbortError); other failures fall back to copying.
+		return (error as DOMException)?.name === "AbortError" ? "dismissed" : "unavailable";
+	}
+}
+
 export function ShareButton(input: ShareButtonProps) {
-	const [props, rest, slot] = setup("ShareButton", input, {}, ["label", "size", "onClick"]);
+	const [props, rest, slot] = setup("ShareButton", input, {}, [
+		"url",
+		"title",
+		"text",
+		"label",
+		"copiedLabel",
+		"size",
+		"onClick",
+		"onShared",
+	]);
+	const { copied, copy } = createCopied();
+	const share = async () => {
+		if (props.onClick?.() === false) return;
+		const url = props.url ?? (typeof location !== "undefined" ? location.href : "");
+		const result = await nativeShare({
+			url,
+			...(props.title ? { title: props.title } : {}),
+			...(props.text ? { text: props.text } : {}),
+		});
+		if (result === "shared") props.onShared?.("share");
+		if (result !== "unavailable") return;
+		await copy(url);
+		if (copied()) props.onShared?.("copy");
+	};
 	return (
 		<Button
 			{...rest}
@@ -541,10 +645,11 @@ export function ShareButton(input: ShareButtonProps) {
 			unstyled={props.unstyled}
 			class={slot.class("root", "a-share-btn")}
 			style={slot.style("root")}
-			start={<Icon name="share" size="sm" />}
-			onClick={() => props.onClick?.()}
+			data-copied={copied() ? "" : undefined}
+			start={<Icon name={copied() ? "check" : "share"} size="sm" />}
+			onClick={() => void share()}
 		>
-			{props.label ?? "Share"}
+			{copied() ? (props.copiedLabel ?? "Link copied") : (props.label ?? "Share")}
 		</Button>
 	);
 }
@@ -1223,6 +1328,8 @@ export type InfiniteScrollProps = SlotProps<InfiniteScrollSlot> & {
 	onLoadMore: () => void;
 	/** Button text (default "Load more" / "Loading…"). */
 	loadMoreLabel?: unknown;
+	/** How far before the end to start loading (IntersectionObserver `rootMargin`). Default `200px`. */
+	rootMargin?: string | undefined;
 	children?: unknown;
 };
 
@@ -1231,11 +1338,13 @@ export function InfiniteScroll(input: InfiniteScrollProps) {
 	const [props, rest, slot] = setup(
 		"InfiniteScroll",
 		input,
-		{},
-		["loading", "hasMore", "onLoadMore", "loadMoreLabel", "children"],
+		{ rootMargin: "200px" },
+		["loading", "hasMore", "onLoadMore", "loadMoreLabel", "rootMargin", "children"],
 		"root" as InfiniteScrollSlot,
 	);
-	return (
+	let sentinel: HTMLElement | undefined;
+	const canLoad = () => !props.loading && props.hasMore !== false;
+	const view = (
 		<div
 			{...rest}
 			class={slot.class("root", "a-infinite")}
@@ -1245,12 +1354,21 @@ export function InfiniteScroll(input: InfiniteScrollProps) {
 		>
 			{props.children}
 			<Show when={props.hasMore !== false}>
-				<div class={slot.class("sentinel", "a-infinite-sentinel")} style={slot.style("sentinel")}>
+				<div
+					ref={(el: HTMLElement) => {
+						sentinel = el;
+					}}
+					class={slot.class("sentinel", "a-infinite-sentinel")}
+					style={slot.style("sentinel")}
+				>
+					{/* Keyboard / no-IntersectionObserver fallback. */}
 					<Button
 						variant="ghost"
 						size="sm"
 						loading={props.loading}
-						onClick={() => props.onLoadMore()}
+						onClick={() => {
+							if (canLoad()) props.onLoadMore();
+						}}
 					>
 						{props.loading ? "Loading…" : (props.loadMoreLabel ?? "Load more")}
 					</Button>
@@ -1258,4 +1376,22 @@ export function InfiniteScroll(input: InfiniteScrollProps) {
 			</Show>
 		</div>
 	);
+	// Auto-load when the sentinel scrolls into view.
+	effect(() => {
+		if (props.hasMore === false || typeof IntersectionObserver === "undefined") return;
+		return whenConnected(
+			() => sentinel,
+			(el) => {
+				const observer = new IntersectionObserver(
+					(entries) => {
+						if (entries.some((e) => e.isIntersecting) && canLoad()) props.onLoadMore();
+					},
+					{ rootMargin: props.rootMargin ?? "200px" },
+				);
+				observer.observe(el);
+				return () => observer.disconnect();
+			},
+		);
+	});
+	return view;
 }

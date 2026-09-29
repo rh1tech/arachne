@@ -9,7 +9,8 @@ export type DocPageSlot = "root" | "head" | "title" | "description" | "body";
 
 export type DocPageProps = SlotProps<DocPageSlot> & {
 	title: string;
-	description?: string | undefined;
+	/** Text or inline content (e.g. with `<Code>` spans). */
+	description?: unknown;
 	children?: unknown;
 };
 
@@ -49,7 +50,8 @@ export type DocExampleSlot = "root" | "title" | "description" | "preview";
 export type DocExampleProps = SlotProps<DocExampleSlot> & {
 	/** Optional section title above the example (e.g. "Colors"). */
 	title?: string | undefined;
-	description?: string | undefined;
+	/** Text or inline content (e.g. with `<Code>` spans). */
+	description?: unknown;
 	/** Source shown under the live preview. */
 	code: string;
 	language?: string | undefined;

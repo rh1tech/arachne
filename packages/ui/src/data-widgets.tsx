@@ -252,13 +252,13 @@ export function Tree(input: TreeProps) {
 
 	return (
 		<ul
+			aria-label={props.label}
 			{...rest}
 			ref={(el: HTMLElement) => {
 				root = el;
 			}}
 			// biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: APG tree pattern is ul[role=tree] > li[role=treeitem]
 			role="tree"
-			aria-label={props.label}
 			class={slot.class("root", "a-tree", "a-tree-list", "a-tree-root")}
 			style={slot.style("root")}
 			onKeyDown={onKeyDown}
@@ -893,6 +893,7 @@ export type TableCellProps = TableSectionProps & {
 	abbr?: string | undefined;
 };
 
+/** Table head section. */
 export function Thead(input: TableSectionProps) {
 	const [props, rest, slot] = setup("Thead", input, {}, ["children"]);
 	return (
@@ -902,6 +903,7 @@ export function Thead(input: TableSectionProps) {
 	);
 }
 
+/** Table body section. */
 export function Tbody(input: TableSectionProps) {
 	const [props, rest, slot] = setup("Tbody", input, {}, ["children"]);
 	return (
@@ -911,6 +913,7 @@ export function Tbody(input: TableSectionProps) {
 	);
 }
 
+/** Table footer section. */
 export function Tfoot(input: TableSectionProps) {
 	const [props, rest, slot] = setup("Tfoot", input, {}, ["children"]);
 	return (
@@ -920,6 +923,7 @@ export function Tfoot(input: TableSectionProps) {
 	);
 }
 
+/** Table row (clickable when `onClick` is set). */
 export function Tr(input: TableSectionProps & { onClick?: ((e: MouseEvent) => void) | undefined }) {
 	const [props, rest, slot] = setup("Tr", input, {}, ["children"]);
 	return (
@@ -929,6 +933,7 @@ export function Tr(input: TableSectionProps & { onClick?: ((e: MouseEvent) => vo
 	);
 }
 
+/** Table header cell. */
 export function Th(input: TableCellProps) {
 	const [props, rest, slot] = setup("Th", input, {}, ["children"]);
 	return (
@@ -938,6 +943,7 @@ export function Th(input: TableCellProps) {
 	);
 }
 
+/** Table data cell. */
 export function Td(input: TableCellProps) {
 	const [props, rest, slot] = setup("Td", input, {}, ["children"]);
 	return (

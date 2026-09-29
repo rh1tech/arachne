@@ -353,7 +353,10 @@ export type NumberFormatterProps = BaseProps & {
 	decimalScale?: number | undefined;
 };
 
-/** Slots: `root`. */
+/**
+ * Formats a number with separators, decimals, prefix and suffix.
+ * Slots: `root`.
+ */
 export function NumberFormatter(input: NumberFormatterProps) {
 	const [props, rest, slot] = setup("NumberFormatter", input, {}, [
 		"value",

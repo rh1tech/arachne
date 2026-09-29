@@ -136,7 +136,10 @@ export type GridItemProps = BaseProps & {
 	children?: unknown;
 };
 
-/** Slots: `root`. Tokens: `--a-grid-span`, `--a-grid-start`. */
+/**
+ * Item of a CSS grid, placed with `span` / `start`.
+ * Slots: `root`. Tokens: `--a-grid-span`, `--a-grid-start`.
+ */
 export function GridItem(input: GridItemProps) {
 	const [props, rest, slot] = setup("GridItem", input, {}, ["span", "start", "children"]);
 	const vars = (): StyleValue => ({
@@ -164,7 +167,10 @@ export type ContainerProps = BaseProps & {
 	children?: unknown;
 };
 
-/** Slots: `root`. */
+/**
+ * Horizontally centred content container with a max width.
+ * Slots: `root`.
+ */
 export function Container(input: ContainerProps) {
 	const [props, rest, slot] = setup("Container", input, {}, ["size", "children"]);
 	return (
@@ -184,7 +190,10 @@ export type SectionProps = BaseProps & {
 	children?: unknown;
 };
 
-/** Slots: `root`. */
+/**
+ * Vertical page section with rhythm spacing.
+ * Slots: `root`.
+ */
 export function Section(input: SectionProps) {
 	const [props, rest, slot] = setup("Section", input, {}, ["size", "children"]);
 	return (
@@ -226,6 +235,7 @@ export type LevelSideProps = BaseProps & {
 	children?: unknown;
 };
 
+/** Left-aligned group of a level bar. */
 export function LevelLeft(input: LevelSideProps) {
 	const [props, rest, slot] = setup("LevelLeft", input, {}, ["children"]);
 	return (
@@ -235,6 +245,7 @@ export function LevelLeft(input: LevelSideProps) {
 	);
 }
 
+/** Right-aligned group of a level bar. */
 export function LevelRight(input: LevelSideProps) {
 	const [props, rest, slot] = setup("LevelRight", input, {}, ["children"]);
 	return (
@@ -244,6 +255,7 @@ export function LevelRight(input: LevelSideProps) {
 	);
 }
 
+/** One centred item of a level bar. */
 export function LevelItem(input: LevelSideProps) {
 	const [props, rest, slot] = setup("LevelItem", input, {}, ["children"]);
 	return (

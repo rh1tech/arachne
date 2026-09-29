@@ -1,11 +1,11 @@
-import { Show } from "@arachne/render";
-import { type BaseProps, type SlotProps, setup } from "./system.ts";
+import { type BaseProps, setup } from "./system.ts";
 
 export type LabelProps = BaseProps & {
 	for?: string | undefined;
 	children?: unknown;
 };
 
+/** Form label. */
 export function Label(input: LabelProps) {
 	const [props, rest, slot] = setup("Label", input, {}, ["for", "children"]);
 	return (
@@ -17,48 +17,6 @@ export function Label(input: LabelProps) {
 		>
 			{props.children}
 		</label>
-	);
-}
-
-export type FieldSlot = "root" | "label" | "control" | "hint";
-
-export type FieldProps = SlotProps<FieldSlot> & {
-	label?: string | undefined;
-	htmlFor?: string | undefined;
-	hint?: string | undefined;
-	children?: unknown;
-};
-
-/** Label + control + hint stack. Slots: `root` `label` `control` `hint`. */
-export function Field(input: FieldProps) {
-	const [props, rest, slot] = setup(
-		"Field",
-		input,
-		{},
-		["label", "htmlFor", "hint", "children"],
-		"root" as FieldSlot,
-	);
-	return (
-		<div {...rest} class={slot.class("root", "a-field")} style={slot.style("root")}>
-			<Show when={props.label}>
-				<Label
-					for={props.htmlFor}
-					class={slot.class("label", "a-field-label")}
-					style={slot.style("label")}
-					unstyled={props.unstyled}
-				>
-					{props.label}
-				</Label>
-			</Show>
-			<div class={slot.class("control", "a-field-control")} style={slot.style("control")}>
-				{props.children}
-			</div>
-			<Show when={props.hint}>
-				<p class={slot.class("hint", "a-field-hint")} style={slot.style("hint")}>
-					{props.hint}
-				</p>
-			</Show>
-		</div>
 	);
 }
 

@@ -20,7 +20,7 @@ export type SlotStyles<S extends string> = Partial<Record<S, StyleValue>>;
 
 /** DOM event handler forwarded as-is (`onClick`, `onPointerEnter`, `on:custom`, …). */
 // biome-ignore lint/suspicious/noExplicitAny: handlers are contravariant; `any` lets every concrete event type fit
-export type EventHandler = ((event: any) => unknown) | undefined;
+export type EventHandler = ((...args: any[]) => unknown) | undefined;
 
 /**
  * Global HTML attributes forwarded to a component's host element. Explicit keys

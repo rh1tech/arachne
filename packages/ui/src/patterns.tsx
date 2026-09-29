@@ -83,7 +83,10 @@ export type StatusDotProps = BaseProps & {
 	label?: string | undefined;
 };
 
-/** Slots: `root`. State: `data-tone`. */
+/**
+ * Small status indicator (online, busy, …), optionally pulsing.
+ * Slots: `root`. State: `data-tone`.
+ */
 export function StatusDot(input: StatusDotProps) {
 	const [props, rest, slot] = setup("StatusDot", input, { tone: "neutral" }, [
 		"tone",
@@ -138,7 +141,10 @@ export type PageHeaderProps = SlotProps<PageHeaderSlot> & {
 	actions?: unknown;
 };
 
-/** Slots: `root` `crumb` `row` `text` `title` `description` `actions`. */
+/**
+ * Page title block with breadcrumb, description and actions.
+ * Slots: `root` `crumb` `row` `text` `title` `description` `actions`.
+ */
 export function PageHeader(input: PageHeaderProps) {
 	const [props, rest, slot] = setup(
 		"PageHeader",
@@ -182,7 +188,10 @@ export type UserButtonProps = SlotProps<UserButtonSlot> & {
 	end?: unknown;
 };
 
-/** Slots: `root` `avatar` `text` `name` `email` `chevron`. */
+/**
+ * Button showing a user's avatar, name and email.
+ * Slots: `root` `avatar` `text` `name` `email` `chevron`.
+ */
 export function UserButton(input: UserButtonProps) {
 	const [props, rest, slot] = setup(
 		"UserButton",
@@ -220,7 +229,10 @@ export type ThemeToggleProps = BaseProps & {
 	onChange: (theme: "light" | "dark") => void;
 };
 
-/** Slots: `root`. State: `data-theme`. */
+/**
+ * Toggle between light and dark themes.
+ * Slots: `root`. State: `data-theme-value`. Apply the theme yourself in `onChange` (e.g. set `data-theme` on `<html>`).
+ */
 export function ThemeToggle(input: ThemeToggleProps) {
 	const [props, rest, slot] = setup("ThemeToggle", input, {}, ["value", "onChange"]);
 	const dark = () => props.value === "dark";
@@ -307,7 +319,10 @@ export type ChatBubbleProps = SlotProps<ChatBubbleSlot> & {
 	children?: unknown;
 };
 
-/** Slots: `root` `meta` `author` `body`. State: `data-from`. */
+/**
+ * Chat message bubble, aligned by sender.
+ * Slots: `root` `meta` `author` `body`. State: `data-from`.
+ */
 export function ChatBubble(input: ChatBubbleProps) {
 	const [props, rest, slot] = setup(
 		"ChatBubble",
@@ -349,7 +364,10 @@ export type TypingIndicatorProps = BaseProps & {
 	label?: string | undefined;
 };
 
-/** Slots: `root`. */
+/**
+ * Animated "someone is typing" indicator.
+ * Slots: `root`.
+ */
 export function TypingIndicator(input: TypingIndicatorProps) {
 	const [props, rest, slot] = setup("TypingIndicator", input, {}, ["label"]);
 	return (
@@ -397,7 +415,10 @@ export function stringifyJson(value: unknown): string {
 	}
 }
 
-/** Slots: `root`. */
+/**
+ * Pretty-printed JSON (handles undefined, circular references and BigInt).
+ * Slots: `root`.
+ */
 export function JsonViewer(input: JsonViewerProps) {
 	const [props, rest, slot] = setup("JsonViewer", input, {}, ["value"]);
 	return (
@@ -435,7 +456,10 @@ export function formatRelative(ms: number, now: number): string {
 	return unit(Math.round(diff / WEEK), "week");
 }
 
-/** Slots: `root`. Refreshes every 15s. */
+/**
+ * Relative time such as "5 minutes ago", with the full date in `title`.
+ * Slots: `root`. Refreshes every 15s.
+ */
 export function RelativeTime(input: RelativeTimeProps) {
 	const [props, rest, slot] = setup("RelativeTime", input, {}, ["value"]);
 	const now = signal(Date.now());
@@ -636,7 +660,10 @@ export type LoadMoreProps = SlotProps<LoadMoreSlot> & {
 	children?: unknown;
 };
 
-/** Slots: `root` `button` `end`. State: `data-state="idle|loading|done"`. */
+/**
+ * "Load more" button that shows loading and end-of-list states.
+ * Slots: `root` `button` `end`. State: `data-state="idle|loading|done"`.
+ */
 export function LoadMore(input: LoadMoreProps) {
 	const [props, rest, slot] = setup(
 		"LoadMore",
@@ -687,7 +714,10 @@ export type ActivityItemProps = SlotProps<ActivityItemSlot> & {
 	children?: unknown;
 };
 
-/** Slots: `root` `icon` `body` `title` `meta` `content`. */
+/**
+ * Activity feed entry with icon, title, meta and content.
+ * Slots: `root` `icon` `body` `title` `meta` `content`.
+ */
 export function ActivityItem(input: ActivityItemProps) {
 	const [props, rest, slot] = setup(
 		"ActivityItem",
@@ -722,7 +752,10 @@ export type FilterBarProps = BaseProps & {
 	children?: unknown;
 };
 
-/** Slots: `root`. */
+/**
+ * Horizontal toolbar for filters and chips.
+ * Slots: `root`.
+ */
 export function FilterBar(input: FilterBarProps) {
 	const [props, rest, slot] = setup("FilterBar", input, {}, ["children"]);
 	return (
@@ -737,7 +770,10 @@ export type MasonryProps = BaseProps & {
 	children?: unknown;
 };
 
-/** Slots: `root`. */
+/**
+ * Masonry layout of variable-height items in columns.
+ * Slots: `root`.
+ */
 export function Masonry(input: MasonryProps) {
 	const [props, rest, slot] = setup("Masonry", input, { columns: 3 }, ["columns", "children"]);
 	return (

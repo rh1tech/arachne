@@ -6,6 +6,11 @@ export type AppShellSlot = "root" | "sidebar" | "main" | "header" | "content";
 export type AppShellProps = SlotProps<AppShellSlot> & {
 	sidebar?: unknown;
 	header?: unknown;
+	/**
+	 * Element for the content area (default `"main"`). Use `"div"` when the shell is
+	 * nested in a page that already has a `<main>` landmark.
+	 */
+	contentAs?: "main" | "div" | undefined;
 	children?: unknown;
 };
 
@@ -18,9 +23,10 @@ export function AppShell(input: AppShellProps) {
 		"AppShell",
 		input,
 		{},
-		["sidebar", "header", "children"],
+		["sidebar", "header", "contentAs", "children"],
 		"root" as AppShellSlot,
 	);
+	const contentClass = () => slot.class("content", "a-shell-content");
 	return (
 		<div {...rest} class={slot.class("root", "a-shell")} style={slot.style("root")}>
 			<Show when={props.sidebar}>
@@ -34,9 +40,18 @@ export function AppShell(input: AppShellProps) {
 						{props.header}
 					</header>
 				</Show>
-				<main class={slot.class("content", "a-shell-content")} style={slot.style("content")}>
-					{props.children}
-				</main>
+				<Show
+					when={props.contentAs === "div"}
+					fallback={
+						<main class={contentClass()} style={slot.style("content")}>
+							{props.children}
+						</main>
+					}
+				>
+					<div class={contentClass()} style={slot.style("content")}>
+						{props.children}
+					</div>
+				</Show>
 			</div>
 		</div>
 	);

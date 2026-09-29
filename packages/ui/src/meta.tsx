@@ -14,7 +14,10 @@ export type DescriptionListProps = SlotProps<DescriptionListSlot> & {
 	items: DescriptionItem[];
 };
 
-/** Slots: `root` `row` `label` `value`. */
+/**
+ * Label / value pairs (`<dl>`).
+ * Slots: `root` `row` `label` `value`.
+ */
 export function DescriptionList(input: DescriptionListProps) {
 	const [props, rest, slot] = setup(
 		"DescriptionList",
@@ -49,7 +52,10 @@ export type StatProps = SlotProps<StatSlot> & {
 	hint?: string | undefined;
 };
 
-/** Slots: `root` `label` `value` `hint`. */
+/**
+ * Statistic with label, value and hint.
+ * Slots: `root` `label` `value` `hint`.
+ */
 export function Stat(input: StatProps) {
 	const [props, rest, slot] = setup(
 		"Stat",

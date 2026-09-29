@@ -372,6 +372,7 @@ export function SemiCircleProgress(input: SemiCircleProgressProps) {
 		`M ${thickness() / 2} ${size() / 2} A ${r()} ${r()} 0 0 1 ${size() - thickness() / 2} ${size() / 2}`;
 	return (
 		<div
+			aria-label="Progress"
 			{...rest}
 			class={slot.class("root", "a-semi")}
 			style={slot.style("root", { width: `${size()}px`, height: `${height()}px` })}
@@ -508,7 +509,8 @@ export function CodeBlock(input: CodeBlockProps) {
 					{copied() ? (props.copiedLabel ?? "Copied") : (props.copyLabel ?? "Copy")}
 				</button>
 			</div>
-			<pre class={slot.class("pre", "a-codeblock-pre")} style={slot.style("pre")}>
+			{/* Focusable so keyboard users can scroll long lines. */}
+			<pre class={slot.class("pre", "a-codeblock-pre")} style={slot.style("pre")} tabindex="0">
 				<code
 					class={slot.class("code", "a-codeblock-code", `language-${props.language}`)}
 					innerHTML={highlightCode(props.code, props.language ?? "tsx")}

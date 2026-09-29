@@ -34,7 +34,7 @@ function App() {
 						))}
 					</select>
 				</nav>
-				<main class="docs-content">
+				<main id="main" class="docs-content" tabindex="-1">
 					<ShowcaseContent page={showcasePage()} />
 					<ToastHost toaster={toaster} />
 				</main>

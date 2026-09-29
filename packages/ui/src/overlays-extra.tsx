@@ -226,7 +226,10 @@ export type BackgroundImageProps = BaseProps & {
 	children?: unknown;
 };
 
-/** Slots: `root`. */
+/**
+ * Box with a background image behind its content.
+ * Slots: `root`.
+ */
 export function BackgroundImage(input: BackgroundImageProps) {
 	const [props, rest, slot] = setup("BackgroundImage", input, {}, ["src", "radius", "children"]);
 	return (
@@ -248,7 +251,10 @@ export type StickyProps = BaseProps & {
 	children?: unknown;
 };
 
-/** Slots: `root`. */
+/**
+ * Sticks its content to an edge of the scroll container.
+ * Slots: `root`.
+ */
 export function Sticky(input: StickyProps) {
 	const [props, rest, slot] = setup("Sticky", input, {}, ["offset", "position", "children"]);
 	const position = () => {

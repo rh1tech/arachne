@@ -5,7 +5,8 @@ import { Switch } from "./controls.tsx";
 import { Icon, type IconName } from "./icons.tsx";
 import { StatusDot } from "./patterns.tsx";
 import { Avatar } from "./presence.tsx";
-import { type BaseProps, type SlotProps, setup } from "./system.ts";
+import { type BaseProps, createId, type SlotProps, setup } from "./system.ts";
+import { DynamicHeading, type HeadingLevel } from "./widgets.tsx";
 
 export type PresenceAvatarSlot = "root" | "avatar" | "dot";
 
@@ -435,6 +436,9 @@ export type SettingsRowProps = SlotProps<SettingsRowSlot> & {
 	label: unknown;
 	description?: unknown;
 	control?: unknown;
+	/** Ids for the label / description, so the control can reference them. */
+	labelId?: string | undefined;
+	descriptionId?: string | undefined;
 };
 
 /** Label + description + control row. Slots: `root` `text` `label` `description` `control`. */
@@ -443,17 +447,22 @@ export function SettingsRow(input: SettingsRowProps) {
 		"SettingsRow",
 		input,
 		{},
-		["label", "description", "control"],
+		["label", "description", "control", "labelId", "descriptionId"],
 		"root" as SettingsRowSlot,
 	);
 	return (
 		<div {...rest} class={slot.class("root", "a-settings-row")} style={slot.style("root")}>
 			<div class={slot.class("text", "a-settings-row-text")} style={slot.style("text")}>
-				<div class={slot.class("label", "a-settings-row-label")} style={slot.style("label")}>
+				<div
+					id={props.labelId}
+					class={slot.class("label", "a-settings-row-label")}
+					style={slot.style("label")}
+				>
 					{props.label}
 				</div>
 				<Show when={props.description}>
 					<div
+						id={props.descriptionId}
 						class={slot.class("description", "a-settings-row-desc")}
 						style={slot.style("description")}
 					>
@@ -487,9 +496,12 @@ export function ToggleRow(input: ToggleRowProps) {
 		"onChange",
 		"disabled",
 	]);
+	const id = createId("toggle-row");
 	return (
 		<SettingsRow
 			{...rest}
+			labelId={`${id}-label`}
+			descriptionId={props.description ? `${id}-desc` : undefined}
 			unstyled={props.unstyled}
 			class={slot.class("root")}
 			style={slot.style("root")}
@@ -498,6 +510,8 @@ export function ToggleRow(input: ToggleRowProps) {
 			description={props.description}
 			control={
 				<Switch
+					aria-labelledby={`${id}-label`}
+					aria-describedby={props.description ? `${id}-desc` : undefined}
 					checked={props.checked}
 					disabled={props.disabled}
 					onChange={(e: Event) => props.onChange((e.target as HTMLInputElement).checked)}
@@ -698,7 +712,8 @@ export type ReelProps = BaseProps & { children?: unknown };
 export function Reel(input: ReelProps) {
 	const [props, rest, slot] = setup("Reel", input, {}, ["children"]);
 	return (
-		<div {...rest} class={slot.class("root", "a-reel")} style={slot.style("root")}>
+		// Focusable so keyboard users can scroll it; pass tabindex={-1} if the content is focusable.
+		<div tabindex="0" {...rest} class={slot.class("root", "a-reel")} style={slot.style("root")}>
 			{props.children}
 		</div>
 	);
@@ -768,6 +783,8 @@ export type ReviewCardSlot = "root" | "stars" | "star" | "title" | "body" | "aut
 export type ReviewCardProps = SlotProps<ReviewCardSlot> & {
 	rating: number;
 	title?: unknown;
+	/** Heading level of the title, to fit the page outline. Default 4. */
+	order?: HeadingLevel | undefined;
 	author?: unknown;
 	children?: unknown;
 };
@@ -778,7 +795,7 @@ export function ReviewCard(input: ReviewCardProps) {
 		"ReviewCard",
 		input,
 		{},
-		["rating", "title", "author", "children"],
+		["rating", "title", "order", "author", "children"],
 		"root" as ReviewCardSlot,
 	);
 	const filled = () => Math.round(Number.isFinite(props.rating) ? props.rating : 0);
@@ -805,9 +822,13 @@ export function ReviewCard(input: ReviewCardProps) {
 				))}
 			</div>
 			<Show when={props.title}>
-				<h4 class={slot.class("title", "a-review-title")} style={slot.style("title")}>
+				<DynamicHeading
+					level={props.order ?? 4}
+					class={slot.class("title", "a-review-title")}
+					style={slot.style("title")}
+				>
 					{props.title}
-				</h4>
+				</DynamicHeading>
 			</Show>
 			<div class={slot.class("body", "a-review-body")} style={slot.style("body")}>
 				{props.children}

@@ -2,28 +2,14 @@
 
 JSX UI primitives for Arachne ([ADR 0013](../../docs/adr/0013-ui-forms.md)).
 
-Catalog spans Bulma / Mantine / Bootstrap / UIkit-style building blocks:
+330+ accessible, server-renderable components, grouped in the [component reference](../../docs/ui/components/README.md):
 
-- **Inputs & forms** — Button, TextInput, Select, Checkbox, Switch, Slider, Pin, … + FormField / FormSection
-- **Layout** — Stack, Columns, Grid, Container, Section, Level, Group, Flex, Center, Tile
-- **Surfaces** — Card, Panel, Paper, Box, Message, Hero, Footer, Media, Article, Figure, Image
-- **Feedback** — Alert, Toast, Progress, Spinner, Skeleton, EmptyState, Indicator, LoadingOverlay
-- **Overlay** — Modal, Drawer, Menu, Popover, Tooltip, Tabs, Accordion, Pagination
-- **Navigation** — Navbar, AppShell, SidebarNav, Breadcrumb, Steps, NavLink, Affix
-- **Icons** — built-in SVG `Icon` set, `IconBadge`, `ActionIcon`, `CloseButton`, `Burger`
-- **Data / nav** — `Tree`, `Carousel`, `Calendar`, `DatePicker`, `Subnav`, `Iconnav`, `Dropzone`, `FileButton`
-- **Extras** — `HoverCard`, `ColorSwatch`, `Highlight`, `Sticky`, `BackgroundImage`, `NavigationProgress`, `NumberFormatter`
-- **Advanced** — `ContextMenu`, `ColorPicker`, `Lightbox`, `TransferList`, `Spotlight`, `ConfirmDialog`
-- **Pickers / charts** — `MonthPicker`, `DateRangePicker`, `TimePicker`, `SemiCircleProgress`, `Sparkline`, `CodeBlock`, `Countdown`, `ToTop`
-- **Composite** — `ButtonGroup`, `SplitButton`, `ToggleGroup`, `AvatarGroup`, `Notification`, `FAB`, `BottomNav`, `SortableList`, `Splitter`, `DataTable`, `YearPicker`, `PasswordStrength`, `Meter`, `Comment`, `Thumbnav`, `Leader`, `Marquee`, `BarList`, `SkipLink`
-- **Patterns** — `BottomSheet`, `Banner`, `PageHeader`, `UserButton`, `ThemeToggle`, `ChoiceCard`, `ChatBubble`, `JsonViewer`, `RelativeTime`, `CountUp`, `ScrollSpy`, `BeforeAfter`, `LoadMore`, `ActivityItem`, `Masonry`, `FilterBar`, `StatusDot`
-- **More** — `CookieConsent`, `OfflineNotice`, `Hotkey`, `InlineEdit`, `CopyField`, `Checklist`, `PricingCard`, `FeatureList`, `StatGroup`, `DotPagination`, `BackLink`, `NextPrev`, `FileCard`, `VideoFrame`, `SteppedProgress`, `Heatmap`, `AngleSlider`, `KanbanBoard`, `Prose`, `Bleed`, `Inset`
-- **Extra** — `PresenceAvatar`, `Truncate`, `Terminal`, `Diff`, `Trend`, `DonutChart`, `SparkBar`, `SkeletonText`/`SkeletonCard`, `LoadingButton`, `ConfirmButton`, `SettingsRow`, `ToggleRow`, `DangerZone`, `StickyBar`, `SiteFooter`, `SocialLinks`, `Reel`, `GalleryGrid`, `Testimonial`, `ReviewCard`, `LogoCloud`, `UploadItem`, `WizardNav`, `FormFooter`, `Details`, `Metric`
-- **App** — `AnnouncementBar`, `CommandBar`, `TableOfContents`, `PropertyList`, `StatCard`, `QuantityInput`, `Price`, `ProductCard`, `CartLine`, `OrderSummary`, `ShareButton`, `CopyId`, `EnvBadge`, `LocaleSwitcher`, `OrgSwitcher`, `InboxItem`, `ReactionBar`, `Mention`, `BrowserFrame`, `PhoneFrame`, `FeatureCompare`, `ViewToggle`, `ResultCount`, `FilterChip`, `BulkBar`, `LiveBadge`, `UnreadBadge`, `SecretField`, `InfiniteScroll`
-- **Ops** — `Callout`, `ChangelogItem`, `VersionTag`, `HttpMethodBadge`, `EndpointRow`, `JsonTree`, `LogViewer`, `ServiceStatus`, `UptimeBar`, `UsageMeter`, `UpgradeBanner`, `ProfileHeader`, `MemberRow`, `RoleBadge`, `PriorityBadge`, `SeverityBadge`, `CommitChip`, `BranchBadge`, `BuildStatus`, `Pipeline`, `SyncStatus`, `AutosaveIndicator`, `LastSaved`, `FloatingToolbar`, `DensityToggle`, `NoResults`, `ErrorState`, `CreditCardPreview`, `InvoiceRow`, `StorageBar`, `FileTree`, `Gauge`, `InviteCard`
-- **Docs** — `DocMenu` (sidebar catalog), `DocPage` + `DocExample` (title, description, live preview, code)
-- **Theming** — `applyPalette` / `applyRadius` / `paletteStyle` / `palettes` (named presets + radius scale: none / sm / lg)
-- **Utilities** — spacing (`m`/`p`/`gap`), color (`textColor`/`bgColor`), visibility helpers via `utils`
+- **Buttons & actions**, **Inputs**, **Date & colour pickers**, **Form layout**
+- **Overlays**, **Navigation**, **Feedback & status**
+- **Data display**, **Stats & charts**, **Layout**, **Typography & content**
+- **Commerce & billing**, **Developer & ops**, **Documentation**
+
+Start with the [guides](../../docs/ui/README.md): getting started, customization, theming, accessibility, SSR.
 
 ```ts
 import {
@@ -66,4 +52,12 @@ configureUI({ components: { Button: { defaultProps: { size: "sm" } }, Modal: { c
 Motion: overlays run enter/exit keyframes keyed on `data-state="open|closed"`.
 Everything collapses under `prefers-reduced-motion`.
 
-Playground tabs: **Controls**, **Overlay**, **Data**, **Layout** (shell + columns/grid + widgets).
+## Examples, reference and checks
+
+Each component has one example in `examples/` (grouped by source module; `examples/catalog-map.ts` assigns reference categories and sub-component parts). The same examples feed:
+
+- the customization contract, SSR and hydration tests;
+- the playground reference pages (`bun run --cwd apps/playground start`);
+- the generated docs (`bun run ui:docs`; CI runs `ui:docs --check`).
+
+`bun run ui:props` fails when a declared prop is never read, or when a prop is read but not claimed in `setup()` and so leaks onto the DOM.

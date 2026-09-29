@@ -2,7 +2,7 @@
 	"name": "arachne",
 	"private": true,
 	"version": "0.0.0",
-	"description": "Arachne — universal, modular, high-performance web framework",
+	"description": "Arachne \u2014 universal, modular, high-performance web framework",
 	"license": "MIT OR Apache-2.0",
 	"type": "module",
 	"workspaces": [
@@ -22,9 +22,11 @@
 		"mcp:http": "bun run packages/mcp/bin/arachne-mcp.ts --http",
 		"mcp:check": "bun run scripts/check-mcp.ts",
 		"playground": "bun run apps/playground/server.ts",
+		"ui:docs": "bun run scripts/gen-ui-docs.ts",
 		"changeset": "changeset",
 		"version-packages": "changeset version",
-		"ci": "bun run lint && bun run boundaries && bun run mcp:check && bun run typecheck && bun run test"
+		"ci": "bun run lint && bun run boundaries && bun run ui:docs --check && bun run ui:props && bun run mcp:check && bun run typecheck && bun run test",
+		"ui:props": "bun run scripts/check-ui-props.ts"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.2.4",

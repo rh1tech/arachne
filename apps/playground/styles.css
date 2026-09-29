@@ -70,6 +70,11 @@ body {
 		var(--canvas);
 }
 
+/* Skip-link target (tabindex=-1): focus moves here, no ring needed around the page. */
+.docs-content:focus {
+	outline: none;
+}
+
 .docs-content {
 	max-width: 52rem;
 	min-width: 0;
@@ -338,4 +343,77 @@ body {
 	font-size: 0.8125rem;
 	color: var(--a-muted);
 	line-height: 1.35;
+}
+
+/* ── Component reference (catalog.tsx) ── */
+.catalog-preview {
+	/* A containing block for position:fixed demos (FAB, banners, bottom nav). */
+	position: relative;
+	transform: translateZ(0);
+	min-height: 4rem;
+}
+
+.catalog-section {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 0.6rem;
+	margin-top: 2rem;
+}
+
+.catalog-props {
+	width: 100%;
+}
+
+/* Narrow screens: the props table scrolls on its own. */
+.catalog-props-scroll {
+	overflow-x: auto;
+}
+
+.catalog-deprecated {
+	color: var(--a-muted);
+	font-size: 0.75rem;
+	font-weight: 600;
+	text-decoration: line-through;
+}
+
+.catalog-shared {
+	margin-top: 0.75rem;
+	font-size: 0.875rem;
+}
+
+/* A sub-component on its parent's page: indented under a rule so the hierarchy reads. */
+.catalog-part {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 0.75rem;
+	margin-top: 1.5rem;
+	padding-left: 1.25rem;
+	border-left: 2px solid var(--a-line);
+}
+
+.catalog-part .catalog-section {
+	margin-top: 0.75rem;
+}
+
+/* Reference appended below a hand-written showcase page. */
+.catalog-reference {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 0.5rem;
+	margin-top: 3rem;
+	padding-top: 2rem;
+	border-top: 1px solid var(--a-line);
+}
+
+.catalog-type {
+	font-family: var(--a-font-mono);
+	font-size: 0.8rem;
+	color: color-mix(in oklab, var(--a-accent) 70%, var(--a-ink));
+	word-break: break-word;
+}
+
+.catalog-required {
+	color: color-mix(in oklab, var(--a-danger) 78%, var(--a-ink));
+	font-size: 0.75rem;
+	font-weight: 600;
 }
