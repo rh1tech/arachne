@@ -1,3 +1,4 @@
+import { renderEffect } from "@arachne/signals";
 import { insert } from "./dom.ts";
 
 export type PortalProps = {
@@ -25,7 +26,8 @@ function ensureBridgeElement(): void {
 /**
  * Renders `children` into `mount` (body by default) so `position: fixed`
  * overlays escape transformed/filtered ancestors.
- * Returns an in-tree bridge node; removing it tears down the portal.
+ * Returns an in-tree bridge node; removing it, or disposing the owner the
+ * Portal was created in, tears down the portal.
  */
 export function Portal(props: PortalProps): HTMLElement {
 	ensureBridgeElement();
@@ -54,6 +56,10 @@ export function Portal(props: PortalProps): HTMLElement {
 		node.remove();
 	};
 	bridge.__aDetach = detach;
+	// Also tear down with the reactive owner: a Portal created in a render pass
+	// that is discarded before its bridge is ever connected would otherwise stay
+	// in `mount` forever (covering the page).
+	renderEffect(() => detach);
 
 	// Fallback when custom elements are unavailable (or not yet connected).
 	if (typeof customElements === "undefined" || !customElements.get(BRIDGE_TAG)) {

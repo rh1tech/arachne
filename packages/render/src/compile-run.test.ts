@@ -399,4 +399,53 @@ describe("compile-run Show/For/Suspense", () => {
 		expect(html).not.toContain("</input>");
 		expect(html).toContain('value="a&amp;b"');
 	});
+
+	test("dynamic children inside fragments and Show update locally", () => {
+		const source = `
+function Toggle(props) {
+  props.renders.count++;
+  return (
+    <>
+      <button type="button">toggle</button>
+      {props.open() ? <em class="panel">open</em> : null}
+    </>
+  );
+}
+export function App(props) {
+  props.renders.app++;
+  return (
+    <div>
+      <Toggle open={props.open} renders={props.renders} />
+      <Show when={props.show()}>{props.open() ? <b class="inner">inner</b> : null}</Show>
+    </div>
+  );
+}
+`;
+		const { code } = compile(source, { filename: "Toggle.tsx", target: "dom", hydratable: false });
+		const { App } = loadCompiled(
+			code,
+			"@arachne/render",
+			render as unknown as Record<string, unknown>,
+		) as unknown as {
+			App: (props: Record<string, unknown>) => unknown;
+		};
+		const open = signal(false);
+		const show = signal(true);
+		const renders = { app: 0, count: 0 };
+		const root = document.createElement("div");
+		document.body.appendChild(root);
+		render.render(() => App({ open, show, renders }) as Node, root);
+		expect(root.querySelector(".panel")).toBeNull();
+
+		open.set(true);
+		// The fragment's ternary and the Show child update in place…
+		expect(root.querySelector(".panel")?.textContent).toBe("open");
+		expect(root.querySelector(".inner")?.textContent).toBe("inner");
+		// …without re-running either component.
+		expect(renders).toEqual({ app: 1, count: 1 });
+
+		open.set(false);
+		expect(root.querySelector(".panel")).toBeNull();
+		expect(root.querySelector(".inner")).toBeNull();
+	});
 });

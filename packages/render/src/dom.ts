@@ -288,6 +288,11 @@ function unwrapAccessor(value: unknown): unknown {
 }
 
 /** Resolve nested accessors/memos while the caller is still tracking. */
+/** Whether `value` is, or (in arrays) contains, an accessor to track. */
+function hasAccessor(value: unknown): boolean {
+	return typeof value === "function" || (Array.isArray(value) && value.some(hasAccessor));
+}
+
 function resolveDeep(value: unknown): unknown {
 	const resolved = typeof value === "function" ? unwrapAccessor(value) : value;
 	if (Array.isArray(resolved)) return resolved.map((item) => resolveDeep(item));
@@ -411,14 +416,18 @@ export function insert(
 			: sharedConfig.hydrate && !marker
 				? [...parent.childNodes]
 				: null;
-	if (typeof accessor !== "function") {
-		replaceNodes(parent, marker, existing, normalizeChild(resolveDeep(accessor)));
+	if (!hasAccessor(accessor)) {
+		replaceNodes(parent, marker, existing, normalizeChild(accessor));
 		return;
 	}
+	// Arrays holding accessors (a component's fragment with a dynamic part) get
+	// their own effect too, so their dependencies don't leak to — and re-run —
+	// whatever effect happens to be inserting them.
+	const read = typeof accessor === "function" ? (accessor as () => unknown) : () => accessor;
 	let prev: Child | Child[] | null = existing;
 	trackEffect(() => {
 		// Resolve nested memos/signals here so dependencies are tracked.
-		const value = resolveDeep((accessor as () => unknown)());
+		const value = resolveDeep(read());
 		untrack(() => {
 			if (patchText(prev, value)) return;
 			prev = replaceNodes(parent, marker, prev, normalizeChild(value));

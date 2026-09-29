@@ -194,8 +194,11 @@ export function Show<T>(props: ShowProps<T>): NodeRange {
 	insert(
 		range.parent,
 		() => {
-			if (!condition()) return untrack(() => props.fallback);
-			const child = untrack(() => props.children);
+			// Children and fallback are read tracked so dynamic expressions in them
+			// (`{a() ? <A /> : null}`) stay live. Components they create are built
+			// untracked, so element children are still stable across unrelated updates.
+			if (!condition()) return props.fallback;
+			const child = props.children;
 			if (typeof child !== "function" || child.length === 0) return child;
 			const current = value() as NonNullable<T>;
 			return untrack(() => (child as (item: NonNullable<T>) => unknown)(current));
