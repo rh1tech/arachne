@@ -15,6 +15,8 @@ export type CatalogEntry = {
 	name: string;
 	/** Set on sub-components documented on their parent's page. */
 	parent?: string;
+	/** Family id when the component shares a page with related components. */
+	family?: string;
 	parts: string[];
 	summary: string;
 	slots: string[];
@@ -28,8 +30,2047 @@ export type CatalogEntry = {
 
 export const catalog: CatalogEntry[] = [
 	{
-		"category": "buttons",
+		"category": "layout",
+		"name": "Stack",
+		"parts": [],
+		"summary": "Flex stack; `gap` maps to `--a-stack-gap`.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "direction",
+				"type": "\"column\" | \"row\"",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "gap",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Stack gap=\"0.5rem\">\n\t<Text>First</Text>\n\t<Text>Second</Text>\n\t<Text>Third</Text>\n</Stack>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "Group",
+		"parts": [],
+		"summary": "Horizontal flex group (Mantine Group / Bootstrap btn-group row).",
+		"slots": [],
+		"props": [
+			{
+				"name": "align",
+				"type": "\"start\" | \"center\" | \"end\" | \"stretch\"",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "gap",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "grow",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "justify",
+				"type": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\"",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "wrap",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Group gap=\"0.5rem\">\n\t<Button variant=\"ghost\" onClick={() => {}}>\n\t\tCancel\n\t</Button>\n\t<Button onClick={() => {}}>Save</Button>\n</Group>",
+		"interactive": false,
+		"logsActions": true
+	},
+	{
+		"category": "layout",
+		"name": "Flex",
+		"parts": [],
+		"summary": "Flexbox layout primitive (direction, gap, align, justify, wrap).",
+		"slots": [],
+		"props": [
+			{
+				"name": "align",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "direction",
+				"type": "\"column\" | \"row\"",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "gap",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "justify",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "wrap",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Flex justify=\"space-between\" align=\"center\">\n\t<Text>Invoices</Text>\n\t<Button size=\"sm\" onClick={() => {}}>\n\t\tExport\n\t</Button>\n</Flex>",
+		"interactive": false,
+		"logsActions": true
+	},
+	{
+		"category": "layout",
+		"name": "Grid",
+		"parts": [
+			"GridItem"
+		],
+		"summary": "CSS grid layout (Bulma-style 2D grid).",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "cols",
+				"type": "number",
+				"required": false,
+				"description": "Column count (CSS grid). Default 12."
+			},
+			{
+				"name": "gap",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "min",
+				"type": "string",
+				"required": false,
+				"description": "Min track width for auto-fit dense grids, e.g. `12rem`. Overrides `cols` when set."
+			}
+		],
+		"code": "<Grid cols={3} gap=\"0.75rem\">\n\t<Box>1</Box>\n\t<Box>2</Box>\n\t<Box>3</Box>\n\t<Box>4</Box>\n\t<Box>5</Box>\n\t<Box>6</Box>\n</Grid>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "GridItem",
+		"parent": "Grid",
+		"parts": [],
+		"summary": "Item of a CSS grid, placed with `span` / `start`.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "span",
+				"type": "number",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "start",
+				"type": "number",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Grid cols={3} gap=\"0.75rem\">\n\t<GridItem span={2}>\n\t\t<Box>Spans two columns</Box>\n\t</GridItem>\n\t<Box>One</Box>\n</Grid>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "Columns",
+		"parts": [
+			"Column"
+		],
+		"summary": "Flexbox columns container (Bulma `columns`).",
+		"slots": [],
+		"props": [
+			{
+				"name": "centered",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "gap",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "mobile",
+				"type": "boolean",
+				"required": false,
+				"description": "Keep columns side-by-side on mobile (default stacks under 768px)."
+			},
+			{
+				"name": "multiline",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "vcentered",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Columns gap=\"1rem\">\n\t<Column>\n\t\t<Box>Auto</Box>\n\t</Column>\n\t<Column size={6}>\n\t\t<Box>Half</Box>\n\t</Column>\n\t<Column>\n\t\t<Box>Auto</Box>\n\t</Column>\n</Columns>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "Column",
+		"parent": "Columns",
+		"parts": [],
+		"summary": "Single column (Bulma `column`).",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "narrow",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "offset",
+				"type": "ColumnSize",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "size",
+				"type": "ColumnSize",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Columns>\n\t<Column size={4}>\n\t\t<Box>One third</Box>\n\t</Column>\n\t<Column>\n\t\t<Box>Rest</Box>\n\t</Column>\n</Columns>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "Container",
+		"parts": [],
+		"summary": "Horizontally centred content container with a max width.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "size",
+				"type": "\"full\" | \"sm\" | \"md\" | \"lg\"",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Container size=\"sm\">\n\t<Box>Content constrained to the small container width.</Box>\n</Container>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "Section",
+		"parts": [],
+		"summary": "Vertical page section with rhythm spacing.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "size",
+				"type": "\"sm\" | \"md\" | \"lg\"",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Section size=\"sm\">\n\t<Title order={3}>Pricing</Title>\n\t<Text>Sections add vertical rhythm between page regions.</Text>\n</Section>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "Level",
+		"parts": [
+			"LevelLeft",
+			"LevelRight",
+			"LevelItem"
+		],
+		"summary": "Horizontal level bar (Bulma `level`).",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "mobile",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Level>\n\t<LevelLeft>\n\t\t<LevelItem>\n\t\t\t<strong>128 deploys</strong>\n\t\t</LevelItem>\n\t</LevelLeft>\n\t<LevelRight>\n\t\t<LevelItem>\n\t\t\t<Button size=\"sm\" onClick={() => {}}>\n\t\t\t\tNew deploy\n\t\t\t</Button>\n\t\t</LevelItem>\n\t</LevelRight>\n</Level>",
+		"interactive": false,
+		"logsActions": true
+	},
+	{
+		"category": "layout",
+		"name": "LevelLeft",
+		"parent": "Level",
+		"parts": [],
+		"summary": "Left-aligned group of a level bar.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Level>\n\t<LevelLeft>\n\t\t<LevelItem>Left side</LevelItem>\n\t</LevelLeft>\n</Level>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "LevelRight",
+		"parent": "Level",
+		"parts": [],
+		"summary": "Right-aligned group of a level bar.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Level>\n\t<LevelRight>\n\t\t<LevelItem>Right side</LevelItem>\n\t</LevelRight>\n</Level>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "LevelItem",
+		"parent": "Level",
+		"parts": [],
+		"summary": "One centred item of a level bar.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Level>\n\t<LevelItem>\n\t\t<Text>Deploys</Text>\n\t</LevelItem>\n\t<LevelItem>\n\t\t<strong>128</strong>\n\t</LevelItem>\n</Level>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "Media",
+		"parts": [
+			"MediaLeft",
+			"MediaContent",
+			"MediaRight"
+		],
+		"summary": "Media object (Bulma / UIkit comment / Bootstrap media).",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Media>\n\t<MediaLeft>\n\t\t<Avatar name=\"Ada Lovelace\" />\n\t</MediaLeft>\n\t<MediaContent>\n\t\t<strong>Ada Lovelace</strong> <Text muted>opened #421</Text>\n\t</MediaContent>\n\t<MediaRight>\n\t\t<Text muted>2h</Text>\n\t</MediaRight>\n</Media>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "MediaLeft",
+		"parent": "Media",
+		"parts": [],
+		"summary": "Leading figure of a media object (avatar, thumbnail).",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Media>\n\t<MediaLeft>\n\t\t<Avatar name=\"Grace Hopper\" />\n\t</MediaLeft>\n\t<MediaContent>Left slot holds the avatar or thumbnail.</MediaContent>\n</Media>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "MediaContent",
+		"parent": "Media",
+		"parts": [],
+		"summary": "Main content of a media object.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Media>\n\t<MediaLeft>\n\t\t<Avatar name=\"Grace Hopper\" />\n\t</MediaLeft>\n\t<MediaContent>The content column grows to fill the row.</MediaContent>\n</Media>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "MediaRight",
+		"parent": "Media",
+		"parts": [],
+		"summary": "Trailing content of a media object (actions).",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Media>\n\t<MediaContent>Row content</MediaContent>\n\t<MediaRight>\n\t\t<Button size=\"sm\" variant=\"ghost\" onClick={() => {}}>\n\t\t\tReply\n\t\t</Button>\n\t</MediaRight>\n</Media>",
+		"interactive": false,
+		"logsActions": true
+	},
+	{
+		"category": "layout",
+		"name": "Center",
+		"family": "spacing",
+		"parts": [],
+		"summary": "Centres its content horizontally and vertically.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "inline",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Center style={{ \"min-height\": \"6rem\" }}>\n\t<Text muted>Centered on both axes</Text>\n</Center>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "Space",
+		"family": "spacing",
+		"parts": [],
+		"summary": "Fixed spacer; `h` / `w` accept numbers (px) or CSS lengths.",
+		"slots": [],
+		"props": [
+			{
+				"name": "h",
+				"type": "string | number",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "w",
+				"type": "string | number",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<div>\n\t<Text>Above</Text>\n\t<Space h=\"1.5rem\" />\n\t<Text>Below, 1.5rem later</Text>\n</div>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "Divider",
+		"family": "spacing",
+		"parts": [],
+		"summary": "Horizontal rule.",
+		"slots": [],
+		"props": [],
+		"code": "<Stack gap=\"0.75rem\">\n\t<Text>Account</Text>\n\t<Divider />\n\t<Text>Billing</Text>\n</Stack>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "AspectRatio",
+		"parts": [],
+		"summary": "Fixed-ratio box (`--a-aspect`).",
+		"slots": [
+			"root",
+			"inner"
+		],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "ratio",
+				"type": "number",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<AspectRatio style={{ \"max-width\": \"20rem\" }} ratio={16 / 9}>\n\t<img src=\"/images/16-9.jpg\" alt=\"16 by 9 placeholder\" />\n</AspectRatio>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "ScrollArea",
+		"parts": [],
+		"summary": "Scrollable region with a max height.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "maxHeight",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<ScrollArea maxHeight=\"6rem\">\n\t<Stack gap=\"0.35rem\">\n\t\t<Text>Deploy #128</Text>\n\t\t<Text>Deploy #127</Text>\n\t\t<Text>Deploy #126</Text>\n\t\t<Text>Deploy #125</Text>\n\t\t<Text>Deploy #124</Text>\n\t\t<Text>Deploy #123</Text>\n\t</Stack>\n</ScrollArea>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "Splitter",
+		"parts": [],
+		"summary": "Two resizable panes (pointer + ← → Home End).",
+		"slots": [
+			"root",
+			"handle",
+			"pane"
+		],
+		"props": [
+			{
+				"name": "initial",
+				"type": "number",
+				"required": false,
+				"description": "Left pane ratio 0–1, default 0.4 (read once, at mount)."
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": "Accessible name for the handle (default \"Resize panes\")."
+			},
+			{
+				"name": "left",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "max",
+				"type": "number",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "min",
+				"type": "number",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "right",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Splitter\n\tstyle={{ height: \"8rem\" }}\n\tlabel=\"Resize panes\"\n\tinitial={40}\n\tleft={<Text>Files</Text>}\n\tright={<Text>Editor</Text>}\n/>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "Masonry",
+		"parts": [],
+		"summary": "Masonry layout of variable-height items in columns.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "columns",
+				"type": "2 | 3 | 4",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst notes = [\n\t\t{ title: \"Release 2.4\", body: \"Dark theme, a component reference and interactive examples.\" },\n\t\t{ title: \"Standup\", body: \"Ship the tree search.\" },\n\t\t{\n\t\t\ttitle: \"Design review\",\n\t\t\tbody: \"Tighten the button group borders, fix the burger icon, make quote backgrounds optional and give the tree folder icons.\",\n\t\t},\n\t\t{ title: \"Bug\", body: \"PIN input needed two Backspaces.\" },\n\t\t{ title: \"Idea\", body: \"Masonry packs cards of different heights into columns without gaps.\" },\n\t\t{ title: \"Reading\", body: \"WAI-ARIA tree pattern.\" },\n\t];\n\treturn (\n\t\t<Masonry columns={3}>\n\t\t\t<For each={notes}>\n\t\t\t\t{(note) => (\n\t\t\t\t\t<Paper withBorder padding=\"md\">\n\t\t\t\t\t\t<strong>{note.title}</strong>\n\t\t\t\t\t\t<Text muted>{note.body}</Text>\n\t\t\t\t\t</Paper>\n\t\t\t\t)}\n\t\t\t</For>\n\t\t</Masonry>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "Reel",
+		"parts": [],
+		"summary": "Horizontal scroll reel.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Reel>\n\t<img src=\"/images/1.jpg\" alt=\"Slide 1\" width=\"240\" height=\"160\" />\n\t<img src=\"/images/2.jpg\" alt=\"Slide 2\" width=\"240\" height=\"160\" />\n\t<img src=\"/images/3.jpg\" alt=\"Slide 3\" width=\"240\" height=\"160\" />\n\t<img src=\"/images/4.jpg\" alt=\"Slide 4\" width=\"240\" height=\"160\" />\n</Reel>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "Bleed",
+		"parts": [],
+		"summary": "Negative horizontal margin to break out of padding.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "x",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Bleed x=\"1rem\">\n\t<Text>Full-width strip that ignores its container's padding.</Text>\n</Bleed>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "AppShell",
+		"parts": [],
+		"summary": "Application chrome: optional sidebar + header around main content.",
+		"slots": [
+			"root",
+			"content",
+			"header",
+			"main",
+			"sidebar"
+		],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "contentAs",
+				"type": "\"main\" | \"div\"",
+				"required": false,
+				"description": "Element for the content area (default `\"main\"`). Use `\"div\"` when the shell is nested in a page that already has a `<main>` landmark."
+			},
+			{
+				"name": "header",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "sidebar",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "const sections = [\n\t{ id: \"overview\", label: \"Overview\" },\n\t{ id: \"deploys\", label: \"Deploys\" },\n\t{ id: \"settings\", label: \"Settings\" },\n];\n\nfunction Example() {\n\tconst page = signal(\"deploys\");\n\treturn (\n\t\t<AppShell\n\t\t\tcontentAs=\"div\"\n\t\t\theader={<strong>Acme Console</strong>}\n\t\t\tsidebar={<SidebarNav label=\"Main\" items={sections} value={page()} onChange={page.set} />}\n\t\t>\n\t\t\t<Text>{sections.find((s) => s.id === page())?.label} page</Text>\n\t\t</AppShell>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "PageHeader",
+		"parts": [],
+		"summary": "Page title block with breadcrumb, description and actions.",
+		"slots": [
+			"root",
+			"actions",
+			"crumb",
+			"description",
+			"row",
+			"text",
+			"title"
+		],
+		"props": [
+			{
+				"name": "title",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "actions",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "breadcrumb",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "description",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<PageHeader\n\ttitle=\"Deploys\"\n\tdescription=\"Every push to a branch creates a deploy.\"\n\tactions={<Button onClick={() => {}}>New deploy</Button>}\n/>",
+		"interactive": false,
+		"logsActions": true
+	},
+	{
+		"category": "layout",
+		"name": "Hero",
+		"parts": [
+			"HeroHead",
+			"HeroBody",
+			"HeroFoot"
+		],
+		"summary": "Full-bleed page hero (Bulma / Bootstrap jumbotron).",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "size",
+				"type": "HeroSize",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "tone",
+				"type": "HeroTone",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Hero tone=\"accent\" size=\"sm\">\n\t<HeroBody>\n\t\t<Title order={2} size={3}>\n\t\t\tShip faster with Arachne\n\t\t</Title>\n\t\t<Text>Signals, SSR and 330+ accessible components.</Text>\n\t</HeroBody>\n</Hero>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "HeroHead",
+		"parent": "Hero",
+		"parts": [],
+		"summary": "Top area of a hero (e.g. navigation).",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Hero tone=\"dark\" size=\"sm\">\n\t<HeroHead>\n\t\t<strong>Arachne</strong>\n\t</HeroHead>\n\t<HeroBody>Hero head sits at the top, for a navbar or brand.</HeroBody>\n</Hero>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "HeroBody",
+		"parent": "Hero",
+		"parts": [],
+		"summary": "Main content area of a hero.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Hero size=\"sm\">\n\t<HeroBody>The body grows to fill the hero and centres its content.</HeroBody>\n</Hero>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "HeroFoot",
+		"parent": "Hero",
+		"parts": [],
+		"summary": "Bottom area of a hero (e.g. tabs).",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Hero tone=\"light\" size=\"sm\">\n\t<HeroBody>Hero with a footer row.</HeroBody>\n\t<HeroFoot>\n\t\t<Text muted>Trusted by 2,000 teams</Text>\n\t</HeroFoot>\n</Hero>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "Footer",
+		"family": "footer",
+		"parts": [],
+		"summary": "Page footer region.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Footer>\n\t<Text muted>© 2026 Acme Inc. · Privacy · Terms</Text>\n</Footer>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "SiteFooter",
+		"family": "footer",
+		"parts": [],
+		"summary": "Marketing footer.",
+		"slots": [
+			"root",
+			"brand",
+			"column",
+			"columnTitle",
+			"grid",
+			"link",
+			"meta"
+		],
+		"props": [
+			{
+				"name": "brand",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "columns",
+				"type": "{ title: string; links: SiteFooterLink[]; }[]",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "meta",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<SiteFooter\n\tbrand=\"Arachne\"\n\tcolumns={[\n\t\t{\n\t\t\ttitle: \"Product\",\n\t\t\tlinks: [\n\t\t\t\t{ label: \"Pricing\", href: \"#pricing\" },\n\t\t\t\t{ label: \"Changelog\", href: \"#changelog\" },\n\t\t\t],\n\t\t},\n\t\t{\n\t\t\ttitle: \"Company\",\n\t\t\tlinks: [\n\t\t\t\t{ label: \"About\", href: \"#about\" },\n\t\t\t\t{ label: \"Careers\", href: \"#careers\" },\n\t\t\t],\n\t\t},\n\t]}\n\tmeta=\"© 2026 Arachne\"\n/>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "Sticky",
+		"family": "sticky",
+		"parts": [],
+		"summary": "Sticks its content to an edge of the scroll container.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "offset",
+				"type": "number",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "position",
+				"type": "\"top\" | \"bottom\"",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Sticky offset={8}>\n\t<Paper withBorder>Sticks 8px from the top while its container scrolls.</Paper>\n</Sticky>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "layout",
+		"name": "StickyBar",
+		"family": "sticky",
+		"parts": [],
+		"summary": "Bar pinned to the top/bottom of its scroll container.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "position",
+				"type": "\"top\" | \"bottom\"",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<StickyBar position=\"bottom\">\n\t<Text>You have unsaved changes.</Text>\n\t<Button size=\"sm\" onClick={() => {}}>\n\t\tSave\n\t</Button>\n</StickyBar>",
+		"interactive": false,
+		"logsActions": true
+	},
+	{
+		"category": "layout",
+		"name": "Affix",
+		"family": "sticky",
+		"parts": [],
+		"summary": "Viewport-pinned container.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "offset",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "position",
+				"type": "\"top-left\" | \"top-right\" | \"bottom-left\" | \"bottom-right\"",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Affix position=\"bottom-right\" offset=\"1rem\">\n\t<Button size=\"sm\" onClick={() => {}}>\n\t\tFeedback\n\t</Button>\n</Affix>",
+		"interactive": false,
+		"logsActions": true
+	},
+	{
+		"category": "surfaces",
+		"name": "Card",
+		"parts": [
+			"CardHeader",
+			"CardHeaderTitle",
+			"CardImage",
+			"CardContent",
+			"CardFooter",
+			"CardFooterItem"
+		],
+		"summary": "Content card (Bulma/Mantine/Bootstrap).",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "const cardImage = \"/images/cover.jpg\";\n\n<Card style={{ \"max-width\": \"22rem\" }}>\n\t<CardImage>\n\t\t<img src={cardImage} alt=\"Project cover\" width=\"640\" height=\"280\" />\n\t</CardImage>\n\t<CardContent>\n\t\t<strong>marketing-site</strong>\n\t\t<Text muted>Deployed 4 minutes ago from main.</Text>\n\t</CardContent>\n\t<CardFooter>\n\t\t<CardFooterItem onClick={() => {}}>Visit</CardFooterItem>\n\t\t<CardFooterItem onClick={() => {}}>Logs</CardFooterItem>\n\t</CardFooter>\n</Card>",
+		"interactive": false,
+		"logsActions": true
+	},
+	{
+		"category": "surfaces",
+		"name": "CardHeader",
+		"parent": "Card",
+		"parts": [],
+		"summary": "Card header row.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Card>\n\t<CardHeader>\n\t\t<CardHeaderTitle>Billing</CardHeaderTitle>\n\t</CardHeader>\n\t<CardContent>Pro plan · renews Oct 1</CardContent>\n</Card>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "surfaces",
+		"name": "CardHeaderTitle",
+		"parent": "Card",
+		"parts": [],
+		"summary": "Title text inside a card header.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Card>\n\t<CardHeader>\n\t\t<CardHeaderTitle>Billing</CardHeaderTitle>\n\t</CardHeader>\n</Card>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "surfaces",
+		"name": "CardImage",
+		"parent": "Card",
+		"parts": [],
+		"summary": "Full-bleed media at the top of a card.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "const cardImage = \"/images/cover.jpg\";\n\n<Card style={{ \"max-width\": \"22rem\" }}>\n\t<CardImage>\n\t\t<img src={cardImage} alt=\"Project cover\" width=\"640\" height=\"280\" />\n\t</CardImage>\n</Card>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "surfaces",
+		"name": "CardContent",
+		"parent": "Card",
+		"parts": [],
+		"summary": "Padded body of a card.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Card>\n\t<CardContent>Card content is padded and flows like body text.</CardContent>\n</Card>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "surfaces",
+		"name": "CardFooter",
+		"parent": "Card",
+		"parts": [],
+		"summary": "Card footer row of actions.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Card>\n\t<CardContent>Delete this project?</CardContent>\n\t<CardFooter>\n\t\t<CardFooterItem onClick={() => {}}>Cancel</CardFooterItem>\n\t\t<CardFooterItem onClick={() => {}}>Delete</CardFooterItem>\n\t</CardFooter>\n</Card>",
+		"interactive": false,
+		"logsActions": true
+	},
+	{
+		"category": "surfaces",
+		"name": "CardFooterItem",
+		"parent": "Card",
+		"parts": [],
+		"summary": "One action cell in a card footer (a button when `onClick` is set).",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "onClick",
+				"type": "(e: MouseEvent) => void",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Card>\n\t<CardFooter>\n\t\t<CardFooterItem onClick={() => {}}>\n\t\t\tSave\n\t\t</CardFooterItem>\n\t\t<CardFooterItem onClick={() => {}}>Cancel</CardFooterItem>\n\t</CardFooter>\n</Card>",
+		"interactive": false,
+		"logsActions": true
+	},
+	{
+		"category": "surfaces",
+		"name": "Box",
+		"parts": [],
+		"summary": "Bordered surface for grouping content.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Box>Boxes group related content on a raised surface.</Box>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "surfaces",
+		"name": "Panel",
+		"parts": [
+			"PanelHeading",
+			"PanelTabs",
+			"PanelTab",
+			"PanelBlock"
+		],
+		"summary": "Side panel / filter panel (Bulma).",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": "Accessible name of the panel's `<nav>` landmark; set it when a page has several panels."
+			}
+		],
+		"code": "function Example() {\n\tconst repos = [\n\t\t{ name: \"arachne\", visibility: \"public\" },\n\t\t{ name: \"marketing-site\", visibility: \"private\" },\n\t\t{ name: \"design-tokens\", visibility: \"public\" },\n\t];\n\tconst tab = signal(\"all\");\n\tconst active = signal(\"arachne\");\n\tconst shown = () => repos.filter((r) => tab() === \"all\" || r.visibility === tab());\n\treturn (\n\t\t<Panel label=\"Repositories\" style={{ \"max-width\": \"22rem\" }}>\n\t\t\t<PanelHeading>Repositories</PanelHeading>\n\t\t\t<PanelTabs>\n\t\t\t\t<For each={[\"all\", \"public\", \"private\"]}>\n\t\t\t\t\t{(id) => (\n\t\t\t\t\t\t<PanelTab active={tab() === id} onClick={() => tab.set(id)}>\n\t\t\t\t\t\t\t{id[0]?.toUpperCase() + id.slice(1)}\n\t\t\t\t\t\t</PanelTab>\n\t\t\t\t\t)}\n\t\t\t\t</For>\n\t\t\t</PanelTabs>\n\t\t\t<For each={shown()}>\n\t\t\t\t{(repo) => (\n\t\t\t\t\t<PanelBlock active={active() === repo.name} onClick={() => active.set(repo.name)}>\n\t\t\t\t\t\t{repo.name}\n\t\t\t\t\t</PanelBlock>\n\t\t\t\t)}\n\t\t\t</For>\n\t\t</Panel>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "surfaces",
+		"name": "PanelHeading",
+		"parent": "Panel",
+		"parts": [],
+		"summary": "Heading row of a panel.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Panel label=\"Projects\">\n\t<PanelHeading>Repositories</PanelHeading>\n\t<PanelBlock>arachne</PanelBlock>\n</Panel>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "surfaces",
+		"name": "PanelTabs",
+		"parent": "Panel",
+		"parts": [],
+		"summary": "Tab row inside a panel.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst tab = signal(\"all\");\n\treturn (\n\t\t<Panel label=\"Filter tabs\">\n\t\t\t<PanelTabs>\n\t\t\t\t<PanelTab active={tab() === \"all\"} onClick={() => tab.set(\"all\")}>\n\t\t\t\t\tAll\n\t\t\t\t</PanelTab>\n\t\t\t\t<PanelTab active={tab() === \"forks\"} onClick={() => tab.set(\"forks\")}>\n\t\t\t\t\tForks\n\t\t\t\t</PanelTab>\n\t\t\t</PanelTabs>\n\t\t</Panel>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "surfaces",
+		"name": "PanelTab",
+		"parent": "Panel",
+		"parts": [],
+		"summary": "One tab in a panel's tab row.",
+		"slots": [],
+		"props": [
+			{
+				"name": "active",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "onClick",
+				"type": "(e: MouseEvent) => void",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst tab = signal(\"all\");\n\treturn (\n\t\t<Panel label=\"Sources\">\n\t\t\t<PanelTabs>\n\t\t\t\t<PanelTab active={tab() === \"all\"} onClick={() => tab.set(\"all\")}>\n\t\t\t\t\tAll\n\t\t\t\t</PanelTab>\n\t\t\t\t<PanelTab active={tab() === \"forks\"} onClick={() => tab.set(\"forks\")}>\n\t\t\t\t\tForks\n\t\t\t\t</PanelTab>\n\t\t\t</PanelTabs>\n\t\t</Panel>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "surfaces",
+		"name": "PanelBlock",
+		"parent": "Panel",
+		"parts": [],
+		"summary": "Panel row; renders a `<button>` when `onClick` is set.",
+		"slots": [],
+		"props": [
+			{
+				"name": "active",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "onClick",
+				"type": "(e: MouseEvent) => void",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst active = signal(\"marketing-site\");\n\treturn (\n\t\t<Panel label=\"Recent projects\">\n\t\t\t<PanelBlock\n\t\t\t\tactive={active() === \"marketing-site\"}\n\t\t\t\tonClick={() => active.set(\"marketing-site\")}\n\t\t\t>\n\t\t\t\tmarketing-site\n\t\t\t</PanelBlock>\n\t\t\t<PanelBlock active={active() === \"docs\"} onClick={() => active.set(\"docs\")}>\n\t\t\t\tdocs\n\t\t\t</PanelBlock>\n\t\t</Panel>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "surfaces",
+		"name": "Paper",
+		"family": "paper",
+		"parts": [],
+		"summary": "Surface paper (Mantine).",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "padding",
+				"type": "\"sm\" | \"md\" | \"lg\"",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "shadow",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "withBorder",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Paper padding=\"lg\" shadow withBorder>\n\tPaper is the plainest surface: padding, radius, optional border and shadow.\n</Paper>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "surfaces",
+		"name": "Tile",
+		"family": "paper",
+		"parts": [],
+		"summary": "Nestable tile grid (Bulma).",
+		"slots": [],
+		"props": [
+			{
+				"name": "ancestor",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "child",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "parent",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "size",
+				"type": "1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "vertical",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Tile ancestor>\n\t<Tile parent size={8}>\n\t\t<Tile child>\n\t\t\t<Box>Wide tile</Box>\n\t\t</Tile>\n\t</Tile>\n\t<Tile parent>\n\t\t<Tile child>\n\t\t\t<Box>Narrow</Box>\n\t\t</Tile>\n\t</Tile>\n</Tile>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "surfaces",
+		"name": "Block",
+		"family": "paper",
+		"parts": [],
+		"summary": "Vertical spacing block (Bulma).",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<div>\n\t<Block>A block adds the standard bottom margin between siblings.</Block>\n\t<Block>Like this second one.</Block>\n</div>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "surfaces",
+		"name": "Inset",
+		"family": "paper",
+		"parts": [],
+		"summary": "Recessed panel (canvas background, border) for secondary content inside a surface.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Inset>\n\t<Text muted>Recessed area for secondary content, like a settings preview.</Text>\n</Inset>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "typography",
+		"name": "Title",
+		"family": "title",
+		"parts": [],
+		"summary": "Section title. `order` picks the semantic level and `size` only the look, so a small title never breaks the heading outline.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "order",
+				"type": "HeadingOrder",
+				"required": false,
+				"description": "Heading level (`<h1>`–`<h6>`) for the document outline. Default 2."
+			},
+			{
+				"name": "size",
+				"type": "HeadingOrder",
+				"required": false,
+				"description": "Visual size 1–6 (1 is largest), independent of the level. Default: `order`, else 3."
+			},
+			{
+				"name": "spaced",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Title order={3}>\n\tProject settings\n</Title>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "typography",
+		"name": "Subtitle",
+		"family": "title",
+		"parts": [],
+		"summary": "Secondary line under a title.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "order",
+				"type": "HeadingOrder",
+				"required": false,
+				"description": "Render as a heading at this level; by default a subtitle is a `<p>`."
+			},
+			{
+				"name": "size",
+				"type": "HeadingOrder",
+				"required": false,
+				"description": "Visual size 1–6. Default 5."
+			}
+		],
+		"code": "<Subtitle>Manage domains, builds and access.</Subtitle>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "typography",
+		"name": "Heading",
+		"family": "title",
+		"parts": [],
+		"summary": "Section heading whose level can change after mount.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "level",
+				"type": "1 | 2 | 3",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Heading level={3}>\n\tTeam members\n</Heading>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "typography",
+		"name": "Text",
+		"family": "text",
+		"parts": [],
+		"summary": "Body text.",
+		"slots": [],
+		"props": [
+			{
+				"name": "as",
+				"type": "\"div\" | \"p\" | \"span\"",
+				"required": false,
+				"description": "Element to render; fixed at mount."
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "danger",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "muted",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Text muted>\n\tLast deployed 4 minutes ago by Ada.\n</Text>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "typography",
+		"name": "Prose",
+		"family": "text",
+		"parts": [],
+		"summary": "Typographic container for rich text (headings, paragraphs, lists, links), e.g. rendered Markdown.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "measure",
+				"type": "boolean",
+				"required": false,
+				"description": "Cap the line length for readability (default true)."
+			}
+		],
+		"code": "<Prose>\n\t<h3>Release notes</h3>\n\t<p>\n\t\tThis release focuses on <a href=\"#a11y\">accessibility</a>: every overlay now traps focus\n\t\tand restores it on close.\n\t</p>\n\t<ul>\n\t\t<li>Keyboard support for menus and trees</li>\n\t\t<li>Reduced-motion aware transitions</li>\n\t</ul>\n</Prose>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "typography",
+		"name": "Article",
+		"family": "text",
+		"parts": [
+			"ArticleTitle",
+			"ArticleMeta"
+		],
+		"summary": "Article container with readable text styles.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Article>\n\t<ArticleTitle order={3}>Designing a kit-wide customization system</ArticleTitle>\n\t<ArticleMeta>Ada Lovelace · Sep 12, 2026 · 6 min read</ArticleMeta>\n\t<p>Every component forwards attributes and exposes named slots…</p>\n</Article>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "typography",
+		"name": "ArticleTitle",
+		"parent": "Article",
+		"parts": [],
+		"summary": "Article heading.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "order",
+				"type": "HeadingLevel",
+				"required": false,
+				"description": "Heading level, to fit the page outline. Default 1."
+			}
+		],
+		"code": "<Article>\n\t<ArticleTitle order={3}>\n\t\tDesigning a kit-wide customization system\n\t</ArticleTitle>\n</Article>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "typography",
+		"name": "ArticleMeta",
+		"parent": "Article",
+		"parts": [],
+		"summary": "Article byline / metadata line.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Article>\n\t<ArticleTitle order={3}>Release 2.4</ArticleTitle>\n\t<ArticleMeta>Grace Hopper · Sep 1, 2026</ArticleMeta>\n</Article>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "typography",
+		"name": "Quote",
+		"family": "text",
+		"parts": [],
+		"summary": "Block quote with an optional citation.",
+		"slots": [
+			"root",
+			"body",
+			"cite"
+		],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "cite",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "variant",
+				"type": "\"soft\" | \"plain\"",
+				"required": false,
+				"description": "`\"soft\"` (default) adds a tinted background; `\"plain\"` keeps only the accent rule."
+			}
+		],
+		"code": "<Stack gap=\"1rem\">\n\t<Quote cite=\"Grace Hopper\">\n\t\tThe most dangerous phrase in the language is “we've always done it this way.”\n\t</Quote>\n\t<Quote variant=\"plain\" cite=\"Alan Kay\">\n\t\tThe best way to predict the future is to invent it.\n\t</Quote>\n</Stack>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "typography",
+		"name": "Anchor",
+		"parts": [],
+		"summary": "Text link; `external` opens a new tab with `rel=\"noreferrer noopener\"`.",
+		"slots": [],
+		"props": [
+			{
+				"name": "href",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "external",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Anchor href=\"/docs\">\n\tRead the docs\n</Anchor>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "typography",
+		"name": "Mark",
+		"family": "highlighting",
+		"parts": [],
+		"summary": "Highlight text you choose (`<mark>`, highlighter-yellow by default). To mark every match of a query inside a string, use `Highlight`.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "tone",
+				"type": "\"accent\" | \"warning\" | \"success\"",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Text>\n\tDeploys run on <Mark>every push</Mark> to main.\n</Text>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "typography",
+		"name": "Highlight",
+		"family": "highlighting",
+		"parts": [],
+		"summary": "Mark every case-insensitive match of `highlight` inside `text`, e.g. search results. To mark a span you choose, use `Mark`.",
+		"slots": [
+			"root",
+			"mark"
+		],
+		"props": [
+			{
+				"name": "highlight",
+				"type": "string | string[]",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "text",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "tone",
+				"type": "\"accent\" | \"warning\" | \"success\"",
+				"required": false,
+				"description": "Mark colour (default `\"warning\"`, highlighter yellow), as on `Mark`."
+			}
+		],
+		"code": "<Highlight text=\"Deploy marketing-site to production\" highlight=\"deploy\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "typography",
+		"name": "Truncate",
+		"family": "truncation",
+		"parts": [],
+		"summary": "Ellipsis after `lines` lines.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "lines",
+				"type": "number",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Truncate style={{ \"max-width\": \"22rem\" }} lines={2}>\n\tThe customization system covers every component: attributes are forwarded to the host\n\telement, classes and styles target named slots, unstyled drops the built-in look, and\n\tconfigureUI sets app-wide defaults. Text past the second line is cut with an ellipsis.\n</Truncate>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "typography",
+		"name": "Leader",
+		"family": "truncation",
+		"parts": [],
+		"summary": "UIkit-style dotted leader row.",
+		"slots": [
+			"root",
+			"dots",
+			"label",
+			"value"
+		],
+		"props": [
+			{
+				"name": "label",
+				"type": "content",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "value",
+				"type": "content",
+				"required": true,
+				"description": ""
+			}
+		],
+		"code": "<Leader label=\"Espresso\" value=\"$3.50\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "typography",
+		"name": "NumberFormatter",
+		"family": "formatted",
+		"parts": [],
+		"summary": "Formats a number with separators, decimals, prefix and suffix.",
+		"slots": [],
+		"props": [
+			{
+				"name": "value",
+				"type": "number",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "decimalScale",
+				"type": "number",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "prefix",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "suffix",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "thousandSeparator",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<NumberFormatter value={1234567.891} decimalScale={2} />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "typography",
+		"name": "RelativeTime",
+		"family": "formatted",
+		"parts": [],
+		"summary": "Relative time such as \"5 minutes ago\", with the full date in `title`.",
+		"slots": [],
+		"props": [
+			{
+				"name": "value",
+				"type": "number",
+				"required": true,
+				"description": "Absolute timestamp (ms)."
+			}
+		],
+		"code": "<RelativeTime value={Date.now() - 5 * 60_000} />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "typography",
+		"name": "Countdown",
+		"family": "formatted",
+		"parts": [],
+		"summary": "Live countdown.",
+		"slots": [
+			"root",
+			"suffix",
+			"unit",
+			"value"
+		],
+		"props": [
+			{
+				"name": "to",
+				"type": "number",
+				"required": true,
+				"description": "Absolute target timestamp (ms)."
+			},
+			{
+				"name": "units",
+				"type": "{ d: string; h: string; m: string; s: string; }",
+				"required": false,
+				"description": "Unit suffixes (default d/h/m/s)."
+			}
+		],
+		"code": "<Countdown to={Date.now() + 3 * 86_400_000} />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "typography",
+		"name": "VisuallyHidden",
+		"parts": [],
+		"summary": "Screen-reader-only text.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Button variant=\"ghost\" onClick={() => {}}>\n\t★<VisuallyHidden>Add to favourites</VisuallyHidden>\n</Button>",
+		"interactive": false,
+		"logsActions": true
+	},
+	{
+		"category": "typography",
+		"name": "Icon",
+		"family": "icon",
+		"parts": [],
+		"summary": "Built-in SVG icon.",
+		"slots": [],
+		"props": [
+			{
+				"name": "name",
+				"type": "IconName",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": "Accessible name; without it the icon is decorative (`aria-hidden`)."
+			},
+			{
+				"name": "size",
+				"type": "number | \"sm\" | \"md\" | \"lg\"",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Icon name=\"bell\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "typography",
+		"name": "IconBadge",
+		"family": "icon",
+		"parts": [],
+		"summary": "Colored circular/square icon badge.",
+		"slots": [
+			"root",
+			"icon"
+		],
+		"props": [
+			{
+				"name": "name",
+				"type": "IconName",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "size",
+				"type": "\"sm\" | \"md\" | \"lg\"",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "tone",
+				"type": "\"accent\" | \"warning\" | \"success\" | \"danger\" | \"muted\"",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<IconBadge name=\"zap\" tone=\"accent\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "actions",
 		"name": "Button",
+		"family": "button",
 		"parts": [],
 		"summary": "Button (or link when `href` is set).",
 		"slots": [
@@ -90,7 +2131,7 @@ export const catalog: CatalogEntry[] = [
 			},
 			{
 				"name": "size",
-				"type": "\"xs\" | \"sm\" | \"md\" | \"lg\"",
+				"type": "\"sm\" | \"md\" | \"lg\" | \"xs\"",
 				"required": false,
 				"description": ""
 			},
@@ -114,7 +2155,7 @@ export const catalog: CatalogEntry[] = [
 			},
 			{
 				"name": "variant",
-				"type": "\"solid\" | \"default\" | \"soft\" | \"outline\" | \"ghost\" | \"link\" | \"danger\" | \"warning\" | \"success\"",
+				"type": "\"default\" | \"link\" | \"soft\" | \"warning\" | \"success\" | \"danger\" | \"solid\" | \"outline\" | \"ghost\"",
 				"required": false,
 				"description": ""
 			}
@@ -124,8 +2165,107 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": true
 	},
 	{
-		"category": "buttons",
+		"category": "actions",
+		"name": "LoadingButton",
+		"family": "button",
+		"parts": [],
+		"summary": "Button that shows a spinner next to its label while busy.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "disabled",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "loading",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "onClick",
+				"type": "(e: MouseEvent) => void",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "size",
+				"type": "\"sm\" | \"md\"",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "type",
+				"type": "\"button\" | \"submit\" | \"reset\"",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "variant",
+				"type": "\"danger\" | \"solid\" | \"ghost\"",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<LoadingButton loading>\n\tSaving…\n</LoadingButton>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "actions",
+		"name": "ConfirmButton",
+		"family": "button",
+		"parts": [],
+		"summary": "Two-step confirm control (click → confirm).",
+		"slots": [],
+		"props": [
+			{
+				"name": "label",
+				"type": "content",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "onConfirm",
+				"type": "() => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "confirmLabel",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "size",
+				"type": "\"sm\" | \"md\"",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "variant",
+				"type": "\"danger\" | \"solid\" | \"ghost\"",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<ConfirmButton label=\"Delete project\" onConfirm={() => {}} />",
+		"interactive": false,
+		"logsActions": true
+	},
+	{
+		"category": "actions",
 		"name": "UnstyledButton",
+		"family": "button",
 		"parts": [],
 		"summary": "Button with browser chrome reset — bring your own look.",
 		"slots": [],
@@ -160,7 +2300,7 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": true
 	},
 	{
-		"category": "buttons",
+		"category": "actions",
 		"name": "ButtonGroup",
 		"parts": [],
 		"summary": "Bootstrap-style button group.",
@@ -190,7 +2330,7 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": true
 	},
 	{
-		"category": "buttons",
+		"category": "actions",
 		"name": "SplitButton",
 		"parts": [],
 		"summary": "Primary action + caret menu.",
@@ -239,7 +2379,7 @@ export const catalog: CatalogEntry[] = [
 			},
 			{
 				"name": "variant",
-				"type": "\"solid\" | \"ghost\" | \"danger\"",
+				"type": "\"danger\" | \"solid\" | \"ghost\"",
 				"required": false,
 				"description": ""
 			}
@@ -249,92 +2389,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "buttons",
-		"name": "ToggleGroup",
-		"parts": [],
-		"summary": "Pressed-toggle group.",
-		"slots": [
-			"root",
-			"item"
-		],
-		"props": [
-			{
-				"name": "items",
-				"type": "ToggleItem[]",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "onChange",
-				"type": "(value: string | string[] | null) => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "value",
-				"type": "string | string[]",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": "Accessible name for the group."
-			},
-			{
-				"name": "multiple",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst formats = signal<string[]>([\"bold\"]);\n\treturn (\n\t\t<ToggleGroup\n\t\t\tlabel=\"Formatting\"\n\t\t\tmultiple\n\t\t\titems={[\n\t\t\t\t{ id: \"bold\", label: \"Bold\" },\n\t\t\t\t{ id: \"italic\", label: \"Italic\" },\n\t\t\t\t{ id: \"underline\", label: \"Underline\" },\n\t\t\t]}\n\t\t\tvalue={formats()}\n\t\t\tonChange={(next) => formats.set(Array.isArray(next) ? next : next ? [next] : [])}\n\t\t/>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "buttons",
-		"name": "Segmented",
-		"parts": [],
-		"summary": "Pressed-button group.",
-		"slots": [
-			"root",
-			"segment"
-		],
-		"props": [
-			{
-				"name": "items",
-				"type": "{ id: string; label: string; disabled?: boolean; }[]",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "onChange",
-				"type": "(id: string) => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "value",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": "Accessible name for the group (default \"Options\")."
-			}
-		],
-		"code": "function Example() {\n\tconst range = signal(\"7d\");\n\treturn (\n\t\t<Segmented\n\t\t\tlabel=\"Range\"\n\t\t\titems={[\n\t\t\t\t{ id: \"24h\", label: \"24h\" },\n\t\t\t\t{ id: \"7d\", label: \"7 days\" },\n\t\t\t\t{ id: \"30d\", label: \"30 days\" },\n\t\t\t]}\n\t\t\tvalue={range()}\n\t\t\tonChange={range.set}\n\t\t/>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "buttons",
+		"category": "actions",
 		"name": "ActionIcon",
+		"family": "icon-buttons",
 		"parts": [],
 		"summary": "Icon-only button (`label` is its accessible name).",
 		"slots": [],
@@ -381,8 +2438,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": true
 	},
 	{
-		"category": "buttons",
+		"category": "actions",
 		"name": "CloseButton",
+		"family": "icon-buttons",
 		"parts": [],
 		"summary": "Dismiss control (×).",
 		"slots": [],
@@ -411,44 +2469,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": true
 	},
 	{
-		"category": "buttons",
-		"name": "Burger",
-		"parts": [],
-		"summary": "Standalone hamburger control (Mantine Burger).",
-		"slots": [],
-		"props": [
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "onClick",
-				"type": "(e: MouseEvent) => void",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "opened",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "size",
-				"type": "\"sm\" | \"md\"",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst opened = signal(false);\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<Burger\n\t\t\t\topened={opened()}\n\t\t\t\tlabel={opened() ? \"Close navigation\" : \"Open navigation\"}\n\t\t\t\tonClick={() => opened.set(!opened())}\n\t\t\t/>\n\t\t\t<Text muted>Navigation is {opened() ? \"open\" : \"closed\"}</Text>\n\t\t</Group>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "buttons",
+		"category": "actions",
 		"name": "FloatingActionButton",
+		"family": "icon-buttons",
 		"parts": [],
 		"summary": "Pinned primary action. `children` replaces the icon.",
 		"slots": [
@@ -482,7 +2505,7 @@ export const catalog: CatalogEntry[] = [
 			},
 			{
 				"name": "position",
-				"type": "\"bottom-right\" | \"bottom-left\"",
+				"type": "\"bottom-left\" | \"bottom-right\"",
 				"required": false,
 				"description": ""
 			}
@@ -492,104 +2515,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": true
 	},
 	{
-		"category": "buttons",
-		"name": "LoadingButton",
-		"parts": [],
-		"summary": "Button that shows a spinner next to its label while busy.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "disabled",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "loading",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "onClick",
-				"type": "(e: MouseEvent) => void",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "size",
-				"type": "\"sm\" | \"md\"",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "type",
-				"type": "\"button\" | \"submit\" | \"reset\"",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "variant",
-				"type": "\"solid\" | \"ghost\" | \"danger\"",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<LoadingButton loading>\n\tSaving…\n</LoadingButton>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "buttons",
-		"name": "ConfirmButton",
-		"parts": [],
-		"summary": "Two-step confirm control (click → confirm).",
-		"slots": [],
-		"props": [
-			{
-				"name": "label",
-				"type": "content",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "onConfirm",
-				"type": "() => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "confirmLabel",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "size",
-				"type": "\"sm\" | \"md\"",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "variant",
-				"type": "\"solid\" | \"ghost\" | \"danger\"",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<ConfirmButton label=\"Delete project\" onConfirm={() => {}} />",
-		"interactive": false,
-		"logsActions": true
-	},
-	{
-		"category": "buttons",
+		"category": "actions",
 		"name": "CopyButton",
+		"family": "copy",
 		"parts": [],
 		"summary": "Copies `value` to the clipboard. Renders a {@link Button}; `data-copied` while confirming.",
 		"slots": [
@@ -616,13 +2544,13 @@ export const catalog: CatalogEntry[] = [
 			},
 			{
 				"name": "size",
-				"type": "\"xs\" | \"sm\" | \"md\" | \"lg\"",
+				"type": "\"sm\" | \"md\" | \"lg\" | \"xs\"",
 				"required": false,
 				"description": ""
 			},
 			{
 				"name": "variant",
-				"type": "\"solid\" | \"default\" | \"soft\" | \"outline\" | \"ghost\"",
+				"type": "\"default\" | \"soft\" | \"solid\" | \"outline\" | \"ghost\"",
 				"required": false,
 				"description": ""
 			}
@@ -632,8 +2560,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "buttons",
+		"category": "actions",
 		"name": "CopyId",
+		"family": "copy",
 		"parts": [],
 		"summary": "Monospace id with a copy button.",
 		"slots": [
@@ -661,8 +2590,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "buttons",
+		"category": "actions",
 		"name": "ShareButton",
+		"family": "copy",
 		"parts": [],
 		"summary": "",
 		"slots": [],
@@ -721,92 +2651,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "buttons",
-		"name": "ViewToggle",
-		"parts": [],
-		"summary": "List / grid toggle.",
-		"slots": [
-			"root",
-			"option"
-		],
-		"props": [
-			{
-				"name": "onChange",
-				"type": "(value: \"list\" | \"grid\") => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "value",
-				"type": "\"list\" | \"grid\"",
-				"required": true,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst view = signal<\"list\" | \"grid\">(\"list\");\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<ViewToggle value={view()} onChange={view.set} />\n\t\t\t<Text muted>Showing a {view()}</Text>\n\t\t</Group>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "buttons",
-		"name": "DensityToggle",
-		"parts": [],
-		"summary": "Compact / comfortable density switch.",
-		"slots": [
-			"root",
-			"option"
-		],
-		"props": [
-			{
-				"name": "onChange",
-				"type": "(value: Density) => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "value",
-				"type": "Density",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": "Accessible name (default \"Density\")."
-			}
-		],
-		"code": "function Example() {\n\tconst density = signal<Density>(\"compact\");\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<DensityToggle value={density()} onChange={density.set} />\n\t\t\t<Text muted>Density: {density()}</Text>\n\t\t</Group>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "buttons",
-		"name": "ThemeToggle",
-		"parts": [],
-		"summary": "Toggle between light and dark themes.",
-		"slots": [],
-		"props": [
-			{
-				"name": "onChange",
-				"type": "(theme: \"light\" | \"dark\") => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "value",
-				"type": "\"light\" | \"dark\"",
-				"required": true,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst theme = signal<\"light\" | \"dark\">(\"light\");\n\treturn (\n\t\t<Paper withBorder class={theme() === \"dark\" ? \"a-theme-dark\" : undefined}>\n\t\t\t<Group gap=\"0.75rem\">\n\t\t\t\t<ThemeToggle value={theme()} onChange={theme.set} />\n\t\t\t\t<Text>This panel is in the {theme()} theme.</Text>\n\t\t\t</Group>\n\t\t</Paper>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "buttons",
+		"category": "actions",
 		"name": "CommandBar",
+		"family": "toolbars",
 		"parts": [],
 		"summary": "WAI-ARIA toolbar for page-level actions: one Tab stop, arrow keys (and Home / End) move focus between its controls.",
 		"slots": [],
@@ -835,8 +2682,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": true
 	},
 	{
-		"category": "buttons",
+		"category": "actions",
 		"name": "FloatingToolbar",
+		"family": "toolbars",
 		"parts": [],
 		"summary": "Floating toolbar for contextual actions (e.g. over a selection): a WAI-ARIA toolbar with one Tab stop and arrow-key focus.",
 		"slots": [],
@@ -859,8 +2707,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": true
 	},
 	{
-		"category": "buttons",
+		"category": "actions",
 		"name": "BulkBar",
+		"family": "toolbars",
 		"parts": [],
 		"summary": "Selection action bar.",
 		"slots": [
@@ -900,7 +2749,7 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
+		"category": "text-input",
 		"name": "TextInput",
 		"parts": [],
 		"summary": "Text field. Every other attribute (`id`, `name`, `autocomplete`, `aria-*`, …) lands on the `<input>`.",
@@ -972,7 +2821,7 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
+		"category": "text-input",
 		"name": "TextArea",
 		"parts": [],
 		"summary": "Multi-line text field.",
@@ -1032,8 +2881,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
+		"category": "text-input",
 		"name": "NumberInput",
+		"family": "number",
 		"parts": [],
 		"summary": "Numeric field. Typing keeps a free-form draft (so `15` can be typed with `min=10`); values commit when in range and clamp on blur / Enter / step. Results are rounded to the precision of `step` (no `0.30000000000000004`). The `<input>` is the host (`class`, `style`, `id`, `aria-*` land on it); `classes.root` styles the wrapper.",
 		"slots": [
@@ -1109,8 +2959,62 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
+		"category": "text-input",
+		"name": "QuantityInput",
+		"family": "number",
+		"parts": [],
+		"summary": "− value + stepper.",
+		"slots": [
+			"root",
+			"button",
+			"value"
+		],
+		"props": [
+			{
+				"name": "onChange",
+				"type": "(value: number) => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "value",
+				"type": "number",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "disabled",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": "Accessible name for the stepper group (default \"Quantity\")."
+			},
+			{
+				"name": "max",
+				"type": "number",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "min",
+				"type": "number",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst quantity = signal(2);\n\treturn <QuantityInput min={1} max={10} value={quantity()} onChange={quantity.set} />;\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "text-input",
 		"name": "PasswordInput",
+		"family": "password",
 		"parts": [],
 		"summary": "Password field with visibility toggle. The `<input>` is the host (`class`, `id`, `autocomplete`, `aria-*` land on it); `classes.root` styles the wrapper.",
 		"slots": [
@@ -1173,8 +3077,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
+		"category": "text-input",
 		"name": "PasswordStrength",
+		"family": "password",
 		"parts": [],
 		"summary": "Four-bar strength meter.",
 		"slots": [
@@ -1202,7 +3107,7 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
+		"category": "text-input",
 		"name": "SearchInput",
 		"parts": [],
 		"summary": "Search field with clear button. The `<input>` is the host; `classes.root` styles the wrapper.",
@@ -1261,7 +3166,7 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
+		"category": "text-input",
 		"name": "PinInput",
 		"parts": [],
 		"summary": "One-time-code input: one cell per digit, paste fills all cells. Forwarded attributes land on the group.",
@@ -1306,7 +3211,54 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
+		"category": "text-input",
+		"name": "TagsInput",
+		"parts": [],
+		"summary": "Free-form tag entry (Enter / comma / paste lists, case-insensitive dedupe).",
+		"slots": [
+			"root",
+			"input",
+			"remove",
+			"tag"
+		],
+		"props": [
+			{
+				"name": "onChange",
+				"type": "(value: string[]) => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "value",
+				"type": "string[]",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "disabled",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "placeholder",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "renderTag",
+				"type": "(tag: string) => unknown",
+				"required": false,
+				"description": "Render a tag's content (default: the text)."
+			}
+		],
+		"code": "function Example() {\n\tconst topics = signal([\"signals\", \"ssr\"]);\n\treturn (\n\t\t<TagsInput\n\t\t\taria-label=\"Topics\"\n\t\t\tplaceholder=\"Add a topic and press Enter\"\n\t\t\tvalue={topics()}\n\t\t\tonChange={topics.set}\n\t\t/>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "text-input",
 		"name": "InputGroup",
 		"parts": [
 			"InputAddon"
@@ -1326,7 +3278,7 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
+		"category": "text-input",
 		"name": "InputAddon",
 		"parent": "InputGroup",
 		"parts": [],
@@ -1345,8 +3297,152 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
+		"category": "text-input",
+		"name": "InlineEdit",
+		"parts": [],
+		"summary": "Click-to-edit text.",
+		"slots": [
+			"root",
+			"display",
+			"icon",
+			"input"
+		],
+		"props": [
+			{
+				"name": "onChange",
+				"type": "(value: string) => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "value",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": "Accessible label for the edit button / input."
+			},
+			{
+				"name": "placeholder",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst name = signal(\"Marketing site\");\n\treturn <InlineEdit label=\"Project name\" value={name()} onChange={name.set} />;\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "text-input",
+		"name": "JsonInput",
+		"parts": [],
+		"summary": "JSON text area that flags invalid JSON (`aria-invalid`, `data-invalid`).",
+		"slots": [],
+		"props": [
+			{
+				"name": "onChange",
+				"type": "(value: string) => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "value",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "disabled",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "rows",
+				"type": "number",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst config = signal('{\\n  \"region\": \"fra1\",\\n  \"replicas\": 2\\n}');\n\treturn <JsonInput aria-label=\"Config JSON\" value={config()} onChange={config.set} />;\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "text-input",
+		"name": "SecretField",
+		"family": "secret",
+		"parts": [],
+		"summary": "Masked secret with reveal / copy.",
+		"slots": [
+			"root",
+			"actions",
+			"label",
+			"value"
+		],
+		"props": [
+			{
+				"name": "value",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<SecretField label=\"Webhook secret\" value=\"whsec_9f2kQ83m1x\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "text-input",
+		"name": "CopyField",
+		"family": "secret",
+		"parts": [],
+		"summary": "Read-only value with a copy button.",
+		"slots": [
+			"root",
+			"action",
+			"label",
+			"value"
+		],
+		"props": [
+			{
+				"name": "value",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<CopyField label=\"API key\" value=\"sk_live_51Hx…9fQ2\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "selection",
 		"name": "Checkbox",
+		"family": "checkbox",
 		"parts": [],
 		"summary": "Checkbox. The native `<input>` is the host: `class`, `style` and forwarded attributes (`id`, `name`, `required`, `aria-*`) land on it; `classes.root` styles the label row.",
 		"slots": [
@@ -1403,8 +3499,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
+		"category": "selection",
 		"name": "CheckboxGroup",
+		"family": "checkbox",
 		"parts": [],
 		"summary": "Multiple-choice checkboxes in a fieldset.",
 		"slots": [
@@ -1449,8 +3546,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
+		"category": "selection",
 		"name": "Checklist",
+		"family": "checkbox",
 		"parts": [],
 		"summary": "Checklist of items with checkboxes.",
 		"slots": [
@@ -1478,53 +3576,7 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
-		"name": "Switch",
-		"parts": [],
-		"summary": "Toggle switch (`role=\"switch\"`). Like {@link Checkbox}, the `<input>` (the visible track) is the host; `classes.root` styles the label row.",
-		"slots": [
-			"root",
-			"input",
-			"label"
-		],
-		"props": [
-			{
-				"name": "checked",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "disabled",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "name",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "onChange",
-				"type": "(e: Event) => void",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst previews = signal(true);\n\treturn (\n\t\t<Switch\n\t\t\tlabel=\"Preview deploys\"\n\t\t\tchecked={previews()}\n\t\t\tonChange={(e) => previews.set((e.target as HTMLInputElement).checked)}\n\t\t/>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "inputs",
+		"category": "selection",
 		"name": "RadioGroup",
 		"parts": [],
 		"summary": "Radio group (`role=\"radiogroup\"`). Forwarded attributes land on the group.",
@@ -1583,14 +3635,12 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
-		"name": "ChoiceCard",
+		"category": "selection",
+		"name": "Switch",
 		"parts": [],
-		"summary": "Selectable card wrapping a native radio/checkbox.",
+		"summary": "Toggle switch (`role=\"switch\"`). Like {@link Checkbox}, the `<input>` (the visible track) is the host; `classes.root` styles the label row.",
 		"slots": [
 			"root",
-			"body",
-			"description",
 			"input",
 			"label"
 		],
@@ -1598,24 +3648,6 @@ export const catalog: CatalogEntry[] = [
 			{
 				"name": "checked",
 				"type": "boolean",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "content",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "onChange",
-				"type": "(checked: boolean) => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "description",
-				"type": "content",
 				"required": false,
 				"description": ""
 			},
@@ -1626,31 +3658,32 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			},
 			{
+				"name": "label",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
 				"name": "name",
 				"type": "string",
 				"required": false,
 				"description": ""
 			},
 			{
-				"name": "type",
-				"type": "\"checkbox\" | \"radio\"",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "value",
-				"type": "string",
+				"name": "onChange",
+				"type": "(e: Event) => void",
 				"required": false,
 				"description": ""
 			}
 		],
-		"code": "function Example() {\n\tconst plan = signal(\"pro\");\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<ChoiceCard\n\t\t\t\ttype=\"radio\"\n\t\t\t\tname=\"plan\"\n\t\t\t\tvalue=\"free\"\n\t\t\t\tchecked={plan() === \"free\"}\n\t\t\t\tlabel=\"Free\"\n\t\t\t\tdescription=\"For side projects\"\n\t\t\t\tonChange={(checked) => checked && plan.set(\"free\")}\n\t\t\t/>\n\t\t\t<ChoiceCard\n\t\t\t\ttype=\"radio\"\n\t\t\t\tname=\"plan\"\n\t\t\t\tvalue=\"pro\"\n\t\t\t\tchecked={plan() === \"pro\"}\n\t\t\t\tlabel=\"Pro\"\n\t\t\t\tdescription=\"$20 per seat / month\"\n\t\t\t\tonChange={(checked) => checked && plan.set(\"pro\")}\n\t\t\t/>\n\t\t</Group>\n\t);\n}",
+		"code": "function Example() {\n\tconst previews = signal(true);\n\treturn (\n\t\t<Switch\n\t\t\tlabel=\"Preview deploys\"\n\t\t\tchecked={previews()}\n\t\t\tonChange={(e) => previews.set((e.target as HTMLInputElement).checked)}\n\t\t/>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
+		"category": "selection",
 		"name": "Select",
+		"family": "select",
 		"parts": [],
 		"summary": "Native select; forwarded attributes land on `<select>`.",
 		"slots": [],
@@ -1703,8 +3736,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
+		"category": "selection",
 		"name": "NativeSelect",
+		"family": "select",
 		"parts": [],
 		"summary": "Native `<select>` with a value callback.",
 		"slots": [],
@@ -1757,8 +3791,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
+		"category": "selection",
 		"name": "MultiSelect",
+		"family": "select",
 		"parts": [],
 		"summary": "Multi-choice listbox dropdown.",
 		"slots": [
@@ -1804,8 +3839,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
+		"category": "selection",
 		"name": "Autocomplete",
+		"family": "select",
 		"parts": [],
 		"summary": "Combobox with suggestion list (↑ ↓ Enter Escape, `aria-activedescendant`). The `<input>` is the host; `classes.root` styles the wrapper.",
 		"slots": [
@@ -1875,27 +3911,40 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
-		"name": "TagsInput",
+		"category": "selection",
+		"name": "ChoiceCard",
 		"parts": [],
-		"summary": "Free-form tag entry (Enter / comma / paste lists, case-insensitive dedupe).",
+		"summary": "Selectable card wrapping a native radio/checkbox.",
 		"slots": [
 			"root",
+			"body",
+			"description",
 			"input",
-			"remove",
-			"tag"
+			"label"
 		],
 		"props": [
 			{
-				"name": "onChange",
-				"type": "(value: string[]) => void",
+				"name": "checked",
+				"type": "boolean",
 				"required": true,
 				"description": ""
 			},
 			{
-				"name": "value",
-				"type": "string[]",
+				"name": "label",
+				"type": "content",
 				"required": true,
+				"description": ""
+			},
+			{
+				"name": "onChange",
+				"type": "(checked: boolean) => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "description",
+				"type": "content",
+				"required": false,
 				"description": ""
 			},
 			{
@@ -1905,25 +3954,75 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			},
 			{
-				"name": "placeholder",
+				"name": "name",
 				"type": "string",
 				"required": false,
 				"description": ""
 			},
 			{
-				"name": "renderTag",
-				"type": "(tag: string) => unknown",
+				"name": "type",
+				"type": "\"checkbox\" | \"radio\"",
 				"required": false,
-				"description": "Render a tag's content (default: the text)."
+				"description": ""
+			},
+			{
+				"name": "value",
+				"type": "string",
+				"required": false,
+				"description": ""
 			}
 		],
-		"code": "function Example() {\n\tconst topics = signal([\"signals\", \"ssr\"]);\n\treturn (\n\t\t<TagsInput\n\t\t\taria-label=\"Topics\"\n\t\t\tplaceholder=\"Add a topic and press Enter\"\n\t\t\tvalue={topics()}\n\t\t\tonChange={topics.set}\n\t\t/>\n\t);\n}",
+		"code": "function Example() {\n\tconst plan = signal(\"pro\");\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<ChoiceCard\n\t\t\t\ttype=\"radio\"\n\t\t\t\tname=\"plan\"\n\t\t\t\tvalue=\"free\"\n\t\t\t\tchecked={plan() === \"free\"}\n\t\t\t\tlabel=\"Free\"\n\t\t\t\tdescription=\"For side projects\"\n\t\t\t\tonChange={(checked) => checked && plan.set(\"free\")}\n\t\t\t/>\n\t\t\t<ChoiceCard\n\t\t\t\ttype=\"radio\"\n\t\t\t\tname=\"plan\"\n\t\t\t\tvalue=\"pro\"\n\t\t\t\tchecked={plan() === \"pro\"}\n\t\t\t\tlabel=\"Pro\"\n\t\t\t\tdescription=\"$20 per seat / month\"\n\t\t\t\tonChange={(checked) => checked && plan.set(\"pro\")}\n\t\t\t/>\n\t\t</Group>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
+		"category": "selection",
+		"name": "Chip",
+		"family": "chips",
+		"parts": [],
+		"summary": "Toggleable pill (`aria-pressed`).",
+		"slots": [],
+		"props": [
+			{
+				"name": "checked",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "disabled",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "icon",
+				"type": "content",
+				"required": false,
+				"description": "Leading icon."
+			},
+			{
+				"name": "onChange",
+				"type": "(checked: boolean) => void",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst on = signal(true);\n\treturn (\n\t\t<Chip checked={on()} onChange={on.set}>\n\t\t\tTypeScript\n\t\t</Chip>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "selection",
 		"name": "ChipGroup",
+		"family": "chips",
 		"parts": [],
 		"summary": "Single or multiple choice chips.",
 		"slots": [
@@ -1974,101 +4073,95 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
-		"name": "Chip",
+		"category": "selection",
+		"name": "Segmented",
+		"family": "segmented",
 		"parts": [],
-		"summary": "Toggleable pill (`aria-pressed`).",
-		"slots": [],
-		"props": [
-			{
-				"name": "checked",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "disabled",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "icon",
-				"type": "content",
-				"required": false,
-				"description": "Leading icon."
-			},
-			{
-				"name": "onChange",
-				"type": "(checked: boolean) => void",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst on = signal(true);\n\treturn (\n\t\t<Chip checked={on()} onChange={on.set}>\n\t\t\tTypeScript\n\t\t</Chip>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "inputs",
-		"name": "Rating",
-		"parts": [],
-		"summary": "Star rating (radio pattern with roving tabindex, arrow keys).",
+		"summary": "Pressed-button group.",
 		"slots": [
 			"root",
-			"star"
+			"segment"
 		],
 		"props": [
 			{
+				"name": "items",
+				"type": "{ id: string; label: string; disabled?: boolean; }[]",
+				"required": true,
+				"description": ""
+			},
+			{
 				"name": "onChange",
-				"type": "(value: number) => void",
+				"type": "(id: string) => void",
 				"required": true,
 				"description": ""
 			},
 			{
 				"name": "value",
-				"type": "number",
+				"type": "string",
 				"required": true,
 				"description": ""
 			},
 			{
-				"name": "count",
-				"type": "number",
+				"name": "label",
+				"type": "string",
 				"required": false,
-				"description": ""
-			},
-			{
-				"name": "disabled",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "starLabel",
-				"type": "(n: number) => string",
-				"required": false,
-				"description": "Accessible label per star, e.g. `(n) => \\`${n} of 5\\``."
-			},
-			{
-				"name": "symbol",
-				"type": "content",
-				"required": false,
-				"description": "Star glyph (default ★)."
+				"description": "Accessible name for the group (default \"Options\")."
 			}
 		],
-		"code": "function Example() {\n\tconst stars = signal(4);\n\treturn <Rating aria-label=\"Rating\" value={stars()} onChange={stars.set} />;\n}",
+		"code": "function Example() {\n\tconst range = signal(\"7d\");\n\treturn (\n\t\t<Segmented\n\t\t\tlabel=\"Range\"\n\t\t\titems={[\n\t\t\t\t{ id: \"24h\", label: \"24h\" },\n\t\t\t\t{ id: \"7d\", label: \"7 days\" },\n\t\t\t\t{ id: \"30d\", label: \"30 days\" },\n\t\t\t]}\n\t\t\tvalue={range()}\n\t\t\tonChange={range.set}\n\t\t/>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
+		"category": "selection",
+		"name": "ToggleGroup",
+		"family": "segmented",
+		"parts": [],
+		"summary": "Pressed-toggle group.",
+		"slots": [
+			"root",
+			"item"
+		],
+		"props": [
+			{
+				"name": "items",
+				"type": "ToggleItem[]",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "onChange",
+				"type": "(value: string | string[] | null) => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "value",
+				"type": "string | string[]",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": "Accessible name for the group."
+			},
+			{
+				"name": "multiple",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst formats = signal<string[]>([\"bold\"]);\n\treturn (\n\t\t<ToggleGroup\n\t\t\tlabel=\"Formatting\"\n\t\t\tmultiple\n\t\t\titems={[\n\t\t\t\t{ id: \"bold\", label: \"Bold\" },\n\t\t\t\t{ id: \"italic\", label: \"Italic\" },\n\t\t\t\t{ id: \"underline\", label: \"Underline\" },\n\t\t\t]}\n\t\t\tvalue={formats()}\n\t\t\tonChange={(next) => formats.set(Array.isArray(next) ? next : next ? [next] : [])}\n\t\t/>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "selection",
 		"name": "Slider",
+		"family": "sliders",
 		"parts": [],
 		"summary": "Range input; forwarded attributes land on `<input type=\"range\">`.",
 		"slots": [],
@@ -2115,8 +4208,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
+		"category": "selection",
 		"name": "RangeSlider",
+		"family": "sliders",
 		"parts": [],
 		"summary": "Two-thumb range.",
 		"slots": [
@@ -2179,8 +4273,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
+		"category": "selection",
 		"name": "AngleSlider",
+		"family": "sliders",
 		"parts": [],
 		"summary": "Circular slider for an angle.",
 		"slots": [
@@ -2229,14 +4324,13 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
-		"name": "QuantityInput",
+		"category": "selection",
+		"name": "Rating",
 		"parts": [],
-		"summary": "− value + stepper.",
+		"summary": "Star rating (radio pattern with roving tabindex, arrow keys).",
 		"slots": [
 			"root",
-			"button",
-			"value"
+			"star"
 		],
 		"props": [
 			{
@@ -2252,87 +4346,193 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			},
 			{
+				"name": "count",
+				"type": "number",
+				"required": false,
+				"description": ""
+			},
+			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
 				"description": ""
 			},
 			{
-				"name": "label",
-				"type": "string",
+				"name": "starLabel",
+				"type": "(n: number) => string",
 				"required": false,
-				"description": "Accessible name for the stepper group (default \"Quantity\")."
+				"description": "Accessible label per star, e.g. `(n) => \\`${n} of 5\\``."
 			},
 			{
-				"name": "max",
-				"type": "number",
+				"name": "symbol",
+				"type": "content",
 				"required": false,
-				"description": ""
-			},
-			{
-				"name": "min",
-				"type": "number",
-				"required": false,
-				"description": ""
+				"description": "Star glyph (default ★)."
 			}
 		],
-		"code": "function Example() {\n\tconst quantity = signal(2);\n\treturn <QuantityInput min={1} max={10} value={quantity()} onChange={quantity.set} />;\n}",
+		"code": "function Example() {\n\tconst stars = signal(4);\n\treturn <Rating aria-label=\"Rating\" value={stars()} onChange={stars.set} />;\n}",
 		"interactive": false,
 		"logsActions": false
 	},
 	{
-		"category": "inputs",
-		"name": "InlineEdit",
+		"category": "selection",
+		"name": "TransferList",
 		"parts": [],
-		"summary": "Click-to-edit text.",
-		"slots": [
-			"root",
-			"display",
-			"icon",
-			"input"
-		],
-		"props": [
-			{
-				"name": "onChange",
-				"type": "(value: string) => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "value",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": "Accessible label for the edit button / input."
-			},
-			{
-				"name": "placeholder",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst name = signal(\"Marketing site\");\n\treturn <InlineEdit label=\"Project name\" value={name()} onChange={name.set} />;\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "inputs",
-		"name": "SecretField",
-		"parts": [],
-		"summary": "Masked secret with reveal / copy.",
+		"summary": "Dual-list mover (Mantine TransferList). Rows keep their DOM between moves.",
 		"slots": [
 			"root",
 			"actions",
-			"label",
-			"value"
+			"item",
+			"list",
+			"pane",
+			"title"
 		],
 		"props": [
+			{
+				"name": "left",
+				"type": "string[]",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "onChange",
+				"type": "(next: { left: string[]; right: string[]; }) => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "right",
+				"type": "string[]",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "leftTitle",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "rightTitle",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst lists = signal({ left: [\"Frankfurt\", \"Tokyo\", \"São Paulo\"], right: [\"Washington, D.C.\"] });\n\treturn (\n\t\t<TransferList\n\t\t\tleftTitle=\"Available\"\n\t\t\trightTitle=\"Selected\"\n\t\t\tleft={lists().left}\n\t\t\tright={lists().right}\n\t\t\tonChange={lists.set}\n\t\t/>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "selection",
+		"name": "ViewToggle",
+		"family": "preferences",
+		"parts": [],
+		"summary": "List / grid toggle.",
+		"slots": [
+			"root",
+			"option"
+		],
+		"props": [
+			{
+				"name": "onChange",
+				"type": "(value: \"grid\" | \"list\") => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "value",
+				"type": "\"grid\" | \"list\"",
+				"required": true,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst view = signal<\"list\" | \"grid\">(\"list\");\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<ViewToggle value={view()} onChange={view.set} />\n\t\t\t<Text muted>Showing a {view()}</Text>\n\t\t</Group>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "selection",
+		"name": "DensityToggle",
+		"family": "preferences",
+		"parts": [],
+		"summary": "Compact / comfortable density switch.",
+		"slots": [
+			"root",
+			"option"
+		],
+		"props": [
+			{
+				"name": "onChange",
+				"type": "(value: Density) => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "value",
+				"type": "Density",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": "Accessible name (default \"Density\")."
+			}
+		],
+		"code": "function Example() {\n\tconst density = signal<Density>(\"compact\");\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<DensityToggle value={density()} onChange={density.set} />\n\t\t\t<Text muted>Density: {density()}</Text>\n\t\t</Group>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "selection",
+		"name": "ThemeToggle",
+		"family": "preferences",
+		"parts": [],
+		"summary": "Toggle between light and dark themes.",
+		"slots": [],
+		"props": [
+			{
+				"name": "onChange",
+				"type": "(theme: \"dark\" | \"light\") => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "value",
+				"type": "\"dark\" | \"light\"",
+				"required": true,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst theme = signal<\"light\" | \"dark\">(\"light\");\n\treturn (\n\t\t<Paper withBorder class={theme() === \"dark\" ? \"a-theme-dark\" : undefined}>\n\t\t\t<Group gap=\"0.75rem\">\n\t\t\t\t<ThemeToggle value={theme()} onChange={theme.set} />\n\t\t\t\t<Text>This panel is in the {theme()} theme.</Text>\n\t\t\t</Group>\n\t\t</Paper>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "selection",
+		"name": "LocaleSwitcher",
+		"family": "preferences",
+		"parts": [],
+		"summary": "Inline language picker.",
+		"slots": [
+			"root",
+			"option"
+		],
+		"props": [
+			{
+				"name": "onChange",
+				"type": "(value: string) => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "options",
+				"type": "LocaleOption[]",
+				"required": true,
+				"description": ""
+			},
 			{
 				"name": "value",
 				"type": "string",
@@ -2341,435 +4541,19 @@ export const catalog: CatalogEntry[] = [
 			},
 			{
 				"name": "label",
-				"type": "content",
+				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Accessible name (default \"Language\")."
 			}
 		],
-		"code": "<SecretField label=\"Webhook secret\" value=\"whsec_9f2kQ83m1x\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "inputs",
-		"name": "CopyField",
-		"parts": [],
-		"summary": "Read-only value with a copy button.",
-		"slots": [
-			"root",
-			"action",
-			"label",
-			"value"
-		],
-		"props": [
-			{
-				"name": "value",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<CopyField label=\"API key\" value=\"sk_live_51Hx…9fQ2\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "inputs",
-		"name": "JsonInput",
-		"parts": [],
-		"summary": "JSON text area that flags invalid JSON (`aria-invalid`, `data-invalid`).",
-		"slots": [],
-		"props": [
-			{
-				"name": "onChange",
-				"type": "(value: string) => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "value",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "disabled",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "name",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "rows",
-				"type": "number",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst config = signal('{\\n  \"region\": \"fra1\",\\n  \"replicas\": 2\\n}');\n\treturn <JsonInput aria-label=\"Config JSON\" value={config()} onChange={config.set} />;\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "inputs",
-		"name": "FileInput",
-		"parts": [],
-		"summary": "Native file input.",
-		"slots": [],
-		"props": [
-			{
-				"name": "accept",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "disabled",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "invalid",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "multiple",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "name",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "onChange",
-				"type": "(e: Event) => void",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "required",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<FileInput aria-label=\"Attachment\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "inputs",
-		"name": "FileButton",
-		"parts": [],
-		"summary": "Hidden file input triggered by a button (Mantine FileButton).",
-		"slots": [
-			"root",
-			"input",
-			"label"
-		],
-		"props": [
-			{
-				"name": "onChange",
-				"type": "(files: File[]) => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "accept",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "disabled",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "multiple",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst file = signal(\"\");\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<FileButton accept=\"image/*\" onChange={(files) => file.set(files[0]?.name ?? \"\")}>\n\t\t\t\tUpload avatar\n\t\t\t</FileButton>\n\t\t\t<Text muted>{file() || \"No file chosen\"}</Text>\n\t\t</Group>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "inputs",
-		"name": "Dropzone",
-		"parts": [],
-		"summary": "Drag-and-drop file target (also a click-to-browse file input).",
-		"slots": [
-			"root",
-			"input",
-			"label"
-		],
-		"props": [
-			{
-				"name": "onDrop",
-				"type": "(files: File[]) => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "accept",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "disabled",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "multiple",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst files = signal<string[]>([]);\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Dropzone\n\t\t\t\tmultiple\n\t\t\t\taccept=\".csv\"\n\t\t\t\tonDrop={(dropped) => files.set(dropped.map((f) => f.name))}\n\t\t\t>\n\t\t\t\tDrop CSV files here, or click to browse\n\t\t\t</Dropzone>\n\t\t\t<Text muted>{files().length ? files().join(\", \") : \"No files yet\"}</Text>\n\t\t</Stack>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "inputs",
-		"name": "UploadItem",
-		"parts": [],
-		"summary": "File upload row with progress.",
-		"slots": [
-			"root",
-			"bar",
-			"cancel",
-			"name",
-			"row",
-			"status",
-			"track"
-		],
-		"props": [
-			{
-				"name": "name",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "progress",
-				"type": "number",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "error",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "onCancel",
-				"type": "() => void",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst progress = signal(12);\n\tconst cancelled = signal(false);\n\t// Simulated upload; effects run only in the browser.\n\teffect(() => {\n\t\tconst timer = setInterval(() => {\n\t\t\tif (!cancelled() && progress() < 100) progress.set(Math.min(100, progress() + 8));\n\t\t}, 400);\n\t\treturn () => clearInterval(timer);\n\t});\n\treturn (\n\t\t<Show\n\t\t\twhen={!cancelled()}\n\t\t\tfallback={\n\t\t\t\t<Button\n\t\t\t\t\tsize=\"sm\"\n\t\t\t\t\tvariant=\"outline\"\n\t\t\t\t\tonClick={() => {\n\t\t\t\t\t\tprogress.set(0);\n\t\t\t\t\t\tcancelled.set(false);\n\t\t\t\t\t}}\n\t\t\t\t>\n\t\t\t\t\tUpload again\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<UploadItem\n\t\t\t\tname=\"hero@2x.png\"\n\t\t\t\tprogress={progress()}\n\t\t\t\tonCancel={() => cancelled.set(true)}\n\t\t\t/>\n\t\t</Show>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "pickers",
-		"name": "DateInput",
-		"parts": [],
-		"summary": "Native date field; forwarded attributes land on the `<input>`.",
-		"slots": [],
-		"props": [
-			{
-				"name": "onChange",
-				"type": "(value: string) => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "value",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "disabled",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "invalid",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "name",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst date = signal(\"2026-10-01\");\n\treturn <DateInput aria-label=\"Start date\" value={date()} onChange={date.set} />;\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "pickers",
-		"name": "TimeInput",
-		"parts": [],
-		"summary": "Native time field; forwarded attributes land on the `<input>`.",
-		"slots": [],
-		"props": [
-			{
-				"name": "onChange",
-				"type": "(value: string) => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "value",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "disabled",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "invalid",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "name",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst time = signal(\"09:30\");\n\treturn <TimeInput aria-label=\"Start time\" value={time()} onChange={time.set} />;\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "pickers",
-		"name": "Calendar",
-		"parts": [],
-		"summary": "Month grid (WAI-ARIA date grid): one tab stop, ← → ↑ ↓ by day/week, PageUp/PageDown by month (Shift = year), Home/End week edges, full-date labels, `aria-selected` / `aria-current=\"date\"`, `min` / `max` / `isDateDisabled`.",
-		"slots": [
-			"root",
-			"cell",
-			"day",
-			"grid",
-			"header",
-			"label",
-			"nav",
-			"row",
-			"table",
-			"weekday",
-			"weekdays"
-		],
-		"props": [
-			{
-				"name": "autoFocus",
-				"type": "boolean",
-				"required": false,
-				"description": "Focus the active day on mount (used by DatePicker)."
-			},
-			{
-				"name": "isDateDisabled",
-				"type": "(iso: string) => boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "locale",
-				"type": "string",
-				"required": false,
-				"description": "BCP 47 locale for month / day labels (default: runtime locale)."
-			},
-			{
-				"name": "max",
-				"type": "string",
-				"required": false,
-				"description": "Latest selectable date, YYYY-MM-DD."
-			},
-			{
-				"name": "min",
-				"type": "string",
-				"required": false,
-				"description": "Earliest selectable date, YYYY-MM-DD."
-			},
-			{
-				"name": "onChange",
-				"type": "(iso: string) => void",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "value",
-				"type": "string",
-				"required": false,
-				"description": "YYYY-MM-DD"
-			},
-			{
-				"name": "weekStartsOn",
-				"type": "Weekday",
-				"required": false,
-				"description": "First column: 0 = Sunday (default) … 6 = Saturday."
-			}
-		],
-		"code": "function Example() {\n\tconst date = signal(\"2026-09-29\");\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Calendar value={date()} onChange={date.set} />\n\t\t\t<Text muted>Selected: {date()}</Text>\n\t\t</Stack>\n\t);\n}",
+		"code": "function Example() {\n\tconst locale = signal(\"en\");\n\treturn (\n\t\t<LocaleSwitcher\n\t\t\tlabel=\"Language\"\n\t\t\tvalue={locale()}\n\t\t\toptions={[\n\t\t\t\t{ value: \"en\", label: \"English\" },\n\t\t\t\t{ value: \"de\", label: \"Deutsch\" },\n\t\t\t\t{ value: \"ja\", label: \"日本語\" },\n\t\t\t]}\n\t\t\tonChange={locale.set}\n\t\t/>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
 	},
 	{
 		"category": "pickers",
 		"name": "DatePicker",
+		"family": "dates",
 		"parts": [],
 		"summary": "Trigger + calendar dropdown. Opening focuses the active day; picking a day or Escape closes and returns focus to the trigger.",
 		"slots": [
@@ -2843,6 +4627,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "pickers",
 		"name": "DateRangePicker",
+		"family": "dates",
 		"parts": [],
 		"summary": "Two-step date range picker (start → end).",
 		"slots": [
@@ -2878,7 +4663,124 @@ export const catalog: CatalogEntry[] = [
 	},
 	{
 		"category": "pickers",
+		"name": "DateInput",
+		"family": "dates",
+		"parts": [],
+		"summary": "Native date field; forwarded attributes land on the `<input>`.",
+		"slots": [],
+		"props": [
+			{
+				"name": "onChange",
+				"type": "(value: string) => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "value",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "disabled",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "invalid",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst date = signal(\"2026-10-01\");\n\treturn <DateInput aria-label=\"Start date\" value={date()} onChange={date.set} />;\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "pickers",
+		"name": "Calendar",
+		"family": "dates",
+		"parts": [],
+		"summary": "Month grid (WAI-ARIA date grid): one tab stop, ← → ↑ ↓ by day/week, PageUp/PageDown by month (Shift = year), Home/End week edges, full-date labels, `aria-selected` / `aria-current=\"date\"`, `min` / `max` / `isDateDisabled`.",
+		"slots": [
+			"root",
+			"cell",
+			"day",
+			"grid",
+			"header",
+			"label",
+			"nav",
+			"row",
+			"table",
+			"weekday",
+			"weekdays"
+		],
+		"props": [
+			{
+				"name": "autoFocus",
+				"type": "boolean",
+				"required": false,
+				"description": "Focus the active day on mount (used by DatePicker)."
+			},
+			{
+				"name": "isDateDisabled",
+				"type": "(iso: string) => boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "locale",
+				"type": "string",
+				"required": false,
+				"description": "BCP 47 locale for month / day labels (default: runtime locale)."
+			},
+			{
+				"name": "max",
+				"type": "string",
+				"required": false,
+				"description": "Latest selectable date, YYYY-MM-DD."
+			},
+			{
+				"name": "min",
+				"type": "string",
+				"required": false,
+				"description": "Earliest selectable date, YYYY-MM-DD."
+			},
+			{
+				"name": "onChange",
+				"type": "(iso: string) => void",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "value",
+				"type": "string",
+				"required": false,
+				"description": "YYYY-MM-DD"
+			},
+			{
+				"name": "weekStartsOn",
+				"type": "Weekday",
+				"required": false,
+				"description": "First column: 0 = Sunday (default) … 6 = Saturday."
+			}
+		],
+		"code": "function Example() {\n\tconst date = signal(\"2026-09-29\");\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Calendar value={date()} onChange={date.set} />\n\t\t\t<Text muted>Selected: {date()}</Text>\n\t\t</Stack>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "pickers",
 		"name": "MonthPicker",
+		"family": "dates",
 		"parts": [],
 		"summary": "Month/year picker.",
 		"slots": [
@@ -2915,6 +4817,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "pickers",
 		"name": "YearPicker",
+		"family": "dates",
 		"parts": [],
 		"summary": "Twelve-year grid with paging.",
 		"slots": [
@@ -2944,7 +4847,51 @@ export const catalog: CatalogEntry[] = [
 	},
 	{
 		"category": "pickers",
+		"name": "TimeInput",
+		"family": "time",
+		"parts": [],
+		"summary": "Native time field; forwarded attributes land on the `<input>`.",
+		"slots": [],
+		"props": [
+			{
+				"name": "onChange",
+				"type": "(value: string) => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "value",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "disabled",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "invalid",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst time = signal(\"09:30\");\n\treturn <TimeInput aria-label=\"Start time\" value={time()} onChange={time.set} />;\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "pickers",
 		"name": "TimePicker",
+		"family": "time",
 		"parts": [],
 		"summary": "Hours/minutes picker.",
 		"slots": [
@@ -2981,6 +4928,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "pickers",
 		"name": "ColorInput",
+		"family": "colour",
 		"parts": [],
 		"summary": "Color swatch + hex text field. The text `<input>` is the host; `classes.root` styles the wrapper.",
 		"slots": [
@@ -3033,6 +4981,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "pickers",
 		"name": "ColorPicker",
+		"family": "colour",
 		"parts": [],
 		"summary": "Native color input + swatches.",
 		"slots": [
@@ -3069,6 +5018,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "pickers",
 		"name": "ColorSwatch",
+		"family": "colour",
 		"parts": [],
 		"summary": "Color chip; renders a `<button>` when `onClick` is set (use `selected` for a picker).",
 		"slots": [],
@@ -3121,8 +5071,247 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
+		"category": "files",
+		"name": "FileInput",
+		"family": "file-inputs",
+		"parts": [],
+		"summary": "Native file input.",
+		"slots": [],
+		"props": [
+			{
+				"name": "accept",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "disabled",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "invalid",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "multiple",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "onChange",
+				"type": "(e: Event) => void",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "required",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<FileInput aria-label=\"Attachment\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "files",
+		"name": "FileButton",
+		"family": "file-inputs",
+		"parts": [],
+		"summary": "Hidden file input triggered by a button (Mantine FileButton).",
+		"slots": [
+			"root",
+			"input",
+			"label"
+		],
+		"props": [
+			{
+				"name": "onChange",
+				"type": "(files: File[]) => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "accept",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "disabled",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "multiple",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst file = signal(\"\");\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<FileButton accept=\"image/*\" onChange={(files) => file.set(files[0]?.name ?? \"\")}>\n\t\t\t\tUpload avatar\n\t\t\t</FileButton>\n\t\t\t<Text muted>{file() || \"No file chosen\"}</Text>\n\t\t</Group>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "files",
+		"name": "Dropzone",
+		"family": "file-inputs",
+		"parts": [],
+		"summary": "Drag-and-drop file target (also a click-to-browse file input).",
+		"slots": [
+			"root",
+			"input",
+			"label"
+		],
+		"props": [
+			{
+				"name": "onDrop",
+				"type": "(files: File[]) => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "accept",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "disabled",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "multiple",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst files = signal<string[]>([]);\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Dropzone\n\t\t\t\tmultiple\n\t\t\t\taccept=\".csv\"\n\t\t\t\tonDrop={(dropped) => files.set(dropped.map((f) => f.name))}\n\t\t\t>\n\t\t\t\tDrop CSV files here, or click to browse\n\t\t\t</Dropzone>\n\t\t\t<Text muted>{files().length ? files().join(\", \") : \"No files yet\"}</Text>\n\t\t</Stack>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "files",
+		"name": "UploadItem",
+		"family": "file-items",
+		"parts": [],
+		"summary": "File upload row with progress.",
+		"slots": [
+			"root",
+			"bar",
+			"cancel",
+			"name",
+			"row",
+			"status",
+			"track"
+		],
+		"props": [
+			{
+				"name": "name",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "progress",
+				"type": "number",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "error",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "onCancel",
+				"type": "() => void",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst progress = signal(12);\n\tconst cancelled = signal(false);\n\t// Simulated upload; effects run only in the browser.\n\teffect(() => {\n\t\tconst timer = setInterval(() => {\n\t\t\tif (!cancelled() && progress() < 100) progress.set(Math.min(100, progress() + 8));\n\t\t}, 400);\n\t\treturn () => clearInterval(timer);\n\t});\n\treturn (\n\t\t<Show\n\t\t\twhen={!cancelled()}\n\t\t\tfallback={\n\t\t\t\t<Button\n\t\t\t\t\tsize=\"sm\"\n\t\t\t\t\tvariant=\"outline\"\n\t\t\t\t\tonClick={() => {\n\t\t\t\t\t\tprogress.set(0);\n\t\t\t\t\t\tcancelled.set(false);\n\t\t\t\t\t}}\n\t\t\t\t>\n\t\t\t\t\tUpload again\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<UploadItem\n\t\t\t\tname=\"hero@2x.png\"\n\t\t\t\tprogress={progress()}\n\t\t\t\tonCancel={() => cancelled.set(true)}\n\t\t\t/>\n\t\t</Show>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "files",
+		"name": "FileCard",
+		"family": "file-items",
+		"parts": [],
+		"summary": "Attached file with icon, name, metadata and remove action.",
+		"slots": [
+			"root",
+			"icon",
+			"meta",
+			"name",
+			"remove",
+			"text"
+		],
+		"props": [
+			{
+				"name": "name",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "icon",
+				"type": "IconName",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "meta",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "onRemove",
+				"type": "() => void",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst attached = signal(true);\n\treturn (\n\t\t<Show\n\t\t\twhen={attached()}\n\t\t\tfallback={\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => attached.set(true)}>\n\t\t\t\t\tAttach Q3-report.pdf\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<FileCard\n\t\t\t\tname=\"Q3-report.pdf\"\n\t\t\t\tmeta=\"2.4 MB · PDF\"\n\t\t\t\tonRemove={() => attached.set(false)}\n\t\t\t/>\n\t\t</Show>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
 		"category": "forms",
 		"name": "FormField",
+		"family": "field",
 		"parts": [
 			"Control",
 			"Help"
@@ -3260,7 +5449,7 @@ export const catalog: CatalogEntry[] = [
 			},
 			{
 				"name": "tone",
-				"type": "\"danger\" | \"success\" | \"muted\"",
+				"type": "\"success\" | \"danger\" | \"muted\"",
 				"required": false,
 				"description": ""
 			}
@@ -3272,6 +5461,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "forms",
 		"name": "Label",
+		"family": "field",
 		"parts": [],
 		"summary": "Form label.",
 		"slots": [],
@@ -3295,7 +5485,100 @@ export const catalog: CatalogEntry[] = [
 	},
 	{
 		"category": "forms",
+		"name": "FormSection",
+		"family": "form-sections",
+		"parts": [],
+		"summary": "Titled form region (grouping of related fields).",
+		"slots": [
+			"root",
+			"body",
+			"description",
+			"header",
+			"title"
+		],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "description",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "order",
+				"type": "2 | 3 | 4 | 5 | 6",
+				"required": false,
+				"description": "Heading level of the title, to fit the page outline. Default 3."
+			},
+			{
+				"name": "title",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst name = signal(\"Ada Lovelace\");\n\treturn (\n\t\t<FormSection title=\"Profile\" description=\"Shown on your public page.\">\n\t\t\t<FormField label=\"Display name\" labelFor=\"section-name\">\n\t\t\t\t<TextInput\n\t\t\t\t\tid=\"section-name\"\n\t\t\t\t\tvalue={name()}\n\t\t\t\t\tonInput={(e) => name.set((e.target as HTMLInputElement).value)}\n\t\t\t\t/>\n\t\t\t</FormField>\n\t\t</FormSection>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "forms",
+		"name": "FormArea",
+		"family": "form-sections",
+		"parts": [],
+		"summary": "Grouped form area / panel (related fields in a boxed region).",
+		"slots": [
+			"root",
+			"body",
+			"description",
+			"header",
+			"title"
+		],
+		"props": [
+			{
+				"name": "bordered",
+				"type": "boolean",
+				"required": false,
+				"description": "Visually emphasize as a bordered panel. Default true."
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "description",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "order",
+				"type": "2 | 3 | 4 | 5 | 6",
+				"required": false,
+				"description": "Heading level of the title, to fit the page outline. Default 4."
+			},
+			{
+				"name": "title",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst failed = signal(true);\n\tconst weekly = signal(false);\n\treturn (\n\t\t<FormArea\n\t\t\torder={3}\n\t\t\ttitle=\"Notifications\"\n\t\t\tdescription=\"Choose what we email you about.\"\n\t\t\tbordered\n\t\t>\n\t\t\t<Checkbox\n\t\t\t\tlabel=\"Failed deploys\"\n\t\t\t\tchecked={failed()}\n\t\t\t\tonChange={(e) => failed.set((e.target as HTMLInputElement).checked)}\n\t\t\t/>\n\t\t\t<Checkbox\n\t\t\t\tlabel=\"Weekly summary\"\n\t\t\t\tchecked={weekly()}\n\t\t\t\tonChange={(e) => weekly.set((e.target as HTMLInputElement).checked)}\n\t\t\t/>\n\t\t</FormArea>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "forms",
 		"name": "Fieldset",
+		"family": "form-sections",
 		"parts": [],
 		"summary": "Native fieldset with optional legend.",
 		"slots": [
@@ -3328,96 +5611,6 @@ export const catalog: CatalogEntry[] = [
 	},
 	{
 		"category": "forms",
-		"name": "FormSection",
-		"parts": [],
-		"summary": "Titled form region (grouping of related fields).",
-		"slots": [
-			"root",
-			"body",
-			"description",
-			"header",
-			"title"
-		],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "description",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "order",
-				"type": "5 | 2 | 3 | 4 | 6",
-				"required": false,
-				"description": "Heading level of the title, to fit the page outline. Default 3."
-			},
-			{
-				"name": "title",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst name = signal(\"Ada Lovelace\");\n\treturn (\n\t\t<FormSection title=\"Profile\" description=\"Shown on your public page.\">\n\t\t\t<FormField label=\"Display name\" labelFor=\"section-name\">\n\t\t\t\t<TextInput\n\t\t\t\t\tid=\"section-name\"\n\t\t\t\t\tvalue={name()}\n\t\t\t\t\tonInput={(e) => name.set((e.target as HTMLInputElement).value)}\n\t\t\t\t/>\n\t\t\t</FormField>\n\t\t</FormSection>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "forms",
-		"name": "FormArea",
-		"parts": [],
-		"summary": "Grouped form area / panel (related fields in a boxed region).",
-		"slots": [
-			"root",
-			"body",
-			"description",
-			"header",
-			"title"
-		],
-		"props": [
-			{
-				"name": "bordered",
-				"type": "boolean",
-				"required": false,
-				"description": "Visually emphasize as a bordered panel. Default true."
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "description",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "order",
-				"type": "5 | 2 | 3 | 4 | 6",
-				"required": false,
-				"description": "Heading level of the title, to fit the page outline. Default 4."
-			},
-			{
-				"name": "title",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst failed = signal(true);\n\tconst weekly = signal(false);\n\treturn (\n\t\t<FormArea\n\t\t\torder={3}\n\t\t\ttitle=\"Notifications\"\n\t\t\tdescription=\"Choose what we email you about.\"\n\t\t\tbordered\n\t\t>\n\t\t\t<Checkbox\n\t\t\t\tlabel=\"Failed deploys\"\n\t\t\t\tchecked={failed()}\n\t\t\t\tonChange={(e) => failed.set((e.target as HTMLInputElement).checked)}\n\t\t\t/>\n\t\t\t<Checkbox\n\t\t\t\tlabel=\"Weekly summary\"\n\t\t\t\tchecked={weekly()}\n\t\t\t\tonChange={(e) => weekly.set((e.target as HTMLInputElement).checked)}\n\t\t\t/>\n\t\t</FormArea>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "forms",
 		"name": "FormFooter",
 		"parts": [],
 		"summary": "Right-aligned form actions row.",
@@ -3437,6 +5630,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "forms",
 		"name": "SettingsRow",
+		"family": "settings",
 		"parts": [],
 		"summary": "Label + description + control row.",
 		"slots": [
@@ -3485,6 +5679,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "forms",
 		"name": "ToggleRow",
+		"family": "settings",
 		"parts": [],
 		"summary": "SettingsRow with a Switch.",
 		"slots": [],
@@ -3613,772 +5808,6 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "overlays",
-		"name": "Modal",
-		"parts": [],
-		"summary": "Centered dialog with focus trap, Escape, scroll lock and enter/exit motion.",
-		"slots": [
-			"root",
-			"backdrop",
-			"body",
-			"close",
-			"description",
-			"footer",
-			"header",
-			"panel",
-			"title"
-		],
-		"props": [
-			{
-				"name": "onClose",
-				"type": "() => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "open",
-				"type": "boolean",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "closeOnBackdrop",
-				"type": "boolean",
-				"required": false,
-				"description": "Close when the backdrop is clicked (default true)."
-			},
-			{
-				"name": "closeOnEscape",
-				"type": "boolean",
-				"required": false,
-				"description": "Close on Escape (default true)."
-			},
-			{
-				"name": "description",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "footer",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "hideClose",
-				"type": "boolean",
-				"required": false,
-				"description": "Hide the header close button."
-			},
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": "Accessible name when there is no visible `title`."
-			},
-			{
-				"name": "mount",
-				"type": "Element",
-				"required": false,
-				"description": "Portal target (defaults to `document.body`)."
-			},
-			{
-				"name": "placement",
-				"type": "\"center\" | \"top\"",
-				"required": false,
-				"description": "Vertical placement (default `center`)."
-			},
-			{
-				"name": "role",
-				"type": "\"dialog\" | \"alertdialog\"",
-				"required": false,
-				"description": "`alertdialog` for confirmations that interrupt the user."
-			},
-			{
-				"name": "size",
-				"type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"full\"",
-				"required": false,
-				"description": "Width preset; override freely with `--a-modal-width`."
-			},
-			{
-				"name": "title",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst open = signal(false);\n\treturn (\n\t\t<>\n\t\t\t<Button onClick={() => open.set(true)}>Open modal</Button>\n\t\t\t<Modal\n\t\t\t\topen={open()}\n\t\t\t\tonClose={() => open.set(false)}\n\t\t\t\ttitle=\"Edit profile\"\n\t\t\t\tdescription=\"Changes are saved when you press Save.\"\n\t\t\t\tfooter={\n\t\t\t\t\t<Group gap=\"0.5rem\">\n\t\t\t\t\t\t<Button variant=\"ghost\" onClick={() => open.set(false)}>\n\t\t\t\t\t\t\tCancel\n\t\t\t\t\t\t</Button>\n\t\t\t\t\t\t<Button onClick={() => open.set(false)}>Save</Button>\n\t\t\t\t\t</Group>\n\t\t\t\t}\n\t\t\t>\n\t\t\t\tModal body content.\n\t\t\t</Modal>\n\t\t</>\n\t);\n}",
-		"interactive": true,
-		"logsActions": false
-	},
-	{
-		"category": "overlays",
-		"name": "Drawer",
-		"parts": [],
-		"summary": "Edge-anchored dialog. Slots match {@link Modal}.",
-		"slots": [
-			"root",
-			"backdrop",
-			"body",
-			"close",
-			"description",
-			"footer",
-			"header",
-			"panel",
-			"title"
-		],
-		"props": [
-			{
-				"name": "onClose",
-				"type": "() => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "open",
-				"type": "boolean",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "closeOnBackdrop",
-				"type": "boolean",
-				"required": false,
-				"description": "Close when the backdrop is clicked (default true)."
-			},
-			{
-				"name": "closeOnEscape",
-				"type": "boolean",
-				"required": false,
-				"description": "Close on Escape (default true)."
-			},
-			{
-				"name": "description",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "footer",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "hideClose",
-				"type": "boolean",
-				"required": false,
-				"description": "Hide the header close button."
-			},
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": "Accessible name when there is no visible `title`."
-			},
-			{
-				"name": "mount",
-				"type": "Element",
-				"required": false,
-				"description": "Portal target (defaults to `document.body`)."
-			},
-			{
-				"name": "role",
-				"type": "\"dialog\" | \"alertdialog\"",
-				"required": false,
-				"description": "`alertdialog` for confirmations that interrupt the user."
-			},
-			{
-				"name": "side",
-				"type": "\"top\" | \"left\" | \"right\" | \"bottom\"",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "size",
-				"type": "\"sm\" | \"md\" | \"lg\" | \"full\"",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "title",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst open = signal(false);\n\treturn (\n\t\t<>\n\t\t\t<Button onClick={() => open.set(true)}>Open drawer</Button>\n\t\t\t<Drawer open={open()} onClose={() => open.set(false)} title=\"Filters\">\n\t\t\t\tDrawer content.\n\t\t\t</Drawer>\n\t\t</>\n\t);\n}",
-		"interactive": true,
-		"logsActions": false
-	},
-	{
-		"category": "overlays",
-		"name": "BottomSheet",
-		"parts": [],
-		"summary": "Mobile bottom sheet (UIkit / Mantine Drawer bottom). Built on the shared dialog frame: focus trap, Escape (topmost layer), scroll lock, exit motion. Slots match {@link DialogBaseProps} (`panel` is the host); theme key `BottomSheet`.",
-		"slots": [
-			"root",
-			"backdrop",
-			"body",
-			"close",
-			"description",
-			"footer",
-			"header",
-			"panel",
-			"title"
-		],
-		"props": [
-			{
-				"name": "onClose",
-				"type": "() => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "open",
-				"type": "boolean",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "closeOnBackdrop",
-				"type": "boolean",
-				"required": false,
-				"description": "Close when the backdrop is clicked (default true)."
-			},
-			{
-				"name": "closeOnEscape",
-				"type": "boolean",
-				"required": false,
-				"description": "Close on Escape (default true)."
-			},
-			{
-				"name": "description",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "footer",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "hideClose",
-				"type": "boolean",
-				"required": false,
-				"description": "Hide the header close button."
-			},
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": "Accessible name when there is no visible `title`."
-			},
-			{
-				"name": "mount",
-				"type": "Element",
-				"required": false,
-				"description": "Portal target (defaults to `document.body`)."
-			},
-			{
-				"name": "role",
-				"type": "\"dialog\" | \"alertdialog\"",
-				"required": false,
-				"description": "`alertdialog` for confirmations that interrupt the user."
-			},
-			{
-				"name": "title",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst open = signal(false);\n\treturn (\n\t\t<>\n\t\t\t<Button onClick={() => open.set(true)}>Open sheet</Button>\n\t\t\t<BottomSheet open={open()} onClose={() => open.set(false)} title=\"Share\">\n\t\t\t\tSheet content.\n\t\t\t</BottomSheet>\n\t\t</>\n\t);\n}",
-		"interactive": true,
-		"logsActions": false
-	},
-	{
-		"category": "overlays",
-		"name": "ConfirmDialog",
-		"parts": [],
-		"summary": "Confirmation built on the shared dialog surface (focus trap, Escape, scroll lock, motion). Initial focus goes to Cancel — the safe choice. Slots match Modal (`root` `backdrop` `panel` …); attributes land on the panel.",
-		"slots": [
-			"root",
-			"backdrop",
-			"body",
-			"close",
-			"description",
-			"footer",
-			"header",
-			"panel",
-			"title"
-		],
-		"props": [
-			{
-				"name": "message",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "onCancel",
-				"type": "() => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "onConfirm",
-				"type": "() => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "open",
-				"type": "boolean",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "cancelLabel",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "confirmLabel",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "danger",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "title",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst open = signal(false);\n\treturn (\n\t\t<>\n\t\t\t<Button variant=\"danger\" onClick={() => open.set(true)}>\n\t\t\t\tDelete project\n\t\t\t</Button>\n\t\t\t<ConfirmDialog\n\t\t\t\topen={open()}\n\t\t\t\tdanger\n\t\t\t\ttitle=\"Delete project?\"\n\t\t\t\tmessage=\"This cannot be undone.\"\n\t\t\t\tconfirmLabel=\"Delete\"\n\t\t\t\tonConfirm={() => open.set(false)}\n\t\t\t\tonCancel={() => open.set(false)}\n\t\t\t/>\n\t\t</>\n\t);\n}",
-		"interactive": true,
-		"logsActions": false
-	},
-	{
-		"category": "overlays",
-		"name": "Popover",
-		"parts": [],
-		"summary": "Click-to-toggle panel anchored to a trigger. Escape / outside click close it and return focus to the trigger.",
-		"slots": [
-			"root",
-			"arrow",
-			"panel",
-			"trigger"
-		],
-		"props": [
-			{
-				"name": "onOpenChange",
-				"type": "(open: boolean) => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "open",
-				"type": "boolean",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "arrow",
-				"type": "boolean",
-				"required": false,
-				"description": "Show a small arrow pointing at the trigger."
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "content",
-				"required": false,
-				"description": "Label for the built-in trigger button"
-			},
-			{
-				"name": "panelLabel",
-				"type": "string",
-				"required": false,
-				"description": "Accessible name for the panel (defaults to the trigger label when it's text)."
-			},
-			{
-				"name": "placement",
-				"type": "PopoverPlacement",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "trigger",
-				"type": "(api: PopoverTriggerApi) => unknown",
-				"required": false,
-				"description": "Render your own trigger: `trigger={(t) => <MyButton {...t.attrs} />}`."
-			}
-		],
-		"code": "function Example() {\n\tconst open = signal(false);\n\treturn (\n\t\t<Popover open={open()} onOpenChange={open.set} label=\"Share\" panelLabel=\"Share project\">\n\t\t\tAnyone with the link can view this project.\n\t\t</Popover>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "overlays",
-		"name": "HoverCard",
-		"parts": [],
-		"summary": "Hover/focus card panel (Mantine HoverCard).",
-		"slots": [
-			"root",
-			"dropdown",
-			"target"
-		],
-		"props": [
-			{
-				"name": "dropdown",
-				"type": "content",
-				"required": true,
-				"description": "Panel content shown on hover/focus."
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "closeDelay",
-				"type": "number",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "openDelay",
-				"type": "number",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<HoverCard dropdown={<Text>Ada Lovelace · Analyst of engines</Text>}>\n\t<Anchor href=\"#ada\">@ada</Anchor>\n</HoverCard>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "overlays",
-		"name": "Tooltip",
-		"parts": [],
-		"summary": "Hover/focus tooltip linked with `aria-describedby`; Escape dismisses and the tooltip itself is hoverable (WCAG 1.4.13).",
-		"slots": [
-			"root",
-			"arrow",
-			"target",
-			"tooltip"
-		],
-		"props": [
-			{
-				"name": "content",
-				"type": "content",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "arrow",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "closeDelay",
-				"type": "number",
-				"required": false,
-				"description": "Delay before hiding, ms (default 80) — lets the pointer reach the tooltip."
-			},
-			{
-				"name": "disabled",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "openDelay",
-				"type": "number",
-				"required": false,
-				"description": "Delay before showing on hover, ms (default 250). Focus shows immediately."
-			},
-			{
-				"name": "placement",
-				"type": "\"top\" | \"left\" | \"right\" | \"bottom\"",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Tooltip content=\"Copies the deploy URL\">\n\t<Button variant=\"outline\" onClick={() => {}}>\n\t\tCopy link\n\t</Button>\n</Tooltip>",
-		"interactive": false,
-		"logsActions": true
-	},
-	{
-		"category": "overlays",
-		"name": "Menu",
-		"parts": [],
-		"summary": "Action menu with roving focus (↑ ↓ Home End, type-ahead), Escape, outside click, focus restore and enter/exit motion.",
-		"slots": [
-			"root",
-			"description",
-			"group",
-			"icon",
-			"item",
-			"label",
-			"separator",
-			"shortcut"
-		],
-		"props": [
-			{
-				"name": "items",
-				"type": "MenuItem[]",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "open",
-				"type": "boolean",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": "Accessible name for the menu."
-			},
-			{
-				"name": "onClose",
-				"type": "() => void",
-				"required": false,
-				"description": "Called on outside click / Escape / selection. Prefer with a wrapping `.a-menu-host`."
-			},
-			{
-				"name": "placement",
-				"type": "MenuPlacement",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst open = signal(false);\n\tconst last = signal(\"\");\n\tconst pick = (label: string) => () => last.set(label);\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<div style={{ position: \"relative\" }}>\n\t\t\t\t<Button variant=\"outline\" aria-expanded={open()} onClick={() => open.set(!open())}>\n\t\t\t\t\tProject actions ▾\n\t\t\t\t</Button>\n\t\t\t\t<Menu\n\t\t\t\t\topen={open()}\n\t\t\t\t\tonClose={() => open.set(false)}\n\t\t\t\t\tlabel=\"Project actions\"\n\t\t\t\t\titems={[\n\t\t\t\t\t\t{ type: \"label\", label: \"marketing-site\" },\n\t\t\t\t\t\t{ label: \"Rename\", onSelect: pick(\"Rename\") },\n\t\t\t\t\t\t{ label: \"Duplicate\", onSelect: pick(\"Duplicate\") },\n\t\t\t\t\t\t{ type: \"separator\" },\n\t\t\t\t\t\t{ label: \"Delete\", onSelect: pick(\"Delete\"), danger: true },\n\t\t\t\t\t]}\n\t\t\t\t/>\n\t\t\t</div>\n\t\t\t<Text muted>{last() ? `Chose “${last()}”` : \"Nothing chosen yet\"}</Text>\n\t\t</Group>\n\t);\n}",
-		"interactive": true,
-		"logsActions": false
-	},
-	{
-		"category": "overlays",
-		"name": "ContextMenu",
-		"parts": [],
-		"summary": "Right-click (or Shift+F10 / ContextMenu key) menu. Clamped to the viewport, focuses the first item, ↑ ↓ Home End navigate, Escape restores focus.",
-		"slots": [
-			"root",
-			"item",
-			"menu"
-		],
-		"props": [
-			{
-				"name": "items",
-				"type": "ContextMenuItem[]",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<ContextMenu\n\titems={[\n\t\t{ id: \"open\", label: \"Open\", onSelect: () => {} },\n\t\t{ id: \"rename\", label: \"Rename\", onSelect: () => {} },\n\t\t{ id: \"delete\", label: \"Delete\", danger: true, onSelect: () => {} },\n\t]}\n>\n\t<Paper withBorder>Right-click this file card</Paper>\n</ContextMenu>",
-		"interactive": false,
-		"logsActions": true
-	},
-	{
-		"category": "overlays",
-		"name": "Spotlight",
-		"parts": [],
-		"summary": "Command palette: the search input is a combobox driving a listbox — ↑ ↓ move the active option, Enter runs it, Escape closes.",
-		"slots": [
-			"root",
-			"backdrop",
-			"description",
-			"empty",
-			"input",
-			"label",
-			"list",
-			"option",
-			"panel"
-		],
-		"props": [
-			{
-				"name": "actions",
-				"type": "SpotlightAction[]",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "onClose",
-				"type": "() => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "open",
-				"type": "boolean",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "placeholder",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst open = signal(false);\n\treturn (\n\t\t<>\n\t\t\t<Button onClick={() => open.set(true)}>Open command palette</Button>\n\t\t\t<Spotlight\n\t\t\t\topen={open()}\n\t\t\t\tonClose={() => open.set(false)}\n\t\t\t\tactions={[\n\t\t\t\t\t{ id: \"new\", label: \"New file\", onSelect: () => open.set(false) },\n\t\t\t\t\t{ id: \"open\", label: \"Open recent\", onSelect: () => open.set(false) },\n\t\t\t\t\t{ id: \"settings\", label: \"Settings\", onSelect: () => open.set(false) },\n\t\t\t\t]}\n\t\t\t/>\n\t\t</>\n\t);\n}",
-		"interactive": true,
-		"logsActions": false
-	},
-	{
-		"category": "overlays",
-		"name": "Lightbox",
-		"parts": [],
-		"summary": "Fullscreen image viewer: focus trap, Escape, ← → between images.",
-		"slots": [
-			"root",
-			"backdrop",
-			"caption",
-			"control",
-			"controls",
-			"image",
-			"stage"
-		],
-		"props": [
-			{
-				"name": "images",
-				"type": "LightboxImage[]",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "index",
-				"type": "number",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "onClose",
-				"type": "() => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "onChange",
-				"type": "(index: number) => void",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst index = signal<number | null>(null);\n\tconst images = [\n\t\t{ src: \"/images/one.jpg\", alt: \"Blue placeholder\" },\n\t\t{ src: \"/images/two.jpg\", alt: \"Green placeholder\" },\n\t\t{ src: \"/images/three.jpg\", alt: \"Orange placeholder\" },\n\t];\n\treturn (\n\t\t<>\n\t\t\t<Button onClick={() => index.set(0)}>Open gallery</Button>\n\t\t\t{index() !== null ? (\n\t\t\t\t<Lightbox\n\t\t\t\t\timages={images}\n\t\t\t\t\tindex={index() ?? 0}\n\t\t\t\t\tonChange={index.set}\n\t\t\t\t\tonClose={() => index.set(null)}\n\t\t\t\t/>\n\t\t\t) : null}\n\t\t</>\n\t);\n}",
-		"interactive": true,
-		"logsActions": false
-	},
-	{
-		"category": "overlays",
-		"name": "Overlay",
-		"parts": [],
-		"summary": "Dimmed layer over its positioned parent.",
-		"slots": [],
-		"props": [
-			{
-				"name": "blur",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "onClick",
-				"type": "(e: MouseEvent) => void",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Box style={{ position: \"relative\", \"min-height\": \"6rem\" }}>\n\t<Text>Content under the overlay</Text>\n\t<Overlay blur />\n</Box>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "overlays",
-		"name": "LoadingOverlay",
-		"parts": [],
-		"summary": "Covers its positioned parent with a spinner while `visible`.",
-		"slots": [
-			"root",
-			"spinner"
-		],
-		"props": [
-			{
-				"name": "visible",
-				"type": "boolean",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst loading = signal(true);\n\tconst refresh = () => loading.set(true);\n\t// Pretend each refresh takes 1.5 s (effects run only in the browser).\n\teffect(() => {\n\t\tif (!loading()) return;\n\t\tconst timer = setTimeout(() => loading.set(false), 1500);\n\t\treturn () => clearTimeout(timer);\n\t});\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Box style={{ position: \"relative\", \"min-height\": \"6rem\" }}>\n\t\t\t\t<Text>Deploy list</Text>\n\t\t\t\t<LoadingOverlay visible={loading()} label=\"Refreshing\" />\n\t\t\t</Box>\n\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={refresh} disabled={loading()}>\n\t\t\t\tRefresh\n\t\t\t</Button>\n\t\t</Stack>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
 		"category": "navigation",
 		"name": "Navbar",
 		"parts": [
@@ -4492,49 +5921,8 @@ export const catalog: CatalogEntry[] = [
 	},
 	{
 		"category": "navigation",
-		"name": "AppShell",
-		"parts": [],
-		"summary": "Application chrome: optional sidebar + header around main content.",
-		"slots": [
-			"root",
-			"content",
-			"header",
-			"main",
-			"sidebar"
-		],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "contentAs",
-				"type": "\"main\" | \"div\"",
-				"required": false,
-				"description": "Element for the content area (default `\"main\"`). Use `\"div\"` when the shell is nested in a page that already has a `<main>` landmark."
-			},
-			{
-				"name": "header",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "sidebar",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "const sections = [\n\t{ id: \"overview\", label: \"Overview\" },\n\t{ id: \"deploys\", label: \"Deploys\" },\n\t{ id: \"settings\", label: \"Settings\" },\n];\n\nfunction Example() {\n\tconst page = signal(\"deploys\");\n\treturn (\n\t\t<AppShell\n\t\t\tcontentAs=\"div\"\n\t\t\theader={<strong>Acme Console</strong>}\n\t\t\tsidebar={<SidebarNav label=\"Main\" items={sections} value={page()} onChange={page.set} />}\n\t\t>\n\t\t\t<Text>{sections.find((s) => s.id === page())?.label} page</Text>\n\t\t</AppShell>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "navigation",
 		"name": "SidebarNav",
+		"family": "sidebar",
 		"parts": [],
 		"summary": "Vertical nav list.",
 		"slots": [
@@ -4568,6 +5956,74 @@ export const catalog: CatalogEntry[] = [
 			}
 		],
 		"code": "const sections = [\n\t{ id: \"overview\", label: \"Overview\" },\n\t{ id: \"deploys\", label: \"Deploys\" },\n\t{ id: \"settings\", label: \"Settings\" },\n];\n\nfunction Example() {\n\tconst page = signal(\"deploys\");\n\treturn <SidebarNav label=\"Project\" items={sections} value={page()} onChange={page.set} />;\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "navigation",
+		"name": "NavLink",
+		"family": "sidebar",
+		"parts": [],
+		"summary": "Navigation row (button, or `<a>` with `href`).",
+		"slots": [
+			"root",
+			"description",
+			"label",
+			"left",
+			"main",
+			"right"
+		],
+		"props": [
+			{
+				"name": "label",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "active",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "description",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "disabled",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "href",
+				"type": "string",
+				"required": false,
+				"description": "Render as a real link (middle-click, open in new tab, crawlable). Fixed at mount."
+			},
+			{
+				"name": "leftSection",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "onClick",
+				"type": "(e: MouseEvent) => void",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "rightSection",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<NavLink label=\"Deploys\" description=\"History and logs\" href=\"#deploys\" active />",
 		"interactive": false,
 		"logsActions": false
 	},
@@ -4719,6 +6175,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "navigation",
 		"name": "Pagination",
+		"family": "pagination",
 		"parts": [],
 		"summary": "Page navigation with previous/next controls and numbered pages (`variant=\"simple\"` shows a status instead). Collapses to arrows on narrow screens.",
 		"slots": [
@@ -4780,6 +6237,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "navigation",
 		"name": "DotPagination",
+		"family": "pagination",
 		"parts": [],
 		"summary": "Dot indicators for carousels and slides.",
 		"slots": [
@@ -4819,6 +6277,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "navigation",
 		"name": "NextPrev",
+		"family": "pagination",
 		"parts": [],
 		"summary": "Previous / next navigation pair.",
 		"slots": [
@@ -4871,6 +6330,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "navigation",
 		"name": "BackLink",
+		"family": "pagination",
 		"parts": [],
 		"summary": "\"Back\" link with an arrow.",
 		"slots": [
@@ -4905,6 +6365,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "navigation",
 		"name": "Subnav",
+		"family": "subnav",
 		"parts": [],
 		"summary": "Compact pill/sub navigation (UIkit subnav).",
 		"slots": [
@@ -4944,6 +6405,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "navigation",
 		"name": "Iconnav",
+		"family": "subnav",
 		"parts": [],
 		"summary": "Icon-only navigation.",
 		"slots": [
@@ -4982,190 +6444,8 @@ export const catalog: CatalogEntry[] = [
 	},
 	{
 		"category": "navigation",
-		"name": "NavLink",
-		"parts": [],
-		"summary": "Navigation row (button, or `<a>` with `href`).",
-		"slots": [
-			"root",
-			"description",
-			"label",
-			"left",
-			"main",
-			"right"
-		],
-		"props": [
-			{
-				"name": "label",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "active",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "description",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "disabled",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "href",
-				"type": "string",
-				"required": false,
-				"description": "Render as a real link (middle-click, open in new tab, crawlable). Fixed at mount."
-			},
-			{
-				"name": "leftSection",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "onClick",
-				"type": "(e: MouseEvent) => void",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "rightSection",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<NavLink label=\"Deploys\" description=\"History and logs\" href=\"#deploys\" active />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "navigation",
-		"name": "Anchor",
-		"parts": [],
-		"summary": "Text link; `external` opens a new tab with `rel=\"noreferrer noopener\"`.",
-		"slots": [],
-		"props": [
-			{
-				"name": "href",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "external",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Anchor href=\"/docs\">\n\tRead the docs\n</Anchor>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "navigation",
-		"name": "TableOfContents",
-		"parts": [],
-		"summary": "\"On this page\" navigation.",
-		"slots": [
-			"root",
-			"link",
-			"list",
-			"title"
-		],
-		"props": [
-			{
-				"name": "items",
-				"type": "TocItem[]",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "title",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst current = signal(\"install\");\n\tconst sections = [\n\t\t{ id: \"install\", label: \"Installation\" },\n\t\t{ id: \"usage\", label: \"Usage\" },\n\t\t{ id: \"theming\", label: \"Theming\" },\n\t];\n\treturn (\n\t\t<TableOfContents\n\t\t\ttitle=\"On this page\"\n\t\t\titems={sections.map((s) => ({\n\t\t\t\t...s,\n\t\t\t\tactive: current() === s.id,\n\t\t\t\tonSelect: () => current.set(s.id),\n\t\t\t}))}\n\t\t/>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "navigation",
-		"name": "ScrollSpy",
-		"parts": [],
-		"summary": "Highlights the section currently in view, in the page or in the sections' scroll container.",
-		"slots": [
-			"root",
-			"item"
-		],
-		"props": [
-			{
-				"name": "items",
-				"type": "ScrollSpyItem[]",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": "Accessible name (default \"On this page\")."
-			},
-			{
-				"name": "offset",
-				"type": "number",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst sections = [\n\t\t{ id: \"spy-intro\", label: \"Introduction\", text: \"What Arachne UI is and when to use it.\" },\n\t\t{\n\t\t\tid: \"spy-install\",\n\t\t\tlabel: \"Installation\",\n\t\t\ttext: \"Add the package and import the stylesheet.\",\n\t\t},\n\t\t{ id: \"spy-usage\", label: \"Usage\", text: \"Render components and wire their state.\" },\n\t];\n\treturn (\n\t\t<Group align=\"start\" gap=\"1.5rem\">\n\t\t\t<ScrollSpy label=\"On this page\" offset={8} items={sections} />\n\t\t\t<ScrollArea maxHeight=\"9rem\" aria-label=\"Article\">\n\t\t\t\t<For each={sections}>\n\t\t\t\t\t{(section) => (\n\t\t\t\t\t\t<section id={section.id} style={{ \"min-height\": \"7rem\" }}>\n\t\t\t\t\t\t\t<strong>{section.label}</strong>\n\t\t\t\t\t\t\t<Text muted>{section.text}</Text>\n\t\t\t\t\t\t</section>\n\t\t\t\t\t)}\n\t\t\t\t</For>\n\t\t\t</ScrollArea>\n\t\t</Group>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "navigation",
-		"name": "SkipLink",
-		"parts": [],
-		"summary": "Visually hidden until focused; jumps to `#main` by default.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "href",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tlet link: HTMLAnchorElement | undefined;\n\treturn (\n\t\t<Box style={{ position: \"relative\", \"padding-top\": \"3rem\" }}>\n\t\t\t<SkipLink\n\t\t\t\thref=\"#main\"\n\t\t\t\tref={(el: HTMLElement) => {\n\t\t\t\t\tlink = el as HTMLAnchorElement;\n\t\t\t\t}}\n\t\t\t>\n\t\t\t\tSkip to content\n\t\t\t</SkipLink>\n\t\t\t<Group gap=\"0.75rem\">\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => link?.focus()}>\n\t\t\t\t\tReveal the skip link\n\t\t\t\t</Button>\n\t\t\t\t<Text muted>It appears only while focused — keyboard users meet it first on Tab.</Text>\n\t\t\t</Group>\n\t\t</Box>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "navigation",
 		"name": "BottomNav",
+		"family": "subnav",
 		"parts": [],
 		"summary": "Mobile tab bar.",
 		"slots": [
@@ -5206,30 +6486,84 @@ export const catalog: CatalogEntry[] = [
 	},
 	{
 		"category": "navigation",
-		"name": "Thumbnav",
+		"name": "Burger",
 		"parts": [],
-		"summary": "Thumbnail picker.",
+		"summary": "Standalone hamburger control (Mantine Burger).",
+		"slots": [],
+		"props": [
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "onClick",
+				"type": "(e: MouseEvent) => void",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "opened",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "size",
+				"type": "\"sm\" | \"md\"",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst opened = signal(false);\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<Burger\n\t\t\t\topened={opened()}\n\t\t\t\tlabel={opened() ? \"Close navigation\" : \"Open navigation\"}\n\t\t\t\tonClick={() => opened.set(!opened())}\n\t\t\t/>\n\t\t\t<Text muted>Navigation is {opened() ? \"open\" : \"closed\"}</Text>\n\t\t</Group>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "navigation",
+		"name": "TableOfContents",
+		"family": "on-this-page",
+		"parts": [],
+		"summary": "\"On this page\" navigation.",
 		"slots": [
 			"root",
-			"image",
+			"link",
+			"list",
+			"title"
+		],
+		"props": [
+			{
+				"name": "items",
+				"type": "TocItem[]",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "title",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst current = signal(\"install\");\n\tconst sections = [\n\t\t{ id: \"install\", label: \"Installation\" },\n\t\t{ id: \"usage\", label: \"Usage\" },\n\t\t{ id: \"theming\", label: \"Theming\" },\n\t];\n\treturn (\n\t\t<TableOfContents\n\t\t\ttitle=\"On this page\"\n\t\t\titems={sections.map((s) => ({\n\t\t\t\t...s,\n\t\t\t\tactive: current() === s.id,\n\t\t\t\tonSelect: () => current.set(s.id),\n\t\t\t}))}\n\t\t/>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "navigation",
+		"name": "ScrollSpy",
+		"family": "on-this-page",
+		"parts": [],
+		"summary": "Highlights the section currently in view, in the page or in the sections' scroll container.",
+		"slots": [
+			"root",
 			"item"
 		],
 		"props": [
 			{
 				"name": "items",
-				"type": "ThumbnavItem[]",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "onChange",
-				"type": "(id: string) => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "value",
-				"type": "string",
+				"type": "ScrollSpyItem[]",
 				"required": true,
 				"description": ""
 			},
@@ -5237,16 +6571,48 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "string",
 				"required": false,
-				"description": "Accessible name (default \"Thumbnails\")."
+				"description": "Accessible name (default \"On this page\")."
+			},
+			{
+				"name": "offset",
+				"type": "number",
+				"required": false,
+				"description": ""
 			}
 		],
-		"code": "function Example() {\n\tconst photos = [\n\t\t{ id: \"lake\", src: \"/images/lake.jpg\", alt: \"Lake at dawn\" },\n\t\t{ id: \"forest\", src: \"/images/forest.jpg\", alt: \"Forest trail\" },\n\t\t{ id: \"desert\", src: \"/images/desert.jpg\", alt: \"Desert dunes\" },\n\t\t{ id: \"city\", src: \"/images/city.jpg\", alt: \"City at night\" },\n\t];\n\tconst photo = signal(\"forest\");\n\tconst current = () => photos.find((ph) => ph.id === photo()) ?? photos[0];\n\treturn (\n\t\t<Stack gap=\"0.75rem\" style={{ \"max-width\": \"24rem\" }}>\n\t\t\t<img\n\t\t\t\tsrc={current()?.src}\n\t\t\t\talt={current()?.alt}\n\t\t\t\twidth=\"640\"\n\t\t\t\theight=\"400\"\n\t\t\t\tstyle={{ width: \"100%\", height: \"auto\", \"border-radius\": \"var(--a-radius)\" }}\n\t\t\t/>\n\t\t\t<Thumbnav label=\"Photos\" items={photos} value={photo()} onChange={photo.set} />\n\t\t</Stack>\n\t);\n}",
+		"code": "function Example() {\n\tconst sections = [\n\t\t{ id: \"spy-intro\", label: \"Introduction\", text: \"What Arachne UI is and when to use it.\" },\n\t\t{\n\t\t\tid: \"spy-install\",\n\t\t\tlabel: \"Installation\",\n\t\t\ttext: \"Add the package and import the stylesheet.\",\n\t\t},\n\t\t{ id: \"spy-usage\", label: \"Usage\", text: \"Render components and wire their state.\" },\n\t];\n\treturn (\n\t\t<Group align=\"start\" gap=\"1.5rem\">\n\t\t\t<ScrollSpy label=\"Article sections\" offset={8} items={sections} />\n\t\t\t<ScrollArea maxHeight=\"9rem\" aria-label=\"Article\">\n\t\t\t\t<For each={sections}>\n\t\t\t\t\t{(section) => (\n\t\t\t\t\t\t<section id={section.id} style={{ \"min-height\": \"7rem\" }}>\n\t\t\t\t\t\t\t<strong>{section.label}</strong>\n\t\t\t\t\t\t\t<Text muted>{section.text}</Text>\n\t\t\t\t\t\t</section>\n\t\t\t\t\t)}\n\t\t\t\t</For>\n\t\t\t</ScrollArea>\n\t\t</Group>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "navigation",
+		"name": "SkipLink",
+		"family": "page-helpers",
+		"parts": [],
+		"summary": "Visually hidden until focused; jumps to `#main` by default.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "href",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tlet link: HTMLAnchorElement | undefined;\n\treturn (\n\t\t<Box style={{ position: \"relative\", \"padding-top\": \"3rem\" }}>\n\t\t\t<SkipLink\n\t\t\t\thref=\"#main\"\n\t\t\t\tref={(el: HTMLElement) => {\n\t\t\t\t\tlink = el as HTMLAnchorElement;\n\t\t\t\t}}\n\t\t\t>\n\t\t\t\tSkip to content\n\t\t\t</SkipLink>\n\t\t\t<Group gap=\"0.75rem\">\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => link?.focus()}>\n\t\t\t\t\tReveal the skip link\n\t\t\t\t</Button>\n\t\t\t\t<Text muted>It appears only while focused — keyboard users meet it first on Tab.</Text>\n\t\t\t</Group>\n\t\t</Box>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
 	},
 	{
 		"category": "navigation",
 		"name": "ToTop",
+		"family": "page-helpers",
 		"parts": [],
 		"summary": "Scroll-to-top control (UIkit totop).",
 		"slots": [
@@ -5277,12 +6643,34 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "navigation",
-		"name": "Affix",
+		"category": "overlays",
+		"name": "Modal",
 		"parts": [],
-		"summary": "Viewport-pinned container.",
-		"slots": [],
+		"summary": "Centered dialog with focus trap, Escape, scroll lock and enter/exit motion.",
+		"slots": [
+			"root",
+			"backdrop",
+			"body",
+			"close",
+			"description",
+			"footer",
+			"header",
+			"panel",
+			"title"
+		],
 		"props": [
+			{
+				"name": "onClose",
+				"type": "() => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "open",
+				"type": "boolean",
+				"required": true,
+				"description": ""
+			},
 			{
 				"name": "children",
 				"type": "content",
@@ -5290,29 +6678,176 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			},
 			{
-				"name": "offset",
+				"name": "closeOnBackdrop",
+				"type": "boolean",
+				"required": false,
+				"description": "Close when the backdrop is clicked (default true)."
+			},
+			{
+				"name": "closeOnEscape",
+				"type": "boolean",
+				"required": false,
+				"description": "Close on Escape (default true)."
+			},
+			{
+				"name": "description",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "footer",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "hideClose",
+				"type": "boolean",
+				"required": false,
+				"description": "Hide the header close button."
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": "Accessible name when there is no visible `title`."
+			},
+			{
+				"name": "mount",
+				"type": "Element",
+				"required": false,
+				"description": "Portal target (defaults to `document.body`)."
+			},
+			{
+				"name": "placement",
+				"type": "\"center\" | \"top\"",
+				"required": false,
+				"description": "Vertical placement (default `center`)."
+			},
+			{
+				"name": "role",
+				"type": "\"dialog\" | \"alertdialog\"",
+				"required": false,
+				"description": "`alertdialog` for confirmations that interrupt the user."
+			},
+			{
+				"name": "size",
+				"type": "\"full\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+				"required": false,
+				"description": "Width preset; override freely with `--a-modal-width`."
+			},
+			{
+				"name": "title",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst open = signal(false);\n\treturn (\n\t\t<>\n\t\t\t<Button onClick={() => open.set(true)}>Open modal</Button>\n\t\t\t<Modal\n\t\t\t\topen={open()}\n\t\t\t\tonClose={() => open.set(false)}\n\t\t\t\ttitle=\"Edit profile\"\n\t\t\t\tdescription=\"Changes are saved when you press Save.\"\n\t\t\t\tfooter={\n\t\t\t\t\t<Group gap=\"0.5rem\">\n\t\t\t\t\t\t<Button variant=\"ghost\" onClick={() => open.set(false)}>\n\t\t\t\t\t\t\tCancel\n\t\t\t\t\t\t</Button>\n\t\t\t\t\t\t<Button onClick={() => open.set(false)}>Save</Button>\n\t\t\t\t\t</Group>\n\t\t\t\t}\n\t\t\t>\n\t\t\t\tModal body content.\n\t\t\t</Modal>\n\t\t</>\n\t);\n}",
+		"interactive": true,
+		"logsActions": false
+	},
+	{
+		"category": "overlays",
+		"name": "ConfirmDialog",
+		"parts": [],
+		"summary": "Confirmation built on the shared dialog surface (focus trap, Escape, scroll lock, motion). Initial focus goes to Cancel — the safe choice. Slots match Modal (`root` `backdrop` `panel` …); attributes land on the panel.",
+		"slots": [
+			"root",
+			"backdrop",
+			"body",
+			"close",
+			"description",
+			"footer",
+			"header",
+			"panel",
+			"title"
+		],
+		"props": [
+			{
+				"name": "message",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "onCancel",
+				"type": "() => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "onConfirm",
+				"type": "() => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "open",
+				"type": "boolean",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "cancelLabel",
 				"type": "string",
 				"required": false,
 				"description": ""
 			},
 			{
-				"name": "position",
-				"type": "\"bottom-right\" | \"bottom-left\" | \"top-left\" | \"top-right\"",
+				"name": "confirmLabel",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "danger",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "title",
+				"type": "string",
 				"required": false,
 				"description": ""
 			}
 		],
-		"code": "<Affix position=\"bottom-right\" offset=\"1rem\">\n\t<Button size=\"sm\" onClick={() => {}}>\n\t\tFeedback\n\t</Button>\n</Affix>",
-		"interactive": false,
-		"logsActions": true
+		"code": "function Example() {\n\tconst open = signal(false);\n\treturn (\n\t\t<>\n\t\t\t<Button variant=\"danger\" onClick={() => open.set(true)}>\n\t\t\t\tDelete project\n\t\t\t</Button>\n\t\t\t<ConfirmDialog\n\t\t\t\topen={open()}\n\t\t\t\tdanger\n\t\t\t\ttitle=\"Delete project?\"\n\t\t\t\tmessage=\"This cannot be undone.\"\n\t\t\t\tconfirmLabel=\"Delete\"\n\t\t\t\tonConfirm={() => open.set(false)}\n\t\t\t\tonCancel={() => open.set(false)}\n\t\t\t/>\n\t\t</>\n\t);\n}",
+		"interactive": true,
+		"logsActions": false
 	},
 	{
-		"category": "navigation",
-		"name": "Sticky",
+		"category": "overlays",
+		"name": "Drawer",
+		"family": "drawer",
 		"parts": [],
-		"summary": "Sticks its content to an edge of the scroll container.",
-		"slots": [],
+		"summary": "Edge-anchored dialog. Slots match {@link Modal}.",
+		"slots": [
+			"root",
+			"backdrop",
+			"body",
+			"close",
+			"description",
+			"footer",
+			"header",
+			"panel",
+			"title"
+		],
 		"props": [
+			{
+				"name": "onClose",
+				"type": "() => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "open",
+				"type": "boolean",
+				"required": true,
+				"description": ""
+			},
 			{
 				"name": "children",
 				"type": "content",
@@ -5320,29 +6855,302 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			},
 			{
-				"name": "offset",
+				"name": "closeOnBackdrop",
+				"type": "boolean",
+				"required": false,
+				"description": "Close when the backdrop is clicked (default true)."
+			},
+			{
+				"name": "closeOnEscape",
+				"type": "boolean",
+				"required": false,
+				"description": "Close on Escape (default true)."
+			},
+			{
+				"name": "description",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "footer",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "hideClose",
+				"type": "boolean",
+				"required": false,
+				"description": "Hide the header close button."
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": "Accessible name when there is no visible `title`."
+			},
+			{
+				"name": "mount",
+				"type": "Element",
+				"required": false,
+				"description": "Portal target (defaults to `document.body`)."
+			},
+			{
+				"name": "role",
+				"type": "\"dialog\" | \"alertdialog\"",
+				"required": false,
+				"description": "`alertdialog` for confirmations that interrupt the user."
+			},
+			{
+				"name": "side",
+				"type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "size",
+				"type": "\"full\" | \"sm\" | \"md\" | \"lg\"",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "title",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst open = signal(false);\n\treturn (\n\t\t<>\n\t\t\t<Button onClick={() => open.set(true)}>Open drawer</Button>\n\t\t\t<Drawer open={open()} onClose={() => open.set(false)} title=\"Filters\">\n\t\t\t\tDrawer content.\n\t\t\t</Drawer>\n\t\t</>\n\t);\n}",
+		"interactive": true,
+		"logsActions": false
+	},
+	{
+		"category": "overlays",
+		"name": "BottomSheet",
+		"family": "drawer",
+		"parts": [],
+		"summary": "Mobile bottom sheet (UIkit / Mantine Drawer bottom). Built on the shared dialog frame: focus trap, Escape (topmost layer), scroll lock, exit motion. Slots match {@link DialogBaseProps} (`panel` is the host); theme key `BottomSheet`.",
+		"slots": [
+			"root",
+			"backdrop",
+			"body",
+			"close",
+			"description",
+			"footer",
+			"header",
+			"panel",
+			"title"
+		],
+		"props": [
+			{
+				"name": "onClose",
+				"type": "() => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "open",
+				"type": "boolean",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "closeOnBackdrop",
+				"type": "boolean",
+				"required": false,
+				"description": "Close when the backdrop is clicked (default true)."
+			},
+			{
+				"name": "closeOnEscape",
+				"type": "boolean",
+				"required": false,
+				"description": "Close on Escape (default true)."
+			},
+			{
+				"name": "description",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "footer",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "hideClose",
+				"type": "boolean",
+				"required": false,
+				"description": "Hide the header close button."
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": "Accessible name when there is no visible `title`."
+			},
+			{
+				"name": "mount",
+				"type": "Element",
+				"required": false,
+				"description": "Portal target (defaults to `document.body`)."
+			},
+			{
+				"name": "role",
+				"type": "\"dialog\" | \"alertdialog\"",
+				"required": false,
+				"description": "`alertdialog` for confirmations that interrupt the user."
+			},
+			{
+				"name": "title",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst open = signal(false);\n\treturn (\n\t\t<>\n\t\t\t<Button onClick={() => open.set(true)}>Open sheet</Button>\n\t\t\t<BottomSheet open={open()} onClose={() => open.set(false)} title=\"Share\">\n\t\t\t\tSheet content.\n\t\t\t</BottomSheet>\n\t\t</>\n\t);\n}",
+		"interactive": true,
+		"logsActions": false
+	},
+	{
+		"category": "overlays",
+		"name": "Popover",
+		"family": "popover",
+		"parts": [],
+		"summary": "Click-to-toggle panel anchored to a trigger. Escape / outside click close it and return focus to the trigger.",
+		"slots": [
+			"root",
+			"arrow",
+			"panel",
+			"trigger"
+		],
+		"props": [
+			{
+				"name": "onOpenChange",
+				"type": "(open: boolean) => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "open",
+				"type": "boolean",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "arrow",
+				"type": "boolean",
+				"required": false,
+				"description": "Show a small arrow pointing at the trigger."
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "content",
+				"required": false,
+				"description": "Label for the built-in trigger button"
+			},
+			{
+				"name": "panelLabel",
+				"type": "string",
+				"required": false,
+				"description": "Accessible name for the panel (defaults to the trigger label when it's text)."
+			},
+			{
+				"name": "placement",
+				"type": "PopoverPlacement",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "trigger",
+				"type": "(api: PopoverTriggerApi) => unknown",
+				"required": false,
+				"description": "Render your own trigger: `trigger={(t) => <MyButton {...t.attrs} />}`."
+			}
+		],
+		"code": "function Example() {\n\tconst open = signal(false);\n\treturn (\n\t\t<Popover open={open()} onOpenChange={open.set} label=\"Share\" panelLabel=\"Share project\">\n\t\t\tAnyone with the link can view this project.\n\t\t</Popover>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "overlays",
+		"name": "HoverCard",
+		"family": "popover",
+		"parts": [],
+		"summary": "Hover/focus card panel (Mantine HoverCard).",
+		"slots": [
+			"root",
+			"dropdown",
+			"target"
+		],
+		"props": [
+			{
+				"name": "dropdown",
+				"type": "content",
+				"required": true,
+				"description": "Panel content shown on hover/focus."
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "closeDelay",
 				"type": "number",
 				"required": false,
 				"description": ""
 			},
 			{
-				"name": "position",
-				"type": "\"top\" | \"bottom\"",
+				"name": "openDelay",
+				"type": "number",
 				"required": false,
 				"description": ""
 			}
 		],
-		"code": "<Sticky offset={8}>\n\t<Paper withBorder>Sticks 8px from the top while its container scrolls.</Paper>\n</Sticky>",
+		"code": "<HoverCard dropdown={<Text>Ada Lovelace · Analyst of engines</Text>}>\n\t<Anchor href=\"#ada\">@ada</Anchor>\n</HoverCard>",
 		"interactive": false,
 		"logsActions": false
 	},
 	{
-		"category": "navigation",
-		"name": "StickyBar",
+		"category": "overlays",
+		"name": "Tooltip",
 		"parts": [],
-		"summary": "Bar pinned to the top/bottom of its scroll container.",
-		"slots": [],
+		"summary": "Hover/focus tooltip linked with `aria-describedby`; Escape dismisses and the tooltip itself is hoverable (WCAG 1.4.13).",
+		"slots": [
+			"root",
+			"arrow",
+			"target",
+			"tooltip"
+		],
 		"props": [
+			{
+				"name": "content",
+				"type": "content",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "arrow",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
 			{
 				"name": "children",
 				"type": "content",
@@ -5350,90 +7158,60 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			},
 			{
-				"name": "position",
-				"type": "\"top\" | \"bottom\"",
+				"name": "closeDelay",
+				"type": "number",
+				"required": false,
+				"description": "Delay before hiding, ms (default 80) — lets the pointer reach the tooltip."
+			},
+			{
+				"name": "disabled",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "openDelay",
+				"type": "number",
+				"required": false,
+				"description": "Delay before showing on hover, ms (default 250). Focus shows immediately."
+			},
+			{
+				"name": "placement",
+				"type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
 				"required": false,
 				"description": ""
 			}
 		],
-		"code": "<StickyBar position=\"bottom\">\n\t<Text>You have unsaved changes.</Text>\n\t<Button size=\"sm\" onClick={() => {}}>\n\t\tSave\n\t</Button>\n</StickyBar>",
+		"code": "<Tooltip content=\"Copies the deploy URL\">\n\t<Button variant=\"outline\" onClick={() => {}}>\n\t\tCopy link\n\t</Button>\n</Tooltip>",
 		"interactive": false,
 		"logsActions": true
 	},
 	{
-		"category": "navigation",
-		"name": "UserButton",
+		"category": "overlays",
+		"name": "Menu",
+		"family": "menu",
 		"parts": [],
-		"summary": "Button showing a user's avatar, name and email.",
+		"summary": "Action menu with roving focus (↑ ↓ Home End, type-ahead), Escape, outside click, focus restore and enter/exit motion.",
 		"slots": [
 			"root",
-			"avatar",
-			"chevron",
-			"email",
-			"name",
-			"text"
+			"description",
+			"group",
+			"icon",
+			"item",
+			"label",
+			"separator",
+			"shortcut"
 		],
 		"props": [
 			{
-				"name": "name",
-				"type": "string",
+				"name": "items",
+				"type": "MenuItem[]",
 				"required": true,
 				"description": ""
 			},
 			{
-				"name": "email",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "end",
-				"type": "content",
-				"required": false,
-				"description": "Trailing content (default chevron); `null` hides it."
-			},
-			{
-				"name": "onClick",
-				"type": "(e: MouseEvent) => void",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "src",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<UserButton name=\"Ada Lovelace\" email=\"ada@example.com\" onClick={() => {}} />",
-		"interactive": false,
-		"logsActions": true
-	},
-	{
-		"category": "navigation",
-		"name": "LocaleSwitcher",
-		"parts": [],
-		"summary": "Inline language picker.",
-		"slots": [
-			"root",
-			"option"
-		],
-		"props": [
-			{
-				"name": "onChange",
-				"type": "(value: string) => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "options",
-				"type": "LocaleOption[]",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "value",
-				"type": "string",
+				"name": "open",
+				"type": "boolean",
 				"required": true,
 				"description": ""
 			},
@@ -5441,47 +7219,178 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "string",
 				"required": false,
-				"description": "Accessible name (default \"Language\")."
-			}
-		],
-		"code": "function Example() {\n\tconst locale = signal(\"en\");\n\treturn (\n\t\t<LocaleSwitcher\n\t\t\tlabel=\"Language\"\n\t\t\tvalue={locale()}\n\t\t\toptions={[\n\t\t\t\t{ value: \"en\", label: \"English\" },\n\t\t\t\t{ value: \"de\", label: \"Deutsch\" },\n\t\t\t\t{ value: \"ja\", label: \"日本語\" },\n\t\t\t]}\n\t\t\tonChange={locale.set}\n\t\t/>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "navigation",
-		"name": "OrgSwitcher",
-		"parts": [],
-		"summary": "Workspace switcher button.",
-		"slots": [
-			"root",
-			"avatar",
-			"chevron",
-			"meta",
-			"name",
-			"plan"
-		],
-		"props": [
-			{
-				"name": "org",
-				"type": "OrgOption",
-				"required": true,
-				"description": ""
+				"description": "Accessible name for the menu."
 			},
 			{
-				"name": "onClick",
+				"name": "onClose",
 				"type": "() => void",
+				"required": false,
+				"description": "Called on outside click / Escape / selection. Prefer with a wrapping `.a-menu-host`."
+			},
+			{
+				"name": "placement",
+				"type": "MenuPlacement",
 				"required": false,
 				"description": ""
 			}
 		],
-		"code": "<OrgSwitcher\n\torg={{ id: \"acme\", name: \"Acme Inc.\", plan: \"Pro\" }}\n\tonClick={() => {}}\n/>",
+		"code": "function Example() {\n\tconst open = signal(false);\n\tconst last = signal(\"\");\n\tconst pick = (label: string) => () => last.set(label);\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<div style={{ position: \"relative\" }}>\n\t\t\t\t<Button variant=\"outline\" aria-expanded={open()} onClick={() => open.set(!open())}>\n\t\t\t\t\tProject actions ▾\n\t\t\t\t</Button>\n\t\t\t\t<Menu\n\t\t\t\t\topen={open()}\n\t\t\t\t\tonClose={() => open.set(false)}\n\t\t\t\t\tlabel=\"Project actions\"\n\t\t\t\t\titems={[\n\t\t\t\t\t\t{ type: \"label\", label: \"marketing-site\" },\n\t\t\t\t\t\t{ label: \"Rename\", onSelect: pick(\"Rename\") },\n\t\t\t\t\t\t{ label: \"Duplicate\", onSelect: pick(\"Duplicate\") },\n\t\t\t\t\t\t{ type: \"separator\" },\n\t\t\t\t\t\t{ label: \"Delete\", onSelect: pick(\"Delete\"), danger: true },\n\t\t\t\t\t]}\n\t\t\t\t/>\n\t\t\t</div>\n\t\t\t<Text muted>{last() ? `Chose “${last()}”` : \"Nothing chosen yet\"}</Text>\n\t\t</Group>\n\t);\n}",
+		"interactive": true,
+		"logsActions": false
+	},
+	{
+		"category": "overlays",
+		"name": "ContextMenu",
+		"family": "menu",
+		"parts": [],
+		"summary": "Right-click (or Shift+F10 / ContextMenu key) menu. Clamped to the viewport, focuses the first item, ↑ ↓ Home End navigate, Escape restores focus.",
+		"slots": [
+			"root",
+			"item",
+			"menu"
+		],
+		"props": [
+			{
+				"name": "items",
+				"type": "ContextMenuItem[]",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<ContextMenu\n\titems={[\n\t\t{ id: \"open\", label: \"Open\", onSelect: () => {} },\n\t\t{ id: \"rename\", label: \"Rename\", onSelect: () => {} },\n\t\t{ id: \"delete\", label: \"Delete\", danger: true, onSelect: () => {} },\n\t]}\n>\n\t<Paper withBorder>Right-click this file card</Paper>\n</ContextMenu>",
 		"interactive": false,
 		"logsActions": true
 	},
 	{
+		"category": "overlays",
+		"name": "Spotlight",
+		"parts": [],
+		"summary": "Command palette: the search input is a combobox driving a listbox — ↑ ↓ move the active option, Enter runs it, Escape closes.",
+		"slots": [
+			"root",
+			"backdrop",
+			"description",
+			"empty",
+			"input",
+			"label",
+			"list",
+			"option",
+			"panel"
+		],
+		"props": [
+			{
+				"name": "actions",
+				"type": "SpotlightAction[]",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "onClose",
+				"type": "() => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "open",
+				"type": "boolean",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "placeholder",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst open = signal(false);\n\treturn (\n\t\t<>\n\t\t\t<Button onClick={() => open.set(true)}>Open command palette</Button>\n\t\t\t<Spotlight\n\t\t\t\topen={open()}\n\t\t\t\tonClose={() => open.set(false)}\n\t\t\t\tactions={[\n\t\t\t\t\t{ id: \"new\", label: \"New file\", onSelect: () => open.set(false) },\n\t\t\t\t\t{ id: \"open\", label: \"Open recent\", onSelect: () => open.set(false) },\n\t\t\t\t\t{ id: \"settings\", label: \"Settings\", onSelect: () => open.set(false) },\n\t\t\t\t]}\n\t\t\t/>\n\t\t</>\n\t);\n}",
+		"interactive": true,
+		"logsActions": false
+	},
+	{
+		"category": "overlays",
+		"name": "Lightbox",
+		"parts": [],
+		"summary": "Fullscreen image viewer: focus trap, Escape, ← → between images.",
+		"slots": [
+			"root",
+			"backdrop",
+			"caption",
+			"control",
+			"controls",
+			"image",
+			"stage"
+		],
+		"props": [
+			{
+				"name": "images",
+				"type": "LightboxImage[]",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "index",
+				"type": "number",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "onClose",
+				"type": "() => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "onChange",
+				"type": "(index: number) => void",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst index = signal<number | null>(null);\n\tconst images = [\n\t\t{ src: \"/images/one.jpg\", alt: \"Blue placeholder\" },\n\t\t{ src: \"/images/two.jpg\", alt: \"Green placeholder\" },\n\t\t{ src: \"/images/three.jpg\", alt: \"Orange placeholder\" },\n\t];\n\treturn (\n\t\t<>\n\t\t\t<Button onClick={() => index.set(0)}>Open gallery</Button>\n\t\t\t{index() !== null ? (\n\t\t\t\t<Lightbox\n\t\t\t\t\timages={images}\n\t\t\t\t\tindex={index() ?? 0}\n\t\t\t\t\tonChange={index.set}\n\t\t\t\t\tonClose={() => index.set(null)}\n\t\t\t\t/>\n\t\t\t) : null}\n\t\t</>\n\t);\n}",
+		"interactive": true,
+		"logsActions": false
+	},
+	{
+		"category": "overlays",
+		"name": "Overlay",
+		"parts": [],
+		"summary": "Dimmed layer over its positioned parent.",
+		"slots": [],
+		"props": [
+			{
+				"name": "blur",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "onClick",
+				"type": "(e: MouseEvent) => void",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Box style={{ position: \"relative\", \"min-height\": \"6rem\" }}>\n\t<Text>Content under the overlay</Text>\n\t<Overlay blur />\n</Box>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
 		"category": "feedback",
 		"name": "Alert",
+		"family": "alert",
 		"parts": [],
 		"summary": "Inline status message; danger/warning are assertive alerts.",
 		"slots": [
@@ -5516,6 +7425,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "feedback",
 		"name": "Callout",
+		"family": "alert",
 		"parts": [],
 		"summary": "Highlighted note block with icon and tone (info, success, warning, danger).",
 		"slots": [
@@ -5553,6 +7463,89 @@ export const catalog: CatalogEntry[] = [
 		],
 		"code": "<Callout tone=\"warning\" title=\"Breaking change\">\n\t<code>size</code> no longer sets the heading level — use <code>order</code>.\n</Callout>",
 		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "feedback",
+		"name": "Notification",
+		"family": "notification",
+		"parts": [],
+		"summary": "Inline notification (distinct from toast host). Danger / warning announce assertively.",
+		"slots": [
+			"root",
+			"body",
+			"close",
+			"content",
+			"title"
+		],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "onClose",
+				"type": "() => void",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "title",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "tone",
+				"type": "AlertTone",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst visible = signal(true);\n\treturn (\n\t\t<Show\n\t\t\twhen={visible()}\n\t\t\tfallback={\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => visible.set(true)}>\n\t\t\t\t\tShow notification\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<Notification tone=\"info\" title=\"New sign-in\" onClose={() => visible.set(false)}>\n\t\t\t\tChrome on macOS, Berlin — just now.\n\t\t\t</Notification>\n\t\t</Show>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "feedback",
+		"name": "ToastHost",
+		"family": "notification",
+		"parts": [],
+		"summary": "Live region for toasts. Existing toasts keep their DOM when others come and go; timers pause on hover/focus.",
+		"slots": [
+			"root",
+			"action",
+			"copy",
+			"dismiss",
+			"icon",
+			"message",
+			"title",
+			"toast"
+		],
+		"props": [
+			{
+				"name": "toaster",
+				"type": "Toaster",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "position",
+				"type": "ToastPosition",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "render",
+				"type": "(toast: ToastItem, dismiss: () => void) => unknown",
+				"required": false,
+				"description": "Custom toast body; receives the item and a dismiss callback."
+			}
+		],
+		"code": "function Example() {\n\tconst toaster = createToaster();\n\treturn (\n\t\t<>\n\t\t\t<Group gap=\"0.5rem\">\n\t\t\t\t<Button onClick={() => toaster.push({ title: \"Saved\", message: \"Your changes are live.\" })}>\n\t\t\t\t\tInfo toast\n\t\t\t\t</Button>\n\t\t\t\t<Button\n\t\t\t\t\tvariant=\"success\"\n\t\t\t\t\tonClick={() => toaster.push({ tone: \"success\", message: \"Deployment finished.\" })}\n\t\t\t\t>\n\t\t\t\t\tSuccess\n\t\t\t\t</Button>\n\t\t\t\t<Button\n\t\t\t\t\tvariant=\"danger\"\n\t\t\t\t\tonClick={() =>\n\t\t\t\t\t\ttoaster.push({\n\t\t\t\t\t\t\ttone: \"danger\",\n\t\t\t\t\t\t\tmessage: \"Build failed.\",\n\t\t\t\t\t\t\taction: { label: \"Retry\", onClick: () => {} },\n\t\t\t\t\t\t})\n\t\t\t\t\t}\n\t\t\t\t>\n\t\t\t\t\tError with action\n\t\t\t\t</Button>\n\t\t\t</Group>\n\t\t\t<ToastHost toaster={toaster} aria-label=\"Demo notifications\" />\n\t\t</>\n\t);\n}",
+		"interactive": true,
 		"logsActions": false
 	},
 	{
@@ -5638,88 +7631,8 @@ export const catalog: CatalogEntry[] = [
 	},
 	{
 		"category": "feedback",
-		"name": "Notification",
-		"parts": [],
-		"summary": "Inline notification (distinct from toast host). Danger / warning announce assertively.",
-		"slots": [
-			"root",
-			"body",
-			"close",
-			"content",
-			"title"
-		],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "onClose",
-				"type": "() => void",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "title",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "tone",
-				"type": "AlertTone",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst visible = signal(true);\n\treturn (\n\t\t<Show\n\t\t\twhen={visible()}\n\t\t\tfallback={\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => visible.set(true)}>\n\t\t\t\t\tShow notification\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<Notification tone=\"info\" title=\"New sign-in\" onClose={() => visible.set(false)}>\n\t\t\t\tChrome on macOS, Berlin — just now.\n\t\t\t</Notification>\n\t\t</Show>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "feedback",
-		"name": "ToastHost",
-		"parts": [],
-		"summary": "Live region for toasts. Existing toasts keep their DOM when others come and go; timers pause on hover/focus.",
-		"slots": [
-			"root",
-			"action",
-			"copy",
-			"dismiss",
-			"icon",
-			"message",
-			"title",
-			"toast"
-		],
-		"props": [
-			{
-				"name": "toaster",
-				"type": "Toaster",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "position",
-				"type": "ToastPosition",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "render",
-				"type": "(toast: ToastItem, dismiss: () => void) => unknown",
-				"required": false,
-				"description": "Custom toast body; receives the item and a dismiss callback."
-			}
-		],
-		"code": "function Example() {\n\tconst toaster = createToaster();\n\treturn (\n\t\t<>\n\t\t\t<Group gap=\"0.5rem\">\n\t\t\t\t<Button onClick={() => toaster.push({ title: \"Saved\", message: \"Your changes are live.\" })}>\n\t\t\t\t\tInfo toast\n\t\t\t\t</Button>\n\t\t\t\t<Button\n\t\t\t\t\tvariant=\"success\"\n\t\t\t\t\tonClick={() => toaster.push({ tone: \"success\", message: \"Deployment finished.\" })}\n\t\t\t\t>\n\t\t\t\t\tSuccess\n\t\t\t\t</Button>\n\t\t\t\t<Button\n\t\t\t\t\tvariant=\"danger\"\n\t\t\t\t\tonClick={() =>\n\t\t\t\t\t\ttoaster.push({\n\t\t\t\t\t\t\ttone: \"danger\",\n\t\t\t\t\t\t\tmessage: \"Build failed.\",\n\t\t\t\t\t\t\taction: { label: \"Retry\", onClick: () => {} },\n\t\t\t\t\t\t})\n\t\t\t\t\t}\n\t\t\t\t>\n\t\t\t\t\tError with action\n\t\t\t\t</Button>\n\t\t\t</Group>\n\t\t\t<ToastHost toaster={toaster} aria-label=\"Demo notifications\" />\n\t\t</>\n\t);\n}",
-		"interactive": true,
-		"logsActions": false
-	},
-	{
-		"category": "feedback",
 		"name": "Banner",
+		"family": "banners",
 		"parts": [],
 		"summary": "Full-width page banner.",
 		"slots": [
@@ -5769,6 +7682,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "feedback",
 		"name": "AnnouncementBar",
+		"family": "banners",
 		"parts": [],
 		"summary": "Site-wide notice strip.",
 		"slots": [
@@ -5797,7 +7711,7 @@ export const catalog: CatalogEntry[] = [
 			},
 			{
 				"name": "tone",
-				"type": "\"danger\" | \"warning\" | \"info\" | \"accent\"",
+				"type": "\"accent\" | \"warning\" | \"info\" | \"danger\"",
 				"required": false,
 				"description": ""
 			}
@@ -5809,6 +7723,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "feedback",
 		"name": "UpgradeBanner",
+		"family": "banners",
 		"parts": [],
 		"summary": "Upsell banner with a call to action.",
 		"slots": [
@@ -5845,6 +7760,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "feedback",
 		"name": "CookieConsent",
+		"family": "notices",
 		"parts": [],
 		"summary": "Cookie consent banner with accept / decline.",
 		"slots": [
@@ -5905,6 +7821,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "feedback",
 		"name": "OfflineNotice",
+		"family": "notices",
 		"parts": [],
 		"summary": "Banner shown while the browser is offline.",
 		"slots": [],
@@ -5928,442 +7845,8 @@ export const catalog: CatalogEntry[] = [
 	},
 	{
 		"category": "feedback",
-		"name": "Spinner",
-		"parts": [],
-		"summary": "Loading indicator.",
-		"slots": [],
-		"props": [
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "size",
-				"type": "\"sm\" | \"md\" | \"lg\"",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Spinner label=\"Loading deploys\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "feedback",
-		"name": "Progress",
-		"parts": [],
-		"summary": "Linear progress bar.",
-		"slots": [
-			"root",
-			"bar"
-		],
-		"props": [
-			{
-				"name": "value",
-				"type": "number",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "color",
-				"type": "\"danger\" | \"warning\" | \"success\" | \"info\" | \"primary\"",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "indeterminate",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "max",
-				"type": "number",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "size",
-				"type": "\"sm\" | \"md\" | \"lg\"",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Progress value={64} color=\"success\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "feedback",
-		"name": "SteppedProgress",
-		"parts": [],
-		"summary": "Progress split into discrete steps.",
-		"slots": [
-			"root",
-			"segment"
-		],
-		"props": [
-			{
-				"name": "steps",
-				"type": "number",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "value",
-				"type": "number",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": "Accessible name (default \"Progress\")."
-			}
-		],
-		"code": "<SteppedProgress label=\"Onboarding\" steps={4} value={2} />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "feedback",
-		"name": "NavigationProgress",
-		"parts": [],
-		"summary": "Top loading bar (Mantine NavigationProgress / NProgress).",
-		"slots": [
-			"root",
-			"bar"
-		],
-		"props": [
-			{
-				"name": "visible",
-				"type": "boolean",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": "Accessible name (default \"Loading\")."
-			},
-			{
-				"name": "value",
-				"type": "number",
-				"required": false,
-				"description": "0–100; omit for indeterminate."
-			}
-		],
-		"code": "function Example() {\n\tconst progress = signal(40);\n\tconst running = signal(true);\n\t// Trickle towards 90% while \"navigating\" (effects run only in the browser).\n\teffect(() => {\n\t\tif (!running()) return;\n\t\tconst timer = setInterval(\n\t\t\t() => progress.set(Math.min(90, progress() + (90 - progress()) * 0.2)),\n\t\t\t300,\n\t\t);\n\t\treturn () => clearInterval(timer);\n\t});\n\treturn (\n\t\t<Stack gap=\"0.75rem\" style={{ \"padding-top\": \"0.75rem\" }}>\n\t\t\t{/* Pinned to the top of the page (here: of the preview). */}\n\t\t\t<NavigationProgress visible={progress() < 100} value={progress()} />\n\t\t\t<Group gap=\"0.5rem\">\n\t\t\t\t<Button\n\t\t\t\t\tsize=\"sm\"\n\t\t\t\t\tonClick={() => {\n\t\t\t\t\t\tprogress.set(5);\n\t\t\t\t\t\trunning.set(true);\n\t\t\t\t\t}}\n\t\t\t\t>\n\t\t\t\t\tStart navigation\n\t\t\t\t</Button>\n\t\t\t\t<Button\n\t\t\t\t\tsize=\"sm\"\n\t\t\t\t\tvariant=\"outline\"\n\t\t\t\t\tonClick={() => {\n\t\t\t\t\t\trunning.set(false);\n\t\t\t\t\t\tprogress.set(100);\n\t\t\t\t\t}}\n\t\t\t\t>\n\t\t\t\t\tFinish\n\t\t\t\t</Button>\n\t\t\t\t<Text muted>{progress() >= 100 ? \"Done\" : `${Math.round(progress())}%`}</Text>\n\t\t\t</Group>\n\t\t</Stack>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "feedback",
-		"name": "RingProgress",
-		"parts": [],
-		"summary": "Circular progress.",
-		"slots": [
-			"root",
-			"bar",
-			"label",
-			"track"
-		],
-		"props": [
-			{
-				"name": "value",
-				"type": "number",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "size",
-				"type": "number",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "thickness",
-				"type": "number",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<RingProgress value={72} label=\"72%\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "feedback",
-		"name": "SemiCircleProgress",
-		"parts": [],
-		"summary": "Half-ring gauge.",
-		"slots": [
-			"root",
-			"bar",
-			"label",
-			"track"
-		],
-		"props": [
-			{
-				"name": "value",
-				"type": "number",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "size",
-				"type": "number",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "thickness",
-				"type": "number",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<SemiCircleProgress value={64} label=\"64%\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "feedback",
-		"name": "Meter",
-		"parts": [],
-		"summary": "Scalar gauge in a known range.",
-		"slots": [
-			"root",
-			"bar",
-			"label",
-			"track"
-		],
-		"props": [
-			{
-				"name": "value",
-				"type": "number",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "max",
-				"type": "number",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "min",
-				"type": "number",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Meter value={62} label=\"Disk usage\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "feedback",
-		"name": "Gauge",
-		"parts": [],
-		"summary": "Semicircle gauge for a value within a range.",
-		"slots": [
-			"root",
-			"bar",
-			"label",
-			"svg",
-			"track"
-		],
-		"props": [
-			{
-				"name": "value",
-				"type": "number",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "max",
-				"type": "number",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "size",
-				"type": "number",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Gauge label=\"CPU\" value={72} />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "feedback",
-		"name": "UsageMeter",
-		"parts": [],
-		"summary": "Usage of a quota (used / limit) with a meter.",
-		"slots": [
-			"root",
-			"fill",
-			"header",
-			"label",
-			"meta",
-			"track"
-		],
-		"props": [
-			{
-				"name": "label",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "limit",
-				"type": "number",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "used",
-				"type": "number",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "unit",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<UsageMeter label=\"Build minutes\" used={1840} limit={2000} unit=\"min\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "feedback",
-		"name": "StorageBar",
-		"parts": [],
-		"summary": "{@link UsageMeter} preset in GB.",
-		"slots": [
-			"root"
-		],
-		"props": [
-			{
-				"name": "totalGb",
-				"type": "number",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "usedGb",
-				"type": "number",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": "Label text (default \"Storage\")."
-			}
-		],
-		"code": "<StorageBar label=\"Storage\" usedGb={38.2} totalGb={50} />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "feedback",
-		"name": "Skeleton",
-		"parts": [],
-		"summary": "Loading placeholder sized by `width` / `height`.",
-		"slots": [],
-		"props": [
-			{
-				"name": "height",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "width",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Skeleton width=\"16rem\" height=\"1.25rem\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "feedback",
-		"name": "SkeletonText",
-		"parts": [],
-		"summary": "Placeholder text lines.",
-		"slots": [
-			"root",
-			"line"
-		],
-		"props": [
-			{
-				"name": "lines",
-				"type": "number",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<SkeletonText lines={3} />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "feedback",
-		"name": "SkeletonCard",
-		"parts": [],
-		"summary": "Placeholder card.",
-		"slots": [
-			"root",
-			"block",
-			"text"
-		],
-		"props": [],
-		"code": "<SkeletonCard />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "feedback",
 		"name": "EmptyState",
+		"family": "empty",
 		"parts": [],
 		"summary": "Placeholder for empty lists.",
 		"slots": [
@@ -6405,6 +7888,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "feedback",
 		"name": "NoResults",
+		"family": "empty",
 		"parts": [],
 		"summary": "Empty search results state.",
 		"slots": [
@@ -6439,6 +7923,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "feedback",
 		"name": "ErrorState",
+		"family": "empty",
 		"parts": [],
 		"summary": "Error state with description and a recovery action.",
 		"slots": [
@@ -6473,8 +7958,547 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": true
 	},
 	{
-		"category": "feedback",
+		"category": "progress",
+		"name": "Spinner",
+		"parts": [],
+		"summary": "Loading indicator.",
+		"slots": [],
+		"props": [
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "size",
+				"type": "\"sm\" | \"md\" | \"lg\"",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Spinner label=\"Loading deploys\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "progress",
+		"name": "Progress",
+		"family": "progress",
+		"parts": [],
+		"summary": "Linear progress bar.",
+		"slots": [
+			"root",
+			"bar"
+		],
+		"props": [
+			{
+				"name": "value",
+				"type": "number",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "color",
+				"type": "\"warning\" | \"success\" | \"info\" | \"danger\" | \"primary\"",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "indeterminate",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "max",
+				"type": "number",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "size",
+				"type": "\"sm\" | \"md\" | \"lg\"",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Progress value={64} color=\"success\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "progress",
+		"name": "SteppedProgress",
+		"family": "progress",
+		"parts": [],
+		"summary": "Progress split into discrete steps.",
+		"slots": [
+			"root",
+			"segment"
+		],
+		"props": [
+			{
+				"name": "steps",
+				"type": "number",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "value",
+				"type": "number",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": "Accessible name (default \"Progress\")."
+			}
+		],
+		"code": "<SteppedProgress label=\"Onboarding\" steps={4} value={2} />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "progress",
+		"name": "RingProgress",
+		"family": "progress",
+		"parts": [],
+		"summary": "Circular progress.",
+		"slots": [
+			"root",
+			"bar",
+			"label",
+			"track"
+		],
+		"props": [
+			{
+				"name": "value",
+				"type": "number",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "size",
+				"type": "number",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "thickness",
+				"type": "number",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<RingProgress value={72} label=\"72%\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "progress",
+		"name": "SemiCircleProgress",
+		"family": "progress",
+		"parts": [],
+		"summary": "Half-ring gauge.",
+		"slots": [
+			"root",
+			"bar",
+			"label",
+			"track"
+		],
+		"props": [
+			{
+				"name": "value",
+				"type": "number",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "size",
+				"type": "number",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "thickness",
+				"type": "number",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<SemiCircleProgress value={64} label=\"64%\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "progress",
+		"name": "NavigationProgress",
+		"parts": [],
+		"summary": "Top loading bar (Mantine NavigationProgress / NProgress).",
+		"slots": [
+			"root",
+			"bar"
+		],
+		"props": [
+			{
+				"name": "visible",
+				"type": "boolean",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": "Accessible name (default \"Loading\")."
+			},
+			{
+				"name": "value",
+				"type": "number",
+				"required": false,
+				"description": "0–100; omit for indeterminate."
+			}
+		],
+		"code": "function Example() {\n\tconst progress = signal(40);\n\tconst running = signal(true);\n\t// Trickle towards 90% while \"navigating\" (effects run only in the browser).\n\teffect(() => {\n\t\tif (!running()) return;\n\t\tconst timer = setInterval(\n\t\t\t() => progress.set(Math.min(90, progress() + (90 - progress()) * 0.2)),\n\t\t\t300,\n\t\t);\n\t\treturn () => clearInterval(timer);\n\t});\n\treturn (\n\t\t<Stack gap=\"0.75rem\" style={{ \"padding-top\": \"0.75rem\" }}>\n\t\t\t{/* Pinned to the top of the page (here: of the preview). */}\n\t\t\t<NavigationProgress visible={progress() < 100} value={progress()} />\n\t\t\t<Group gap=\"0.5rem\">\n\t\t\t\t<Button\n\t\t\t\t\tsize=\"sm\"\n\t\t\t\t\tonClick={() => {\n\t\t\t\t\t\tprogress.set(5);\n\t\t\t\t\t\trunning.set(true);\n\t\t\t\t\t}}\n\t\t\t\t>\n\t\t\t\t\tStart navigation\n\t\t\t\t</Button>\n\t\t\t\t<Button\n\t\t\t\t\tsize=\"sm\"\n\t\t\t\t\tvariant=\"outline\"\n\t\t\t\t\tonClick={() => {\n\t\t\t\t\t\trunning.set(false);\n\t\t\t\t\t\tprogress.set(100);\n\t\t\t\t\t}}\n\t\t\t\t>\n\t\t\t\t\tFinish\n\t\t\t\t</Button>\n\t\t\t\t<Text muted>{progress() >= 100 ? \"Done\" : `${Math.round(progress())}%`}</Text>\n\t\t\t</Group>\n\t\t</Stack>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "progress",
+		"name": "LoadingOverlay",
+		"parts": [],
+		"summary": "Covers its positioned parent with a spinner while `visible`.",
+		"slots": [
+			"root",
+			"spinner"
+		],
+		"props": [
+			{
+				"name": "visible",
+				"type": "boolean",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst loading = signal(true);\n\tconst refresh = () => loading.set(true);\n\t// Pretend each refresh takes 1.5 s (effects run only in the browser).\n\teffect(() => {\n\t\tif (!loading()) return;\n\t\tconst timer = setTimeout(() => loading.set(false), 1500);\n\t\treturn () => clearTimeout(timer);\n\t});\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Box style={{ position: \"relative\", \"min-height\": \"6rem\" }}>\n\t\t\t\t<Text>Deploy list</Text>\n\t\t\t\t<LoadingOverlay visible={loading()} label=\"Refreshing\" />\n\t\t\t</Box>\n\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={refresh} disabled={loading()}>\n\t\t\t\tRefresh\n\t\t\t</Button>\n\t\t</Stack>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "progress",
+		"name": "Skeleton",
+		"family": "skeleton",
+		"parts": [],
+		"summary": "Loading placeholder sized by `width` / `height`.",
+		"slots": [],
+		"props": [
+			{
+				"name": "height",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "width",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Skeleton width=\"16rem\" height=\"1.25rem\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "progress",
+		"name": "SkeletonText",
+		"family": "skeleton",
+		"parts": [],
+		"summary": "Placeholder text lines.",
+		"slots": [
+			"root",
+			"line"
+		],
+		"props": [
+			{
+				"name": "lines",
+				"type": "number",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<SkeletonText lines={3} />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "progress",
+		"name": "SkeletonCard",
+		"family": "skeleton",
+		"parts": [],
+		"summary": "Placeholder card.",
+		"slots": [
+			"root",
+			"block",
+			"text"
+		],
+		"props": [],
+		"code": "<SkeletonCard />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "progress",
+		"name": "LoadMore",
+		"family": "load-more",
+		"parts": [],
+		"summary": "\"Load more\" button that shows loading and end-of-list states.",
+		"slots": [
+			"root",
+			"button",
+			"end"
+		],
+		"props": [
+			{
+				"name": "onLoad",
+				"type": "() => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "endLabel",
+				"type": "content",
+				"required": false,
+				"description": "Text when everything is loaded (default \"You're all caught up\")."
+			},
+			{
+				"name": "hasMore",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "loading",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst count = signal(3);\n\tconst loading = signal(false);\n\tconst load = () => {\n\t\tloading.set(true);\n\t\tsetTimeout(() => {\n\t\t\tcount.set(count() + 3);\n\t\t\tloading.set(false);\n\t\t}, 500);\n\t};\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<For each={Array.from({ length: count() }, (_, i) => i + 1)}>\n\t\t\t\t{(n) => <Text>Activity #{n}</Text>}\n\t\t\t</For>\n\t\t\t<LoadMore\n\t\t\t\tonLoad={load}\n\t\t\t\tloading={loading()}\n\t\t\t\thasMore={count() < 12}\n\t\t\t\tendLabel=\"That's everything.\"\n\t\t\t>\n\t\t\t\tLoad 3 more\n\t\t\t</LoadMore>\n\t\t</Stack>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "progress",
+		"name": "InfiniteScroll",
+		"family": "load-more",
+		"parts": [],
+		"summary": "Content followed by a \"Load more\" control.",
+		"slots": [
+			"root",
+			"sentinel"
+		],
+		"props": [
+			{
+				"name": "onLoadMore",
+				"type": "() => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "hasMore",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "loading",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "loadMoreLabel",
+				"type": "content",
+				"required": false,
+				"description": "Button text (default \"Load more\" / \"Loading…\")."
+			},
+			{
+				"name": "rootMargin",
+				"type": "string",
+				"required": false,
+				"description": "How far before the end to start loading (IntersectionObserver `rootMargin`). Default `200px`."
+			}
+		],
+		"code": "function Example() {\n\tconst deploys = signal(Array.from({ length: 6 }, (_, i) => 128 - i));\n\tconst loading = signal(false);\n\tconst hasMore = () => deploys().length < 30;\n\tconst loadMore = () => {\n\t\tif (loading() || !hasMore()) return;\n\t\tloading.set(true);\n\t\tsetTimeout(() => {\n\t\t\tconst last = deploys()[deploys().length - 1] ?? 128;\n\t\t\tdeploys.set([...deploys(), ...Array.from({ length: 6 }, (_, i) => last - 1 - i)]);\n\t\t\tloading.set(false);\n\t\t}, 600);\n\t};\n\treturn (\n\t\t<ScrollArea maxHeight=\"12rem\">\n\t\t\t<InfiniteScroll onLoadMore={loadMore} hasMore={hasMore()} loading={loading()}>\n\t\t\t\t<Stack gap=\"0.5rem\">\n\t\t\t\t\t<For each={deploys()}>{(n) => <Text>Deploy #{n}</Text>}</For>\n\t\t\t\t</Stack>\n\t\t\t</InfiniteScroll>\n\t\t</ScrollArea>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "status",
+		"name": "Badge",
+		"parts": [],
+		"summary": "Count / status pill.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "rounded",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "tone",
+				"type": "\"accent\" | \"warning\" | \"success\" | \"danger\" | \"muted\"",
+				"required": false,
+				"description": "Compact count / status pill — prefer Tag for labeled chips."
+			}
+		],
+		"code": "<Badge tone=\"success\">\n\tActive\n</Badge>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "status",
+		"name": "Tag",
+		"parts": [
+			"Tags"
+		],
+		"summary": "Small label for categories and filters, optionally removable.",
+		"slots": [
+			"root",
+			"label",
+			"remove"
+		],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "color",
+				"type": "\"accent\" | \"dark\" | \"light\" | \"link\" | \"warning\" | \"success\" | \"info\" | \"danger\" | \"primary\" | \"neutral\" | \"black\" | \"white\"",
+				"required": false,
+				"description": "Color / tone. Prefer semantic colors (primary, success, …)."
+			},
+			{
+				"name": "light",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "onRemove",
+				"type": "() => void",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "removeLabel",
+				"type": "string",
+				"required": false,
+				"description": "Accessible label for the remove button (default \"Remove\")."
+			},
+			{
+				"name": "rounded",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "size",
+				"type": "\"normal\" | \"medium\" | \"large\"",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "tone",
+				"type": "\"accent\" | \"danger\" | \"neutral\"",
+				"required": false,
+				"description": "",
+				"deprecated": "use `color`"
+			}
+		],
+		"code": "<Tag color=\"success\">\n\tDeployed\n</Tag>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "status",
+		"name": "Tags",
+		"parent": "Tag",
+		"parts": [],
+		"summary": "Group of tags — wraps evenly and supports addon pairs.",
+		"slots": [],
+		"props": [
+			{
+				"name": "addons",
+				"type": "boolean",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "size",
+				"type": "\"medium\" | \"large\"",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Tags>\n\t<Tag>typescript</Tag>\n\t<Tag>ssr</Tag>\n\t<Tag color=\"info\">signals</Tag>\n</Tags>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "status",
 		"name": "StatusDot",
+		"family": "status-dot",
 		"parts": [],
 		"summary": "Small status indicator (online, busy, …), optionally pulsing.",
 		"slots": [],
@@ -6493,7 +8517,7 @@ export const catalog: CatalogEntry[] = [
 			},
 			{
 				"name": "tone",
-				"type": "\"danger\" | \"warning\" | \"success\" | \"accent\" | \"neutral\"",
+				"type": "\"accent\" | \"warning\" | \"success\" | \"danger\" | \"neutral\"",
 				"required": false,
 				"description": ""
 			}
@@ -6503,8 +8527,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "feedback",
+		"category": "status",
 		"name": "Indicator",
+		"family": "status-dot",
 		"parts": [],
 		"summary": "Corner badge / dot over its children.",
 		"slots": [
@@ -6548,8 +8573,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": true
 	},
 	{
-		"category": "feedback",
+		"category": "status",
 		"name": "LiveBadge",
+		"family": "count-badges",
 		"parts": [],
 		"summary": "Pulsing \"Live\" pill.",
 		"slots": [
@@ -6569,8 +8595,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "feedback",
+		"category": "status",
 		"name": "UnreadBadge",
+		"family": "count-badges",
 		"parts": [],
 		"summary": "Count bubble; hidden at 0, capped at `max` (`99+`).",
 		"slots": [],
@@ -6593,26 +8620,104 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "feedback",
-		"name": "TypingIndicator",
+		"category": "status",
+		"name": "EnvBadge",
+		"family": "semantic-badges",
 		"parts": [],
-		"summary": "Animated \"someone is typing\" indicator.",
+		"summary": "Environment pill (production = danger, staging = warning).",
 		"slots": [],
 		"props": [
 			{
-				"name": "label",
+				"name": "env",
 				"type": "string",
-				"required": false,
-				"description": "Accessible name (default \"Typing\")."
+				"required": true,
+				"description": ""
 			}
 		],
-		"code": "<TypingIndicator label=\"Grace is typing\" />",
+		"code": "<EnvBadge env=\"staging\" />",
 		"interactive": false,
 		"logsActions": false
 	},
 	{
-		"category": "feedback",
+		"category": "status",
+		"name": "VersionTag",
+		"family": "semantic-badges",
+		"parts": [],
+		"summary": "Version label (e.g. `v1.2.0`).",
+		"slots": [],
+		"props": [
+			{
+				"name": "version",
+				"type": "string",
+				"required": true,
+				"description": ""
+			}
+		],
+		"code": "<VersionTag version=\"2.4.0\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "status",
+		"name": "RoleBadge",
+		"family": "semantic-badges",
+		"parts": [],
+		"summary": "Member role label (admin, member, …).",
+		"slots": [],
+		"props": [
+			{
+				"name": "role",
+				"type": "string",
+				"required": true,
+				"description": "Team role label (not the ARIA role)."
+			}
+		],
+		"code": "<RoleBadge role=\"Admin\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "status",
+		"name": "PriorityBadge",
+		"family": "semantic-badges",
+		"parts": [],
+		"summary": "Issue priority label.",
+		"slots": [],
+		"props": [
+			{
+				"name": "priority",
+				"type": "Priority",
+				"required": true,
+				"description": ""
+			}
+		],
+		"code": "<PriorityBadge priority=\"urgent\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "status",
+		"name": "SeverityBadge",
+		"family": "semantic-badges",
+		"parts": [],
+		"summary": "Incident severity label.",
+		"slots": [],
+		"props": [
+			{
+				"name": "severity",
+				"type": "Severity",
+				"required": true,
+				"description": ""
+			}
+		],
+		"code": "<SeverityBadge severity=\"critical\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "status",
 		"name": "SyncStatus",
+		"family": "save-status",
 		"parts": [],
 		"summary": "Sync state indicator (synced, syncing, offline, error).",
 		"slots": [],
@@ -6635,8 +8740,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "feedback",
+		"category": "status",
 		"name": "AutosaveIndicator",
+		"family": "save-status",
 		"parts": [],
 		"summary": "Autosave state (saving, saved, error).",
 		"slots": [],
@@ -6659,8 +8765,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "feedback",
+		"category": "status",
 		"name": "LastSaved",
+		"family": "save-status",
 		"parts": [],
 		"summary": "\"Last saved\" timestamp.",
 		"slots": [],
@@ -6683,37 +8790,27 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "feedback",
-		"name": "Countdown",
+		"category": "status",
+		"name": "TypingIndicator",
 		"parts": [],
-		"summary": "Live countdown.",
-		"slots": [
-			"root",
-			"suffix",
-			"unit",
-			"value"
-		],
+		"summary": "Animated \"someone is typing\" indicator.",
+		"slots": [],
 		"props": [
 			{
-				"name": "to",
-				"type": "number",
-				"required": true,
-				"description": "Absolute target timestamp (ms)."
-			},
-			{
-				"name": "units",
-				"type": "{ d: string; h: string; m: string; s: string; }",
+				"name": "label",
+				"type": "string",
 				"required": false,
-				"description": "Unit suffixes (default d/h/m/s)."
+				"description": "Accessible name (default \"Typing\")."
 			}
 		],
-		"code": "<Countdown to={Date.now() + 3 * 86_400_000} />",
+		"code": "<TypingIndicator label=\"Grace is typing\" />",
 		"interactive": false,
 		"logsActions": false
 	},
 	{
 		"category": "data",
 		"name": "Table",
+		"family": "table",
 		"parts": [
 			"Thead",
 			"Tbody",
@@ -6949,6 +9046,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "data",
 		"name": "DataTable",
+		"family": "table",
 		"parts": [],
 		"summary": "Sortable data grid with ARIA table semantics (`rowgroup`s, `aria-sort`, header sort buttons). Sorting is stable; clicking cycles asc → desc → none.",
 		"slots": [
@@ -7006,6 +9104,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "data",
 		"name": "DescriptionList",
+		"family": "description",
 		"parts": [],
 		"summary": "Label / value pairs (`<dl>`).",
 		"slots": [
@@ -7029,6 +9128,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "data",
 		"name": "PropertyList",
+		"family": "description",
 		"parts": [],
 		"summary": "Label / value pairs.",
 		"slots": [
@@ -7052,6 +9152,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "data",
 		"name": "List",
+		"family": "list",
 		"parts": [
 			"ListItem"
 		],
@@ -7107,6 +9208,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "data",
 		"name": "ListGroup",
+		"family": "list",
 		"parts": [
 			"ListGroupItem"
 		],
@@ -7235,162 +9337,6 @@ export const catalog: CatalogEntry[] = [
 	},
 	{
 		"category": "data",
-		"name": "Accordion",
-		"parts": [],
-		"summary": "Disclosure list. Panels stay mounted (state and focus survive toggling) and animate height via `grid-template-rows`.",
-		"slots": [
-			"root",
-			"chevron",
-			"content",
-			"icon",
-			"item",
-			"panel",
-			"subtitle",
-			"title",
-			"trigger"
-		],
-		"props": [
-			{
-				"name": "items",
-				"type": "AccordionItem[]",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "onChange",
-				"type": "((id: string | null) => void) | ((ids: string[]) => void)",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "value",
-				"type": "string | string[]",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "chevron",
-				"type": "content",
-				"required": false,
-				"description": "Custom chevron (any node); `null` hides it."
-			},
-			{
-				"name": "multiple",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "variant",
-				"type": "\"default\" | \"separated\" | \"flush\"",
-				"required": false,
-				"description": "`separated` renders each item as its own card."
-			}
-		],
-		"code": "function Example() {\n\tconst openItem = signal<string | null>(\"billing\");\n\treturn (\n\t\t<Accordion\n\t\t\tvalue={openItem() ?? \"\"}\n\t\t\tonChange={(id: string | null) => openItem.set(id)}\n\t\t\titems={[\n\t\t\t\t{\n\t\t\t\t\tid: \"billing\",\n\t\t\t\t\ttitle: \"How does billing work?\",\n\t\t\t\t\tcontent: \"You're billed monthly per seat.\",\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\tid: \"cancel\",\n\t\t\t\t\ttitle: \"Can I cancel anytime?\",\n\t\t\t\t\tcontent: \"Yes — your plan ends at the period's close.\",\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\tid: \"data\",\n\t\t\t\t\ttitle: \"Where is my data stored?\",\n\t\t\t\t\tcontent: \"In the EU (Frankfurt) by default.\",\n\t\t\t\t},\n\t\t\t]}\n\t\t/>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "Collapse",
-		"parts": [],
-		"summary": "Show/hide region.",
-		"slots": [],
-		"props": [
-			{
-				"name": "open",
-				"type": "boolean",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst open = signal(true);\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Button size=\"sm\" variant=\"outline\" aria-expanded={open()} onClick={() => open.set(!open())}>\n\t\t\t\t{open() ? \"Hide details\" : \"Show details\"}\n\t\t\t</Button>\n\t\t\t<Collapse open={open()}>\n\t\t\t\t<Text>Collapsible content animates its height when toggled.</Text>\n\t\t\t</Collapse>\n\t\t</Stack>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "Spoiler",
-		"parts": [],
-		"summary": "Height-clamped content with a toggle.",
-		"slots": [
-			"root",
-			"content",
-			"toggle"
-		],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "hideLabel",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "maxHeight",
-				"type": "number",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "showLabel",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Spoiler maxHeight={48} showLabel=\"Show more\" hideLabel=\"Show less\">\n\tArachne renders on the server and hydrates on the client without re-running component\n\tbodies. Signals track exactly which DOM nodes depend on which values, so updates touch only\n\twhat changed. Components share one customization system for classes, styles and slots.\n</Spoiler>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "Details",
-		"parts": [],
-		"summary": "Native `<details>` disclosure (listen with `onToggle`).",
-		"slots": [
-			"root",
-			"body",
-			"summary"
-		],
-		"props": [
-			{
-				"name": "summary",
-				"type": "content",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "open",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Details summary=\"Why is my deploy queued?\">\n\tFree plans run one build at a time; later builds wait for the current one.\n</Details>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
 		"name": "Tree",
 		"parts": [],
 		"summary": "WAI-ARIA tree: one tab stop, ↑ ↓ move, → expands / enters, ← collapses / goes to parent, Home End, Enter/Space select, type-ahead. Node icons and badges, `filter` for search, `icons=\"auto\"` for folder/file icons.",
@@ -7468,127 +9414,6 @@ export const catalog: CatalogEntry[] = [
 			}
 		],
 		"code": "function Example() {\n\tconst selected = signal(\"button.tsx\");\n\tconst query = signal(\"\");\n\tconst files: TreeNode[] = [\n\t\t{\n\t\t\tid: \"apps\",\n\t\t\tlabel: \"apps\",\n\t\t\tbadge: 2,\n\t\t\tchildren: [\n\t\t\t\t{ id: \"web\", label: \"web\", children: [{ id: \"client.tsx\", label: \"client.tsx\" }] },\n\t\t\t\t{ id: \"admin\", label: \"admin\", disabled: true, badge: \"locked\" },\n\t\t\t],\n\t\t},\n\t\t{\n\t\t\tid: \"packages\",\n\t\t\tlabel: \"packages\",\n\t\t\tchildren: [\n\t\t\t\t{\n\t\t\t\t\tid: \"ui\",\n\t\t\t\t\tlabel: \"ui\",\n\t\t\t\t\tchildren: [\n\t\t\t\t\t\t{ id: \"button.tsx\", label: \"button.tsx\" },\n\t\t\t\t\t\t{ id: \"tree.tsx\", label: \"tree.tsx\" },\n\t\t\t\t\t\t{ id: \"styles.css\", label: \"styles.css\", icon: \"code\" },\n\t\t\t\t\t],\n\t\t\t\t},\n\t\t\t],\n\t\t},\n\t\t{ id: \"readme\", label: \"README.md\", icon: \"info\" },\n\t];\n\treturn (\n\t\t<Stack gap=\"0.5rem\" style={{ \"max-width\": \"22rem\" }}>\n\t\t\t<SearchInput\n\t\t\t\taria-label=\"Filter files\"\n\t\t\t\tplaceholder=\"Filter files\"\n\t\t\t\tvalue={query()}\n\t\t\t\tonChange={query.set}\n\t\t\t/>\n\t\t\t<Tree\n\t\t\t\tlabel=\"Workspace\"\n\t\t\t\ticons=\"auto\"\n\t\t\t\tfilter={query()}\n\t\t\t\tdefaultExpanded={[\"apps\", \"packages\", \"ui\"]}\n\t\t\t\tvalue={selected()}\n\t\t\t\tonChange={selected.set}\n\t\t\t\tdata={files}\n\t\t\t/>\n\t\t\t<Text muted>Open: {selected()}</Text>\n\t\t</Stack>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "FileTree",
-		"parts": [],
-		"summary": "File / folder tree. Rows expose `data-kind`.",
-		"slots": [],
-		"props": [
-			{
-				"name": "nodes",
-				"type": "FileTreeNode[]",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": "Accessible name for the tree."
-			},
-			{
-				"name": "onSelect",
-				"type": "(id: string) => void",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "selected",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "const repoTree: FileTreeNode[] = [\n\t{\n\t\tid: \"src\",\n\t\tname: \"src\",\n\t\tkind: \"folder\",\n\t\tchildren: [\n\t\t\t{ id: \"src/index.ts\", name: \"index.ts\", kind: \"file\" },\n\t\t\t{ id: \"src/button.tsx\", name: \"button.tsx\", kind: \"file\" },\n\t\t],\n\t},\n\t{ id: \"package.json\", name: \"package.json\", kind: \"file\" },\n];\n\nfunction Example() {\n\tconst file = signal(\"src/button.tsx\");\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<FileTree label=\"Repository\" nodes={repoTree} selected={file()} onSelect={file.set} />\n\t\t\t<Text muted>Open: {file()}</Text>\n\t\t</Stack>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "JsonTree",
-		"parts": [],
-		"summary": "Collapsible JSON tree.",
-		"slots": [],
-		"props": [
-			{
-				"name": "data",
-				"type": "JsonNode",
-				"required": true,
-				"description": ""
-			}
-		],
-		"code": "const configJson: JsonNode = {\n\tkind: \"object\",\n\tentries: [\n\t\t{ key: \"name\", value: { kind: \"primitive\", value: \"arachne\" } },\n\t\t{ key: \"private\", value: { kind: \"primitive\", value: true } },\n\t\t{\n\t\t\tkey: \"workspaces\",\n\t\t\tvalue: {\n\t\t\t\tkind: \"array\",\n\t\t\t\titems: [\n\t\t\t\t\t{ kind: \"primitive\", value: \"packages/*\" },\n\t\t\t\t\t{ kind: \"primitive\", value: \"apps/*\" },\n\t\t\t\t],\n\t\t\t},\n\t\t},\n\t],\n};\n\n<JsonTree data={configJson} />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "JsonViewer",
-		"parts": [],
-		"summary": "Pretty-printed JSON (handles undefined, circular references and BigInt).",
-		"slots": [],
-		"props": [
-			{
-				"name": "value",
-				"type": "content",
-				"required": true,
-				"description": ""
-			}
-		],
-		"code": "<JsonViewer value={{ id: \"dep_128\", status: \"ready\", regions: [\"fra1\", \"iad1\"] }} />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "TransferList",
-		"parts": [],
-		"summary": "Dual-list mover (Mantine TransferList). Rows keep their DOM between moves.",
-		"slots": [
-			"root",
-			"actions",
-			"item",
-			"list",
-			"pane",
-			"title"
-		],
-		"props": [
-			{
-				"name": "left",
-				"type": "string[]",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "onChange",
-				"type": "(next: { left: string[]; right: string[]; }) => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "right",
-				"type": "string[]",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "leftTitle",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "rightTitle",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst lists = signal({ left: [\"Frankfurt\", \"Tokyo\", \"São Paulo\"], right: [\"Washington, D.C.\"] });\n\treturn (\n\t\t<TransferList\n\t\t\tleftTitle=\"Available\"\n\t\t\trightTitle=\"Selected\"\n\t\t\tleft={lists().left}\n\t\t\tright={lists().right}\n\t\t\tonChange={lists.set}\n\t\t/>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
 	},
@@ -7740,88 +9565,98 @@ export const catalog: CatalogEntry[] = [
 	},
 	{
 		"category": "data",
-		"name": "Carousel",
+		"name": "Accordion",
+		"family": "disclosure",
 		"parts": [],
-		"summary": "Previous/next carousel; controlled when `value` is set. ← → switch slides.",
+		"summary": "Disclosure list. Panels stay mounted (state and focus survive toggling) and animate height via `grid-template-rows`.",
 		"slots": [
 			"root",
-			"control",
-			"controls",
-			"slide",
-			"status",
-			"viewport"
+			"chevron",
+			"content",
+			"icon",
+			"item",
+			"panel",
+			"subtitle",
+			"title",
+			"trigger"
 		],
 		"props": [
 			{
-				"name": "slides",
-				"type": "CarouselSlide[]",
+				"name": "items",
+				"type": "AccordionItem[]",
 				"required": true,
 				"description": ""
 			},
 			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": "Accessible name (default \"Carousel\")."
-			},
-			{
 				"name": "onChange",
-				"type": "(id: string) => void",
-				"required": false,
+				"type": "((id: string | null) => void) | ((ids: string[]) => void)",
+				"required": true,
 				"description": ""
 			},
 			{
 				"name": "value",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Carousel\n\tlabel=\"Highlights\"\n\tslides={[\n\t\t{\n\t\t\tid: \"s1\",\n\t\t\tcontent: (\n\t\t\t\t<img src=\"/images/signals.jpg\" alt=\"Signals\" width=\"640\" height=\"280\" />\n\t\t\t),\n\t\t},\n\t\t{\n\t\t\tid: \"s2\",\n\t\t\tcontent: <img src=\"/images/ssr.jpg\" alt=\"SSR\" width=\"640\" height=\"280\" />,\n\t\t},\n\t\t{\n\t\t\tid: \"s3\",\n\t\t\tcontent: (\n\t\t\t\t<img src=\"/images/theming.jpg\" alt=\"Theming\" width=\"640\" height=\"280\" />\n\t\t\t),\n\t\t},\n\t]}\n/>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "Badge",
-		"parts": [],
-		"summary": "Count / status pill.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
+				"type": "string | string[]",
+				"required": true,
 				"description": ""
 			},
 			{
-				"name": "rounded",
+				"name": "chevron",
+				"type": "content",
+				"required": false,
+				"description": "Custom chevron (any node); `null` hides it."
+			},
+			{
+				"name": "multiple",
 				"type": "boolean",
 				"required": false,
 				"description": ""
 			},
 			{
-				"name": "tone",
-				"type": "\"danger\" | \"warning\" | \"success\" | \"muted\" | \"accent\"",
+				"name": "variant",
+				"type": "\"default\" | \"separated\" | \"flush\"",
 				"required": false,
-				"description": "Compact count / status pill — prefer Tag for labeled chips."
+				"description": "`separated` renders each item as its own card."
 			}
 		],
-		"code": "<Badge tone=\"success\">\n\tActive\n</Badge>",
+		"code": "function Example() {\n\tconst openItem = signal<string | null>(\"billing\");\n\treturn (\n\t\t<Accordion\n\t\t\tvalue={openItem() ?? \"\"}\n\t\t\tonChange={(id: string | null) => openItem.set(id)}\n\t\t\titems={[\n\t\t\t\t{\n\t\t\t\t\tid: \"billing\",\n\t\t\t\t\ttitle: \"How does billing work?\",\n\t\t\t\t\tcontent: \"You're billed monthly per seat.\",\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\tid: \"cancel\",\n\t\t\t\t\ttitle: \"Can I cancel anytime?\",\n\t\t\t\t\tcontent: \"Yes — your plan ends at the period's close.\",\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\tid: \"data\",\n\t\t\t\t\ttitle: \"Where is my data stored?\",\n\t\t\t\t\tcontent: \"In the EU (Frankfurt) by default.\",\n\t\t\t\t},\n\t\t\t]}\n\t\t/>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
 	},
 	{
 		"category": "data",
-		"name": "Tag",
-		"parts": [
-			"Tags"
+		"name": "Collapse",
+		"family": "disclosure",
+		"parts": [],
+		"summary": "Show/hide region.",
+		"slots": [],
+		"props": [
+			{
+				"name": "open",
+				"type": "boolean",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
 		],
-		"summary": "Small label for categories and filters, optionally removable.",
+		"code": "function Example() {\n\tconst open = signal(true);\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Button size=\"sm\" variant=\"outline\" aria-expanded={open()} onClick={() => open.set(!open())}>\n\t\t\t\t{open() ? \"Hide details\" : \"Show details\"}\n\t\t\t</Button>\n\t\t\t<Collapse open={open()}>\n\t\t\t\t<Text>Collapsible content animates its height when toggled.</Text>\n\t\t\t</Collapse>\n\t\t</Stack>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "data",
+		"name": "Spoiler",
+		"family": "disclosure",
+		"parts": [],
+		"summary": "Height-clamped content with a toggle.",
 		"slots": [
 			"root",
-			"label",
-			"remove"
+			"content",
+			"toggle"
 		],
 		"props": [
 			{
@@ -7831,65 +9666,44 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			},
 			{
-				"name": "color",
-				"type": "\"link\" | \"danger\" | \"warning\" | \"success\" | \"info\" | \"light\" | \"dark\" | \"accent\" | \"primary\" | \"neutral\" | \"black\" | \"white\"",
-				"required": false,
-				"description": "Color / tone. Prefer semantic colors (primary, success, …)."
-			},
-			{
-				"name": "light",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "onRemove",
-				"type": "() => void",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "removeLabel",
+				"name": "hideLabel",
 				"type": "string",
 				"required": false,
-				"description": "Accessible label for the remove button (default \"Remove\")."
+				"description": ""
 			},
 			{
-				"name": "rounded",
-				"type": "boolean",
+				"name": "maxHeight",
+				"type": "number",
 				"required": false,
 				"description": ""
 			},
 			{
-				"name": "size",
-				"type": "\"normal\" | \"medium\" | \"large\"",
+				"name": "showLabel",
+				"type": "string",
 				"required": false,
 				"description": ""
-			},
-			{
-				"name": "tone",
-				"type": "\"danger\" | \"accent\" | \"neutral\"",
-				"required": false,
-				"description": "",
-				"deprecated": "use `color`"
 			}
 		],
-		"code": "<Tag color=\"success\">\n\tDeployed\n</Tag>",
+		"code": "<Spoiler maxHeight={48} showLabel=\"Show more\" hideLabel=\"Show less\">\n\tArachne renders on the server and hydrates on the client without re-running component\n\tbodies. Signals track exactly which DOM nodes depend on which values, so updates touch only\n\twhat changed. Components share one customization system for classes, styles and slots.\n</Spoiler>",
 		"interactive": false,
 		"logsActions": false
 	},
 	{
 		"category": "data",
-		"name": "Tags",
-		"parent": "Tag",
+		"name": "Details",
+		"family": "disclosure",
 		"parts": [],
-		"summary": "Group of tags — wraps evenly and supports addon pairs.",
-		"slots": [],
+		"summary": "Native `<details>` disclosure (listen with `onToggle`).",
+		"slots": [
+			"root",
+			"body",
+			"summary"
+		],
 		"props": [
 			{
-				"name": "addons",
-				"type": "boolean",
-				"required": false,
+				"name": "summary",
+				"type": "content",
+				"required": true,
 				"description": ""
 			},
 			{
@@ -7899,19 +9713,39 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			},
 			{
-				"name": "size",
-				"type": "\"medium\" | \"large\"",
+				"name": "open",
+				"type": "boolean",
 				"required": false,
 				"description": ""
 			}
 		],
-		"code": "<Tags>\n\t<Tag>typescript</Tag>\n\t<Tag>ssr</Tag>\n\t<Tag color=\"info\">signals</Tag>\n</Tags>",
+		"code": "<Details summary=\"Why is my deploy queued?\">\n\tFree plans run one build at a time; later builds wait for the current one.\n</Details>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "data",
+		"name": "FilterBar",
+		"family": "filtering",
+		"parts": [],
+		"summary": "Horizontal toolbar for filters and chips.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst query = signal(\"\");\n\tconst deploys = [\"marketing-site #128\", \"docs #127\", \"marketing-site #126\", \"api #125\"];\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<FilterBar>\n\t\t\t\t<SearchInput\n\t\t\t\t\taria-label=\"Search deploys\"\n\t\t\t\t\tplaceholder=\"Search deploys\"\n\t\t\t\t\tvalue={query()}\n\t\t\t\t\tonChange={query.set}\n\t\t\t\t/>\n\t\t\t\t<Button variant=\"outline\" onClick={() => query.set(\"\")}>\n\t\t\t\t\tClear\n\t\t\t\t</Button>\n\t\t\t</FilterBar>\n\t\t\t<For each={deploys.filter((d) => d.includes(query()))}>{(d) => <Text>{d}</Text>}</For>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
 	},
 	{
 		"category": "data",
 		"name": "FilterChip",
+		"family": "filtering",
 		"parts": [],
 		"summary": "Active filter with a remove button.",
 		"slots": [
@@ -7938,533 +9772,8 @@ export const catalog: CatalogEntry[] = [
 	},
 	{
 		"category": "data",
-		"name": "Avatar",
-		"parts": [],
-		"summary": "Picture or initials.",
-		"slots": [
-			"root",
-			"fallback",
-			"image"
-		],
-		"props": [
-			{
-				"name": "alt",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "name",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "size",
-				"type": "\"sm\" | \"md\" | \"lg\"",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "src",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Avatar name=\"Ada Lovelace\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "AvatarGroup",
-		"parts": [],
-		"summary": "Overlapping avatars with a \"+N\" overflow chip.",
-		"slots": [
-			"root",
-			"avatar",
-			"more"
-		],
-		"props": [
-			{
-				"name": "names",
-				"type": "string[]",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "max",
-				"type": "number",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "size",
-				"type": "\"sm\" | \"md\" | \"lg\"",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<AvatarGroup\n\tmax={3}\n\tnames={[\"Ada Lovelace\", \"Grace Hopper\", \"Alan Turing\", \"Linus Torvalds\"]}\n/>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "PresenceAvatar",
-		"parts": [],
-		"summary": "Avatar with a presence dot.",
-		"slots": [
-			"root",
-			"avatar",
-			"dot"
-		],
-		"props": [
-			{
-				"name": "name",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "size",
-				"type": "\"sm\" | \"md\" | \"lg\"",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "src",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "status",
-				"type": "\"danger\" | \"warning\" | \"success\" | \"accent\" | \"neutral\"",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<PresenceAvatar name=\"Ada Lovelace\" status=\"success\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "Kbd",
-		"parts": [],
-		"summary": "Keyboard key.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Text>\n\tPress <Kbd>Esc</Kbd> to close.\n</Text>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "Hotkey",
-		"parts": [],
-		"summary": "Display a key combo (⌘K, Ctrl+S).",
-		"slots": [
-			"root",
-			"key",
-			"part",
-			"separator"
-		],
-		"props": [
-			{
-				"name": "keys",
-				"type": "string[]",
-				"required": true,
-				"description": "Keys to show and (with `onTrigger`) listen for, e.g. `[\"Ctrl\", \"K\"]` or `[\"⌘\", \"Shift\", \"P\"]`."
-			},
-			{
-				"name": "ignoreInInputs",
-				"type": "boolean",
-				"required": false,
-				"description": "Ignore the shortcut while typing in inputs (default true)."
-			},
-			{
-				"name": "onTrigger",
-				"type": "(e: KeyboardEvent) => void",
-				"required": false,
-				"description": "Bind the combination on `document`; called when it is pressed (default prevented)."
-			},
-			{
-				"name": "separator",
-				"type": "content",
-				"required": false,
-				"description": "Separator between keys (default `+`)."
-			}
-		],
-		"code": "<Hotkey keys={[\"⌘\", \"K\"]} />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "Code",
-		"parts": [],
-		"summary": "Inline code.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Text>\n\tRun <Code>bun run ui:docs</Code> after changing an example.\n</Text>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "CodeBlock",
-		"parts": [],
-		"summary": "Highlighted code with copy button.",
-		"slots": [
-			"root",
-			"bar",
-			"code",
-			"copy",
-			"language",
-			"pre"
-		],
-		"props": [
-			{
-				"name": "code",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "copiedLabel",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "copyLabel",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "language",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "radius",
-				"type": "RadiusName | (string & {})",
-				"required": false,
-				"description": "Corner radius: `\"none\"` | `\"sm\"` | `\"lg\"` or any CSS length (default: the theme radius)."
-			}
-		],
-		"code": "<CodeBlock\n\tlanguage=\"tsx\"\n\tradius=\"lg\"\n\tcode={\n\t\t'import { Button } from \"@arachne/ui\";\\n\\nexport const Save = () => <Button>Save</Button>;'\n\t}\n/>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "Diff",
-		"parts": [],
-		"summary": "Unified diff lines.",
-		"slots": [
-			"root",
-			"line",
-			"prefix"
-		],
-		"props": [
-			{
-				"name": "lines",
-				"type": "DiffLine[]",
-				"required": true,
-				"description": ""
-			}
-		],
-		"code": "<Diff\n\tlines={[\n\t\t{ type: \"ctx\", text: \"<Title\" },\n\t\t{ type: \"del\", text: \"  size={5}\" },\n\t\t{ type: \"add\", text: \"  order={3} size={5}\" },\n\t\t{ type: \"ctx\", text: \">Settings</Title>\" },\n\t]}\n/>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "Terminal",
-		"parts": [],
-		"summary": "Terminal window mock-up.",
-		"slots": [
-			"root",
-			"bar",
-			"body",
-			"title"
-		],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "title",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Terminal title=\"zsh\">\n\t{\"$ bun add @arachne/ui\\ninstalled @arachne/ui@2.4.0\"}\n</Terminal>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "LogViewer",
-		"parts": [],
-		"summary": "Monospace log output with levels and timestamps.",
-		"slots": [
-			"root",
-			"level",
-			"line",
-			"message",
-			"time"
-		],
-		"props": [
-			{
-				"name": "lines",
-				"type": "LogLineData[]",
-				"required": true,
-				"description": ""
-			}
-		],
-		"code": "<LogViewer\n\tlines={[\n\t\t{ time: \"12:04:01\", level: \"info\", message: \"Listening on :3000\" },\n\t\t{ time: \"12:04:07\", level: \"warn\", message: \"Slow query (812 ms): SELECT * FROM runs\" },\n\t\t{ time: \"12:04:09\", level: \"error\", message: \"ECONNRESET redis://cache:6379\" },\n\t]}\n/>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "Mark",
-		"parts": [],
-		"summary": "Highlight text you choose (`<mark>`, highlighter-yellow by default). To mark every match of a query inside a string, use `Highlight`.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "tone",
-				"type": "\"warning\" | \"success\" | \"accent\"",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Text>\n\tDeploys run on <Mark>every push</Mark> to main.\n</Text>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "Highlight",
-		"parts": [],
-		"summary": "Mark every case-insensitive match of `highlight` inside `text`, e.g. search results. To mark a span you choose, use `Mark`.",
-		"slots": [
-			"root",
-			"mark"
-		],
-		"props": [
-			{
-				"name": "highlight",
-				"type": "string | string[]",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "text",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "tone",
-				"type": "\"warning\" | \"success\" | \"accent\"",
-				"required": false,
-				"description": "Mark colour (default `\"warning\"`, highlighter yellow), as on `Mark`."
-			}
-		],
-		"code": "<Highlight text=\"Deploy marketing-site to production\" highlight=\"deploy\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "Truncate",
-		"parts": [],
-		"summary": "Ellipsis after `lines` lines.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "lines",
-				"type": "number",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Truncate style={{ \"max-width\": \"22rem\" }} lines={2}>\n\tThe customization system covers every component: attributes are forwarded to the host\n\telement, classes and styles target named slots, unstyled drops the built-in look, and\n\tconfigureUI sets app-wide defaults. Text past the second line is cut with an ellipsis.\n</Truncate>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "Leader",
-		"parts": [],
-		"summary": "UIkit-style dotted leader row.",
-		"slots": [
-			"root",
-			"dots",
-			"label",
-			"value"
-		],
-		"props": [
-			{
-				"name": "label",
-				"type": "content",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "value",
-				"type": "content",
-				"required": true,
-				"description": ""
-			}
-		],
-		"code": "<Leader label=\"Espresso\" value=\"$3.50\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "NumberFormatter",
-		"parts": [],
-		"summary": "Formats a number with separators, decimals, prefix and suffix.",
-		"slots": [],
-		"props": [
-			{
-				"name": "value",
-				"type": "number",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "decimalScale",
-				"type": "number",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "prefix",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "suffix",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "thousandSeparator",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<NumberFormatter value={1234567.891} decimalScale={2} />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "RelativeTime",
-		"parts": [],
-		"summary": "Relative time such as \"5 minutes ago\", with the full date in `title`.",
-		"slots": [],
-		"props": [
-			{
-				"name": "value",
-				"type": "number",
-				"required": true,
-				"description": "Absolute timestamp (ms)."
-			}
-		],
-		"code": "<RelativeTime value={Date.now() - 5 * 60_000} />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "Price",
-		"parts": [],
-		"summary": "Formatted price with optional strike-through and period.",
-		"slots": [
-			"root",
-			"amount",
-			"period",
-			"strike"
-		],
-		"props": [
-			{
-				"name": "amount",
-				"type": "number",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "currency",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "period",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "strike",
-				"type": "number",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Price amount={24} strike={32} period=\"month\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
 		"name": "ResultCount",
+		"family": "filtering",
 		"parts": [],
 		"summary": "\"12 results\" line (live region).",
 		"slots": [],
@@ -8487,105 +9796,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "data",
-		"name": "LoadMore",
-		"parts": [],
-		"summary": "\"Load more\" button that shows loading and end-of-list states.",
-		"slots": [
-			"root",
-			"button",
-			"end"
-		],
-		"props": [
-			{
-				"name": "onLoad",
-				"type": "() => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "endLabel",
-				"type": "content",
-				"required": false,
-				"description": "Text when everything is loaded (default \"You're all caught up\")."
-			},
-			{
-				"name": "hasMore",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "loading",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst count = signal(3);\n\tconst loading = signal(false);\n\tconst load = () => {\n\t\tloading.set(true);\n\t\tsetTimeout(() => {\n\t\t\tcount.set(count() + 3);\n\t\t\tloading.set(false);\n\t\t}, 500);\n\t};\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<For each={Array.from({ length: count() }, (_, i) => i + 1)}>\n\t\t\t\t{(n) => <Text>Activity #{n}</Text>}\n\t\t\t</For>\n\t\t\t<LoadMore\n\t\t\t\tonLoad={load}\n\t\t\t\tloading={loading()}\n\t\t\t\thasMore={count() < 12}\n\t\t\t\tendLabel=\"That's everything.\"\n\t\t\t>\n\t\t\t\tLoad 3 more\n\t\t\t</LoadMore>\n\t\t</Stack>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "data",
-		"name": "InfiniteScroll",
-		"parts": [],
-		"summary": "Content followed by a \"Load more\" control.",
-		"slots": [
-			"root",
-			"sentinel"
-		],
-		"props": [
-			{
-				"name": "onLoadMore",
-				"type": "() => void",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "hasMore",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "loading",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "loadMoreLabel",
-				"type": "content",
-				"required": false,
-				"description": "Button text (default \"Load more\" / \"Loading…\")."
-			},
-			{
-				"name": "rootMargin",
-				"type": "string",
-				"required": false,
-				"description": "How far before the end to start loading (IntersectionObserver `rootMargin`). Default `200px`."
-			}
-		],
-		"code": "function Example() {\n\tconst deploys = signal(Array.from({ length: 6 }, (_, i) => 128 - i));\n\tconst loading = signal(false);\n\tconst hasMore = () => deploys().length < 30;\n\tconst loadMore = () => {\n\t\tif (loading() || !hasMore()) return;\n\t\tloading.set(true);\n\t\tsetTimeout(() => {\n\t\t\tconst last = deploys()[deploys().length - 1] ?? 128;\n\t\t\tdeploys.set([...deploys(), ...Array.from({ length: 6 }, (_, i) => last - 1 - i)]);\n\t\t\tloading.set(false);\n\t\t}, 600);\n\t};\n\treturn (\n\t\t<ScrollArea maxHeight=\"12rem\">\n\t\t\t<InfiniteScroll onLoadMore={loadMore} hasMore={hasMore()} loading={loading()}>\n\t\t\t\t<Stack gap=\"0.5rem\">\n\t\t\t\t\t<For each={deploys()}>{(n) => <Text>Deploy #{n}</Text>}</For>\n\t\t\t\t</Stack>\n\t\t\t</InfiniteScroll>\n\t\t</ScrollArea>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
 		"category": "charts",
 		"name": "Stat",
+		"family": "stats",
 		"parts": [
 			"StatGroup"
 		],
@@ -8642,6 +9855,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "charts",
 		"name": "StatCard",
+		"family": "stats",
 		"parts": [],
 		"summary": "KPI tile with optional trend.",
 		"slots": [
@@ -8684,6 +9898,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "charts",
 		"name": "Metric",
+		"family": "stats",
 		"parts": [],
 		"summary": "Compact KPI with optional Trend.",
 		"slots": [
@@ -8720,6 +9935,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "charts",
 		"name": "Trend",
+		"family": "stats",
 		"parts": [],
 		"summary": "▲/▼ delta.",
 		"slots": [
@@ -8747,6 +9963,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "charts",
 		"name": "CountUp",
+		"family": "stats",
 		"parts": [],
 		"summary": "Animated number (rAF, eased); jumps straight to the value under reduced motion.",
 		"slots": [],
@@ -8771,6 +9988,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "charts",
 		"name": "Sparkline",
+		"family": "sparklines",
 		"parts": [],
 		"summary": "Inline trend line (`currentColor`).",
 		"slots": [
@@ -8810,6 +10028,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "charts",
 		"name": "SparkBar",
+		"family": "sparklines",
 		"parts": [],
 		"summary": "Tiny bar chart.",
 		"slots": [
@@ -8942,6 +10161,168 @@ export const catalog: CatalogEntry[] = [
 	},
 	{
 		"category": "charts",
+		"name": "Meter",
+		"family": "meters",
+		"parts": [],
+		"summary": "Scalar gauge in a known range.",
+		"slots": [
+			"root",
+			"bar",
+			"label",
+			"track"
+		],
+		"props": [
+			{
+				"name": "value",
+				"type": "number",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "max",
+				"type": "number",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "min",
+				"type": "number",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Meter value={62} label=\"Disk usage\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "charts",
+		"name": "Gauge",
+		"family": "meters",
+		"parts": [],
+		"summary": "Semicircle gauge for a value within a range.",
+		"slots": [
+			"root",
+			"bar",
+			"label",
+			"svg",
+			"track"
+		],
+		"props": [
+			{
+				"name": "value",
+				"type": "number",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "max",
+				"type": "number",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "size",
+				"type": "number",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Gauge label=\"CPU\" value={72} />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "charts",
+		"name": "UsageMeter",
+		"family": "meters",
+		"parts": [],
+		"summary": "Usage of a quota (used / limit) with a meter.",
+		"slots": [
+			"root",
+			"fill",
+			"header",
+			"label",
+			"meta",
+			"track"
+		],
+		"props": [
+			{
+				"name": "label",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "limit",
+				"type": "number",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "used",
+				"type": "number",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "unit",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<UsageMeter label=\"Build minutes\" used={1840} limit={2000} unit=\"min\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "charts",
+		"name": "StorageBar",
+		"family": "meters",
+		"parts": [],
+		"summary": "{@link UsageMeter} preset in GB.",
+		"slots": [
+			"root"
+		],
+		"props": [
+			{
+				"name": "totalGb",
+				"type": "number",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "usedGb",
+				"type": "number",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": "Label text (default \"Storage\")."
+			}
+		],
+		"code": "<StorageBar label=\"Storage\" usedGb={38.2} totalGb={50} />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "charts",
 		"name": "UptimeBar",
 		"parts": [],
 		"summary": "Daily uptime history bar.",
@@ -8968,1651 +10349,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "layout",
-		"name": "Stack",
-		"parts": [],
-		"summary": "Flex stack; `gap` maps to `--a-stack-gap`.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "direction",
-				"type": "\"row\" | \"column\"",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "gap",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Stack gap=\"0.5rem\">\n\t<Text>First</Text>\n\t<Text>Second</Text>\n\t<Text>Third</Text>\n</Stack>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Group",
-		"parts": [],
-		"summary": "Horizontal flex group (Mantine Group / Bootstrap btn-group row).",
-		"slots": [],
-		"props": [
-			{
-				"name": "align",
-				"type": "\"start\" | \"end\" | \"center\" | \"stretch\"",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "gap",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "grow",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "justify",
-				"type": "\"start\" | \"end\" | \"center\" | \"between\" | \"around\"",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "wrap",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Group gap=\"0.5rem\">\n\t<Button variant=\"ghost\" onClick={() => {}}>\n\t\tCancel\n\t</Button>\n\t<Button onClick={() => {}}>Save</Button>\n</Group>",
-		"interactive": false,
-		"logsActions": true
-	},
-	{
-		"category": "layout",
-		"name": "Flex",
-		"parts": [],
-		"summary": "Flexbox layout primitive (direction, gap, align, justify, wrap).",
-		"slots": [],
-		"props": [
-			{
-				"name": "align",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "direction",
-				"type": "\"row\" | \"column\"",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "gap",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "justify",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "wrap",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Flex justify=\"space-between\" align=\"center\">\n\t<Text>Invoices</Text>\n\t<Button size=\"sm\" onClick={() => {}}>\n\t\tExport\n\t</Button>\n</Flex>",
-		"interactive": false,
-		"logsActions": true
-	},
-	{
-		"category": "layout",
-		"name": "Center",
-		"parts": [],
-		"summary": "Centres its content horizontally and vertically.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "inline",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Center style={{ \"min-height\": \"6rem\" }}>\n\t<Text muted>Centered on both axes</Text>\n</Center>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Space",
-		"parts": [],
-		"summary": "Fixed spacer; `h` / `w` accept numbers (px) or CSS lengths.",
-		"slots": [],
-		"props": [
-			{
-				"name": "h",
-				"type": "string | number",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "w",
-				"type": "string | number",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<div>\n\t<Text>Above</Text>\n\t<Space h=\"1.5rem\" />\n\t<Text>Below, 1.5rem later</Text>\n</div>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Box",
-		"parts": [],
-		"summary": "Bordered surface for grouping content.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Box>Boxes group related content on a raised surface.</Box>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Paper",
-		"parts": [],
-		"summary": "Surface paper (Mantine).",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "padding",
-				"type": "\"sm\" | \"md\" | \"lg\"",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "shadow",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "withBorder",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Paper padding=\"lg\" shadow withBorder>\n\tPaper is the plainest surface: padding, radius, optional border and shadow.\n</Paper>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Block",
-		"parts": [],
-		"summary": "Vertical spacing block (Bulma).",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<div>\n\t<Block>A block adds the standard bottom margin between siblings.</Block>\n\t<Block>Like this second one.</Block>\n</div>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Tile",
-		"parts": [],
-		"summary": "Nestable tile grid (Bulma).",
-		"slots": [],
-		"props": [
-			{
-				"name": "ancestor",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "child",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "parent",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "size",
-				"type": "5 | 2 | 1 | 3 | 4 | 6 | 7 | 8 | 9 | 10 | 11 | 12",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "vertical",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Tile ancestor>\n\t<Tile parent size={8}>\n\t\t<Tile child>\n\t\t\t<Box>Wide tile</Box>\n\t\t</Tile>\n\t</Tile>\n\t<Tile parent>\n\t\t<Tile child>\n\t\t\t<Box>Narrow</Box>\n\t\t</Tile>\n\t</Tile>\n</Tile>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Card",
-		"parts": [
-			"CardHeader",
-			"CardHeaderTitle",
-			"CardImage",
-			"CardContent",
-			"CardFooter",
-			"CardFooterItem"
-		],
-		"summary": "Content card (Bulma/Mantine/Bootstrap).",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "const cardImage = \"/images/cover.jpg\";\n\n<Card style={{ \"max-width\": \"22rem\" }}>\n\t<CardImage>\n\t\t<img src={cardImage} alt=\"Project cover\" width=\"640\" height=\"280\" />\n\t</CardImage>\n\t<CardContent>\n\t\t<strong>marketing-site</strong>\n\t\t<Text muted>Deployed 4 minutes ago from main.</Text>\n\t</CardContent>\n\t<CardFooter>\n\t\t<CardFooterItem onClick={() => {}}>Visit</CardFooterItem>\n\t\t<CardFooterItem onClick={() => {}}>Logs</CardFooterItem>\n\t</CardFooter>\n</Card>",
-		"interactive": false,
-		"logsActions": true
-	},
-	{
-		"category": "layout",
-		"name": "CardHeader",
-		"parent": "Card",
-		"parts": [],
-		"summary": "Card header row.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Card>\n\t<CardHeader>\n\t\t<CardHeaderTitle>Billing</CardHeaderTitle>\n\t</CardHeader>\n\t<CardContent>Pro plan · renews Oct 1</CardContent>\n</Card>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "CardHeaderTitle",
-		"parent": "Card",
-		"parts": [],
-		"summary": "Title text inside a card header.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Card>\n\t<CardHeader>\n\t\t<CardHeaderTitle>Billing</CardHeaderTitle>\n\t</CardHeader>\n</Card>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "CardImage",
-		"parent": "Card",
-		"parts": [],
-		"summary": "Full-bleed media at the top of a card.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "const cardImage = \"/images/cover.jpg\";\n\n<Card style={{ \"max-width\": \"22rem\" }}>\n\t<CardImage>\n\t\t<img src={cardImage} alt=\"Project cover\" width=\"640\" height=\"280\" />\n\t</CardImage>\n</Card>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "CardContent",
-		"parent": "Card",
-		"parts": [],
-		"summary": "Padded body of a card.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Card>\n\t<CardContent>Card content is padded and flows like body text.</CardContent>\n</Card>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "CardFooter",
-		"parent": "Card",
-		"parts": [],
-		"summary": "Card footer row of actions.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Card>\n\t<CardContent>Delete this project?</CardContent>\n\t<CardFooter>\n\t\t<CardFooterItem onClick={() => {}}>Cancel</CardFooterItem>\n\t\t<CardFooterItem onClick={() => {}}>Delete</CardFooterItem>\n\t</CardFooter>\n</Card>",
-		"interactive": false,
-		"logsActions": true
-	},
-	{
-		"category": "layout",
-		"name": "CardFooterItem",
-		"parent": "Card",
-		"parts": [],
-		"summary": "One action cell in a card footer (a button when `onClick` is set).",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "onClick",
-				"type": "(e: MouseEvent) => void",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Card>\n\t<CardFooter>\n\t\t<CardFooterItem onClick={() => {}}>\n\t\t\tSave\n\t\t</CardFooterItem>\n\t\t<CardFooterItem onClick={() => {}}>Cancel</CardFooterItem>\n\t</CardFooter>\n</Card>",
-		"interactive": false,
-		"logsActions": true
-	},
-	{
-		"category": "layout",
-		"name": "Panel",
-		"parts": [
-			"PanelHeading",
-			"PanelTabs",
-			"PanelTab",
-			"PanelBlock"
-		],
-		"summary": "Side panel / filter panel (Bulma).",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": "Accessible name of the panel's `<nav>` landmark; set it when a page has several panels."
-			}
-		],
-		"code": "function Example() {\n\tconst repos = [\n\t\t{ name: \"arachne\", visibility: \"public\" },\n\t\t{ name: \"marketing-site\", visibility: \"private\" },\n\t\t{ name: \"design-tokens\", visibility: \"public\" },\n\t];\n\tconst tab = signal(\"all\");\n\tconst active = signal(\"arachne\");\n\tconst shown = () => repos.filter((r) => tab() === \"all\" || r.visibility === tab());\n\treturn (\n\t\t<Panel label=\"Repositories\" style={{ \"max-width\": \"22rem\" }}>\n\t\t\t<PanelHeading>Repositories</PanelHeading>\n\t\t\t<PanelTabs>\n\t\t\t\t<For each={[\"all\", \"public\", \"private\"]}>\n\t\t\t\t\t{(id) => (\n\t\t\t\t\t\t<PanelTab active={tab() === id} onClick={() => tab.set(id)}>\n\t\t\t\t\t\t\t{id[0]?.toUpperCase() + id.slice(1)}\n\t\t\t\t\t\t</PanelTab>\n\t\t\t\t\t)}\n\t\t\t\t</For>\n\t\t\t</PanelTabs>\n\t\t\t<For each={shown()}>\n\t\t\t\t{(repo) => (\n\t\t\t\t\t<PanelBlock active={active() === repo.name} onClick={() => active.set(repo.name)}>\n\t\t\t\t\t\t{repo.name}\n\t\t\t\t\t</PanelBlock>\n\t\t\t\t)}\n\t\t\t</For>\n\t\t</Panel>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "PanelHeading",
-		"parent": "Panel",
-		"parts": [],
-		"summary": "Heading row of a panel.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Panel label=\"Projects\">\n\t<PanelHeading>Repositories</PanelHeading>\n\t<PanelBlock>arachne</PanelBlock>\n</Panel>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "PanelTabs",
-		"parent": "Panel",
-		"parts": [],
-		"summary": "Tab row inside a panel.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst tab = signal(\"all\");\n\treturn (\n\t\t<Panel label=\"Filter tabs\">\n\t\t\t<PanelTabs>\n\t\t\t\t<PanelTab active={tab() === \"all\"} onClick={() => tab.set(\"all\")}>\n\t\t\t\t\tAll\n\t\t\t\t</PanelTab>\n\t\t\t\t<PanelTab active={tab() === \"forks\"} onClick={() => tab.set(\"forks\")}>\n\t\t\t\t\tForks\n\t\t\t\t</PanelTab>\n\t\t\t</PanelTabs>\n\t\t</Panel>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "PanelTab",
-		"parent": "Panel",
-		"parts": [],
-		"summary": "One tab in a panel's tab row.",
-		"slots": [],
-		"props": [
-			{
-				"name": "active",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "onClick",
-				"type": "(e: MouseEvent) => void",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst tab = signal(\"all\");\n\treturn (\n\t\t<Panel label=\"Sources\">\n\t\t\t<PanelTabs>\n\t\t\t\t<PanelTab active={tab() === \"all\"} onClick={() => tab.set(\"all\")}>\n\t\t\t\t\tAll\n\t\t\t\t</PanelTab>\n\t\t\t\t<PanelTab active={tab() === \"forks\"} onClick={() => tab.set(\"forks\")}>\n\t\t\t\t\tForks\n\t\t\t\t</PanelTab>\n\t\t\t</PanelTabs>\n\t\t</Panel>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "PanelBlock",
-		"parent": "Panel",
-		"parts": [],
-		"summary": "Panel row; renders a `<button>` when `onClick` is set.",
-		"slots": [],
-		"props": [
-			{
-				"name": "active",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "onClick",
-				"type": "(e: MouseEvent) => void",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst active = signal(\"marketing-site\");\n\treturn (\n\t\t<Panel label=\"Recent projects\">\n\t\t\t<PanelBlock\n\t\t\t\tactive={active() === \"marketing-site\"}\n\t\t\t\tonClick={() => active.set(\"marketing-site\")}\n\t\t\t>\n\t\t\t\tmarketing-site\n\t\t\t</PanelBlock>\n\t\t\t<PanelBlock active={active() === \"docs\"} onClick={() => active.set(\"docs\")}>\n\t\t\t\tdocs\n\t\t\t</PanelBlock>\n\t\t</Panel>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Inset",
-		"parts": [],
-		"summary": "Recessed panel (canvas background, border) for secondary content inside a surface.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Inset>\n\t<Text muted>Recessed area for secondary content, like a settings preview.</Text>\n</Inset>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Bleed",
-		"parts": [],
-		"summary": "Negative horizontal margin to break out of padding.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "x",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Bleed x=\"1rem\">\n\t<Text>Full-width strip that ignores its container's padding.</Text>\n</Bleed>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Columns",
-		"parts": [
-			"Column"
-		],
-		"summary": "Flexbox columns container (Bulma `columns`).",
-		"slots": [],
-		"props": [
-			{
-				"name": "centered",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "gap",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "mobile",
-				"type": "boolean",
-				"required": false,
-				"description": "Keep columns side-by-side on mobile (default stacks under 768px)."
-			},
-			{
-				"name": "multiline",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "vcentered",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Columns gap=\"1rem\">\n\t<Column>\n\t\t<Box>Auto</Box>\n\t</Column>\n\t<Column size={6}>\n\t\t<Box>Half</Box>\n\t</Column>\n\t<Column>\n\t\t<Box>Auto</Box>\n\t</Column>\n</Columns>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Column",
-		"parent": "Columns",
-		"parts": [],
-		"summary": "Single column (Bulma `column`).",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "narrow",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "offset",
-				"type": "ColumnSize",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "size",
-				"type": "ColumnSize",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Columns>\n\t<Column size={4}>\n\t\t<Box>One third</Box>\n\t</Column>\n\t<Column>\n\t\t<Box>Rest</Box>\n\t</Column>\n</Columns>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Grid",
-		"parts": [
-			"GridItem"
-		],
-		"summary": "CSS grid layout (Bulma-style 2D grid).",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "cols",
-				"type": "number",
-				"required": false,
-				"description": "Column count (CSS grid). Default 12."
-			},
-			{
-				"name": "gap",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "min",
-				"type": "string",
-				"required": false,
-				"description": "Min track width for auto-fit dense grids, e.g. `12rem`. Overrides `cols` when set."
-			}
-		],
-		"code": "<Grid cols={3} gap=\"0.75rem\">\n\t<Box>1</Box>\n\t<Box>2</Box>\n\t<Box>3</Box>\n\t<Box>4</Box>\n\t<Box>5</Box>\n\t<Box>6</Box>\n</Grid>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "GridItem",
-		"parent": "Grid",
-		"parts": [],
-		"summary": "Item of a CSS grid, placed with `span` / `start`.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "span",
-				"type": "number",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "start",
-				"type": "number",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Grid cols={3} gap=\"0.75rem\">\n\t<GridItem span={2}>\n\t\t<Box>Spans two columns</Box>\n\t</GridItem>\n\t<Box>One</Box>\n</Grid>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Container",
-		"parts": [],
-		"summary": "Horizontally centred content container with a max width.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "size",
-				"type": "\"sm\" | \"md\" | \"lg\" | \"full\"",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Container size=\"sm\">\n\t<Box>Content constrained to the small container width.</Box>\n</Container>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Section",
-		"parts": [],
-		"summary": "Vertical page section with rhythm spacing.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "size",
-				"type": "\"sm\" | \"md\" | \"lg\"",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Section size=\"sm\">\n\t<Title order={3}>Pricing</Title>\n\t<Text>Sections add vertical rhythm between page regions.</Text>\n</Section>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Level",
-		"parts": [
-			"LevelLeft",
-			"LevelRight",
-			"LevelItem"
-		],
-		"summary": "Horizontal level bar (Bulma `level`).",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "mobile",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Level>\n\t<LevelLeft>\n\t\t<LevelItem>\n\t\t\t<strong>128 deploys</strong>\n\t\t</LevelItem>\n\t</LevelLeft>\n\t<LevelRight>\n\t\t<LevelItem>\n\t\t\t<Button size=\"sm\" onClick={() => {}}>\n\t\t\t\tNew deploy\n\t\t\t</Button>\n\t\t</LevelItem>\n\t</LevelRight>\n</Level>",
-		"interactive": false,
-		"logsActions": true
-	},
-	{
-		"category": "layout",
-		"name": "LevelLeft",
-		"parent": "Level",
-		"parts": [],
-		"summary": "Left-aligned group of a level bar.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Level>\n\t<LevelLeft>\n\t\t<LevelItem>Left side</LevelItem>\n\t</LevelLeft>\n</Level>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "LevelRight",
-		"parent": "Level",
-		"parts": [],
-		"summary": "Right-aligned group of a level bar.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Level>\n\t<LevelRight>\n\t\t<LevelItem>Right side</LevelItem>\n\t</LevelRight>\n</Level>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "LevelItem",
-		"parent": "Level",
-		"parts": [],
-		"summary": "One centred item of a level bar.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Level>\n\t<LevelItem>\n\t\t<Text>Deploys</Text>\n\t</LevelItem>\n\t<LevelItem>\n\t\t<strong>128</strong>\n\t</LevelItem>\n</Level>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Hero",
-		"parts": [
-			"HeroHead",
-			"HeroBody",
-			"HeroFoot"
-		],
-		"summary": "Full-bleed page hero (Bulma / Bootstrap jumbotron).",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "size",
-				"type": "HeroSize",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "tone",
-				"type": "HeroTone",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Hero tone=\"accent\" size=\"sm\">\n\t<HeroBody>\n\t\t<Title order={2} size={3}>\n\t\t\tShip faster with Arachne\n\t\t</Title>\n\t\t<Text>Signals, SSR and 330+ accessible components.</Text>\n\t</HeroBody>\n</Hero>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "HeroHead",
-		"parent": "Hero",
-		"parts": [],
-		"summary": "Top area of a hero (e.g. navigation).",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Hero tone=\"dark\" size=\"sm\">\n\t<HeroHead>\n\t\t<strong>Arachne</strong>\n\t</HeroHead>\n\t<HeroBody>Hero head sits at the top, for a navbar or brand.</HeroBody>\n</Hero>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "HeroBody",
-		"parent": "Hero",
-		"parts": [],
-		"summary": "Main content area of a hero.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Hero size=\"sm\">\n\t<HeroBody>The body grows to fill the hero and centres its content.</HeroBody>\n</Hero>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "HeroFoot",
-		"parent": "Hero",
-		"parts": [],
-		"summary": "Bottom area of a hero (e.g. tabs).",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Hero tone=\"light\" size=\"sm\">\n\t<HeroBody>Hero with a footer row.</HeroBody>\n\t<HeroFoot>\n\t\t<Text muted>Trusted by 2,000 teams</Text>\n\t</HeroFoot>\n</Hero>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Media",
-		"parts": [
-			"MediaLeft",
-			"MediaContent",
-			"MediaRight"
-		],
-		"summary": "Media object (Bulma / UIkit comment / Bootstrap media).",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Media>\n\t<MediaLeft>\n\t\t<Avatar name=\"Ada Lovelace\" />\n\t</MediaLeft>\n\t<MediaContent>\n\t\t<strong>Ada Lovelace</strong> <Text muted>opened #421</Text>\n\t</MediaContent>\n\t<MediaRight>\n\t\t<Text muted>2h</Text>\n\t</MediaRight>\n</Media>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "MediaLeft",
-		"parent": "Media",
-		"parts": [],
-		"summary": "Leading figure of a media object (avatar, thumbnail).",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Media>\n\t<MediaLeft>\n\t\t<Avatar name=\"Grace Hopper\" />\n\t</MediaLeft>\n\t<MediaContent>Left slot holds the avatar or thumbnail.</MediaContent>\n</Media>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "MediaContent",
-		"parent": "Media",
-		"parts": [],
-		"summary": "Main content of a media object.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Media>\n\t<MediaLeft>\n\t\t<Avatar name=\"Grace Hopper\" />\n\t</MediaLeft>\n\t<MediaContent>The content column grows to fill the row.</MediaContent>\n</Media>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "MediaRight",
-		"parent": "Media",
-		"parts": [],
-		"summary": "Trailing content of a media object (actions).",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Media>\n\t<MediaContent>Row content</MediaContent>\n\t<MediaRight>\n\t\t<Button size=\"sm\" variant=\"ghost\" onClick={() => {}}>\n\t\t\tReply\n\t\t</Button>\n\t</MediaRight>\n</Media>",
-		"interactive": false,
-		"logsActions": true
-	},
-	{
-		"category": "layout",
-		"name": "Footer",
-		"parts": [],
-		"summary": "Page footer region.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Footer>\n\t<Text muted>© 2026 Acme Inc. · Privacy · Terms</Text>\n</Footer>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "SiteFooter",
-		"parts": [],
-		"summary": "Marketing footer.",
-		"slots": [
-			"root",
-			"brand",
-			"column",
-			"columnTitle",
-			"grid",
-			"link",
-			"meta"
-		],
-		"props": [
-			{
-				"name": "brand",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "columns",
-				"type": "{ title: string; links: SiteFooterLink[]; }[]",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "meta",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<SiteFooter\n\tbrand=\"Arachne\"\n\tcolumns={[\n\t\t{\n\t\t\ttitle: \"Product\",\n\t\t\tlinks: [\n\t\t\t\t{ label: \"Pricing\", href: \"#pricing\" },\n\t\t\t\t{ label: \"Changelog\", href: \"#changelog\" },\n\t\t\t],\n\t\t},\n\t\t{\n\t\t\ttitle: \"Company\",\n\t\t\tlinks: [\n\t\t\t\t{ label: \"About\", href: \"#about\" },\n\t\t\t\t{ label: \"Careers\", href: \"#careers\" },\n\t\t\t],\n\t\t},\n\t]}\n\tmeta=\"© 2026 Arachne\"\n/>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Divider",
-		"parts": [],
-		"summary": "Horizontal rule.",
-		"slots": [],
-		"props": [],
-		"code": "<Stack gap=\"0.75rem\">\n\t<Text>Account</Text>\n\t<Divider />\n\t<Text>Billing</Text>\n</Stack>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "AspectRatio",
-		"parts": [],
-		"summary": "Fixed-ratio box (`--a-aspect`).",
-		"slots": [
-			"root",
-			"inner"
-		],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "ratio",
-				"type": "number",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<AspectRatio style={{ \"max-width\": \"20rem\" }} ratio={16 / 9}>\n\t<img src=\"/images/16-9.jpg\" alt=\"16 by 9 placeholder\" />\n</AspectRatio>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "ScrollArea",
-		"parts": [],
-		"summary": "Scrollable region with a max height.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "maxHeight",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<ScrollArea maxHeight=\"6rem\">\n\t<Stack gap=\"0.35rem\">\n\t\t<Text>Deploy #128</Text>\n\t\t<Text>Deploy #127</Text>\n\t\t<Text>Deploy #126</Text>\n\t\t<Text>Deploy #125</Text>\n\t\t<Text>Deploy #124</Text>\n\t\t<Text>Deploy #123</Text>\n\t</Stack>\n</ScrollArea>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Splitter",
-		"parts": [],
-		"summary": "Two resizable panes (pointer + ← → Home End).",
-		"slots": [
-			"root",
-			"handle",
-			"pane"
-		],
-		"props": [
-			{
-				"name": "initial",
-				"type": "number",
-				"required": false,
-				"description": "Left pane ratio 0–1, default 0.4 (read once, at mount)."
-			},
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": "Accessible name for the handle (default \"Resize panes\")."
-			},
-			{
-				"name": "left",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "max",
-				"type": "number",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "min",
-				"type": "number",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "right",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Splitter\n\tstyle={{ height: \"8rem\" }}\n\tlabel=\"Resize panes\"\n\tinitial={40}\n\tleft={<Text>Files</Text>}\n\tright={<Text>Editor</Text>}\n/>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Masonry",
-		"parts": [],
-		"summary": "Masonry layout of variable-height items in columns.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "columns",
-				"type": "2 | 3 | 4",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst notes = [\n\t\t{ title: \"Release 2.4\", body: \"Dark theme, a component reference and interactive examples.\" },\n\t\t{ title: \"Standup\", body: \"Ship the tree search.\" },\n\t\t{\n\t\t\ttitle: \"Design review\",\n\t\t\tbody: \"Tighten the button group borders, fix the burger icon, make quote backgrounds optional and give the tree folder icons.\",\n\t\t},\n\t\t{ title: \"Bug\", body: \"PIN input needed two Backspaces.\" },\n\t\t{ title: \"Idea\", body: \"Masonry packs cards of different heights into columns without gaps.\" },\n\t\t{ title: \"Reading\", body: \"WAI-ARIA tree pattern.\" },\n\t];\n\treturn (\n\t\t<Masonry columns={3}>\n\t\t\t<For each={notes}>\n\t\t\t\t{(note) => (\n\t\t\t\t\t<Paper withBorder padding=\"md\">\n\t\t\t\t\t\t<strong>{note.title}</strong>\n\t\t\t\t\t\t<Text muted>{note.body}</Text>\n\t\t\t\t\t</Paper>\n\t\t\t\t)}\n\t\t\t</For>\n\t\t</Masonry>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "Reel",
-		"parts": [],
-		"summary": "Horizontal scroll reel.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Reel>\n\t<img src=\"/images/1.jpg\" alt=\"Slide 1\" width=\"240\" height=\"160\" />\n\t<img src=\"/images/2.jpg\" alt=\"Slide 2\" width=\"240\" height=\"160\" />\n\t<img src=\"/images/3.jpg\" alt=\"Slide 3\" width=\"240\" height=\"160\" />\n\t<img src=\"/images/4.jpg\" alt=\"Slide 4\" width=\"240\" height=\"160\" />\n</Reel>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "GalleryGrid",
-		"parts": [],
-		"summary": "Image grid.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "columns",
-				"type": "2 | 3 | 4",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<GalleryGrid columns={3}>\n\t<img src=\"/images/a.jpg\" alt=\"Gallery A\" width=\"320\" height=\"240\" />\n\t<img src=\"/images/b.jpg\" alt=\"Gallery B\" width=\"320\" height=\"240\" />\n\t<img src=\"/images/c.jpg\" alt=\"Gallery C\" width=\"320\" height=\"240\" />\n</GalleryGrid>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "layout",
-		"name": "FilterBar",
-		"parts": [],
-		"summary": "Horizontal toolbar for filters and chips.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst query = signal(\"\");\n\tconst deploys = [\"marketing-site #128\", \"docs #127\", \"marketing-site #126\", \"api #125\"];\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<FilterBar>\n\t\t\t\t<SearchInput\n\t\t\t\t\taria-label=\"Search deploys\"\n\t\t\t\t\tplaceholder=\"Search deploys\"\n\t\t\t\t\tvalue={query()}\n\t\t\t\t\tonChange={query.set}\n\t\t\t\t/>\n\t\t\t\t<Button variant=\"outline\" onClick={() => query.set(\"\")}>\n\t\t\t\t\tClear\n\t\t\t\t</Button>\n\t\t\t</FilterBar>\n\t\t\t<For each={deploys.filter((d) => d.includes(query()))}>{(d) => <Text>{d}</Text>}</For>\n\t\t</Stack>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "content",
-		"name": "Text",
-		"parts": [],
-		"summary": "Body text.",
-		"slots": [],
-		"props": [
-			{
-				"name": "as",
-				"type": "\"div\" | \"p\" | \"span\"",
-				"required": false,
-				"description": "Element to render; fixed at mount."
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "danger",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "muted",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Text muted>\n\tLast deployed 4 minutes ago by Ada.\n</Text>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "content",
-		"name": "Title",
-		"parts": [],
-		"summary": "Section title. `order` picks the semantic level and `size` only the look, so a small title never breaks the heading outline.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "order",
-				"type": "HeadingOrder",
-				"required": false,
-				"description": "Heading level (`<h1>`–`<h6>`) for the document outline. Default 2."
-			},
-			{
-				"name": "size",
-				"type": "HeadingOrder",
-				"required": false,
-				"description": "Visual size 1–6 (1 is largest), independent of the level. Default: `order`, else 3."
-			},
-			{
-				"name": "spaced",
-				"type": "boolean",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Title order={3}>\n\tProject settings\n</Title>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "content",
-		"name": "Subtitle",
-		"parts": [],
-		"summary": "Secondary line under a title.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "order",
-				"type": "HeadingOrder",
-				"required": false,
-				"description": "Render as a heading at this level; by default a subtitle is a `<p>`."
-			},
-			{
-				"name": "size",
-				"type": "HeadingOrder",
-				"required": false,
-				"description": "Visual size 1–6. Default 5."
-			}
-		],
-		"code": "<Subtitle>Manage domains, builds and access.</Subtitle>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "content",
-		"name": "Heading",
-		"parts": [],
-		"summary": "Section heading whose level can change after mount.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "level",
-				"type": "2 | 1 | 3",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Heading level={3}>\n\tTeam members\n</Heading>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "content",
-		"name": "Prose",
-		"parts": [],
-		"summary": "Typographic container for rich text (headings, paragraphs, lists, links), e.g. rendered Markdown.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "measure",
-				"type": "boolean",
-				"required": false,
-				"description": "Cap the line length for readability (default true)."
-			}
-		],
-		"code": "<Prose>\n\t<h3>Release notes</h3>\n\t<p>\n\t\tThis release focuses on <a href=\"#a11y\">accessibility</a>: every overlay now traps focus\n\t\tand restores it on close.\n\t</p>\n\t<ul>\n\t\t<li>Keyboard support for menus and trees</li>\n\t\t<li>Reduced-motion aware transitions</li>\n\t</ul>\n</Prose>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "content",
-		"name": "Quote",
-		"parts": [],
-		"summary": "Block quote with an optional citation.",
-		"slots": [
-			"root",
-			"body",
-			"cite"
-		],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "cite",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "variant",
-				"type": "\"soft\" | \"plain\"",
-				"required": false,
-				"description": "`\"soft\"` (default) adds a tinted background; `\"plain\"` keeps only the accent rule."
-			}
-		],
-		"code": "<Stack gap=\"1rem\">\n\t<Quote cite=\"Grace Hopper\">\n\t\tThe most dangerous phrase in the language is “we've always done it this way.”\n\t</Quote>\n\t<Quote variant=\"plain\" cite=\"Alan Kay\">\n\t\tThe best way to predict the future is to invent it.\n\t</Quote>\n</Stack>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "content",
-		"name": "Article",
-		"parts": [
-			"ArticleTitle",
-			"ArticleMeta"
-		],
-		"summary": "Article container with readable text styles.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Article>\n\t<ArticleTitle order={3}>Designing a kit-wide customization system</ArticleTitle>\n\t<ArticleMeta>Ada Lovelace · Sep 12, 2026 · 6 min read</ArticleMeta>\n\t<p>Every component forwards attributes and exposes named slots…</p>\n</Article>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "content",
-		"name": "ArticleTitle",
-		"parent": "Article",
-		"parts": [],
-		"summary": "Article heading.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "order",
-				"type": "HeadingLevel",
-				"required": false,
-				"description": "Heading level, to fit the page outline. Default 1."
-			}
-		],
-		"code": "<Article>\n\t<ArticleTitle order={3}>\n\t\tDesigning a kit-wide customization system\n\t</ArticleTitle>\n</Article>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "content",
-		"name": "ArticleMeta",
-		"parent": "Article",
-		"parts": [],
-		"summary": "Article byline / metadata line.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Article>\n\t<ArticleTitle order={3}>Release 2.4</ArticleTitle>\n\t<ArticleMeta>Grace Hopper · Sep 1, 2026</ArticleMeta>\n</Article>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "content",
-		"name": "PageHeader",
-		"parts": [],
-		"summary": "Page title block with breadcrumb, description and actions.",
-		"slots": [
-			"root",
-			"actions",
-			"crumb",
-			"description",
-			"row",
-			"text",
-			"title"
-		],
-		"props": [
-			{
-				"name": "title",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "actions",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "breadcrumb",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "description",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<PageHeader\n\ttitle=\"Deploys\"\n\tdescription=\"Every push to a branch creates a deploy.\"\n\tactions={<Button onClick={() => {}}>New deploy</Button>}\n/>",
-		"interactive": false,
-		"logsActions": true
-	},
-	{
-		"category": "content",
-		"name": "Figure",
-		"parts": [],
-		"summary": "Figure with an optional caption.",
-		"slots": [
-			"root",
-			"caption"
-		],
-		"props": [
-			{
-				"name": "caption",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<Figure caption=\"Build times dropped 40% after caching dependencies.\">\n\t<img src=\"/images/chart.jpg\" alt=\"Build time chart\" width=\"480\" height=\"240\" />\n</Figure>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "content",
+		"category": "media",
 		"name": "Image",
+		"family": "image",
 		"parts": [],
 		"summary": "Responsive image: lazy-loaded by default, with `fit`, radius, `srcset` and `sizes` support.",
 		"slots": [],
@@ -10695,8 +10434,37 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "content",
+		"category": "media",
+		"name": "Figure",
+		"family": "image",
+		"parts": [],
+		"summary": "Figure with an optional caption.",
+		"slots": [
+			"root",
+			"caption"
+		],
+		"props": [
+			{
+				"name": "caption",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Figure caption=\"Build times dropped 40% after caching dependencies.\">\n\t<img src=\"/images/chart.jpg\" alt=\"Build time chart\" width=\"480\" height=\"240\" />\n</Figure>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "media",
 		"name": "BackgroundImage",
+		"family": "image",
 		"parts": [],
 		"summary": "",
 		"slots": [],
@@ -10725,7 +10493,7 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "content",
+		"category": "media",
 		"name": "VideoFrame",
 		"parts": [],
 		"summary": "Responsive iframe embed.",
@@ -10758,7 +10526,117 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "content",
+		"category": "media",
+		"name": "Carousel",
+		"family": "gallery",
+		"parts": [],
+		"summary": "Previous/next carousel; controlled when `value` is set. ← → switch slides.",
+		"slots": [
+			"root",
+			"control",
+			"controls",
+			"slide",
+			"status",
+			"viewport"
+		],
+		"props": [
+			{
+				"name": "slides",
+				"type": "CarouselSlide[]",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": "Accessible name (default \"Carousel\")."
+			},
+			{
+				"name": "onChange",
+				"type": "(id: string) => void",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "value",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Carousel\n\tlabel=\"Highlights\"\n\tslides={[\n\t\t{\n\t\t\tid: \"s1\",\n\t\t\tcontent: (\n\t\t\t\t<img src=\"/images/signals.jpg\" alt=\"Signals\" width=\"640\" height=\"280\" />\n\t\t\t),\n\t\t},\n\t\t{\n\t\t\tid: \"s2\",\n\t\t\tcontent: <img src=\"/images/ssr.jpg\" alt=\"SSR\" width=\"640\" height=\"280\" />,\n\t\t},\n\t\t{\n\t\t\tid: \"s3\",\n\t\t\tcontent: (\n\t\t\t\t<img src=\"/images/theming.jpg\" alt=\"Theming\" width=\"640\" height=\"280\" />\n\t\t\t),\n\t\t},\n\t]}\n/>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "media",
+		"name": "Thumbnav",
+		"family": "gallery",
+		"parts": [],
+		"summary": "Thumbnail picker.",
+		"slots": [
+			"root",
+			"image",
+			"item"
+		],
+		"props": [
+			{
+				"name": "items",
+				"type": "ThumbnavItem[]",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "onChange",
+				"type": "(id: string) => void",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "value",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": "Accessible name (default \"Thumbnails\")."
+			}
+		],
+		"code": "function Example() {\n\tconst photos = [\n\t\t{ id: \"lake\", src: \"/images/lake.jpg\", alt: \"Lake at dawn\" },\n\t\t{ id: \"forest\", src: \"/images/forest.jpg\", alt: \"Forest trail\" },\n\t\t{ id: \"desert\", src: \"/images/desert.jpg\", alt: \"Desert dunes\" },\n\t\t{ id: \"city\", src: \"/images/city.jpg\", alt: \"City at night\" },\n\t];\n\tconst photo = signal(\"forest\");\n\tconst current = () => photos.find((ph) => ph.id === photo()) ?? photos[0];\n\treturn (\n\t\t<Stack gap=\"0.75rem\" style={{ \"max-width\": \"24rem\" }}>\n\t\t\t<img\n\t\t\t\tsrc={current()?.src}\n\t\t\t\talt={current()?.alt}\n\t\t\t\twidth=\"640\"\n\t\t\t\theight=\"400\"\n\t\t\t\tstyle={{ width: \"100%\", height: \"auto\", \"border-radius\": \"var(--a-radius)\" }}\n\t\t\t/>\n\t\t\t<Thumbnav label=\"Photos\" items={photos} value={photo()} onChange={photo.set} />\n\t\t</Stack>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "media",
+		"name": "GalleryGrid",
+		"family": "gallery",
+		"parts": [],
+		"summary": "Image grid.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "columns",
+				"type": "2 | 3 | 4",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<GalleryGrid columns={3}>\n\t<img src=\"/images/a.jpg\" alt=\"Gallery A\" width=\"320\" height=\"240\" />\n\t<img src=\"/images/b.jpg\" alt=\"Gallery B\" width=\"320\" height=\"240\" />\n\t<img src=\"/images/c.jpg\" alt=\"Gallery C\" width=\"320\" height=\"240\" />\n</GalleryGrid>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "media",
 		"name": "BeforeAfter",
 		"parts": [],
 		"summary": "Image compare slider.",
@@ -10812,8 +10690,31 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "content",
+		"category": "media",
+		"name": "LogoCloud",
+		"family": "logos",
+		"parts": [],
+		"summary": "Row of partner logos / names.",
+		"slots": [
+			"root",
+			"item"
+		],
+		"props": [
+			{
+				"name": "items",
+				"type": "unknown[]",
+				"required": true,
+				"description": ""
+			}
+		],
+		"code": "<LogoCloud items={[\"Acme\", \"Globex\", \"Initech\", \"Umbrella\"]} />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "media",
 		"name": "Marquee",
+		"family": "logos",
 		"parts": [],
 		"summary": "Seamless ticker: content is rendered twice so the −50% keyframe loops without a gap; the copy is hidden from assistive tech.",
 		"slots": [
@@ -10852,48 +10753,149 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "content",
-		"name": "Icon",
+		"category": "media",
+		"name": "BrowserFrame",
+		"family": "frames",
 		"parts": [],
-		"summary": "Built-in SVG icon.",
-		"slots": [],
+		"summary": "Browser chrome mock-up.",
+		"slots": [
+			"root",
+			"bar",
+			"body",
+			"url"
+		],
 		"props": [
 			{
-				"name": "name",
-				"type": "IconName",
-				"required": true,
+				"name": "children",
+				"type": "content",
+				"required": false,
 				"description": ""
 			},
 			{
-				"name": "label",
+				"name": "url",
 				"type": "string",
-				"required": false,
-				"description": "Accessible name; without it the icon is decorative (`aria-hidden`)."
-			},
-			{
-				"name": "size",
-				"type": "number | \"sm\" | \"md\" | \"lg\"",
 				"required": false,
 				"description": ""
 			}
 		],
-		"code": "<Icon name=\"bell\" />",
+		"code": "<BrowserFrame url=\"https://acme.arachne.app\">\n\t<img src=\"/images/preview.jpg\" alt=\"Site preview\" width=\"640\" height=\"300\" />\n</BrowserFrame>",
 		"interactive": false,
 		"logsActions": false
 	},
 	{
-		"category": "content",
-		"name": "IconBadge",
+		"category": "media",
+		"name": "PhoneFrame",
+		"family": "frames",
 		"parts": [],
-		"summary": "Colored circular/square icon badge.",
+		"summary": "Phone mock-up.",
 		"slots": [
 			"root",
-			"icon"
+			"body",
+			"notch"
+		],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<PhoneFrame>\n\t<img src=\"/images/app.jpg\" alt=\"App screen\" width=\"300\" height=\"600\" />\n</PhoneFrame>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "people",
+		"name": "Avatar",
+		"family": "avatar",
+		"parts": [],
+		"summary": "Picture or initials.",
+		"slots": [
+			"root",
+			"fallback",
+			"image"
+		],
+		"props": [
+			{
+				"name": "alt",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "size",
+				"type": "\"sm\" | \"md\" | \"lg\"",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "src",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Avatar name=\"Ada Lovelace\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "people",
+		"name": "AvatarGroup",
+		"family": "avatar",
+		"parts": [],
+		"summary": "Overlapping avatars with a \"+N\" overflow chip.",
+		"slots": [
+			"root",
+			"avatar",
+			"more"
+		],
+		"props": [
+			{
+				"name": "names",
+				"type": "string[]",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "max",
+				"type": "number",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "size",
+				"type": "\"sm\" | \"md\" | \"lg\"",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<AvatarGroup\n\tmax={3}\n\tnames={[\"Ada Lovelace\", \"Grace Hopper\", \"Alan Turing\", \"Linus Torvalds\"]}\n/>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "people",
+		"name": "PresenceAvatar",
+		"family": "avatar",
+		"parts": [],
+		"summary": "Avatar with a presence dot.",
+		"slots": [
+			"root",
+			"avatar",
+			"dot"
 		],
 		"props": [
 			{
 				"name": "name",
-				"type": "IconName",
+				"type": "string",
 				"required": true,
 				"description": ""
 			},
@@ -10904,44 +10906,90 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			},
 			{
-				"name": "tone",
-				"type": "\"danger\" | \"warning\" | \"success\" | \"muted\" | \"accent\"",
+				"name": "src",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "status",
+				"type": "\"accent\" | \"warning\" | \"success\" | \"danger\" | \"neutral\"",
 				"required": false,
 				"description": ""
 			}
 		],
-		"code": "<IconBadge name=\"zap\" tone=\"accent\" />",
+		"code": "<PresenceAvatar name=\"Ada Lovelace\" status=\"success\" />",
 		"interactive": false,
 		"logsActions": false
 	},
 	{
-		"category": "content",
-		"name": "VisuallyHidden",
+		"category": "people",
+		"name": "UserButton",
+		"family": "account",
 		"parts": [],
-		"summary": "Screen-reader-only text.",
-		"slots": [],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
+		"summary": "Button showing a user's avatar, name and email.",
+		"slots": [
+			"root",
+			"avatar",
+			"chevron",
+			"email",
+			"name",
+			"text"
 		],
-		"code": "<Button variant=\"ghost\" onClick={() => {}}>\n\t★<VisuallyHidden>Add to favourites</VisuallyHidden>\n</Button>",
-		"interactive": false,
-		"logsActions": true
-	},
-	{
-		"category": "content",
-		"name": "Mention",
-		"parts": [],
-		"summary": "Inline",
-		"slots": [],
 		"props": [
 			{
 				"name": "name",
 				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "email",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "end",
+				"type": "content",
+				"required": false,
+				"description": "Trailing content (default chevron); `null` hides it."
+			},
+			{
+				"name": "onClick",
+				"type": "(e: MouseEvent) => void",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "src",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<UserButton name=\"Ada Lovelace\" email=\"ada@example.com\" onClick={() => {}} />",
+		"interactive": false,
+		"logsActions": true
+	},
+	{
+		"category": "people",
+		"name": "OrgSwitcher",
+		"family": "account",
+		"parts": [],
+		"summary": "Workspace switcher button.",
+		"slots": [
+			"root",
+			"avatar",
+			"chevron",
+			"meta",
+			"name",
+			"plan"
+		],
+		"props": [
+			{
+				"name": "org",
+				"type": "OrgOption",
 				"required": true,
 				"description": ""
 			},
@@ -10952,13 +11000,177 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Text>\n\tThanks <Mention name=\"ada\" onClick={() => {}} />, merging now.\n</Text>",
+		"code": "<OrgSwitcher\n\torg={{ id: \"acme\", name: \"Acme Inc.\", plan: \"Pro\" }}\n\tonClick={() => {}}\n/>",
 		"interactive": false,
 		"logsActions": true
 	},
 	{
-		"category": "content",
+		"category": "people",
+		"name": "ProfileHeader",
+		"family": "profile",
+		"parts": [],
+		"summary": "Profile header with cover, avatar, name, handle, bio and actions.",
+		"slots": [
+			"root",
+			"actions",
+			"avatar",
+			"bio",
+			"cover",
+			"handle",
+			"main",
+			"meta",
+			"name"
+		],
+		"props": [
+			{
+				"name": "name",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "actions",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "bio",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "cover",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "handle",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "src",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<ProfileHeader\n\tname=\"Ada Lovelace\"\n\thandle=\"ada\"\n\tbio=\"Analyst of engines. Writes the first programs.\"\n\tactions={\n\t\t<Button variant=\"outline\" onClick={() => {}}>\n\t\t\tFollow\n\t\t</Button>\n\t}\n/>",
+		"interactive": false,
+		"logsActions": true
+	},
+	{
+		"category": "people",
+		"name": "MemberRow",
+		"family": "profile",
+		"parts": [],
+		"summary": "Team member row with avatar, email and remove action.",
+		"slots": [
+			"root",
+			"avatar",
+			"email",
+			"meta",
+			"name",
+			"remove"
+		],
+		"props": [
+			{
+				"name": "name",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "email",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "onRemove",
+				"type": "() => void",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "role",
+				"type": "string",
+				"required": false,
+				"description": "Team role shown as a {@link RoleBadge} (not the ARIA role)."
+			},
+			{
+				"name": "src",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst members = signal([\n\t\t{ name: \"Grace Hopper\", email: \"grace@navy.mil\" },\n\t\t{ name: \"Alan Turing\", email: \"alan@bletchley.uk\" },\n\t]);\n\treturn (\n\t\t<Stack gap=\"0.25rem\">\n\t\t\t<For each={members()}>\n\t\t\t\t{(member) => (\n\t\t\t\t\t<MemberRow\n\t\t\t\t\t\tname={member.name}\n\t\t\t\t\t\temail={member.email}\n\t\t\t\t\t\tonRemove={() => members.set(members().filter((m) => m !== member))}\n\t\t\t\t\t/>\n\t\t\t\t)}\n\t\t\t</For>\n\t\t\t<Show when={members().length === 0}>\n\t\t\t\t<Text muted>No members left.</Text>\n\t\t\t</Show>\n\t\t</Stack>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "people",
+		"name": "InviteCard",
+		"family": "profile",
+		"parts": [],
+		"summary": "Pending invitation with resend and revoke actions.",
+		"slots": [
+			"root",
+			"actions",
+			"email",
+			"meta"
+		],
+		"props": [
+			{
+				"name": "email",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "onResend",
+				"type": "() => void",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "onRevoke",
+				"type": "() => void",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "resendLabel",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "revokeLabel",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "role",
+				"type": "string",
+				"required": false,
+				"description": "Team role shown as a {@link RoleBadge} (not the ARIA role)."
+			}
+		],
+		"code": "function Example() {\n\tconst status = signal(\"Invitation pending\");\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<InviteCard\n\t\t\t\temail=\"linus@example.com\"\n\t\t\t\tonResend={() => status.set(\"Invitation re-sent just now\")}\n\t\t\t\tonRevoke={() => status.set(\"Invitation revoked\")}\n\t\t\t/>\n\t\t\t<Text muted>{status()}</Text>\n\t\t</Stack>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "people",
 		"name": "Comment",
+		"family": "conversation",
 		"parts": [],
 		"summary": "Discussion entry.",
 		"slots": [
@@ -11008,8 +11220,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "content",
+		"category": "people",
 		"name": "ChatBubble",
+		"family": "conversation",
 		"parts": [],
 		"summary": "Chat message bubble, aligned by sender.",
 		"slots": [
@@ -11049,8 +11262,62 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "content",
+		"category": "people",
+		"name": "Mention",
+		"family": "conversation",
+		"parts": [],
+		"summary": "Inline",
+		"slots": [],
+		"props": [
+			{
+				"name": "name",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "onClick",
+				"type": "() => void",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Text>\n\tThanks <Mention name=\"ada\" onClick={() => {}} />, merging now.\n</Text>",
+		"interactive": false,
+		"logsActions": true
+	},
+	{
+		"category": "people",
+		"name": "ReactionBar",
+		"family": "conversation",
+		"parts": [],
+		"summary": "Emoji reaction toggles.",
+		"slots": [
+			"root",
+			"reaction"
+		],
+		"props": [
+			{
+				"name": "reactions",
+				"type": "Reaction[]",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "onToggle",
+				"type": "(emoji: string) => void",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "function Example() {\n\tconst reactions = signal([\n\t\t{ emoji: \"👍\", count: 12, active: true },\n\t\t{ emoji: \"🎉\", count: 4, active: false },\n\t\t{ emoji: \"👀\", count: 2, active: false },\n\t]);\n\tconst toggle = (emoji: string) =>\n\t\treactions.set(\n\t\t\treactions().map((r) =>\n\t\t\t\tr.emoji === emoji ? { ...r, active: !r.active, count: r.count + (r.active ? -1 : 1) } : r,\n\t\t\t),\n\t\t);\n\treturn <ReactionBar reactions={reactions()} onToggle={toggle} />;\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "people",
 		"name": "ActivityItem",
+		"family": "feed",
 		"parts": [],
 		"summary": "Activity feed entry with icon, title, meta and content.",
 		"slots": [
@@ -11098,8 +11365,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "content",
+		"category": "people",
 		"name": "InboxItem",
+		"family": "feed",
 		"parts": [],
 		"summary": "Notification row.",
 		"slots": [
@@ -11153,35 +11421,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": true
 	},
 	{
-		"category": "content",
-		"name": "ReactionBar",
-		"parts": [],
-		"summary": "Emoji reaction toggles.",
-		"slots": [
-			"root",
-			"reaction"
-		],
-		"props": [
-			{
-				"name": "reactions",
-				"type": "Reaction[]",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "onToggle",
-				"type": "(emoji: string) => void",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst reactions = signal([\n\t\t{ emoji: \"👍\", count: 12, active: true },\n\t\t{ emoji: \"🎉\", count: 4, active: false },\n\t\t{ emoji: \"👀\", count: 2, active: false },\n\t]);\n\tconst toggle = (emoji: string) =>\n\t\treactions.set(\n\t\t\treactions().map((r) =>\n\t\t\t\tr.emoji === emoji ? { ...r, active: !r.active, count: r.count + (r.active ? -1 : 1) } : r,\n\t\t\t),\n\t\t);\n\treturn <ReactionBar reactions={reactions()} onToggle={toggle} />;\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "content",
+		"category": "people",
 		"name": "Testimonial",
+		"family": "testimonials",
 		"parts": [],
 		"summary": "Customer quote.",
 		"slots": [
@@ -11223,8 +11465,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "content",
+		"category": "people",
 		"name": "ReviewCard",
+		"family": "testimonials",
 		"parts": [],
 		"summary": "Star-rated review.",
 		"slots": [
@@ -11272,79 +11515,7 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
-		"category": "content",
-		"name": "LogoCloud",
-		"parts": [],
-		"summary": "Row of partner logos / names.",
-		"slots": [
-			"root",
-			"item"
-		],
-		"props": [
-			{
-				"name": "items",
-				"type": "unknown[]",
-				"required": true,
-				"description": ""
-			}
-		],
-		"code": "<LogoCloud items={[\"Acme\", \"Globex\", \"Initech\", \"Umbrella\"]} />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "content",
-		"name": "BrowserFrame",
-		"parts": [],
-		"summary": "Browser chrome mock-up.",
-		"slots": [
-			"root",
-			"bar",
-			"body",
-			"url"
-		],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "url",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<BrowserFrame url=\"https://acme.arachne.app\">\n\t<img src=\"/images/preview.jpg\" alt=\"Site preview\" width=\"640\" height=\"300\" />\n</BrowserFrame>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "content",
-		"name": "PhoneFrame",
-		"parts": [],
-		"summary": "Phone mock-up.",
-		"slots": [
-			"root",
-			"body",
-			"notch"
-		],
-		"props": [
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<PhoneFrame>\n\t<img src=\"/images/app.jpg\" alt=\"App screen\" width=\"300\" height=\"600\" />\n</PhoneFrame>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "content",
+		"category": "people",
 		"name": "SocialLinks",
 		"parts": [],
 		"summary": "Row of icon links.",
@@ -11365,8 +11536,525 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": false
 	},
 	{
+		"category": "developer",
+		"name": "Code",
+		"family": "code",
+		"parts": [],
+		"summary": "Inline code.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Text>\n\tRun <Code>bun run ui:docs</Code> after changing an example.\n</Text>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "developer",
+		"name": "CodeBlock",
+		"family": "code",
+		"parts": [],
+		"summary": "Highlighted code with copy button.",
+		"slots": [
+			"root",
+			"bar",
+			"code",
+			"copy",
+			"language",
+			"pre"
+		],
+		"props": [
+			{
+				"name": "code",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "copiedLabel",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "copyLabel",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "language",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "radius",
+				"type": "RadiusName | (string & {})",
+				"required": false,
+				"description": "Corner radius: `\"none\"` | `\"sm\"` | `\"lg\"` or any CSS length (default: the theme radius)."
+			}
+		],
+		"code": "<CodeBlock\n\tlanguage=\"tsx\"\n\tradius=\"lg\"\n\tcode={\n\t\t'import { Button } from \"@arachne/ui\";\\n\\nexport const Save = () => <Button>Save</Button>;'\n\t}\n/>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "developer",
+		"name": "Diff",
+		"family": "code",
+		"parts": [],
+		"summary": "Unified diff lines.",
+		"slots": [
+			"root",
+			"line",
+			"prefix"
+		],
+		"props": [
+			{
+				"name": "lines",
+				"type": "DiffLine[]",
+				"required": true,
+				"description": ""
+			}
+		],
+		"code": "<Diff\n\tlines={[\n\t\t{ type: \"ctx\", text: \"<Title\" },\n\t\t{ type: \"del\", text: \"  size={5}\" },\n\t\t{ type: \"add\", text: \"  order={3} size={5}\" },\n\t\t{ type: \"ctx\", text: \">Settings</Title>\" },\n\t]}\n/>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "developer",
+		"name": "Kbd",
+		"family": "keys",
+		"parts": [],
+		"summary": "Keyboard key.",
+		"slots": [],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Text>\n\tPress <Kbd>Esc</Kbd> to close.\n</Text>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "developer",
+		"name": "Hotkey",
+		"family": "keys",
+		"parts": [],
+		"summary": "Display a key combo (⌘K, Ctrl+S).",
+		"slots": [
+			"root",
+			"key",
+			"part",
+			"separator"
+		],
+		"props": [
+			{
+				"name": "keys",
+				"type": "string[]",
+				"required": true,
+				"description": "Keys to show and (with `onTrigger`) listen for, e.g. `[\"Ctrl\", \"K\"]` or `[\"⌘\", \"Shift\", \"P\"]`."
+			},
+			{
+				"name": "ignoreInInputs",
+				"type": "boolean",
+				"required": false,
+				"description": "Ignore the shortcut while typing in inputs (default true)."
+			},
+			{
+				"name": "onTrigger",
+				"type": "(e: KeyboardEvent) => void",
+				"required": false,
+				"description": "Bind the combination on `document`; called when it is pressed (default prevented)."
+			},
+			{
+				"name": "separator",
+				"type": "content",
+				"required": false,
+				"description": "Separator between keys (default `+`)."
+			}
+		],
+		"code": "<Hotkey keys={[\"⌘\", \"K\"]} />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "developer",
+		"name": "Terminal",
+		"family": "terminal",
+		"parts": [],
+		"summary": "Terminal window mock-up.",
+		"slots": [
+			"root",
+			"bar",
+			"body",
+			"title"
+		],
+		"props": [
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "title",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Terminal title=\"zsh\">\n\t{\"$ bun add @arachne/ui\\ninstalled @arachne/ui@2.4.0\"}\n</Terminal>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "developer",
+		"name": "LogViewer",
+		"family": "terminal",
+		"parts": [],
+		"summary": "Monospace log output with levels and timestamps.",
+		"slots": [
+			"root",
+			"level",
+			"line",
+			"message",
+			"time"
+		],
+		"props": [
+			{
+				"name": "lines",
+				"type": "LogLineData[]",
+				"required": true,
+				"description": ""
+			}
+		],
+		"code": "<LogViewer\n\tlines={[\n\t\t{ time: \"12:04:01\", level: \"info\", message: \"Listening on :3000\" },\n\t\t{ time: \"12:04:07\", level: \"warn\", message: \"Slow query (812 ms): SELECT * FROM runs\" },\n\t\t{ time: \"12:04:09\", level: \"error\", message: \"ECONNRESET redis://cache:6379\" },\n\t]}\n/>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "developer",
+		"name": "JsonViewer",
+		"family": "json",
+		"parts": [],
+		"summary": "Pretty-printed JSON (handles undefined, circular references and BigInt).",
+		"slots": [],
+		"props": [
+			{
+				"name": "value",
+				"type": "content",
+				"required": true,
+				"description": ""
+			}
+		],
+		"code": "<JsonViewer value={{ id: \"dep_128\", status: \"ready\", regions: [\"fra1\", \"iad1\"] }} />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "developer",
+		"name": "JsonTree",
+		"family": "json",
+		"parts": [],
+		"summary": "Collapsible JSON tree.",
+		"slots": [],
+		"props": [
+			{
+				"name": "data",
+				"type": "JsonNode",
+				"required": true,
+				"description": ""
+			}
+		],
+		"code": "const configJson: JsonNode = {\n\tkind: \"object\",\n\tentries: [\n\t\t{ key: \"name\", value: { kind: \"primitive\", value: \"arachne\" } },\n\t\t{ key: \"private\", value: { kind: \"primitive\", value: true } },\n\t\t{\n\t\t\tkey: \"workspaces\",\n\t\t\tvalue: {\n\t\t\t\tkind: \"array\",\n\t\t\t\titems: [\n\t\t\t\t\t{ kind: \"primitive\", value: \"packages/*\" },\n\t\t\t\t\t{ kind: \"primitive\", value: \"apps/*\" },\n\t\t\t\t],\n\t\t\t},\n\t\t},\n\t],\n};\n\n<JsonTree data={configJson} />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "developer",
+		"name": "FileTree",
+		"parts": [],
+		"summary": "File / folder tree. Rows expose `data-kind`.",
+		"slots": [],
+		"props": [
+			{
+				"name": "nodes",
+				"type": "FileTreeNode[]",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": "Accessible name for the tree."
+			},
+			{
+				"name": "onSelect",
+				"type": "(id: string) => void",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "selected",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "const repoTree: FileTreeNode[] = [\n\t{\n\t\tid: \"src\",\n\t\tname: \"src\",\n\t\tkind: \"folder\",\n\t\tchildren: [\n\t\t\t{ id: \"src/index.ts\", name: \"index.ts\", kind: \"file\" },\n\t\t\t{ id: \"src/button.tsx\", name: \"button.tsx\", kind: \"file\" },\n\t\t],\n\t},\n\t{ id: \"package.json\", name: \"package.json\", kind: \"file\" },\n];\n\nfunction Example() {\n\tconst file = signal(\"src/button.tsx\");\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<FileTree label=\"Repository\" nodes={repoTree} selected={file()} onSelect={file.set} />\n\t\t\t<Text muted>Open: {file()}</Text>\n\t\t</Stack>\n\t);\n}",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "developer",
+		"name": "EndpointRow",
+		"family": "api",
+		"parts": [],
+		"summary": "API endpoint row: method, path and summary.",
+		"slots": [
+			"root",
+			"path",
+			"summary"
+		],
+		"props": [
+			{
+				"name": "method",
+				"type": "HttpMethod",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "path",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "onClick",
+				"type": "() => void",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "summary",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<EndpointRow\n\tmethod=\"POST\"\n\tpath=\"/v1/projects/{id}/deploys\"\n\tsummary=\"Start a deploy\"\n\tonClick={() => {}}\n/>",
+		"interactive": false,
+		"logsActions": true
+	},
+	{
+		"category": "developer",
+		"name": "HttpMethodBadge",
+		"family": "api",
+		"parts": [],
+		"summary": "Coloured HTTP method label (GET, POST, …).",
+		"slots": [],
+		"props": [
+			{
+				"name": "method",
+				"type": "HttpMethod",
+				"required": true,
+				"description": ""
+			}
+		],
+		"code": "<HttpMethodBadge method=\"DELETE\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "developer",
+		"name": "Pipeline",
+		"family": "delivery",
+		"parts": [],
+		"summary": "CI pipeline of steps with their statuses.",
+		"slots": [
+			"root",
+			"line",
+			"step"
+		],
+		"props": [
+			{
+				"name": "steps",
+				"type": "PipelineStep[]",
+				"required": true,
+				"description": ""
+			}
+		],
+		"code": "<Pipeline\n\tsteps={[\n\t\t{ id: \"install\", label: \"Install\", status: \"success\" },\n\t\t{ id: \"test\", label: \"Test\", status: \"success\" },\n\t\t{ id: \"build\", label: \"Build\", status: \"running\" },\n\t\t{ id: \"deploy\", label: \"Deploy\", status: \"queued\" },\n\t]}\n/>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "developer",
+		"name": "BuildStatus",
+		"family": "delivery",
+		"parts": [],
+		"summary": "CI build status (running, success, failed …).",
+		"slots": [],
+		"props": [
+			{
+				"name": "status",
+				"type": "BuildStatusKind",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "label",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<BuildStatus status=\"running\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "developer",
+		"name": "CommitChip",
+		"family": "delivery",
+		"parts": [],
+		"summary": "Commit SHA and message chip.",
+		"slots": [
+			"root",
+			"message",
+			"sha"
+		],
+		"props": [
+			{
+				"name": "sha",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "message",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "onClick",
+				"type": "() => void",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<CommitChip\n\tsha=\"3f9c2e7a41d0b8\"\n\tmessage=\"Fix toast focus\"\n\tonClick={() => {}}\n/>",
+		"interactive": false,
+		"logsActions": true
+	},
+	{
+		"category": "developer",
+		"name": "BranchBadge",
+		"family": "delivery",
+		"parts": [],
+		"summary": "Git branch name label.",
+		"slots": [],
+		"props": [
+			{
+				"name": "name",
+				"type": "string",
+				"required": true,
+				"description": ""
+			}
+		],
+		"code": "<BranchBadge name=\"feat/ui-kit\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "developer",
+		"name": "ServiceStatus",
+		"family": "ops",
+		"parts": [],
+		"summary": "Service name with its operational status.",
+		"slots": [
+			"root",
+			"name",
+			"status"
+		],
+		"props": [
+			{
+				"name": "name",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "status",
+				"type": "ServiceStatusKind",
+				"required": true,
+				"description": ""
+			}
+		],
+		"code": "<ServiceStatus name=\"Build workers\" status=\"degraded\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "developer",
+		"name": "ChangelogItem",
+		"family": "ops",
+		"parts": [],
+		"summary": "One release entry in a changelog.",
+		"slots": [
+			"root",
+			"body",
+			"date",
+			"header",
+			"title"
+		],
+		"props": [
+			{
+				"name": "version",
+				"type": "string",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "children",
+				"type": "content",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "date",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "title",
+				"type": "string",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<ChangelogItem version=\"2.4.0\" date=\"Sep 12, 2026\">\n\tTables gain sticky headers and keyboard row selection.\n</ChangelogItem>",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
 		"category": "commerce",
 		"name": "ProductCard",
+		"family": "product",
 		"parts": [],
 		"summary": "Product tile.",
 		"slots": [
@@ -11446,7 +12134,50 @@ export const catalog: CatalogEntry[] = [
 	},
 	{
 		"category": "commerce",
+		"name": "Price",
+		"family": "product",
+		"parts": [],
+		"summary": "Formatted price with optional strike-through and period.",
+		"slots": [
+			"root",
+			"amount",
+			"period",
+			"strike"
+		],
+		"props": [
+			{
+				"name": "amount",
+				"type": "number",
+				"required": true,
+				"description": ""
+			},
+			{
+				"name": "currency",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "period",
+				"type": "string",
+				"required": false,
+				"description": ""
+			},
+			{
+				"name": "strike",
+				"type": "number",
+				"required": false,
+				"description": ""
+			}
+		],
+		"code": "<Price amount={24} strike={32} period=\"month\" />",
+		"interactive": false,
+		"logsActions": false
+	},
+	{
+		"category": "commerce",
 		"name": "CartLine",
+		"family": "cart",
 		"parts": [],
 		"summary": "Cart row.",
 		"slots": [
@@ -11508,6 +12239,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "commerce",
 		"name": "OrderSummary",
+		"family": "cart",
 		"parts": [],
 		"summary": "Subtotal / tax / total block.",
 		"slots": [
@@ -11548,6 +12280,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "commerce",
 		"name": "PricingCard",
+		"family": "plans",
 		"parts": [],
 		"summary": "Pricing plan card with price, features and a call to action.",
 		"slots": [
@@ -11610,6 +12343,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "commerce",
 		"name": "FeatureList",
+		"family": "plans",
 		"parts": [],
 		"summary": "List of features with check icons.",
 		"slots": [
@@ -11639,6 +12373,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "commerce",
 		"name": "FeatureCompare",
+		"family": "plans",
 		"parts": [],
 		"summary": "Plan comparison grid (ARIA table over CSS grid rows).",
 		"slots": [
@@ -11674,6 +12409,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "commerce",
 		"name": "CreditCardPreview",
+		"family": "billing",
 		"parts": [],
 		"summary": "Masked payment card preview.",
 		"slots": [
@@ -11716,6 +12452,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "commerce",
 		"name": "InvoiceRow",
+		"family": "billing",
 		"parts": [],
 		"summary": "Invoice row with number, date, amount and status.",
 		"slots": [
@@ -11762,527 +12499,9 @@ export const catalog: CatalogEntry[] = [
 		"logsActions": true
 	},
 	{
-		"category": "developer",
-		"name": "ChangelogItem",
-		"parts": [],
-		"summary": "One release entry in a changelog.",
-		"slots": [
-			"root",
-			"body",
-			"date",
-			"header",
-			"title"
-		],
-		"props": [
-			{
-				"name": "version",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "children",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "date",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "title",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<ChangelogItem version=\"2.4.0\" date=\"Sep 12, 2026\">\n\tTables gain sticky headers and keyboard row selection.\n</ChangelogItem>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "developer",
-		"name": "VersionTag",
-		"parts": [],
-		"summary": "Version label (e.g. `v1.2.0`).",
-		"slots": [],
-		"props": [
-			{
-				"name": "version",
-				"type": "string",
-				"required": true,
-				"description": ""
-			}
-		],
-		"code": "<VersionTag version=\"2.4.0\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "developer",
-		"name": "EnvBadge",
-		"parts": [],
-		"summary": "Environment pill (production = danger, staging = warning).",
-		"slots": [],
-		"props": [
-			{
-				"name": "env",
-				"type": "string",
-				"required": true,
-				"description": ""
-			}
-		],
-		"code": "<EnvBadge env=\"staging\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "developer",
-		"name": "HttpMethodBadge",
-		"parts": [],
-		"summary": "Coloured HTTP method label (GET, POST, …).",
-		"slots": [],
-		"props": [
-			{
-				"name": "method",
-				"type": "HttpMethod",
-				"required": true,
-				"description": ""
-			}
-		],
-		"code": "<HttpMethodBadge method=\"DELETE\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "developer",
-		"name": "EndpointRow",
-		"parts": [],
-		"summary": "API endpoint row: method, path and summary.",
-		"slots": [
-			"root",
-			"path",
-			"summary"
-		],
-		"props": [
-			{
-				"name": "method",
-				"type": "HttpMethod",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "path",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "onClick",
-				"type": "() => void",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "summary",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<EndpointRow\n\tmethod=\"POST\"\n\tpath=\"/v1/projects/{id}/deploys\"\n\tsummary=\"Start a deploy\"\n\tonClick={() => {}}\n/>",
-		"interactive": false,
-		"logsActions": true
-	},
-	{
-		"category": "developer",
-		"name": "ServiceStatus",
-		"parts": [],
-		"summary": "Service name with its operational status.",
-		"slots": [
-			"root",
-			"name",
-			"status"
-		],
-		"props": [
-			{
-				"name": "name",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "status",
-				"type": "ServiceStatusKind",
-				"required": true,
-				"description": ""
-			}
-		],
-		"code": "<ServiceStatus name=\"Build workers\" status=\"degraded\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "developer",
-		"name": "BuildStatus",
-		"parts": [],
-		"summary": "CI build status (running, success, failed …).",
-		"slots": [],
-		"props": [
-			{
-				"name": "status",
-				"type": "BuildStatusKind",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "label",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<BuildStatus status=\"running\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "developer",
-		"name": "Pipeline",
-		"parts": [],
-		"summary": "CI pipeline of steps with their statuses.",
-		"slots": [
-			"root",
-			"line",
-			"step"
-		],
-		"props": [
-			{
-				"name": "steps",
-				"type": "PipelineStep[]",
-				"required": true,
-				"description": ""
-			}
-		],
-		"code": "<Pipeline\n\tsteps={[\n\t\t{ id: \"install\", label: \"Install\", status: \"success\" },\n\t\t{ id: \"test\", label: \"Test\", status: \"success\" },\n\t\t{ id: \"build\", label: \"Build\", status: \"running\" },\n\t\t{ id: \"deploy\", label: \"Deploy\", status: \"queued\" },\n\t]}\n/>",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "developer",
-		"name": "CommitChip",
-		"parts": [],
-		"summary": "Commit SHA and message chip.",
-		"slots": [
-			"root",
-			"message",
-			"sha"
-		],
-		"props": [
-			{
-				"name": "sha",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "message",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "onClick",
-				"type": "() => void",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<CommitChip\n\tsha=\"3f9c2e7a41d0b8\"\n\tmessage=\"Fix toast focus\"\n\tonClick={() => {}}\n/>",
-		"interactive": false,
-		"logsActions": true
-	},
-	{
-		"category": "developer",
-		"name": "BranchBadge",
-		"parts": [],
-		"summary": "Git branch name label.",
-		"slots": [],
-		"props": [
-			{
-				"name": "name",
-				"type": "string",
-				"required": true,
-				"description": ""
-			}
-		],
-		"code": "<BranchBadge name=\"feat/ui-kit\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "developer",
-		"name": "ProfileHeader",
-		"parts": [],
-		"summary": "Profile header with cover, avatar, name, handle, bio and actions.",
-		"slots": [
-			"root",
-			"actions",
-			"avatar",
-			"bio",
-			"cover",
-			"handle",
-			"main",
-			"meta",
-			"name"
-		],
-		"props": [
-			{
-				"name": "name",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "actions",
-				"type": "content",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "bio",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "cover",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "handle",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "src",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "<ProfileHeader\n\tname=\"Ada Lovelace\"\n\thandle=\"ada\"\n\tbio=\"Analyst of engines. Writes the first programs.\"\n\tactions={\n\t\t<Button variant=\"outline\" onClick={() => {}}>\n\t\t\tFollow\n\t\t</Button>\n\t}\n/>",
-		"interactive": false,
-		"logsActions": true
-	},
-	{
-		"category": "developer",
-		"name": "MemberRow",
-		"parts": [],
-		"summary": "Team member row with avatar, email and remove action.",
-		"slots": [
-			"root",
-			"avatar",
-			"email",
-			"meta",
-			"name",
-			"remove"
-		],
-		"props": [
-			{
-				"name": "name",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "email",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "onRemove",
-				"type": "() => void",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "role",
-				"type": "string",
-				"required": false,
-				"description": "Team role shown as a {@link RoleBadge} (not the ARIA role)."
-			},
-			{
-				"name": "src",
-				"type": "string",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst members = signal([\n\t\t{ name: \"Grace Hopper\", email: \"grace@navy.mil\" },\n\t\t{ name: \"Alan Turing\", email: \"alan@bletchley.uk\" },\n\t]);\n\treturn (\n\t\t<Stack gap=\"0.25rem\">\n\t\t\t<For each={members()}>\n\t\t\t\t{(member) => (\n\t\t\t\t\t<MemberRow\n\t\t\t\t\t\tname={member.name}\n\t\t\t\t\t\temail={member.email}\n\t\t\t\t\t\tonRemove={() => members.set(members().filter((m) => m !== member))}\n\t\t\t\t\t/>\n\t\t\t\t)}\n\t\t\t</For>\n\t\t\t<Show when={members().length === 0}>\n\t\t\t\t<Text muted>No members left.</Text>\n\t\t\t</Show>\n\t\t</Stack>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "developer",
-		"name": "RoleBadge",
-		"parts": [],
-		"summary": "Member role label (admin, member, …).",
-		"slots": [],
-		"props": [
-			{
-				"name": "role",
-				"type": "string",
-				"required": true,
-				"description": "Team role label (not the ARIA role)."
-			}
-		],
-		"code": "<RoleBadge role=\"Admin\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "developer",
-		"name": "InviteCard",
-		"parts": [],
-		"summary": "Pending invitation with resend and revoke actions.",
-		"slots": [
-			"root",
-			"actions",
-			"email",
-			"meta"
-		],
-		"props": [
-			{
-				"name": "email",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "onResend",
-				"type": "() => void",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "onRevoke",
-				"type": "() => void",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "resendLabel",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "revokeLabel",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "role",
-				"type": "string",
-				"required": false,
-				"description": "Team role shown as a {@link RoleBadge} (not the ARIA role)."
-			}
-		],
-		"code": "function Example() {\n\tconst status = signal(\"Invitation pending\");\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<InviteCard\n\t\t\t\temail=\"linus@example.com\"\n\t\t\t\tonResend={() => status.set(\"Invitation re-sent just now\")}\n\t\t\t\tonRevoke={() => status.set(\"Invitation revoked\")}\n\t\t\t/>\n\t\t\t<Text muted>{status()}</Text>\n\t\t</Stack>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "developer",
-		"name": "PriorityBadge",
-		"parts": [],
-		"summary": "Issue priority label.",
-		"slots": [],
-		"props": [
-			{
-				"name": "priority",
-				"type": "Priority",
-				"required": true,
-				"description": ""
-			}
-		],
-		"code": "<PriorityBadge priority=\"urgent\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "developer",
-		"name": "SeverityBadge",
-		"parts": [],
-		"summary": "Incident severity label.",
-		"slots": [],
-		"props": [
-			{
-				"name": "severity",
-				"type": "Severity",
-				"required": true,
-				"description": ""
-			}
-		],
-		"code": "<SeverityBadge severity=\"critical\" />",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
-		"category": "developer",
-		"name": "FileCard",
-		"parts": [],
-		"summary": "Attached file with icon, name, metadata and remove action.",
-		"slots": [
-			"root",
-			"icon",
-			"meta",
-			"name",
-			"remove",
-			"text"
-		],
-		"props": [
-			{
-				"name": "name",
-				"type": "string",
-				"required": true,
-				"description": ""
-			},
-			{
-				"name": "icon",
-				"type": "IconName",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "meta",
-				"type": "string",
-				"required": false,
-				"description": ""
-			},
-			{
-				"name": "onRemove",
-				"type": "() => void",
-				"required": false,
-				"description": ""
-			}
-		],
-		"code": "function Example() {\n\tconst attached = signal(true);\n\treturn (\n\t\t<Show\n\t\t\twhen={attached()}\n\t\t\tfallback={\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => attached.set(true)}>\n\t\t\t\t\tAttach Q3-report.pdf\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<FileCard\n\t\t\t\tname=\"Q3-report.pdf\"\n\t\t\t\tmeta=\"2.4 MB · PDF\"\n\t\t\t\tonRemove={() => attached.set(false)}\n\t\t\t/>\n\t\t</Show>\n\t);\n}",
-		"interactive": false,
-		"logsActions": false
-	},
-	{
 		"category": "docs",
 		"name": "DocPage",
+		"family": "doc-pages",
 		"parts": [],
 		"summary": "Component docs page: title, short description, then example blocks.",
 		"slots": [
@@ -12319,6 +12538,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "docs",
 		"name": "DocExample",
+		"family": "doc-pages",
 		"parts": [],
 		"summary": "Live preview + code snippet — the Bulma docs pattern.",
 		"slots": [
@@ -12366,6 +12586,7 @@ export const catalog: CatalogEntry[] = [
 	{
 		"category": "docs",
 		"name": "DocMenu",
+		"family": "doc-pages",
 		"parts": [],
 		"summary": "Sidebar catalog with collapsible sections.",
 		"slots": [

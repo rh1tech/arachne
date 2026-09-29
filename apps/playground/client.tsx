@@ -19,7 +19,7 @@ function App() {
 					sections={showcaseSections}
 					value={showcasePage()}
 					onChange={(id) => showcasePage.set(id)}
-					defaultOpen={["elements", "components"]}
+					defaultOpen={["start", "ref-layout"]}
 				/>
 			</aside>
 			<div class="docs-main">

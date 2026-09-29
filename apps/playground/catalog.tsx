@@ -1,14 +1,16 @@
 /**
- * Component reference: one page per @arachne/ui component, generated from the
- * shared examples (live preview + code) and the component types (props, slots).
- * Sub-components are documented on their parent's page; components that have a
- * hand-written showcase page get their reference appended there instead.
+ * Component reference, generated from the shared examples (live preview + code)
+ * and the component types (props, slots). Pages follow examples/catalog-map.ts:
+ * one page per component or per family of related components; sub-components
+ * are documented on their parent's page; components with a hand-written
+ * showcase page get their reference (and their family's) there instead.
  */
 import { For, Show } from "@arachne/render";
-import { effect, untrack } from "@arachne/signals";
+import { effect, signal, untrack } from "@arachne/signals";
 import {
 	Code,
 	DocExample,
+	type DocMenuItem,
 	type DocMenuSection,
 	DocPage,
 	Group,
@@ -23,31 +25,65 @@ import {
 	Tr,
 } from "@arachne/ui";
 import { actionLog, clearActions } from "../../packages/ui/examples/actions.ts";
-import { categories, curatedPages } from "../../packages/ui/examples/catalog-map.ts";
+import {
+	categories,
+	curatedPages,
+	type Family,
+	isFamily,
+	itemComponents,
+} from "../../packages/ui/examples/catalog-map.ts";
 import { exampleGroups } from "../../packages/ui/examples/index.ts";
 import { type CatalogEntry, catalog } from "./catalog.generated.ts";
 
 export const CATALOG_PREFIX = "c-";
+export const FAMILY_PREFIX = "f-";
 
-const curated = new Set(Object.values(curatedPages));
 const entries = new Map(catalog.map((entry) => [entry.name, entry] as const));
 const examples = new Map(exampleGroups.flatMap((g) => g.examples.map((e) => [e.name, e] as const)));
+/** Hand-written page id by component name. */
+const curatedPageOf = new Map(
+	Object.entries(curatedPages).map(([page, name]) => [name, page] as const),
+);
+const families = categories.flatMap((c) => c.components.filter(isFamily));
+const familyOf = new Map(families.flatMap((f) => f.components.map((name) => [name, f] as const)));
 
-/** Sidebar sections: one per category; parts and curated components are left out. */
-export const catalogSections: DocMenuSection[] = categories.map((category) => ({
-	id: `ref-${category.id}`,
-	label: category.label,
-	items: category.components
-		.filter((name) => !curated.has(name))
-		.map((name) => ({ id: `${CATALOG_PREFIX}${name}`, label: name })),
-}));
+/** Page id for a category item: its hand-written page if a member has one. */
+function pageId(item: string | Family): string {
+	const curated = itemComponents(item)
+		.map((name) => curatedPageOf.get(name))
+		.find(Boolean);
+	if (curated) return curated;
+	return isFamily(item) ? `${FAMILY_PREFIX}${item.family}` : `${CATALOG_PREFIX}${item}`;
+}
+
+/**
+ * Sidebar: one section per category, one item per component or family.
+ * `extra` adds guide pages at the top of a category (e.g. form recipes).
+ */
+export function referenceSections(extra: Record<string, DocMenuItem[]> = {}): DocMenuSection[] {
+	return categories.map((category) => ({
+		id: `ref-${category.id}`,
+		label: category.label,
+		items: [
+			...(extra[category.id] ?? []),
+			...category.components.map((item) => ({
+				id: pageId(item),
+				label: isFamily(item) ? item.title : item,
+			})),
+		],
+	}));
+}
+
+/** The preview the user last interacted with: the one whose event log is shown. */
+const activePreview = signal("");
 
 /** Callbacks the example fired (`action("onX")` handlers), newest first. */
-function ActionLog() {
+function ActionLog(props: { name: string }) {
+	const mine = () => actionLog().length > 0 && activePreview() === props.name;
 	return (
-		<output class="catalog-actions" aria-live="polite" aria-label="Event log">
+		<output class="catalog-actions" aria-live="polite" aria-label={`${props.name} event log`}>
 			<Show
-				when={actionLog().length > 0}
+				when={mine()}
 				fallback={
 					<span class="catalog-actions-empty">
 						Interact with the example — callbacks show up here.
@@ -112,6 +148,8 @@ function Preview(props: { name: string }) {
 		// `transform` makes the preview the containing block of fixed-position components.
 		<div
 			class="catalog-preview"
+			onPointerDown={() => activePreview.set(props.name)}
+			onFocusIn={() => activePreview.set(props.name)}
 			ref={(el: HTMLElement) => {
 				// Children are attached after the ref runs; measure once they are.
 				queueMicrotask(() => {
@@ -168,7 +206,10 @@ type HeadingKind = "section" | "label";
  * Two heading styles only: `section` (API / Example / Parts on the page) and
  * `label` (small caps inside a part card). The level follows the nesting.
  */
-function Heading(props: { kind: HeadingKind; order: 2 | 3 | 4; children: unknown }) {
+type Level = 2 | 3 | 4 | 5 | 6;
+const deeper = (level: Level): Level => Math.min(6, level + 1) as Level;
+
+function Heading(props: { kind: HeadingKind; order: Level; children: unknown }) {
 	return (
 		<Title
 			order={props.order}
@@ -180,7 +221,7 @@ function Heading(props: { kind: HeadingKind; order: 2 | 3 | 4; children: unknown
 }
 
 /** Props table, slot names and the shared-props note as one compact block. */
-function ApiReference(props: { entry: CatalogEntry; order: 2 | 3 | 4; kind?: HeadingKind }) {
+function ApiReference(props: { entry: CatalogEntry; order: Level; kind?: HeadingKind }) {
 	return (
 		<section class="catalog-api" aria-label={`${props.entry.name} API`}>
 			<Heading kind={props.kind ?? "section"} order={props.order}>
@@ -212,46 +253,129 @@ function ApiReference(props: { entry: CatalogEntry; order: 2 | 3 | 4; kind?: Hea
 	);
 }
 
+/** An example block with its preview and (when it logs callbacks) the event log. */
+function Example(props: { entry: CatalogEntry }) {
+	return (
+		<DocExample
+			description={props.entry.interactive ? "Interactive demo — opens on demand." : undefined}
+			code={props.entry.code}
+		>
+			<Preview name={props.entry.name} />
+			<Show when={props.entry.logsActions}>
+				<ActionLog name={props.entry.name} />
+			</Show>
+		</DocExample>
+	);
+}
+
 /** A sub-component documented on its parent's page, as a card under "Parts". */
-function Part(props: { entry: CatalogEntry }) {
+function Part(props: { entry: CatalogEntry; level: Level }) {
 	return (
 		<section class="catalog-part" id={`part-${props.entry.name}`}>
 			<header class="catalog-part-head">
-				<Title order={3} class="catalog-part-title">
+				<Title order={props.level} class="catalog-part-title">
 					{props.entry.name}
 				</Title>
 				<p class="catalog-part-summary">
 					<RichText text={props.entry.summary} />
 				</p>
 			</header>
-			<ApiReference entry={props.entry} order={4} kind="label" />
+			<ApiReference entry={props.entry} order={deeper(props.level)} kind="label" />
 			<section class="catalog-section">
-				<Heading kind="label" order={4}>
+				<Heading kind="label" order={deeper(props.level)}>
 					Example
 				</Heading>
-				<DocExample code={props.entry.code}>
-					<Preview name={props.entry.name} />
-				</DocExample>
+				<Example entry={props.entry} />
 			</section>
 		</section>
 	);
 }
 
-function Parts(props: { entry: CatalogEntry }) {
+/** "Parts" heading at `level`, part cards one level below. */
+function Parts(props: { entry: CatalogEntry; level: Level }) {
 	const parts = props.entry.parts.flatMap((name) => entries.get(name) ?? []);
 	return (
 		<Show when={parts.length > 0}>
 			<section class="catalog-section catalog-parts">
-				<Heading kind="section" order={2}>
+				<Heading kind={props.level === 2 ? "section" : "label"} order={props.level}>
 					Parts
 				</Heading>
 				<p class="catalog-meta catalog-meta-hint">
 					{props.entry.name} is composed from these sub-components.
 				</p>
-				<For each={parts}>{(part) => <Part entry={part} />}</For>
+				<For each={parts}>{(part) => <Part entry={part} level={deeper(props.level)} />}</For>
 			</section>
 		</Show>
 	);
+}
+
+/** One member of a family page: name, summary, API, example, parts. */
+function Member(props: { entry: CatalogEntry; withExample?: boolean }) {
+	return (
+		<section class="catalog-member" id={`member-${props.entry.name}`}>
+			<header class="catalog-part-head">
+				<Title order={2} class="catalog-member-title">
+					{props.entry.name}
+				</Title>
+				<p class="catalog-part-summary">
+					<RichText text={props.entry.summary} />
+				</p>
+			</header>
+			<ApiReference entry={props.entry} order={3} kind="label" />
+			<Show when={props.withExample !== false}>
+				<section class="catalog-section">
+					<Heading kind="label" order={3}>
+						Example
+					</Heading>
+					<Example entry={props.entry} />
+				</section>
+			</Show>
+			<Parts entry={props.entry} level={3} />
+		</section>
+	);
+}
+
+/** Links to the members at the top of a family page. */
+function MemberIndex(props: { family: Family }) {
+	return (
+		<nav class="catalog-meta" aria-label={`${props.family.title} components`}>
+			<span class="catalog-meta-label">On this page</span>
+			<For each={props.family.components}>
+				{(name) => (
+					<a class="catalog-chip catalog-chip-link" href={`#member-${name}`}>
+						{name}
+					</a>
+				)}
+			</For>
+		</nav>
+	);
+}
+
+/** A page for a family of related components (e.g. the colour inputs). */
+export function FamilyPage(props: { family: Family }) {
+	clearActions();
+	const members = props.family.components.flatMap((name) => entries.get(name) ?? []);
+	return (
+		<DocPage title={props.family.title} description={props.family.description}>
+			<MemberIndex family={props.family} />
+			<For each={members}>{(entry) => <Member entry={entry} />}</For>
+		</DocPage>
+	);
+}
+
+/**
+ * Generated page for an id: `f-<family>`, or `c-<Component>` (a family member
+ * resolves to its family's page). Undefined for other ids.
+ */
+export function referencePage(id: string): unknown {
+	if (id.startsWith(FAMILY_PREFIX)) {
+		const family = families.find((f) => f.family === id.slice(FAMILY_PREFIX.length));
+		return family ? <FamilyPage family={family} /> : undefined;
+	}
+	if (!id.startsWith(CATALOG_PREFIX)) return undefined;
+	const name = id.slice(CATALOG_PREFIX.length);
+	const family = familyOf.get(name);
+	return family ? <FamilyPage family={family} /> : <CatalogPage name={name} />;
 }
 
 export function CatalogPage(props: { name: string }) {
@@ -265,17 +389,9 @@ export function CatalogPage(props: { name: string }) {
 				<Heading kind="section" order={2}>
 					Example
 				</Heading>
-				<DocExample
-					description={entry.interactive ? "Interactive demo — opens on demand." : undefined}
-					code={entry.code}
-				>
-					<Preview name={entry.name} />
-					<Show when={entry.logsActions}>
-						<ActionLog />
-					</Show>
-				</DocExample>
+				<Example entry={entry} />
 			</section>
-			<Parts entry={entry} />
+			<Parts entry={entry} level={2} />
 		</DocPage>
 	);
 }
@@ -284,10 +400,15 @@ export function CatalogPage(props: { name: string }) {
 export function ComponentReference(props: { pageId: string }) {
 	const entry = entries.get(curatedPages[props.pageId] ?? "");
 	if (!entry) return null;
+	// Family siblings are documented here too, each with its own example.
+	const siblings = (familyOf.get(entry.name)?.components ?? [])
+		.filter((name) => name !== entry.name)
+		.flatMap((name) => entries.get(name) ?? []);
 	return (
 		<section class="catalog-reference" aria-label={`${entry.name} reference`}>
 			<ApiReference entry={entry} order={2} />
-			<Parts entry={entry} />
+			<Parts entry={entry} level={2} />
+			<For each={siblings}>{(sibling) => <Member entry={sibling} />}</For>
 		</section>
 	);
 }

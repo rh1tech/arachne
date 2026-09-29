@@ -8,7 +8,13 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import ts from "typescript";
-import { categories, parts } from "../packages/ui/examples/catalog-map.ts";
+import {
+	categories,
+	type Family,
+	isFamily,
+	itemComponents,
+	parts,
+} from "../packages/ui/examples/catalog-map.ts";
 
 const ROOT = join(import.meta.dir, "..");
 const UI = join(ROOT, "packages/ui");
@@ -28,6 +34,8 @@ type Entry = {
 	name: string;
 	/** Set on sub-components documented on their parent's page. */
 	parent?: string;
+	/** Family id when the component shares a page with related components. */
+	family?: string;
 	parts: string[];
 	summary: string;
 	slots: string[];
@@ -306,17 +314,24 @@ const demos = demoSources();
 const snippets = new Map(EXAMPLE_FILES.flatMap((file) => [...snippetsFor(file)]));
 
 // Every example is listed exactly once: in a category, or as a part of its parent.
-const placement = new Map<string, { category: string; parent?: string }>();
+type Placement = { category: string; parent?: string; family?: string };
+const placement = new Map<string, Placement>();
 const problems: string[] = [];
-const place = (name: string, where: { category: string; parent?: string }) => {
+const place = (name: string, where: Placement) => {
 	if (placement.has(name)) problems.push(`${name} is listed twice in catalog-map.ts`);
 	if (!snippets.has(name)) problems.push(`${name} is in catalog-map.ts but has no example`);
 	placement.set(name, where);
 };
+const familyIds = new Set<string>();
 for (const category of categories) {
-	for (const name of category.components) {
-		place(name, { category: category.id });
-		for (const part of parts[name] ?? []) place(part, { category: category.id, parent: name });
+	for (const item of category.components) {
+		const family = isFamily(item) ? item.family : undefined;
+		if (family && familyIds.has(family)) problems.push(`family id ${family} is used twice`);
+		if (family) familyIds.add(family);
+		for (const name of itemComponents(item)) {
+			place(name, { category: category.id, ...(family ? { family } : {}) });
+			for (const part of parts[name] ?? []) place(part, { category: category.id, parent: name });
+		}
 	}
 }
 for (const parent of Object.keys(parts)) {
@@ -328,7 +343,7 @@ for (const name of snippets.keys()) {
 
 const entries: Entry[] = [];
 for (const category of categories) {
-	for (const name of category.components) {
+	for (const name of category.components.flatMap(itemComponents)) {
 		for (const member of [name, ...(parts[name] ?? [])]) {
 			const symbol = componentSymbol(member);
 			const typed = symbol ? propsTypeOf(symbol) : undefined;
@@ -336,11 +351,12 @@ for (const category of categories) {
 				problems.push(`${member} is not an exported component`);
 				continue;
 			}
-			const parent = placement.get(member)?.parent;
+			const { parent, family } = placement.get(member) ?? {};
 			entries.push({
 				category: category.id,
 				name: member,
 				...(parent ? { parent } : {}),
+				...(family ? { family } : {}),
 				parts: member === name ? (parts[name] ?? []) : [],
 				summary: summaryOf(symbol),
 				slots: slotsOf(typed.type, typed.decl),
@@ -372,6 +388,8 @@ export type CatalogEntry = {
 	name: string;
 	/** Set on sub-components documented on their parent's page. */
 	parent?: string;
+	/** Family id when the component shares a page with related components. */
+	family?: string;
 	parts: string[];
 	summary: string;
 	slots: string[];
@@ -403,17 +421,11 @@ function componentMarkdown(e: Entry, level = 2): string {
 		lines.push("");
 	}
 	lines.push("```tsx", e.code, "```", "");
-	if (level === 2) {
-		lines.push(
-			"Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.",
-			"",
-		);
-	}
+	if (level === 2) lines.push(SHARED_PROPS_NOTE, "");
 	return lines.join("\n");
 }
 
 const byName = new Map(entries.map((e) => [e.name, e] as const));
-const anchor = (name: string) => name.toLowerCase();
 
 const docs = new Map<string, string>();
 const index = [
@@ -424,27 +436,65 @@ const index = [
 	"Guides: [getting started](../getting-started.md) · [customization](../customization.md) · [theming](../theming.md) · [accessibility](../accessibility.md) · [SSR & hydration](../ssr.md).",
 	"",
 ];
+const SHARED_PROPS_NOTE =
+	"Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.";
+
+/** A component with its parts, headed at `level`. */
+function componentSection(name: string, level: number): string {
+	const main = byName.get(name) as Entry;
+	const partDocs = main.parts.map((part) =>
+		componentMarkdown(byName.get(part) as Entry, level + 1),
+	);
+	return [
+		componentMarkdown(main, level),
+		...(partDocs.length ? ["**Parts**", "", ...partDocs] : []),
+	].join("\n");
+}
+
+function familySection(family: Family): string {
+	return [
+		`## ${family.title}`,
+		"",
+		family.description,
+		"",
+		...family.components.map((name) => componentSection(name, 3)),
+		SHARED_PROPS_NOTE,
+		"",
+	].join("\n");
+}
+
+const itemAnchor = (item: string | Family) =>
+	(isFamily(item) ? item.title : item)
+		.toLowerCase()
+		.replace(/[^a-z0-9]+/g, "-")
+		.replace(/^-|-$/g, "");
+
 for (const category of categories) {
 	const file = `${category.id}.md`;
 	index.push(
 		`## [${category.label}](${file})`,
 		"",
-		category.components.map((name) => `[${name}](${file}#${anchor(name)})`).join(" · "),
+		category.description,
+		"",
+		category.components
+			.map((item) =>
+				isFamily(item)
+					? `[${item.title}](${file}#${itemAnchor(item)}) (${item.components.join(", ")})`
+					: `[${item}](${file}#${itemAnchor(item)})`,
+			)
+			.join(" · "),
 		"",
 	);
-	const sections = category.components.map((name) => {
-		const main = byName.get(name) as Entry;
-		const partDocs = main.parts.map((part) => componentMarkdown(byName.get(part) as Entry, 3));
-		return [
-			componentMarkdown(main),
-			...(partDocs.length ? ["**Parts**", "", ...partDocs] : []),
-		].join("\n");
-	});
+	const sections = category.components.map((item) =>
+		isFamily(item) ? familySection(item) : componentSection(item, 2),
+	);
 	docs.set(
 		file,
 		[
 			"<!-- Generated by scripts/gen-ui-docs.ts — do not edit. -->",
 			`# ${category.label}`,
+			"",
+			category.description,
 			"",
 			"[← Component reference](README.md)",
 			"",

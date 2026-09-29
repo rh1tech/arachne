@@ -4,58 +4,128 @@
 332 components, generated from their types and the shared examples in `packages/ui/examples`.
 Guides: [getting started](../getting-started.md) · [customization](../customization.md) · [theming](../theming.md) · [accessibility](../accessibility.md) · [SSR & hydration](../ssr.md).
 
-## [Buttons & actions](buttons.md)
+## [Layout](layout.md)
 
-[Button](buttons.md#button) · [UnstyledButton](buttons.md#unstyledbutton) · [ButtonGroup](buttons.md#buttongroup) · [SplitButton](buttons.md#splitbutton) · [ToggleGroup](buttons.md#togglegroup) · [Segmented](buttons.md#segmented) · [ActionIcon](buttons.md#actionicon) · [CloseButton](buttons.md#closebutton) · [Burger](buttons.md#burger) · [FloatingActionButton](buttons.md#floatingactionbutton) · [LoadingButton](buttons.md#loadingbutton) · [ConfirmButton](buttons.md#confirmbutton) · [CopyButton](buttons.md#copybutton) · [CopyId](buttons.md#copyid) · [ShareButton](buttons.md#sharebutton) · [ViewToggle](buttons.md#viewtoggle) · [DensityToggle](buttons.md#densitytoggle) · [ThemeToggle](buttons.md#themetoggle) · [CommandBar](buttons.md#commandbar) · [FloatingToolbar](buttons.md#floatingtoolbar) · [BulkBar](buttons.md#bulkbar)
+Arrange things on the page: stacks, grids, containers and page chrome.
 
-## [Inputs](inputs.md)
+[Stack](layout.md#stack) · [Group](layout.md#group) · [Flex](layout.md#flex) · [Grid](layout.md#grid) · [Columns](layout.md#columns) · [Container](layout.md#container) · [Section](layout.md#section) · [Level](layout.md#level) · [Media](layout.md#media) · [Center & space](layout.md#center-space) (Center, Space, Divider) · [AspectRatio](layout.md#aspectratio) · [ScrollArea](layout.md#scrollarea) · [Splitter](layout.md#splitter) · [Masonry](layout.md#masonry) · [Reel](layout.md#reel) · [Bleed](layout.md#bleed) · [AppShell](layout.md#appshell) · [PageHeader](layout.md#pageheader) · [Hero](layout.md#hero) · [Footer](layout.md#footer) (Footer, SiteFooter) · [Sticky & affix](layout.md#sticky-affix) (Sticky, StickyBar, Affix)
 
-[TextInput](inputs.md#textinput) · [TextArea](inputs.md#textarea) · [NumberInput](inputs.md#numberinput) · [PasswordInput](inputs.md#passwordinput) · [PasswordStrength](inputs.md#passwordstrength) · [SearchInput](inputs.md#searchinput) · [PinInput](inputs.md#pininput) · [InputGroup](inputs.md#inputgroup) · [Checkbox](inputs.md#checkbox) · [CheckboxGroup](inputs.md#checkboxgroup) · [Checklist](inputs.md#checklist) · [Switch](inputs.md#switch) · [RadioGroup](inputs.md#radiogroup) · [ChoiceCard](inputs.md#choicecard) · [Select](inputs.md#select) · [NativeSelect](inputs.md#nativeselect) · [MultiSelect](inputs.md#multiselect) · [Autocomplete](inputs.md#autocomplete) · [TagsInput](inputs.md#tagsinput) · [ChipGroup](inputs.md#chipgroup) · [Chip](inputs.md#chip) · [Rating](inputs.md#rating) · [Slider](inputs.md#slider) · [RangeSlider](inputs.md#rangeslider) · [AngleSlider](inputs.md#angleslider) · [QuantityInput](inputs.md#quantityinput) · [InlineEdit](inputs.md#inlineedit) · [SecretField](inputs.md#secretfield) · [CopyField](inputs.md#copyfield) · [JsonInput](inputs.md#jsoninput) · [FileInput](inputs.md#fileinput) · [FileButton](inputs.md#filebutton) · [Dropzone](inputs.md#dropzone) · [UploadItem](inputs.md#uploaditem)
+## [Surfaces](surfaces.md)
 
-## [Date & colour pickers](pickers.md)
+Containers with a visual boundary that group related content.
 
-[DateInput](pickers.md#dateinput) · [TimeInput](pickers.md#timeinput) · [Calendar](pickers.md#calendar) · [DatePicker](pickers.md#datepicker) · [DateRangePicker](pickers.md#daterangepicker) · [MonthPicker](pickers.md#monthpicker) · [YearPicker](pickers.md#yearpicker) · [TimePicker](pickers.md#timepicker) · [ColorInput](pickers.md#colorinput) · [ColorPicker](pickers.md#colorpicker) · [ColorSwatch](pickers.md#colorswatch)
+[Card](surfaces.md#card) · [Box](surfaces.md#box) · [Panel](surfaces.md#panel) · [Paper & tiles](surfaces.md#paper-tiles) (Paper, Tile, Block, Inset)
 
-## [Form layout](forms.md)
+## [Text & icons](typography.md)
 
-[FormField](forms.md#formfield) · [Label](forms.md#label) · [Fieldset](forms.md#fieldset) · [FormSection](forms.md#formsection) · [FormArea](forms.md#formarea) · [FormFooter](forms.md#formfooter) · [SettingsRow](forms.md#settingsrow) · [ToggleRow](forms.md#togglerow) · [DangerZone](forms.md#dangerzone) · [WizardNav](forms.md#wizardnav)
+Headings, body text, inline emphasis, formatted values and icons.
 
-## [Overlays](overlays.md)
+[Title](typography.md#title) (Title, Subtitle, Heading) · [Text & prose](typography.md#text-prose) (Text, Prose, Article, Quote) · [Anchor](typography.md#anchor) · [Mark & highlight](typography.md#mark-highlight) (Mark, Highlight) · [Truncate & leader](typography.md#truncate-leader) (Truncate, Leader) · [Formatted values](typography.md#formatted-values) (NumberFormatter, RelativeTime, Countdown) · [VisuallyHidden](typography.md#visuallyhidden) · [Icon](typography.md#icon) (Icon, IconBadge)
 
-[Modal](overlays.md#modal) · [Drawer](overlays.md#drawer) · [BottomSheet](overlays.md#bottomsheet) · [ConfirmDialog](overlays.md#confirmdialog) · [Popover](overlays.md#popover) · [HoverCard](overlays.md#hovercard) · [Tooltip](overlays.md#tooltip) · [Menu](overlays.md#menu) · [ContextMenu](overlays.md#contextmenu) · [Spotlight](overlays.md#spotlight) · [Lightbox](overlays.md#lightbox) · [Overlay](overlays.md#overlay) · [LoadingOverlay](overlays.md#loadingoverlay)
+## [Actions](actions.md)
+
+Trigger something: buttons and toolbars.
+
+[Button](actions.md#button) (Button, LoadingButton, ConfirmButton, UnstyledButton) · [ButtonGroup](actions.md#buttongroup) · [SplitButton](actions.md#splitbutton) · [Icon buttons](actions.md#icon-buttons) (ActionIcon, CloseButton, FloatingActionButton) · [Copy & share](actions.md#copy-share) (CopyButton, CopyId, ShareButton) · [Toolbars](actions.md#toolbars) (CommandBar, FloatingToolbar, BulkBar)
+
+## [Text input](text-input.md)
+
+Fields the user types a value into.
+
+[TextInput](text-input.md#textinput) · [TextArea](text-input.md#textarea) · [Number input](text-input.md#number-input) (NumberInput, QuantityInput) · [Password](text-input.md#password) (PasswordInput, PasswordStrength) · [SearchInput](text-input.md#searchinput) · [PinInput](text-input.md#pininput) · [TagsInput](text-input.md#tagsinput) · [InputGroup](text-input.md#inputgroup) · [InlineEdit](text-input.md#inlineedit) · [JsonInput](text-input.md#jsoninput) · [Secret & copy fields](text-input.md#secret-copy-fields) (SecretField, CopyField)
+
+## [Selection](selection.md)
+
+Choose from options: checkboxes, radios, selects, chips, toggles and sliders.
+
+[Checkbox](selection.md#checkbox) (Checkbox, CheckboxGroup, Checklist) · [RadioGroup](selection.md#radiogroup) · [Switch](selection.md#switch) · [Select](selection.md#select) (Select, NativeSelect, MultiSelect, Autocomplete) · [ChoiceCard](selection.md#choicecard) · [Chips](selection.md#chips) (Chip, ChipGroup) · [Segmented & toggle group](selection.md#segmented-toggle-group) (Segmented, ToggleGroup) · [Sliders](selection.md#sliders) (Slider, RangeSlider, AngleSlider) · [Rating](selection.md#rating) · [TransferList](selection.md#transferlist) · [Preference toggles](selection.md#preference-toggles) (ViewToggle, DensityToggle, ThemeToggle, LocaleSwitcher)
+
+## [Date, time & colour](pickers.md)
+
+Pick dates, times and colours.
+
+[Date pickers](pickers.md#date-pickers) (DatePicker, DateRangePicker, DateInput, Calendar, MonthPicker, YearPicker) · [Time pickers](pickers.md#time-pickers) (TimeInput, TimePicker) · [Colour](pickers.md#colour) (ColorInput, ColorPicker, ColorSwatch)
+
+## [Files & uploads](files.md)
+
+Choose, drop, upload and show files.
+
+[File inputs](files.md#file-inputs) (FileInput, FileButton, Dropzone) · [File items](files.md#file-items) (UploadItem, FileCard)
+
+## [Forms](forms.md)
+
+Structure a form: labels, help and errors, sections, footers and settings rows.
+
+[Form field](forms.md#form-field) (FormField, Label) · [Form sections](forms.md#form-sections) (FormSection, FormArea, Fieldset) · [FormFooter](forms.md#formfooter) · [Settings rows](forms.md#settings-rows) (SettingsRow, ToggleRow) · [DangerZone](forms.md#dangerzone) · [WizardNav](forms.md#wizardnav)
 
 ## [Navigation](navigation.md)
 
-[Navbar](navigation.md#navbar) · [AppShell](navigation.md#appshell) · [SidebarNav](navigation.md#sidebarnav) · [Breadcrumb](navigation.md#breadcrumb) · [Tabs](navigation.md#tabs) · [Steps](navigation.md#steps) · [Pagination](navigation.md#pagination) · [DotPagination](navigation.md#dotpagination) · [NextPrev](navigation.md#nextprev) · [BackLink](navigation.md#backlink) · [Subnav](navigation.md#subnav) · [Iconnav](navigation.md#iconnav) · [NavLink](navigation.md#navlink) · [Anchor](navigation.md#anchor) · [TableOfContents](navigation.md#tableofcontents) · [ScrollSpy](navigation.md#scrollspy) · [SkipLink](navigation.md#skiplink) · [BottomNav](navigation.md#bottomnav) · [Thumbnav](navigation.md#thumbnav) · [ToTop](navigation.md#totop) · [Affix](navigation.md#affix) · [Sticky](navigation.md#sticky) · [StickyBar](navigation.md#stickybar) · [UserButton](navigation.md#userbutton) · [LocaleSwitcher](navigation.md#localeswitcher) · [OrgSwitcher](navigation.md#orgswitcher)
+Move between pages, sections and steps.
 
-## [Feedback & status](feedback.md)
+[Navbar](navigation.md#navbar) · [Sidebar navigation](navigation.md#sidebar-navigation) (SidebarNav, NavLink) · [Breadcrumb](navigation.md#breadcrumb) · [Tabs](navigation.md#tabs) · [Steps](navigation.md#steps) · [Pagination](navigation.md#pagination) (Pagination, DotPagination, NextPrev, BackLink) · [Sub-navigation](navigation.md#sub-navigation) (Subnav, Iconnav, BottomNav) · [Burger](navigation.md#burger) · [On this page](navigation.md#on-this-page) (TableOfContents, ScrollSpy) · [Skip link & to top](navigation.md#skip-link-to-top) (SkipLink, ToTop)
 
-[Alert](feedback.md#alert) · [Callout](feedback.md#callout) · [Message](feedback.md#message) · [Notification](feedback.md#notification) · [ToastHost](feedback.md#toasthost) · [Banner](feedback.md#banner) · [AnnouncementBar](feedback.md#announcementbar) · [UpgradeBanner](feedback.md#upgradebanner) · [CookieConsent](feedback.md#cookieconsent) · [OfflineNotice](feedback.md#offlinenotice) · [Spinner](feedback.md#spinner) · [Progress](feedback.md#progress) · [SteppedProgress](feedback.md#steppedprogress) · [NavigationProgress](feedback.md#navigationprogress) · [RingProgress](feedback.md#ringprogress) · [SemiCircleProgress](feedback.md#semicircleprogress) · [Meter](feedback.md#meter) · [Gauge](feedback.md#gauge) · [UsageMeter](feedback.md#usagemeter) · [StorageBar](feedback.md#storagebar) · [Skeleton](feedback.md#skeleton) · [SkeletonText](feedback.md#skeletontext) · [SkeletonCard](feedback.md#skeletoncard) · [EmptyState](feedback.md#emptystate) · [NoResults](feedback.md#noresults) · [ErrorState](feedback.md#errorstate) · [StatusDot](feedback.md#statusdot) · [Indicator](feedback.md#indicator) · [LiveBadge](feedback.md#livebadge) · [UnreadBadge](feedback.md#unreadbadge) · [TypingIndicator](feedback.md#typingindicator) · [SyncStatus](feedback.md#syncstatus) · [AutosaveIndicator](feedback.md#autosaveindicator) · [LastSaved](feedback.md#lastsaved) · [Countdown](feedback.md#countdown)
+## [Overlays](overlays.md)
+
+Content layered above the page: dialogs, drawers, popovers, menus and tooltips.
+
+[Modal](overlays.md#modal) · [ConfirmDialog](overlays.md#confirmdialog) · [Drawer](overlays.md#drawer) (Drawer, BottomSheet) · [Popover & hover card](overlays.md#popover-hover-card) (Popover, HoverCard) · [Tooltip](overlays.md#tooltip) · [Menu](overlays.md#menu) (Menu, ContextMenu) · [Spotlight](overlays.md#spotlight) · [Lightbox](overlays.md#lightbox) · [Overlay](overlays.md#overlay)
+
+## [Feedback](feedback.md)
+
+Tell the user what happened: alerts, notifications, banners and empty or error states.
+
+[Alert & callout](feedback.md#alert-callout) (Alert, Callout) · [Notification & toast](feedback.md#notification-toast) (Notification, ToastHost) · [Message](feedback.md#message) · [Banners](feedback.md#banners) (Banner, AnnouncementBar, UpgradeBanner) · [Consent & offline notices](feedback.md#consent-offline-notices) (CookieConsent, OfflineNotice) · [Empty & error states](feedback.md#empty-error-states) (EmptyState, NoResults, ErrorState)
+
+## [Progress & loading](progress.md)
+
+Show that work is in progress, or load more.
+
+[Spinner](progress.md#spinner) · [Progress](progress.md#progress) (Progress, SteppedProgress, RingProgress, SemiCircleProgress) · [NavigationProgress](progress.md#navigationprogress) · [LoadingOverlay](progress.md#loadingoverlay) · [Skeleton](progress.md#skeleton) (Skeleton, SkeletonText, SkeletonCard) · [Load more](progress.md#load-more) (LoadMore, InfiniteScroll)
+
+## [Badges & status](status.md)
+
+Label and mark state: badges, tags, status dots and live indicators.
+
+[Badge](status.md#badge) · [Tag](status.md#tag) · [Status dot & indicator](status.md#status-dot-indicator) (StatusDot, Indicator) · [Live & unread badges](status.md#live-unread-badges) (LiveBadge, UnreadBadge) · [Semantic badges](status.md#semantic-badges) (EnvBadge, VersionTag, RoleBadge, PriorityBadge, SeverityBadge) · [Save & sync status](status.md#save-sync-status) (SyncStatus, AutosaveIndicator, LastSaved) · [TypingIndicator](status.md#typingindicator)
 
 ## [Data display](data.md)
 
-[Table](data.md#table) · [DataTable](data.md#datatable) · [DescriptionList](data.md#descriptionlist) · [PropertyList](data.md#propertylist) · [List](data.md#list) · [ListGroup](data.md#listgroup) · [Timeline](data.md#timeline) · [Accordion](data.md#accordion) · [Collapse](data.md#collapse) · [Spoiler](data.md#spoiler) · [Details](data.md#details) · [Tree](data.md#tree) · [FileTree](data.md#filetree) · [JsonTree](data.md#jsontree) · [JsonViewer](data.md#jsonviewer) · [TransferList](data.md#transferlist) · [SortableList](data.md#sortablelist) · [KanbanBoard](data.md#kanbanboard) · [Carousel](data.md#carousel) · [Badge](data.md#badge) · [Tag](data.md#tag) · [FilterChip](data.md#filterchip) · [Avatar](data.md#avatar) · [AvatarGroup](data.md#avatargroup) · [PresenceAvatar](data.md#presenceavatar) · [Kbd](data.md#kbd) · [Hotkey](data.md#hotkey) · [Code](data.md#code) · [CodeBlock](data.md#codeblock) · [Diff](data.md#diff) · [Terminal](data.md#terminal) · [LogViewer](data.md#logviewer) · [Mark](data.md#mark) · [Highlight](data.md#highlight) · [Truncate](data.md#truncate) · [Leader](data.md#leader) · [NumberFormatter](data.md#numberformatter) · [RelativeTime](data.md#relativetime) · [Price](data.md#price) · [ResultCount](data.md#resultcount) · [LoadMore](data.md#loadmore) · [InfiniteScroll](data.md#infinitescroll)
+Present records: tables, lists, trees, boards, and disclosure of detail.
 
-## [Stats & charts](charts.md)
+[Table](data.md#table) (Table, DataTable) · [Description list](data.md#description-list) (DescriptionList, PropertyList) · [List](data.md#list) (List, ListGroup) · [Timeline](data.md#timeline) · [Tree](data.md#tree) · [SortableList](data.md#sortablelist) · [KanbanBoard](data.md#kanbanboard) · [Accordion & disclosure](data.md#accordion-disclosure) (Accordion, Collapse, Spoiler, Details) · [Filtering](data.md#filtering) (FilterBar, FilterChip, ResultCount)
 
-[Stat](charts.md#stat) · [StatCard](charts.md#statcard) · [Metric](charts.md#metric) · [Trend](charts.md#trend) · [CountUp](charts.md#countup) · [Sparkline](charts.md#sparkline) · [SparkBar](charts.md#sparkbar) · [BarList](charts.md#barlist) · [DonutChart](charts.md#donutchart) · [Heatmap](charts.md#heatmap) · [UptimeBar](charts.md#uptimebar)
+## [Charts & metrics](charts.md)
 
-## [Layout](layout.md)
+Numbers and their shape: stats, trends, small charts, meters and gauges.
 
-[Stack](layout.md#stack) · [Group](layout.md#group) · [Flex](layout.md#flex) · [Center](layout.md#center) · [Space](layout.md#space) · [Box](layout.md#box) · [Paper](layout.md#paper) · [Block](layout.md#block) · [Tile](layout.md#tile) · [Card](layout.md#card) · [Panel](layout.md#panel) · [Inset](layout.md#inset) · [Bleed](layout.md#bleed) · [Columns](layout.md#columns) · [Grid](layout.md#grid) · [Container](layout.md#container) · [Section](layout.md#section) · [Level](layout.md#level) · [Hero](layout.md#hero) · [Media](layout.md#media) · [Footer](layout.md#footer) · [SiteFooter](layout.md#sitefooter) · [Divider](layout.md#divider) · [AspectRatio](layout.md#aspectratio) · [ScrollArea](layout.md#scrollarea) · [Splitter](layout.md#splitter) · [Masonry](layout.md#masonry) · [Reel](layout.md#reel) · [GalleryGrid](layout.md#gallerygrid) · [FilterBar](layout.md#filterbar)
+[Stats](charts.md#stats) (Stat, StatCard, Metric, Trend, CountUp) · [Sparklines](charts.md#sparklines) (Sparkline, SparkBar) · [BarList](charts.md#barlist) · [DonutChart](charts.md#donutchart) · [Heatmap](charts.md#heatmap) · [Meters & gauges](charts.md#meters-gauges) (Meter, Gauge, UsageMeter, StorageBar) · [UptimeBar](charts.md#uptimebar)
 
-## [Typography & content](content.md)
+## [Media](media.md)
 
-[Text](content.md#text) · [Title](content.md#title) · [Subtitle](content.md#subtitle) · [Heading](content.md#heading) · [Prose](content.md#prose) · [Quote](content.md#quote) · [Article](content.md#article) · [PageHeader](content.md#pageheader) · [Figure](content.md#figure) · [Image](content.md#image) · [BackgroundImage](content.md#backgroundimage) · [VideoFrame](content.md#videoframe) · [BeforeAfter](content.md#beforeafter) · [Marquee](content.md#marquee) · [Icon](content.md#icon) · [IconBadge](content.md#iconbadge) · [VisuallyHidden](content.md#visuallyhidden) · [Mention](content.md#mention) · [Comment](content.md#comment) · [ChatBubble](content.md#chatbubble) · [ActivityItem](content.md#activityitem) · [InboxItem](content.md#inboxitem) · [ReactionBar](content.md#reactionbar) · [Testimonial](content.md#testimonial) · [ReviewCard](content.md#reviewcard) · [LogoCloud](content.md#logocloud) · [BrowserFrame](content.md#browserframe) · [PhoneFrame](content.md#phoneframe) · [SocialLinks](content.md#sociallinks)
+Images, video, galleries and device frames.
+
+[Image](media.md#image) (Image, Figure, BackgroundImage) · [VideoFrame](media.md#videoframe) · [Galleries](media.md#galleries) (Carousel, Thumbnav, GalleryGrid) · [BeforeAfter](media.md#beforeafter) · [Logo cloud & marquee](media.md#logo-cloud-marquee) (LogoCloud, Marquee) · [Device frames](media.md#device-frames) (BrowserFrame, PhoneFrame)
+
+## [People & social](people.md)
+
+Users, accounts and conversations: avatars, profiles, comments and reactions.
+
+[Avatar](people.md#avatar) (Avatar, AvatarGroup, PresenceAvatar) · [Account switchers](people.md#account-switchers) (UserButton, OrgSwitcher) · [Profiles & members](people.md#profiles-members) (ProfileHeader, MemberRow, InviteCard) · [Comments & chat](people.md#comments-chat) (Comment, ChatBubble, Mention, ReactionBar) · [Activity & inbox](people.md#activity-inbox) (ActivityItem, InboxItem) · [Testimonials & reviews](people.md#testimonials-reviews) (Testimonial, ReviewCard) · [SocialLinks](people.md#sociallinks)
+
+## [Code & developer](developer.md)
+
+Code, keyboard shortcuts, logs, JSON, APIs and delivery pipelines.
+
+[Code](developer.md#code) (Code, CodeBlock, Diff) · [Keyboard](developer.md#keyboard) (Kbd, Hotkey) · [Terminal & logs](developer.md#terminal-logs) (Terminal, LogViewer) · [JSON](developer.md#json) (JsonViewer, JsonTree) · [FileTree](developer.md#filetree) · [API endpoints](developer.md#api-endpoints) (EndpointRow, HttpMethodBadge) · [Builds & git](developer.md#builds-git) (Pipeline, BuildStatus, CommitChip, BranchBadge) · [Status & changelog](developer.md#status-changelog) (ServiceStatus, ChangelogItem)
 
 ## [Commerce & billing](commerce.md)
 
-[ProductCard](commerce.md#productcard) · [CartLine](commerce.md#cartline) · [OrderSummary](commerce.md#ordersummary) · [PricingCard](commerce.md#pricingcard) · [FeatureList](commerce.md#featurelist) · [FeatureCompare](commerce.md#featurecompare) · [CreditCardPreview](commerce.md#creditcardpreview) · [InvoiceRow](commerce.md#invoicerow)
+Products, carts, prices, plans and invoices.
 
-## [Developer & ops](developer.md)
-
-[ChangelogItem](developer.md#changelogitem) · [VersionTag](developer.md#versiontag) · [EnvBadge](developer.md#envbadge) · [HttpMethodBadge](developer.md#httpmethodbadge) · [EndpointRow](developer.md#endpointrow) · [ServiceStatus](developer.md#servicestatus) · [BuildStatus](developer.md#buildstatus) · [Pipeline](developer.md#pipeline) · [CommitChip](developer.md#commitchip) · [BranchBadge](developer.md#branchbadge) · [ProfileHeader](developer.md#profileheader) · [MemberRow](developer.md#memberrow) · [RoleBadge](developer.md#rolebadge) · [InviteCard](developer.md#invitecard) · [PriorityBadge](developer.md#prioritybadge) · [SeverityBadge](developer.md#severitybadge) · [FileCard](developer.md#filecard)
+[Product & price](commerce.md#product-price) (ProductCard, Price) · [Cart](commerce.md#cart) (CartLine, OrderSummary) · [Plans](commerce.md#plans) (PricingCard, FeatureList, FeatureCompare) · [Billing](commerce.md#billing) (CreditCardPreview, InvoiceRow)
 
 ## [Documentation](docs.md)
 
-[DocPage](docs.md#docpage) · [DocExample](docs.md#docexample) · [DocMenu](docs.md#docmenu)
+Build documentation pages like these.
+
+[Documentation pages](docs.md#documentation-pages) (DocPage, DocExample, DocMenu)

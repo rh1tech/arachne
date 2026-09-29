@@ -73,70 +73,24 @@ import {
 	TextInput,
 	Title,
 } from "@arachne/ui";
-import { CATALOG_PREFIX, CatalogPage, ComponentReference, catalogSections } from "./catalog.tsx";
+import { ComponentReference, referencePage, referenceSections } from "./catalog.tsx";
 
 export const showcaseSections: DocMenuSection[] = [
-	{ id: "overview", label: "Overview" },
-	{ id: "palette", label: "Palette" },
 	{
-		id: "elements",
-		label: "Elements",
+		id: "start",
+		label: "Getting started",
 		items: [
-			{ id: "button", label: "Button" },
-			{ id: "box", label: "Box" },
-			{ id: "tag", label: "Tag" },
-			{ id: "badge", label: "Badge" },
-			{ id: "progress", label: "Progress" },
-			{ id: "notification", label: "Notification" },
-			{ id: "icon", label: "Icon" },
-			{ id: "title", label: "Title" },
-			{ id: "table", label: "Table" },
-			{ id: "image", label: "Image" },
+			{ id: "overview", label: "Overview" },
+			{ id: "palette", label: "Theming & palettes" },
 		],
 	},
-	{
-		id: "components",
-		label: "Components",
-		items: [
-			{ id: "breadcrumb", label: "Breadcrumb" },
-			{ id: "card", label: "Card" },
-			{ id: "dropdown", label: "Drawer" },
-			{ id: "menu", label: "Menu" },
-			{ id: "message", label: "Message" },
-			{ id: "modal", label: "Modal" },
-			{ id: "navbar", label: "Navbar" },
-			{ id: "pagination", label: "Pagination" },
-			{ id: "panel", label: "Panel" },
-			{ id: "tabs", label: "Tabs" },
+	// Every component by category (examples/catalog-map.ts); guides open the category they belong to.
+	...referenceSections({
+		forms: [
+			{ id: "form-complete", label: "Guide: complete form" },
+			{ id: "form-layouts", label: "Guide: form layouts" },
 		],
-	},
-	{
-		id: "form",
-		label: "Form",
-		items: [
-			{ id: "form-complete", label: "Complete form" },
-			{ id: "form-layouts", label: "Form layouts" },
-			{ id: "input", label: "Input" },
-			{ id: "textarea", label: "Textarea" },
-			{ id: "select", label: "Select" },
-			{ id: "checkbox", label: "Checkbox" },
-			{ id: "radio", label: "Radio" },
-			{ id: "switch", label: "Switch" },
-		],
-	},
-	{
-		id: "layout",
-		label: "Layout",
-		items: [
-			{ id: "columns", label: "Columns" },
-			{ id: "container", label: "Container" },
-			{ id: "hero", label: "Hero" },
-			{ id: "level", label: "Level" },
-			{ id: "section", label: "Section" },
-		],
-	},
-	// Generated reference: every other component, by category (see catalog.tsx).
-	...catalogSections,
+	}),
 ];
 
 export function flatShowcaseOptions(): Array<{ id: string; label: string }> {
@@ -1798,7 +1752,8 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 };
 
 function renderShowcasePage(id: string) {
-	if (id.startsWith(CATALOG_PREFIX)) return <CatalogPage name={id.slice(CATALOG_PREFIX.length)} />;
+	const reference = referencePage(id);
+	if (reference) return reference;
 	const page = SHOWCASE_PAGES[id];
 	if (page) return page();
 	return (

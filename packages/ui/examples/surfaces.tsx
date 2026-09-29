@@ -403,7 +403,7 @@ function ScrollSpyExample(p: ExampleProps) {
 	];
 	return (
 		<Group align="start" gap="1.5rem">
-			<ScrollSpy {...p} label="On this page" offset={8} items={sections} />
+			<ScrollSpy {...p} label="Article sections" offset={8} items={sections} />
 			<ScrollArea maxHeight="9rem" aria-label="Article">
 				<For each={sections}>
 					{(section) => (

@@ -590,3 +590,32 @@ p.catalog-meta-hint code {
 	font-size: 0.85em;
 	padding: 0.05em 0.3em;
 }
+
+/* A component on a family page: separated by a rule, named in monospace. */
+.catalog-member {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 1.25rem;
+	padding-top: 2rem;
+	border-top: 1px solid var(--a-line);
+}
+
+.catalog-member-title {
+	font-family: var(--a-font-mono);
+	font-size: 1.375rem;
+	font-weight: 700;
+	letter-spacing: -0.01em;
+}
+
+.catalog-chip-link {
+	font-family: var(--a-font-mono);
+	font-size: 0.8em;
+	border-radius: 4px;
+	color: var(--a-ink);
+	text-decoration: none;
+}
+
+.catalog-chip-link:hover {
+	border-color: var(--a-accent);
+	color: var(--a-accent);
+}
