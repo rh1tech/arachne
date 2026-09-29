@@ -3,27 +3,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Arachne · playground</title>
+    <title>Arachne · UI library</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="/ui.css" />
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <div class="atmosphere" aria-hidden="true"></div>
-    <main>
-      <header class="brand">
-        <p class="mark">Arachne</p>
-        <h1>Live render playground</h1>
-        <p class="lede">
-          Real <code>.tsx</code>, routing, and SQLite notes — schema → DB → API.
-        </p>
-      </header>
-      <div id="app"></div>
-    </main>
+    <div id="app"></div>
     <script type="module" src="/client.js"></script>
   </body>
 </html>

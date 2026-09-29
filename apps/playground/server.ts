@@ -39,9 +39,18 @@ const app = createServer({
 		},
 		{
 			method: "GET",
+			path: "/ui.css",
+			handler: () =>
+				new Response(Bun.file(join(root, "../../packages/ui/src/styles.css")), {
+					headers: { "content-type": "text/css; charset=utf-8" },
+				}),
+		},
+		{
+			method: "GET",
 			path: "/client.js",
-			handler: async (ctx) => {
-				if (ctx.query.has("rebuild")) clientJs = await bundleClient();
+			handler: async () => {
+				// Playground always rebundles so UI/source edits show up without a server restart.
+				clientJs = await bundleClient();
 				return new Response(clientJs, {
 					headers: {
 						"content-type": "application/javascript; charset=utf-8",

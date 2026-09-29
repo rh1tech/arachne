@@ -9,11 +9,13 @@
 	"dependencies": {
 		"@arachne/db": "workspace:*",
 		"@arachne/db-sqlite": "workspace:*",
+		"@arachne/forms": "workspace:*",
 		"@arachne/render": "workspace:*",
 		"@arachne/router": "workspace:*",
 		"@arachne/schema": "workspace:*",
 		"@arachne/server": "workspace:*",
 		"@arachne/signals": "workspace:*",
+		"@arachne/ui": "workspace:*",
 		"@arachne/vite": "workspace:*"
 	}
 }
