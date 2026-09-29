@@ -30,7 +30,7 @@ logout, email verification, password reset, email sending, access levels
 |---|-----------|------------|--------|
 | 1 | Plan + ADR + this log | docs | [x] |
 | 2 | Schema: formats, coercion, refine/transform, record, file, JSON Schema export | `@arachne/schema` | [x] |
-| 3 | Server: typed routes with validation, body/multipart parsing, errors, cookies, CORS, security headers, rate limit, static files, groups, OpenAPI | `@arachne/server` | [ ] |
+| 3 | Server: typed routes with validation, body/multipart parsing, errors, cookies, CORS, security headers, rate limit, static files, groups, OpenAPI | `@arachne/server` | [x] |
 | 4 | DB: update, operators, order/limit/offset, count, nullable/json columns, indexes, transactions | `@arachne/db`, `@arachne/db-sqlite` | [ ] |
 | 5 | Migrations | `@arachne/migrate` | [ ] |
 | 6 | Access control (core) | `@arachne/acl` | [ ] |
@@ -40,10 +40,10 @@ logout, email verification, password reset, email sending, access levels
 | 10 | Router: `Link`, click interception, lazy routes, layouts, head | `@arachne/router` | [ ] |
 | 11 | Kit: `defineApp`, SSR pages, static prerender build, dev server with hot reload, `arachne` CLI | `@arachne/kit` | [ ] |
 | 12 | Examples: static site, full-stack, API-only | `apps/examples/*` | [ ] |
-| 12b | Typed API client inferred from routes | `@arachne/server` (`/client`) | [ ] |
+| 12b | Typed API client inferred from routes | `@arachne/server` (`/client`) | [x] |
 | 12c | Optional GraphQL adapter over the same schemas | `@arachne/graphql` | [ ] |
 | 12e | MCP-first apps: routes → MCP tools (with auth/ACL), `/mcp` endpoint | `@arachne/server`, `@arachne/kit` | [ ] |
-| 12d | Binary codecs: CBOR in server (content negotiation); protobuf/Connect later | `@arachne/server` | [ ] |
+| 12d | Binary codecs: CBOR in server (content negotiation); protobuf/Connect later | `@arachne/server` | [~] CBOR done |
 | 13 | Docs + README per package, root README update | docs | [ ] |
 
 ## Implemented (detail)
@@ -75,12 +75,43 @@ logout, email verification, password reset, email sending, access levels
   `record`.
 - Tests: `src/extended.test.ts`, `src/mcp.test.ts`.
 
+### M3 — `@arachne/server` (2026-09-30)
+
+- `route()` (`route.ts`): params/query/headers/body/response schemas; params
+  typed from the path when no schema; handler returns `Response` or a value;
+  phantom `~types` for the client. `group()` prefixes/tags/meta/middleware and
+  flattens nested groups (type-level too — see `PrefixAll` comment).
+- `server.ts`: 404 envelope, 405 + `Allow`, HEAD→GET, errors → envelope
+  (`errors.ts`), `onError`, `exposeErrors`, `validateResponses`, `trustProxy`,
+  `ctx.ip` from `Bun.serve`. Response headers beat `ctx.header()` defaults.
+- `context.ts`: `ContextState` / `RouteMeta` are open interfaces for
+  declaration merging (auth will add `user`, `permission`).
+- `body.ts`: JSON / multipart / urlencoded / codecs, streaming size limit,
+  `formToObject` (nested keys, prototype-pollution guard).
+- `codec.ts` + `cbor.ts` (`@arachne/server/cbor`, cbor-x): Accept negotiation.
+- Middleware: `cors.ts`, `security.ts` (CSP nonce), `rate-limit.ts`
+  (pluggable `RateLimitStore`), `request-id.ts`, `static.ts` (`safeJoin`
+  traversal guard, ETag, immutable hashed assets), `sse.ts`.
+- `openapi.ts`: OpenAPI 3.1 + `apiDocs()` (Scalar explorer with its own CSP).
+- `client.ts` (`@arachne/server/client`): `createClient<typeof routes>()`.
+- `@arachne/router/path` entry added so the server doesn't load the DOM router.
+- MCP: `arachne_server_dispatch` (validating), `arachne_server_openapi`.
+- Tests: `route.test.ts`, `body.test.ts`, `middleware.test.ts`,
+  `openapi.test.ts`, `mcp.test.ts`, `index.test.ts`.
+
 ## Known gaps / next steps
 
 - **Docs backlog:** pre-existing packages not yet in `docs-check.json`
   (counts on 2026-09-30): core 77, router 44, mcp 37, jsx 37, forms 36,
   testing 35, config 25, render 24, signals 21, vite 2. `ui` uses its own
   generator (`bun run ui:docs`).
+- Server: no WebSocket helper yet (Bun.serve `websocket` passthrough); no
+  compression middleware (expected at the CDN/proxy); multipart bodies are
+  buffered in memory up to `bodyLimit` (no streaming to storage yet).
+- Lint: new code adds ~9 `noExcessiveCognitiveComplexity` warnings (body
+  `assign`, cors/security/static middleware, server `fetch`, openapi
+  `operation`, client `call`, schema `validateObject`/`string`) — split in
+  a polish pass.
 - Schema: async validators are rejected (sync-only by design); no
   discriminated-union optimisation; `lazy`/recursive schemas not supported.
 

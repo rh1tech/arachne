@@ -8,7 +8,7 @@
 		"render": ["signals", "jsx", "mcp"],
 		"schema": ["mcp"],
 		"router": ["render", "jsx", "signals", "mcp"],
-		"server": ["router", "render", "core", "config", "mcp"],
+		"server": ["router", "render", "core", "config", "schema", "mcp"],
 		"vite": ["jsx", "render", "mcp"],
 		"db": ["schema", "core", "mcp"],
 		"db-postgres": ["db", "schema", "mcp"],

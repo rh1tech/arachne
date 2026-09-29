@@ -1,1 +1,1 @@
-{ "packages": ["schema"] }
+{ "packages": ["schema", "server", "server/src/client.ts", "server/src/cbor.ts"] }

@@ -10,6 +10,11 @@
 			"import": "./src/index.ts",
 			"default": "./src/index.ts"
 		},
+		"./path": {
+			"types": "./src/path.ts",
+			"import": "./src/path.ts",
+			"default": "./src/path.ts"
+		},
 		"./mcp": {
 			"types": "./src/mcp.ts",
 			"import": "./src/mcp.ts",

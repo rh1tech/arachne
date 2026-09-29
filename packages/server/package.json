@@ -1,7 +1,7 @@
 {
 	"name": "@arachne/server",
 	"version": "0.0.1",
-	"description": "Bun HTTP server kernel for Arachne",
+	"description": "HTTP server for Arachne: typed validated routes, uploads, OpenAPI, middleware",
 	"license": "MIT OR Apache-2.0",
 	"type": "module",
 	"exports": {
@@ -14,6 +14,16 @@
 			"types": "./src/mcp.ts",
 			"import": "./src/mcp.ts",
 			"default": "./src/mcp.ts"
+		},
+		"./client": {
+			"types": "./src/client.ts",
+			"import": "./src/client.ts",
+			"default": "./src/client.ts"
+		},
+		"./cbor": {
+			"types": "./src/cbor.ts",
+			"import": "./src/cbor.ts",
+			"default": "./src/cbor.ts"
 		}
 	},
 	"files": [
@@ -28,7 +38,9 @@
 	"dependencies": {
 		"@arachne/mcp": "workspace:*",
 		"@arachne/router": "workspace:*",
-		"zod": "3.25.76"
+		"cbor-x": "^1.6.6",
+		"zod": "3.25.76",
+		"@arachne/schema": "workspace:*"
 	},
 	"devDependencies": {
 		"typescript": "^5.9.2"

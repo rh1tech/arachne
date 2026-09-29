@@ -11,7 +11,10 @@ import ts from "typescript";
 
 /** Shape of ./docs-check.json. */
 interface DocsCheckConfig {
-	/** Package directory names under `packages/`. */
+	/**
+	 * Package directory names under `packages/` (checks `src/index.ts`), or
+	 * `pkg/src/file.ts` for extra entry points such as `server/src/client.ts`.
+	 */
 	packages: string[];
 }
 
@@ -78,10 +81,11 @@ function main(): void {
 	) as DocsCheckConfig;
 	let failures = 0;
 	for (const pkg of config.packages) {
-		const missing = findUndocumented(join(root, "packages", pkg, "src/index.ts"));
+		const entry = pkg.includes("/") ? pkg : `${pkg}/src/index.ts`;
+		const missing = findUndocumented(join(root, "packages", entry));
 		if (missing.length === 0) continue;
 		failures += missing.length;
-		console.error(`@arachne/${pkg}: ${missing.length} undocumented`);
+		console.error(`${entry}: ${missing.length} undocumented`);
 		for (const name of missing) console.error(`  - ${name}`);
 	}
 	if (failures > 0) {

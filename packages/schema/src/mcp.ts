@@ -4,7 +4,8 @@ import { toJSONSchema } from "./composites.ts";
 import { formatIssues, safeParse } from "./parse.ts";
 import { type SchemaSpec, schemaFromSpec } from "./spec.ts";
 
-const schemaSpecSchema: z.ZodTypeAny = z.lazy(() =>
+/** Zod validator for `SchemaSpec` descriptors, shared by MCP tools in other packages. */
+export const schemaSpecSchema: z.ZodTypeAny = z.lazy(() =>
 	z.union([
 		z.object({
 			kind: z.literal("string"),
