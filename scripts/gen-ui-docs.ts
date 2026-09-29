@@ -34,6 +34,8 @@ type Entry = {
 	props: Prop[];
 	code: string;
 	interactive: boolean;
+	/** The example reports callbacks through `action()` (shown in the event log). */
+	logsActions: boolean;
 };
 
 /** Example sources (every file exporting `examples`). */
@@ -242,6 +244,9 @@ function snippetText(body: ts.Node, sf: ts.SourceFile, helpers: Map<string, stri
 	return `${used.map((h) => asExample(helpers.get(h) as string, h, false)).join("\n\n")}\n\n${jsx}`;
 }
 
+/** Examples whose source calls `action()`, filled by {@link snippetsFor}. */
+const actionExamples = new Set<string>();
+
 function snippetsFor(file: string): Map<string, string> {
 	const path = join(UI, "examples", file);
 	const sf = ts.createSourceFile(
@@ -256,7 +261,12 @@ function snippetsFor(file: string): Map<string, string> {
 	const out = new Map<string, string>();
 	const visit = (node: ts.Node) => {
 		const found = exampleCase(node, sf);
-		if (found) out.set(found[0], withConsts(snippetText(found[1], sf, helpers), consts));
+		if (found) {
+			out.set(found[0], withConsts(snippetText(found[1], sf, helpers), consts));
+			const raw = nodeText(found[1], sf);
+			const sources = [raw, ...referencedHelpers(raw, helpers).map((h) => helpers.get(h) ?? "")];
+			if (sources.some((text) => /\baction\(/.test(text))) actionExamples.add(found[0]);
+		}
 		ts.forEachChild(node, visit);
 	};
 	visit(sf);
@@ -337,6 +347,7 @@ for (const category of categories) {
 				props: ownProps(typed.type, typed.decl),
 				code: demos.get(member) ?? snippets.get(member) ?? "",
 				interactive: demos.has(member),
+				logsActions: !demos.has(member) && actionExamples.has(member),
 			});
 		}
 	}
@@ -368,6 +379,8 @@ export type CatalogEntry = {
 	code: string;
 	/** Rendered through an interactive demo (overlays open on demand). */
 	interactive: boolean;
+	/** The example reports callbacks through \`action()\` (shown in the event log). */
+	logsActions: boolean;
 };
 
 export const catalog: CatalogEntry[] = ${JSON.stringify(entries, null, "\t")};

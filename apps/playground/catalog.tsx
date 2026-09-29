@@ -258,7 +258,9 @@ export function CatalogPage(props: { name: string }) {
 				code={entry.code}
 			>
 				<Preview name={entry.name} />
-				<ActionLog />
+				<Show when={entry.logsActions}>
+					<ActionLog />
+				</Show>
 			</DocExample>
 			<Slots entry={entry} order={2} />
 			<Props entry={entry} order={2} />
