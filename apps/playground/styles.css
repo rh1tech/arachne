@@ -516,20 +516,65 @@ span.catalog-meta-hint {
 }
 
 /* A sub-component on its parent's page: indented under a rule so the hierarchy reads. */
-/* A sub-component on its parent's page: aligned with the page, separated by a rule. */
+/* Heading scale of a reference page: h1 page title → section → part card → label. */
+.catalog-h-section {
+	font-size: 1.375rem;
+	font-weight: 700;
+	letter-spacing: -0.01em;
+}
+
+.catalog-h-label {
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--a-muted);
+}
+
+/* Page sections (API, Example, Parts) share one rhythm. */
+.docs-content .a-doc-page-body > .catalog-section,
+.docs-content .a-doc-page-body > .catalog-api {
+	gap: 0.75rem;
+}
+
+.catalog-parts {
+	gap: 1rem;
+}
+
+/* A sub-component on its parent's page: a card, so nesting reads without indentation. */
 .catalog-part {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr);
-	gap: 0.75rem;
-	padding-top: 1.5rem;
-	border-top: 1px solid var(--a-line);
+	gap: 1.25rem;
+	padding: 1.25rem;
+	border: 1px solid var(--a-line);
+	border-radius: calc(var(--a-radius) + 4px);
+	background: color-mix(in oklab, var(--a-paper) 55%, transparent);
+}
+
+.catalog-part-head {
+	display: grid;
+	gap: 0.25rem;
+}
+
+.catalog-part-title {
+	font-family: var(--a-font-mono);
+	font-size: 1.05rem;
+	font-weight: 700;
+}
+
+.catalog-part-summary {
+	margin: 0;
+	font-size: 0.9375rem;
+	color: var(--a-muted);
 }
 
 /* Reference (props, slots, parts) at the top of a hand-written showcase page. */
 .catalog-reference {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr);
-	gap: 0.5rem;
+	/* Same spacing between API and Parts as on a catalog page. */
+	gap: 2.5rem;
 	padding-bottom: 2rem;
 	border-bottom: 1px solid var(--a-line);
 }

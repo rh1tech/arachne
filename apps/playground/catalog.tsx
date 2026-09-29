@@ -162,13 +162,30 @@ function PropsTable(props: { entry: CatalogEntry }) {
 	);
 }
 
+type HeadingKind = "section" | "label";
+
+/**
+ * Two heading styles only: `section` (API / Example / Parts on the page) and
+ * `label` (small caps inside a part card). The level follows the nesting.
+ */
+function Heading(props: { kind: HeadingKind; order: 2 | 3 | 4; children: unknown }) {
+	return (
+		<Title
+			order={props.order}
+			class={props.kind === "section" ? "catalog-h-section" : "catalog-h-label"}
+		>
+			{props.children}
+		</Title>
+	);
+}
+
 /** Props table, slot names and the shared-props note as one compact block. */
-function ApiReference(props: { entry: CatalogEntry; order: 2 | 3 | 4; title?: string }) {
+function ApiReference(props: { entry: CatalogEntry; order: 2 | 3 | 4; kind?: HeadingKind }) {
 	return (
 		<section class="catalog-api" aria-label={`${props.entry.name} API`}>
-			<Title order={props.order} size={(props.order + 2) as 4 | 5 | 6}>
-				{props.title ?? "API"}
-			</Title>
+			<Heading kind={props.kind ?? "section"} order={props.order}>
+				API
+			</Heading>
 			<Show
 				when={props.entry.props.length > 0}
 				fallback={<p class="catalog-meta">No component-specific props.</p>}
@@ -195,20 +212,27 @@ function ApiReference(props: { entry: CatalogEntry; order: 2 | 3 | 4; title?: st
 	);
 }
 
-/** A sub-component documented on its parent's page. */
+/** A sub-component documented on its parent's page, as a card under "Parts". */
 function Part(props: { entry: CatalogEntry }) {
 	return (
 		<section class="catalog-part" id={`part-${props.entry.name}`}>
-			<Title order={3} size={4}>
-				{props.entry.name}
-			</Title>
-			<Text muted>
-				<RichText text={props.entry.summary} />
-			</Text>
-			<ApiReference entry={props.entry} order={4} title="API" />
-			<DocExample code={props.entry.code}>
-				<Preview name={props.entry.name} />
-			</DocExample>
+			<header class="catalog-part-head">
+				<Title order={3} class="catalog-part-title">
+					{props.entry.name}
+				</Title>
+				<p class="catalog-part-summary">
+					<RichText text={props.entry.summary} />
+				</p>
+			</header>
+			<ApiReference entry={props.entry} order={4} kind="label" />
+			<section class="catalog-section">
+				<Heading kind="label" order={4}>
+					Example
+				</Heading>
+				<DocExample code={props.entry.code}>
+					<Preview name={props.entry.name} />
+				</DocExample>
+			</section>
 		</section>
 	);
 }
@@ -217,16 +241,15 @@ function Parts(props: { entry: CatalogEntry }) {
 	const parts = props.entry.parts.flatMap((name) => entries.get(name) ?? []);
 	return (
 		<Show when={parts.length > 0}>
-			<section class="catalog-section">
-				<Title order={2} size={4}>
+			<section class="catalog-section catalog-parts">
+				<Heading kind="section" order={2}>
 					Parts
-				</Title>
+				</Heading>
 				<p class="catalog-meta catalog-meta-hint">
-					Compose {props.entry.name} from these sub-components:{" "}
-					{parts.map((part, i) => [i ? ", " : "", <code>{part.name}</code>])}.
+					{props.entry.name} is composed from these sub-components.
 				</p>
+				<For each={parts}>{(part) => <Part entry={part} />}</For>
 			</section>
-			<For each={parts}>{(part) => <Part entry={part} />}</For>
 		</Show>
 	);
 }
@@ -239,8 +262,10 @@ export function CatalogPage(props: { name: string }) {
 		<DocPage title={entry.name} description={<RichText text={entry.summary} />}>
 			<ApiReference entry={entry} order={2} />
 			<section class="catalog-section">
+				<Heading kind="section" order={2}>
+					Example
+				</Heading>
 				<DocExample
-					title="Example"
 					description={entry.interactive ? "Interactive demo — opens on demand." : undefined}
 					code={entry.code}
 				>
