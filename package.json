@@ -2,7 +2,7 @@
 	"name": "arachne",
 	"private": true,
 	"version": "0.0.0",
-	"description": "Arachne \u2014 universal, modular, high-performance web framework",
+	"description": "Arachne — universal, modular, high-performance web framework",
 	"license": "MIT OR Apache-2.0",
 	"type": "module",
 	"workspaces": [
@@ -25,8 +25,11 @@
 		"ui:docs": "bun run scripts/gen-ui-docs.ts",
 		"changeset": "changeset",
 		"version-packages": "changeset version",
-		"ci": "bun run lint && bun run boundaries && bun run ui:docs --check && bun run ui:props && bun run mcp:check && bun run typecheck && bun run test",
-		"ui:props": "bun run scripts/check-ui-props.ts"
+		"ci": "bun run lint && bun run boundaries && bun run docs:check && bun run ui:docs --check && bun run ui:props && bun run mcp:check && bun run typecheck && bun run typecheck:tests && bun run test && bun run test:scripts",
+		"ui:props": "bun run scripts/check-ui-props.ts",
+		"docs:check": "bun run scripts/check-docs.ts",
+		"test:scripts": "bun test scripts",
+		"typecheck:tests": "tsc -p tsconfig.tests.json"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.2.4",

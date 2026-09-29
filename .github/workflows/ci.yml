@@ -30,11 +30,20 @@ jobs:
       - name: Boundaries
         run: bun run boundaries
 
+      - name: API docs (TSDoc coverage)
+        run: bun run docs:check
+
       - name: MCP contract
         run: bun run mcp:check
 
       - name: Typecheck
         run: bun run typecheck
 
+      - name: Typecheck tests
+        run: bun run typecheck:tests
+
       - name: Test
         run: bun run test
+
+      - name: Script tests
+        run: bun run test:scripts

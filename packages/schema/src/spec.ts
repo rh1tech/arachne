@@ -1,9 +1,15 @@
 import type { AnySchema } from "./helpers.ts";
-import { s } from "./schema.ts";
+import type { StringFormat } from "./primitives.ts";
+import { type StringOptions, s } from "./schema.ts";
 
 /** JSON-friendly schema descriptor for MCP / tooling. */
 export type SchemaSpec =
-	| { kind: "string"; min?: number | undefined; max?: number | undefined }
+	| {
+			kind: "string";
+			min?: number | undefined;
+			max?: number | undefined;
+			format?: StringFormat | undefined;
+	  }
 	| {
 			kind: "number";
 			min?: number | undefined;
@@ -17,14 +23,17 @@ export type SchemaSpec =
 	| { kind: "nullable"; of: SchemaSpec }
 	| { kind: "defaulted"; of: SchemaSpec; value: unknown }
 	| { kind: "array"; of: SchemaSpec }
+	| { kind: "record"; of: SchemaSpec }
 	| { kind: "object"; fields: Record<string, SchemaSpec> }
 	| { kind: "union"; options: [SchemaSpec, SchemaSpec, ...SchemaSpec[]] };
 
+/** Build a schema from a JSON {@link SchemaSpec} (used by MCP tools). */
 export function schemaFromSpec(spec: SchemaSpec): AnySchema {
 	switch (spec.kind) {
 		case "string": {
-			const options: { min?: number; max?: number } = {};
+			const options: StringOptions = {};
 			if (spec.min !== undefined) options.min = spec.min;
+			if (spec.format !== undefined) options.format = spec.format;
 			if (spec.max !== undefined) options.max = spec.max;
 			return s.string(options);
 		}
@@ -49,6 +58,8 @@ export function schemaFromSpec(spec: SchemaSpec): AnySchema {
 			return s.defaulted(schemaFromSpec(spec.of), spec.value);
 		case "array":
 			return s.array(schemaFromSpec(spec.of));
+		case "record":
+			return s.record(schemaFromSpec(spec.of));
 		case "object": {
 			const shape: Record<string, AnySchema> = {};
 			for (const [key, field] of Object.entries(spec.fields)) {

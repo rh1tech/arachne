@@ -1,5 +1,6 @@
 import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp";
 import { z } from "zod";
+import { toJSONSchema } from "./composites.ts";
 import { formatIssues, safeParse } from "./parse.ts";
 import { type SchemaSpec, schemaFromSpec } from "./spec.ts";
 
@@ -9,6 +10,7 @@ const schemaSpecSchema: z.ZodTypeAny = z.lazy(() =>
 			kind: z.literal("string"),
 			min: z.number().optional(),
 			max: z.number().optional(),
+			format: z.enum(["email", "url", "uuid", "date-time", "date"]).optional(),
 		}),
 		z.object({
 			kind: z.literal("number"),
@@ -33,6 +35,7 @@ const schemaSpecSchema: z.ZodTypeAny = z.lazy(() =>
 			value: z.unknown(),
 		}),
 		z.object({ kind: z.literal("array"), of: schemaSpecSchema }),
+		z.object({ kind: z.literal("record"), of: schemaSpecSchema }),
 		z.object({
 			kind: z.literal("object"),
 			fields: z.record(schemaSpecSchema),
@@ -72,14 +75,25 @@ export const mcpModule = defineMcpModule({
 			},
 		},
 		{
+			name: toolName("schema", "json_schema"),
+			description:
+				"Convert a SchemaSpec descriptor to JSON Schema 2020-12 (the form used in OpenAPI 3.1).",
+			inputSchema: { spec: schemaSpecSchema },
+			handler: (args) => jsonResult(toJSONSchema(schemaFromSpec(args["spec"] as SchemaSpec))),
+		},
+		{
 			name: toolName("schema", "api_summary"),
 			description: "Summarize @arachne/schema public API.",
 			handler: () =>
 				textResult(
 					[
-						"s.string / s.number / s.boolean / s.literal / s.enum",
-						"s.object / s.array / s.union",
-						"s.optional / s.nullable / s.defaulted",
+						"s.string({ min, max, pattern, format, trim, lowercase }) · s.email / s.url / s.uuid / s.datetime / s.isoDate",
+						"s.number / s.integer / s.boolean / s.literal / s.enum / s.date / s.file / s.unknown",
+						"s.object(shape, { unknownKeys }) / s.pick / s.omit / s.partial / s.extend",
+						"s.array / s.record / s.union · s.optional / s.nullable / s.defaulted",
+						"s.refine / s.transform / s.preprocess / s.describe",
+						"s.coerce.number / integer / boolean / date / array (query + form input)",
+						"toJSONSchema(schema) → JSON Schema 2020-12 (OpenAPI 3.1)",
 						"parse(schema, value) · safeParse(schema, value)",
 						"Infer<typeof schema> · Standard Schema V1 (~standard)",
 						"schemaFromSpec(spec) for JSON descriptors / MCP",

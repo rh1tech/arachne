@@ -1,4 +1,9 @@
+/**
+ * The Standard Schema V1 interface (https://standardschema.dev), shared by
+ * zod, valibot, arktype and Arachne schemas.
+ */
 export interface StandardSchemaV1<Input = unknown, Output = Input> {
+	/** Vendor-neutral validation entry point. */
 	readonly "~standard": StandardSchemaV1.Props<Input, Output>;
 }
 
@@ -44,4 +49,8 @@ export namespace StandardSchemaV1 {
 	>["output"];
 }
 
+/** Output type a Standard Schema produces (after defaults and transforms). */
 export type Infer<S extends StandardSchemaV1> = StandardSchemaV1.InferOutput<S>;
+
+/** Input type a Standard Schema accepts. */
+export type InferInput<S extends StandardSchemaV1> = StandardSchemaV1.InferInput<S>;
