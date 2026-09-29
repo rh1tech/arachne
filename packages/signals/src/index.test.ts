@@ -1,5 +1,17 @@
 import { describe, expect, test } from "bun:test";
-import { batch, computed, effect, resource, signal, store, untrack } from "../src/index.ts";
+import {
+	batch,
+	computed,
+	deferEffects,
+	effect,
+	isServerRender,
+	renderEffect,
+	resource,
+	signal,
+	store,
+	untrack,
+	withoutEffects,
+} from "../src/index.ts";
 
 describe("signal", () => {
 	test("get / set via call and methods", () => {
@@ -58,6 +70,147 @@ describe("untrack", () => {
 		});
 		a.set(1);
 		expect(runs).toBe(1);
+	});
+});
+
+describe("untrack ownership", () => {
+	test("effects created under untrack are disposed with the enclosing effect", () => {
+		const show = signal(true);
+		const tick = signal(0);
+		let runs = 0;
+		let cleanups = 0;
+		effect(() => {
+			if (!show()) return;
+			untrack(() => {
+				effect(() => {
+					tick();
+					runs++;
+					return () => {
+						cleanups++;
+					};
+				});
+			});
+		});
+		tick.set(1);
+		expect(runs).toBe(2);
+
+		show.set(false);
+		expect(cleanups).toBe(2);
+		tick.set(2);
+		expect(runs).toBe(2);
+	});
+
+	test("untrack still hides reads from the enclosing effect", () => {
+		const outer = signal(0);
+		const inner = signal(0);
+		let parentRuns = 0;
+		effect(() => {
+			outer();
+			parentRuns++;
+			untrack(() => {
+				inner();
+				effect(() => {
+					inner();
+				});
+			});
+		});
+		inner.set(1);
+		expect(parentRuns).toBe(1);
+		outer.set(1);
+		expect(parentRuns).toBe(2);
+	});
+
+	test("untrack outside any effect creates a root effect", () => {
+		const a = signal(0);
+		let runs = 0;
+		const stop = untrack(() =>
+			effect(() => {
+				a();
+				runs++;
+			}),
+		);
+		a.set(1);
+		expect(runs).toBe(2);
+		stop();
+		a.set(2);
+		expect(runs).toBe(2);
+	});
+});
+
+describe("deferEffects", () => {
+	test("queues effects until the callback returns, then starts them under their owner", () => {
+		const order: string[] = [];
+		const toggle = signal(true);
+		const tick = signal(0);
+		let childRuns = 0;
+		effect(() => {
+			if (!toggle()) return;
+			untrack(() =>
+				deferEffects(() => {
+					effect(() => {
+						tick();
+						childRuns++;
+						order.push("user");
+					});
+					renderEffect(() => {
+						order.push("render");
+					});
+					order.push("body");
+				}),
+			);
+		});
+		expect(order).toEqual(["render", "body", "user"]);
+		tick.set(1);
+		expect(childRuns).toBe(2);
+		toggle.set(false);
+		tick.set(2);
+		expect(childRuns).toBe(2);
+	});
+
+	test("a deferred effect disposed before it starts never runs", () => {
+		let runs = 0;
+		deferEffects(() => {
+			const stop = effect(() => {
+				runs++;
+			});
+			stop();
+		});
+		expect(runs).toBe(0);
+	});
+});
+
+describe("withoutEffects", () => {
+	test("skips effects created inside (server rendering) but keeps computeds", () => {
+		const a = signal(1);
+		let runs = 0;
+		const doubled = withoutEffects(() => {
+			expect(isServerRender()).toBe(true);
+			const stop = effect(() => {
+				a();
+				runs++;
+			});
+			stop();
+			return computed(() => a() * 2);
+		});
+		expect(runs).toBe(0);
+		expect(doubled()).toBe(2);
+		expect(isServerRender()).toBe(false);
+		effect(() => {
+			a();
+			runs++;
+		});
+		expect(runs).toBe(1);
+	});
+
+	test("nests and restores after throwing", () => {
+		expect(() =>
+			withoutEffects(() => {
+				withoutEffects(() => {});
+				expect(isServerRender()).toBe(true);
+				throw new Error("boom");
+			}),
+		).toThrow("boom");
+		expect(isServerRender()).toBe(false);
 	});
 });
 

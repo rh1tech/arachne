@@ -1,10 +1,11 @@
-import { computed, root, untrack } from "@arachne/signals";
+import { computed, renderEffect, root, untrack } from "@arachne/signals";
+import { insert, NodeRange } from "./dom.ts";
 
 export type ShowProps<T> = {
 	when: T | undefined | null | false;
 	keyed?: boolean | undefined;
 	fallback?: unknown;
-	children: unknown | ((item: NonNullable<T> | (() => NonNullable<T>)) => unknown);
+	children: unknown | ((item: NonNullable<T>) => unknown);
 };
 
 export type ForProps<T> = {
@@ -38,6 +39,17 @@ export function mapArray<T, R>(
 	let disposers: Array<(() => void) | undefined> = [];
 	let len = 0;
 	const indexes = mapFn.length > 1 ? ([] as Array<((i: number) => void) | undefined>) : null;
+
+	// Rows live in detached roots so list updates don't purge them; tie those
+	// roots to the owner that created the list so unmounting disposes them.
+	renderEffect(() => () => {
+		disposeAll(disposers);
+		disposers = [];
+		items = [];
+		mapped = [];
+		len = 0;
+		if (indexes) indexes.length = 0;
+	});
 
 	return () => {
 		const newItems = (list() || []) as T[];
@@ -169,36 +181,54 @@ export function mapArray<T, R>(
 	};
 }
 
-export function Show<T>(props: ShowProps<T>): () => unknown {
-	const condition = computed(() => props.when);
-	return computed(() => {
-		const c = condition();
-		if (c) {
-			const child = props.children;
-			const fn = typeof child === "function" && child.length > 0;
-			return fn
-				? untrack(() => (child as (item: NonNullable<T>) => unknown)(c as NonNullable<T>))
-				: child;
-		}
-		return props.fallback;
-	});
+/**
+ * Conditional render into a {@link NodeRange} (no wrapper element).
+ * Element children are created once per falsy→truthy flip (per value when
+ * `keyed`), so focus and local state survive unrelated updates. Function
+ * children `(value) => …` re-run whenever the value changes.
+ */
+export function Show<T>(props: ShowProps<T>): NodeRange {
+	const range = new NodeRange();
+	const value = computed(() => props.when);
+	const condition = computed(() => (props.keyed ? value() : Boolean(value())));
+	insert(
+		range.parent,
+		() => {
+			if (!condition()) return untrack(() => props.fallback);
+			const child = untrack(() => props.children);
+			if (typeof child !== "function" || child.length === 0) return child;
+			const current = value() as NonNullable<T>;
+			return untrack(() => (child as (item: NonNullable<T>) => unknown)(current));
+		},
+		range.end,
+	);
+	return range;
 }
 
-export function For<T>(props: ForProps<T>): () => unknown[] {
+/** Keyed list render into a {@link NodeRange} (valid inside `<ul>`, `<tbody>`, `<select>`). */
+export function For<T>(props: ForProps<T>): NodeRange {
+	const range = new NodeRange();
 	const fallback =
 		"fallback" in props
 			? {
 					fallback: () => props.fallback as unknown,
 				}
 			: undefined;
-	return mapArray(
-		() => props.each,
-		props.children,
-		fallback as { fallback?: (() => unknown) | undefined } | undefined,
-	) as () => unknown[];
+	insert(
+		range.parent,
+		mapArray(
+			() => props.each,
+			props.children,
+			fallback as { fallback?: (() => unknown) | undefined } | undefined,
+		),
+		range.end,
+	);
+	return range;
 }
 
 /** Sync pass-through for Phase 0; async resource context comes later. */
-export function Suspense(props: SuspenseProps): () => unknown {
-	return computed(() => props.children ?? props.fallback);
+export function Suspense(props: SuspenseProps): NodeRange {
+	const range = new NodeRange();
+	insert(range.parent, () => props.children ?? props.fallback, range.end);
+	return range;
 }

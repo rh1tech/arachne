@@ -25,6 +25,16 @@
 			"import": "./src/islands.ts",
 			"default": "./src/islands.ts"
 		},
+		"./jsx-runtime": {
+			"types": "./src/jsx-runtime.d.ts",
+			"import": "./src/jsx-runtime.ts",
+			"default": "./src/jsx-runtime.ts"
+		},
+		"./jsx-dev-runtime": {
+			"types": "./src/jsx-runtime.d.ts",
+			"import": "./src/jsx-runtime.ts",
+			"default": "./src/jsx-runtime.ts"
+		},
 		"./mcp": {
 			"types": "./src/mcp.ts",
 			"import": "./src/mcp.ts",

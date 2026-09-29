@@ -115,6 +115,37 @@ describe("compile-run Show/For/Suspense", () => {
 		expect(root.textContent).not.toContain("1");
 	});
 
+	test("DOM compile renders anchor tags via claimElement", () => {
+		const { code } = compile(
+			`export function App() {
+				return (
+					<nav class="toc">
+						<a class="link" href="#one">One</a>
+						<a class="link" href="#two">Two</a>
+					</nav>
+				);
+			}`,
+			{ filename: "Toc.tsx", target: "dom", hydratable: false },
+		);
+		expect(code).toContain("claimElement");
+
+		const { App } = loadCompiled(
+			code,
+			"@arachne/render",
+			render as unknown as Record<string, unknown>,
+		);
+		const root = document.createElement("div");
+		document.body.appendChild(root);
+		render.render(() => (App as () => Node)(), root);
+
+		const links = root.querySelectorAll("a.link");
+		expect(links.length).toBe(2);
+		expect(links[0]?.getAttribute("href")).toBe("#one");
+		expect(links[1]?.getAttribute("href")).toBe("#two");
+		expect(root.textContent).toContain("One");
+		expect(root.textContent).toContain("Two");
+	});
+
 	test("SSR compile renders matching markup", () => {
 		const { code } = compile(fixture, {
 			filename: "App.tsx",
@@ -142,5 +173,230 @@ describe("compile-run Show/For/Suspense", () => {
 		expect(html).toContain("2");
 		expect(html).toContain("ready");
 		expect(html).not.toContain("&lt;");
+	});
+
+	test("DOM compile applies element and component spreads reactively", () => {
+		const { code } = compile(
+			`import { splitProps } from "@arachne/render";
+			function Box(props) {
+				const [own, rest] = splitProps(props, ["tone"]);
+				return <div class={"box " + own.tone} {...rest} data-fixed="1">{props.children}</div>;
+			}
+			export function App(props) {
+				return <Box tone="calm" id="b" title={props.title()} style={{ color: "red" }} onClick={props.onClick}>hi</Box>;
+			}`,
+			{ filename: "Spread.tsx", target: "dom", hydratable: false },
+		);
+		const { App } = loadCompiled(
+			code,
+			"@arachne/render",
+			render as unknown as Record<string, unknown>,
+		) as unknown as {
+			App: (p: { title: () => string; onClick: () => void }) => Node;
+		};
+		const title = signal("one");
+		let clicks = 0;
+		const root = document.createElement("div");
+		document.body.appendChild(root);
+		render.render(() => App({ title, onClick: () => clicks++ }), root);
+
+		const box = root.querySelector("div") as HTMLElement;
+		expect(box.getAttribute("id")).toBe("b");
+		expect(box.getAttribute("data-fixed")).toBe("1");
+		expect(box.getAttribute("title")).toBe("one");
+		expect(box.style.getPropertyValue("color")).toBe("red");
+		expect(box.hasAttribute("tone")).toBe(false);
+		expect(box.hasAttribute("children")).toBe(false);
+		expect(box.textContent).toBe("hi");
+
+		title.set("two");
+		expect(box.getAttribute("title")).toBe("two");
+
+		box.dispatchEvent(new window.Event("click", { bubbles: true }));
+		expect(clicks).toBe(1);
+	});
+
+	test("DOM compile calls element refs with the node", () => {
+		const { code } = compile(
+			`export function App(props) {
+				return <section><p ref={(el) => props.seen(el)} class="r">x</p><i ref={[props.seen, props.seen]} /></section>;
+			}`,
+			{ filename: "Ref.tsx", target: "dom", hydratable: false },
+		);
+		const { App } = loadCompiled(
+			code,
+			"@arachne/render",
+			render as unknown as Record<string, unknown>,
+		) as unknown as {
+			App: (p: { seen: (el: Element) => void }) => Node;
+		};
+		const seen: string[] = [];
+		const root = document.createElement("div");
+		render.render(() => App({ seen: (el) => seen.push(el.tagName.toLowerCase()) }), root);
+		expect(seen).toEqual(["p", "i", "i"]);
+	});
+
+	test("omitProps returns a live remainder without the omitted keys", () => {
+		const title = signal("a");
+		const props = {
+			get title() {
+				return title();
+			},
+			tone: "x",
+			id: "i",
+		};
+		const rest = render.omitProps(props, ["tone"]) as Record<string, unknown>;
+		expect(Object.keys(rest).sort()).toEqual(["id", "title"]);
+		expect(rest["tone"]).toBeUndefined();
+		expect("tone" in rest).toBe(false);
+		title.set("b");
+		expect(rest["title"]).toBe("b");
+	});
+
+	test("mergeProps resolves function sources and skips undefined overrides", () => {
+		const extra = signal<Record<string, unknown>>({ a: 1 });
+		const merged = render.mergeProps({ a: 0, b: 2 }, () => extra(), { c: undefined }) as Record<
+			string,
+			unknown
+		>;
+		expect(merged["a"]).toBe(1);
+		expect(merged["b"]).toBe(2);
+		extra.set({ a: 5, d: 4 });
+		expect(merged["a"]).toBe(5);
+		expect(merged["d"]).toBe(4);
+		expect(Object.keys(merged).sort()).toEqual(["a", "b", "c", "d"]);
+		expect(render.mergeProps({ size: "md" }, { size: undefined }).size).toBe("md");
+	});
+
+	test("SSR spread omits handlers and serializes style objects", () => {
+		const html = ssr.resolveSSRNode(
+			ssr.ssrElement(
+				"div",
+				ssr.mergeProps({ class: "x" }, () => ({
+					id: "a",
+					onClick: () => {},
+					style: { color: "red", "--gap": "2px" },
+					hidden: false,
+				})),
+				"hi",
+			),
+		);
+		expect(html).toBe('<div class="x" id="a" style="color:red;--gap:2px">hi</div>');
+	});
+
+	test("SSR compile renders dynamic class, style and grouped holes once-escaped", () => {
+		const { code } = compile(
+			`export function App(props) {
+				return (
+					<div class={props.cls} style={{ color: props.color, "--gap": props.gap }} title={props.title}>
+						<span style={props.spanStyle} class={"a " + props.k}>{props.text}</span>
+					</div>
+				);
+			}`,
+			{ filename: "Group.tsx", target: "ssr", hydratable: false },
+		);
+		const { App } = loadCompiled(
+			code,
+			"@arachne/render/ssr",
+			ssr as unknown as Record<string, unknown>,
+		) as unknown as {
+			App: (p: Record<string, unknown>) => ssr.SSRPayload;
+		};
+		const html = ssr.renderToString(() =>
+			App({
+				cls: "box",
+				color: "red",
+				gap: undefined,
+				title: 'Tom & "Jerry"',
+				spanStyle: { "margin-top": "2px", paddingLeft: "1px" },
+				k: "b",
+				text: "<x> & y",
+			}),
+		);
+		expect(html).toBe(
+			'<div class="box" style="color:red" title="Tom &amp; &quot;Jerry&quot;"><span style="margin-top:2px;padding-left:1px" class="a b">&lt;x&gt; &amp; y</span></div>',
+		);
+	});
+
+	test("hydrate adopts SSR markup with dynamic holes, Show and For (no duplication)", () => {
+		const src = `export function App(props) {
+			return (
+				<div class="app">
+					<b>{props.name()}</b>
+					<Show when={props.show()}><i>shown</i></Show>
+					<ul><For each={props.items()}>{(n) => <li>{n}</li>}</For></ul>
+					<button type="button" onClick={props.onClick}>go</button>
+				</div>
+			);
+		}`;
+		const server = compile(src, { filename: "H.tsx", target: "ssr", hydratable: true });
+		const client = compile(src, { filename: "H.tsx", target: "dom", hydratable: true });
+		const { App: ServerApp } = loadCompiled(
+			server.code,
+			"@arachne/render/ssr",
+			ssr as unknown as Record<string, unknown>,
+		) as unknown as {
+			App: (p: Record<string, unknown>) => ssr.SSRPayload;
+		};
+		const { App: ClientApp } = loadCompiled(
+			client.code,
+			"@arachne/render",
+			render as unknown as Record<string, unknown>,
+		) as unknown as {
+			App: (p: Record<string, unknown>) => Node;
+		};
+		const name = signal("ada");
+		const show = signal(true);
+		const items = signal([1, 2]);
+		let clicks = 0;
+		const props = { name, show, items, onClick: () => clicks++ };
+
+		const root = document.createElement("div");
+		root.innerHTML = ssr.renderToString(() => ServerApp(props));
+		document.body.appendChild(root);
+		const serverButton = root.querySelector("button");
+		// Delegation is module-global; earlier tests registered it on an older document.
+		render.clearDelegatedEvents();
+		render.delegateEvents(["click"]);
+		render.hydrate(() => ClientApp(props), root);
+
+		expect(root.querySelectorAll(".app").length).toBe(1);
+		expect(root.querySelector("b")?.textContent).toBe("ada");
+		expect(root.querySelectorAll("i").length).toBe(1);
+		expect([...root.querySelectorAll("li")].map((li) => li.textContent)).toEqual(["1", "2"]);
+		// Claimed, not recreated: the server's element is the live one.
+		expect(root.querySelector("button")).toBe(serverButton);
+
+		root.querySelector("button")?.click();
+		expect(clicks).toBe(1);
+		name.set("grace");
+		expect(root.querySelector("b")?.textContent).toBe("grace");
+		show.set(false);
+		expect(root.querySelectorAll("i").length).toBe(0);
+		items.set([3]);
+		expect([...root.querySelectorAll("li")].map((li) => li.textContent)).toEqual(["3"]);
+	});
+
+	test("SSR spread elements keep hydration markers and void tags", () => {
+		const { code } = compile(
+			`export function App(props) {
+				return <div {...props.rest} class="f"><Show when={props.on}><b>x</b></Show><input {...props.input} /></div>;
+			}`,
+			{ filename: "Spread.tsx", target: "ssr", hydratable: true },
+		);
+		const { App } = loadCompiled(
+			code,
+			"@arachne/render/ssr",
+			ssr as unknown as Record<string, unknown>,
+		) as unknown as {
+			App: (p: Record<string, unknown>) => ssr.SSRPayload;
+		};
+		const html = ssr.renderToString(() =>
+			App({ rest: { id: "r" }, on: true, input: { value: "a&b" } }),
+		);
+		expect(html).not.toContain("&lt;!--");
+		expect(html).toContain("<!--$-->");
+		expect(html).not.toContain("</input>");
+		expect(html).toContain('value="a&amp;b"');
 	});
 });

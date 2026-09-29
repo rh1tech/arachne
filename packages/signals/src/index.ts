@@ -53,8 +53,96 @@ export function computed<T>(fn: (previous?: T) => T): ReadonlySignal<T> {
 	return api;
 }
 
+/**
+ * Owner captured by {@link untrack}. Tracking and ownership share alien-signals'
+ * `activeSub`, so untracked code would otherwise create orphan effects that
+ * outlive the component that made them.
+ */
+let untrackedOwner: ReturnType<typeof getActiveSub>;
+
+let serverDepth = 0;
+
+/**
+ * Run `fn` with effects disabled — used by server rendering, where effects
+ * (DOM listeners, timers, rAF) must not run. Computeds and signals still work.
+ */
+export function withoutEffects<T>(fn: () => T): T {
+	serverDepth += 1;
+	try {
+		return fn();
+	} finally {
+		serverDepth -= 1;
+	}
+}
+
+/** True while rendering on the server (inside {@link withoutEffects}). */
+export function isServerRender(): boolean {
+	return serverDepth > 0;
+}
+
+const noop = () => {};
+
+type Owner = ReturnType<typeof getActiveSub>;
+
+/** Create an alien effect under `owner` (the enclosing or untrack-captured one). */
+function startEffect(fn: () => void | (() => void), owner: Owner): () => void {
+	if (owner === undefined || getActiveSub() === owner) return alienEffect(fn);
+	const prev = setActiveSub(owner);
+	try {
+		return alienEffect(fn);
+	} finally {
+		setActiveSub(prev);
+	}
+}
+
+const currentOwner = (): Owner => getActiveSub() ?? untrackedOwner;
+
+let deferred: Array<() => void> | undefined;
+
+/**
+ * Run `fn`, queueing {@link effect}s created inside until it returns — used by
+ * hydration so the render phase (which claims server DOM in order) matches the
+ * server, where effects never run. {@link renderEffect}s still run inline.
+ */
+export function deferEffects<T>(fn: () => T): T {
+	if (deferred) return fn();
+	const queue: Array<() => void> = [];
+	deferred = queue;
+	let result: T;
+	try {
+		result = fn();
+	} finally {
+		deferred = undefined;
+	}
+	for (const start of queue) start();
+	return result;
+}
+
+/**
+ * Side-effect for components (listeners, timers, DOM measurement). Owned by
+ * the enclosing effect, skipped on the server, deferred while hydrating.
+ */
 export function effect(fn: () => void | (() => void)): () => void {
-	return alienEffect(fn);
+	if (serverDepth > 0) return noop;
+	const owner = currentOwner();
+	if (!deferred) return startEffect(fn, owner);
+	let stop: (() => void) | undefined;
+	let cancelled = false;
+	deferred.push(() => {
+		if (!cancelled) stop = startEffect(fn, owner);
+	});
+	return () => {
+		cancelled = true;
+		stop?.();
+	};
+}
+
+/**
+ * Effect for renderer bindings: runs immediately even while hydrating, so DOM
+ * bindings attach during the render phase. Not for application code.
+ */
+export function renderEffect(fn: () => void | (() => void)): () => void {
+	return startEffect(fn, currentOwner());
 }
 
 export function batch<T>(fn: () => T): T {
@@ -66,13 +154,17 @@ export function batch<T>(fn: () => T): T {
 	}
 }
 
+/** Read without subscribing; effects created inside stay owned by the enclosing effect. */
 export function untrack<T>(fn: () => T): T {
 	const prev = getActiveSub();
+	const prevOwner = untrackedOwner;
+	if (prev !== undefined) untrackedOwner = prev;
 	setActiveSub(undefined);
 	try {
 		return fn();
 	} finally {
 		setActiveSub(prev);
+		untrackedOwner = prevOwner;
 	}
 }
 

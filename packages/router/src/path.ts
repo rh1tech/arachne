@@ -70,27 +70,20 @@ export function compilePath(pattern: string): CompiledPath {
 			return { params, pathname: path };
 		},
 		build(params: PathParams = {}): string {
-			const out: string[] = [];
-			for (const segment of segments) {
-				if (segment.startsWith("*")) {
-					const name = segment.slice(1) || "rest";
-					const value = params[name];
-					if (value === undefined) throw new Error(`missing path param "${name}"`);
-					out.push(value.replace(/^\//, ""));
-					continue;
-				}
-				if (segment.startsWith(":")) {
-					const name = segment.slice(1);
-					const value = params[name];
-					if (value === undefined) throw new Error(`missing path param "${name}"`);
-					out.push(encodeURIComponent(value));
-					continue;
-				}
-				out.push(segment);
-			}
+			const out = segments.map((segment) => buildSegment(segment, params));
 			return out.length === 0 ? "/" : `/${out.join("/")}`;
 		},
 	};
+}
+
+/** One pattern segment filled from `params` (`:name` encoded, `*name` joined as-is). */
+function buildSegment(segment: string, params: PathParams): string {
+	const splat = segment.startsWith("*");
+	if (!splat && !segment.startsWith(":")) return segment;
+	const name = segment.slice(1) || (splat ? "rest" : "");
+	const value = params[name];
+	if (value === undefined) throw new Error(`missing path param "${name}"`);
+	return splat ? value.replace(/^\//, "") : encodeURIComponent(value);
 }
 
 export function parseLocation(url: string): { pathname: string; search: string; hash: string } {

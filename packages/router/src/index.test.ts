@@ -4,6 +4,17 @@ import { compilePath, parseLocation } from "../src/path.ts";
 import { createRouter } from "../src/router.ts";
 
 describe("compilePath", () => {
+	test("build encodes params, joins splats and rejects missing params", () => {
+		expect(compilePath("/users/:id").build({ id: "a b/c" })).toBe("/users/a%20b%2Fc");
+		expect(compilePath("/files/*path").build({ path: "/docs/readme.md" })).toBe(
+			"/files/docs/readme.md",
+		);
+		expect(compilePath("/files/*").build({ rest: "x/y" })).toBe("/files/x/y");
+		expect(compilePath("/").build()).toBe("/");
+		expect(() => compilePath("/users/:id").build({})).toThrow('missing path param "id"');
+		expect(() => compilePath("/files/*path").build({})).toThrow('missing path param "path"');
+	});
+
 	test("matches static and params", () => {
 		const users = compilePath("/users/:id");
 		expect(users.match("/users/42")).toEqual({
