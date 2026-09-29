@@ -1,0 +1,1002 @@
+import { For, Show } from "@arachne/render";
+import { effect, isServerRender, signal } from "@arachne/signals";
+import { Button } from "./button.tsx";
+import { Icon, type IconName } from "./icons.tsx";
+import { TextInput } from "./input.tsx";
+import { Kbd } from "./presence.tsx";
+import { type BaseProps, type SlotProps, setup } from "./system.ts";
+import { ActionIcon } from "./widgets.tsx";
+
+export type CookieConsentSlot = "root" | "body" | "title" | "message" | "actions";
+
+export type CookieConsentProps = SlotProps<CookieConsentSlot> & {
+	open: boolean;
+	title?: string | undefined;
+	message?: string | undefined;
+	acceptLabel?: string | undefined;
+	declineLabel?: string | undefined;
+	onAccept: () => void;
+	onDecline?: (() => void) | undefined;
+};
+
+/** Slots: `root` `body` `title` `message` `actions`. */
+export function CookieConsent(input: CookieConsentProps) {
+	const [props, rest, slot] = setup(
+		"CookieConsent",
+		input,
+		{},
+		["open", "title", "message", "acceptLabel", "declineLabel", "onAccept", "onDecline"],
+		"root" as CookieConsentSlot,
+	);
+	return (
+		<Show when={props.open}>
+			<div
+				aria-label="Cookie consent"
+				{...rest}
+				class={slot.class("root", "a-cookie")}
+				style={slot.style("root")}
+				role="dialog"
+			>
+				<div class={slot.class("body", "a-cookie-body")} style={slot.style("body")}>
+					<strong class={slot.class("title", "a-cookie-title")}>{props.title ?? "Cookies"}</strong>
+					<p class={slot.class("message", "a-cookie-msg")}>
+						{props.message ??
+							"We use cookies to improve your experience. You can accept or decline non-essential cookies."}
+					</p>
+				</div>
+				<div class={slot.class("actions", "a-cookie-actions")} style={slot.style("actions")}>
+					<Show when={props.onDecline}>
+						<Button size="sm" variant="ghost" onClick={() => props.onDecline?.()}>
+							{props.declineLabel ?? "Decline"}
+						</Button>
+					</Show>
+					<Button size="sm" onClick={() => props.onAccept()}>
+						{props.acceptLabel ?? "Accept"}
+					</Button>
+				</div>
+			</div>
+		</Show>
+	);
+}
+
+export type OfflineNoticeProps = BaseProps & {
+	/** Force visibility (otherwise listens to navigator.onLine). */
+	offline?: boolean | undefined;
+	children?: unknown;
+};
+
+/** Slots: `root`. */
+export function OfflineNotice(input: OfflineNoticeProps) {
+	const [props, rest, slot] = setup("OfflineNotice", input, {}, ["offline", "children"]);
+	// Only an explicit `false` means offline; servers (and Bun's navigator) report nothing.
+	const offline = signal(
+		!isServerRender() && typeof navigator !== "undefined" && navigator.onLine === false,
+	);
+
+	effect(() => {
+		if (props.offline != null) {
+			offline.set(props.offline);
+			return;
+		}
+		const goOffline = () => offline.set(true);
+		const goOnline = () => offline.set(false);
+		window.addEventListener("offline", goOffline);
+		window.addEventListener("online", goOnline);
+		return () => {
+			window.removeEventListener("offline", goOffline);
+			window.removeEventListener("online", goOnline);
+		};
+	});
+
+	return (
+		<Show when={offline()}>
+			<div
+				{...rest}
+				class={slot.class("root", "a-offline")}
+				style={slot.style("root")}
+				role="status"
+			>
+				{props.children ?? "You are offline. Changes may not sync."}
+			</div>
+		</Show>
+	);
+}
+
+export type HotkeySlot = "root" | "part" | "separator" | "key";
+
+export type HotkeyProps = SlotProps<HotkeySlot> & {
+	keys: string[];
+	/** Separator between keys (default `+`). */
+	separator?: unknown;
+};
+
+/** Display a key combo (⌘K, Ctrl+S). Slots: `root` `part` `separator` `key`. */
+export function Hotkey(input: HotkeyProps) {
+	const [props, rest, slot] = setup(
+		"Hotkey",
+		input,
+		{},
+		["keys", "separator"],
+		"root" as HotkeySlot,
+	);
+	return (
+		<span {...rest} class={slot.class("root", "a-hotkey")} style={slot.style("root")}>
+			<For each={props.keys}>
+				{(k, i) => (
+					<span class={slot.class("part", "a-hotkey-part")}>
+						<Show when={i() > 0}>
+							<span class={slot.class("separator", "a-hotkey-plus")} aria-hidden="true">
+								{props.separator ?? "+"}
+							</span>
+						</Show>
+						<Kbd class={slot.class("key")}>{k}</Kbd>
+					</span>
+				)}
+			</For>
+		</span>
+	);
+}
+
+export type InlineEditSlot = "root" | "input" | "display" | "icon";
+
+export type InlineEditProps = SlotProps<InlineEditSlot> & {
+	value: string;
+	placeholder?: string | undefined;
+	onChange: (value: string) => void;
+	/** Accessible label for the edit button / input. */
+	label?: string | undefined;
+};
+
+/** Click-to-edit text. Slots: `root` `input` `display` `icon`. State: `data-state="editing|idle"`. */
+export function InlineEdit(input: InlineEditProps) {
+	const [props, rest, slot] = setup(
+		"InlineEdit",
+		input,
+		{},
+		["value", "placeholder", "onChange", "label"],
+		"root" as InlineEditSlot,
+	);
+	const editing = signal(false);
+	const draft = signal(props.value);
+
+	effect(() => {
+		if (!editing()) draft.set(props.value);
+	});
+
+	let host: HTMLElement | undefined;
+
+	// Guarded by `editing` so Enter followed by the unmount blur commits once.
+	// Read the draft before leaving edit mode: the sync effect resets it.
+	const commit = () => {
+		if (!editing()) return;
+		const next = draft().trim();
+		editing.set(false);
+		if (next !== props.value) props.onChange(next);
+	};
+
+	const startEditing = () => {
+		editing.set(true);
+		const field = host?.querySelector("input");
+		field?.focus();
+		field?.select();
+	};
+
+	return (
+		<div
+			{...rest}
+			ref={(el: HTMLElement) => {
+				host = el;
+			}}
+			class={slot.class("root", "a-inline-edit", editing() && "a-inline-edit-open")}
+			style={slot.style("root")}
+			data-state={editing() ? "editing" : "idle"}
+		>
+			{editing() ? (
+				<TextInput
+					class={slot.class("input", "a-inline-edit-input")}
+					value={draft()}
+					placeholder={props.placeholder}
+					aria-label={props.label}
+					onInput={(e: InputEvent) => draft.set((e.target as HTMLInputElement).value)}
+					onKeyDown={(e: KeyboardEvent) => {
+						if (e.key === "Enter") commit();
+						if (e.key === "Escape") {
+							draft.set(props.value);
+							editing.set(false);
+						}
+					}}
+					onBlur={() => commit()}
+				/>
+			) : (
+				<button
+					type="button"
+					class={slot.class("display", "a-inline-edit-display")}
+					aria-label={props.label ? `Edit ${props.label}` : undefined}
+					onClick={startEditing}
+				>
+					{props.value || props.placeholder || "Edit…"}
+					<span class={slot.class("icon")} aria-hidden="true">
+						<Icon name="edit" size={14} />
+					</span>
+				</button>
+			)}
+		</div>
+	);
+}
+
+export type CopyFieldSlot = "root" | "label" | "value" | "action";
+
+export type CopyFieldProps = SlotProps<CopyFieldSlot> & {
+	value: string;
+	label?: string | undefined;
+};
+
+const COPIED_MS = 1200;
+
+/** Slots: `root` `label` `value` `action`. State: `data-copied`. */
+export function CopyField(input: CopyFieldProps) {
+	const [props, rest, slot] = setup(
+		"CopyField",
+		input,
+		{},
+		["value", "label"],
+		"root" as CopyFieldSlot,
+	);
+	const copied = signal(false);
+	let timer: ReturnType<typeof setTimeout> | undefined;
+	effect(() => () => clearTimeout(timer));
+	return (
+		<div
+			{...rest}
+			class={slot.class("root", "a-copy-field")}
+			style={slot.style("root")}
+			data-copied={copied() ? "" : undefined}
+		>
+			<Show when={props.label}>
+				<span class={slot.class("label", "a-copy-field-label")}>{props.label}</span>
+			</Show>
+			<code class={slot.class("value", "a-copy-field-value")}>{props.value}</code>
+			<ActionIcon
+				class={slot.class("action")}
+				label={copied() ? "Copied" : "Copy"}
+				size="sm"
+				onClick={async () => {
+					try {
+						await navigator.clipboard.writeText(props.value);
+						copied.set(true);
+						clearTimeout(timer);
+						timer = setTimeout(() => copied.set(false), COPIED_MS);
+					} catch {
+						copied.set(false);
+					}
+				}}
+			>
+				<Icon name={copied() ? "check" : "copy"} size={14} />
+			</ActionIcon>
+		</div>
+	);
+}
+
+export type ChecklistItemData = {
+	id: string;
+	label: string;
+	done?: boolean | undefined;
+};
+
+export type ChecklistSlot = "root" | "item" | "checkbox" | "label";
+
+export type ChecklistProps = SlotProps<ChecklistSlot> & {
+	items: ChecklistItemData[];
+	onChange: (items: ChecklistItemData[]) => void;
+};
+
+/** Slots: `root` `item` `checkbox` `label`. Items expose `data-state="done|todo"`. */
+export function Checklist(input: ChecklistProps) {
+	const [props, rest, slot] = setup(
+		"Checklist",
+		input,
+		{},
+		["items", "onChange"],
+		"root" as ChecklistSlot,
+	);
+	return (
+		<ul {...rest} class={slot.class("root", "a-checklist")} style={slot.style("root")}>
+			<For each={props.items}>
+				{(item) => (
+					<li>
+						<label
+							class={slot.class("item", "a-checklist-item", item.done && "a-checklist-item-done")}
+							style={slot.style("item")}
+							data-state={item.done ? "done" : "todo"}
+						>
+							<input
+								type="checkbox"
+								class={slot.class("checkbox")}
+								checked={Boolean(item.done)}
+								onChange={(e: Event) => {
+									const box = e.target as HTMLInputElement;
+									const done = box.checked;
+									props.onChange(props.items.map((x) => (x.id === item.id ? { ...x, done } : x)));
+									// Controlled: if the parent rejected the change, snap the box back.
+									const current = props.items.find((x) => x.id === item.id);
+									box.checked = Boolean(current?.done);
+								}}
+							/>
+							<span class={slot.class("label")}>{item.label}</span>
+						</label>
+					</li>
+				)}
+			</For>
+		</ul>
+	);
+}
+
+export type FeatureListSlot = "root" | "item" | "icon" | "label";
+
+export type FeatureListProps = SlotProps<FeatureListSlot> & {
+	items: string[];
+	icon?: IconName | undefined;
+};
+
+/** Slots: `root` `item` `icon` `label`. */
+export function FeatureList(input: FeatureListProps) {
+	const [props, rest, slot] = setup(
+		"FeatureList",
+		input,
+		{},
+		["items", "icon"],
+		"root" as FeatureListSlot,
+	);
+	return (
+		<ul {...rest} class={slot.class("root", "a-feature-list")} style={slot.style("root")}>
+			<For each={props.items}>
+				{(item) => (
+					<li class={slot.class("item")} style={slot.style("item")}>
+						<span class={slot.class("icon")} aria-hidden="true">
+							<Icon name={props.icon ?? "check"} size={14} />
+						</span>
+						<span class={slot.class("label")}>{item}</span>
+					</li>
+				)}
+			</For>
+		</ul>
+	);
+}
+
+export type PricingCardSlot =
+	| "root"
+	| "name"
+	| "price"
+	| "period"
+	| "description"
+	| "features"
+	| "action";
+
+export type PricingCardProps = SlotProps<PricingCardSlot> & {
+	name: string;
+	price: string;
+	period?: string | undefined;
+	description?: string | undefined;
+	features?: string[] | undefined;
+	highlighted?: boolean | undefined;
+	action?: unknown;
+};
+
+/** Slots: `root` `name` `price` `period` `description` `features` `action`. State: `data-highlighted`. */
+export function PricingCard(input: PricingCardProps) {
+	const [props, rest, slot] = setup(
+		"PricingCard",
+		input,
+		{},
+		["name", "price", "period", "description", "features", "highlighted", "action"],
+		"root" as PricingCardSlot,
+	);
+	return (
+		<div
+			{...rest}
+			class={slot.class("root", "a-pricing", props.highlighted && "a-pricing-hl")}
+			style={slot.style("root")}
+			data-highlighted={props.highlighted ? "" : undefined}
+		>
+			<p class={slot.class("name", "a-pricing-name")}>{props.name}</p>
+			<p class={slot.class("price", "a-pricing-price")}>
+				<span>{props.price}</span>
+				<Show when={props.period}>
+					<small class={slot.class("period")}>/{props.period}</small>
+				</Show>
+			</p>
+			<Show when={props.description}>
+				<p class={slot.class("description", "a-pricing-desc")}>{props.description}</p>
+			</Show>
+			<Show when={props.features?.length}>
+				<FeatureList class={slot.class("features")} items={props.features ?? []} />
+			</Show>
+			<Show when={props.action}>
+				<div class={slot.class("action", "a-pricing-action")}>{props.action}</div>
+			</Show>
+		</div>
+	);
+}
+
+export type StatGroupProps = BaseProps & {
+	children?: unknown;
+};
+
+/** Slots: `root`. */
+export function StatGroup(input: StatGroupProps) {
+	const [props, rest, slot] = setup("StatGroup", input, {}, ["children"]);
+	return (
+		<div {...rest} class={slot.class("root", "a-stat-group")} style={slot.style("root")}>
+			{props.children}
+		</div>
+	);
+}
+
+export type DotPaginationSlot = "root" | "dot";
+
+export type DotPaginationProps = SlotProps<DotPaginationSlot> & {
+	count: number;
+	value: number;
+	onChange: (index: number) => void;
+	/** Accessible name (default "Pagination"). */
+	label?: string | undefined;
+};
+
+/** Slots: `root` `dot`. Dots expose `data-state="active|inactive"`. */
+export function DotPagination(input: DotPaginationProps) {
+	const [props, rest, slot] = setup(
+		"DotPagination",
+		input,
+		{},
+		["count", "value", "onChange", "label"],
+		"root" as DotPaginationSlot,
+	);
+	const dots = () => Array.from({ length: Math.max(0, Math.floor(props.count) || 0) }, (_, i) => i);
+	return (
+		<div
+			aria-label={props.label ?? "Pagination"}
+			{...rest}
+			class={slot.class("root", "a-dots")}
+			style={slot.style("root")}
+			role="tablist"
+		>
+			<For each={dots()}>
+				{(i) => (
+					<button
+						type="button"
+						role="tab"
+						aria-selected={props.value === i}
+						aria-label={`Page ${i + 1}`}
+						class={slot.class("dot", "a-dots-item", props.value === i && "a-dots-item-active")}
+						style={slot.style("dot")}
+						data-state={props.value === i ? "active" : "inactive"}
+						onClick={() => props.onChange(i)}
+					/>
+				)}
+			</For>
+		</div>
+	);
+}
+
+export type BackLinkSlot = "root" | "icon" | "label";
+
+export type BackLinkProps = SlotProps<BackLinkSlot> & {
+	/** Render as a link. */
+	href?: string | undefined;
+	onClick?: ((e: MouseEvent) => void) | undefined;
+	children?: unknown;
+};
+
+/** Slots: `root` `icon` `label`. Renders `<a>` when `href` is set. */
+export function BackLink(input: BackLinkProps) {
+	const [props, rest, slot] = setup(
+		"BackLink",
+		input,
+		{},
+		["href", "onClick", "children"],
+		"root" as BackLinkSlot,
+	);
+	const content = (
+		<>
+			<span class={slot.class("icon")} aria-hidden="true">
+				<Icon name="arrow-left" size={14} />
+			</span>
+			<span class={slot.class("label")}>{props.children ?? "Back"}</span>
+		</>
+	);
+	if (props.href !== undefined) {
+		return (
+			<a
+				{...rest}
+				href={props.href}
+				class={slot.class("root", "a-back-link")}
+				style={slot.style("root")}
+				onClick={(e: MouseEvent) => props.onClick?.(e)}
+			>
+				{content}
+			</a>
+		);
+	}
+	return (
+		<button
+			{...rest}
+			type="button"
+			class={slot.class("root", "a-back-link")}
+			style={slot.style("root")}
+			onClick={(e: MouseEvent) => props.onClick?.(e)}
+		>
+			{content}
+		</button>
+	);
+}
+
+export type NextPrevSlot = "root" | "prev" | "next";
+
+export type NextPrevProps = SlotProps<NextPrevSlot> & {
+	onPrev?: (() => void) | undefined;
+	onNext?: (() => void) | undefined;
+	prevLabel?: string | undefined;
+	nextLabel?: string | undefined;
+	prevDisabled?: boolean | undefined;
+	nextDisabled?: boolean | undefined;
+};
+
+/** Slots: `root` `prev` `next`. */
+export function NextPrev(input: NextPrevProps) {
+	const [props, rest, slot] = setup(
+		"NextPrev",
+		input,
+		{},
+		["onPrev", "onNext", "prevLabel", "nextLabel", "prevDisabled", "nextDisabled"],
+		"root" as NextPrevSlot,
+	);
+	return (
+		<nav
+			aria-label="Previous and next"
+			{...rest}
+			class={slot.class("root", "a-nextprev")}
+			style={slot.style("root")}
+		>
+			<Button
+				size="sm"
+				variant="ghost"
+				class={slot.class("prev")}
+				disabled={props.prevDisabled || !props.onPrev}
+				onClick={() => props.onPrev?.()}
+			>
+				← {props.prevLabel ?? "Previous"}
+			</Button>
+			<Button
+				size="sm"
+				variant="ghost"
+				class={slot.class("next")}
+				disabled={props.nextDisabled || !props.onNext}
+				onClick={() => props.onNext?.()}
+			>
+				{props.nextLabel ?? "Next"} →
+			</Button>
+		</nav>
+	);
+}
+
+export type FileCardSlot = "root" | "icon" | "text" | "name" | "meta" | "remove";
+
+export type FileCardProps = SlotProps<FileCardSlot> & {
+	name: string;
+	meta?: string | undefined;
+	icon?: IconName | undefined;
+	onRemove?: (() => void) | undefined;
+};
+
+/** Slots: `root` `icon` `text` `name` `meta` `remove`. */
+export function FileCard(input: FileCardProps) {
+	const [props, rest, slot] = setup(
+		"FileCard",
+		input,
+		{},
+		["name", "meta", "icon", "onRemove"],
+		"root" as FileCardSlot,
+	);
+	return (
+		<div {...rest} class={slot.class("root", "a-file-card")} style={slot.style("root")}>
+			<span class={slot.class("icon", "a-file-card-icon")} aria-hidden="true">
+				<Icon name={props.icon ?? "file"} size={18} />
+			</span>
+			<span class={slot.class("text", "a-file-card-text")}>
+				<span class={slot.class("name", "a-file-card-name")}>{props.name}</span>
+				<Show when={props.meta}>
+					<span class={slot.class("meta", "a-file-card-meta")}>{props.meta}</span>
+				</Show>
+			</span>
+			<Show when={props.onRemove}>
+				<ActionIcon
+					class={slot.class("remove")}
+					label={`Remove ${props.name}`}
+					size="sm"
+					onClick={() => props.onRemove?.()}
+				>
+					<Icon name="x" size={14} />
+				</ActionIcon>
+			</Show>
+		</div>
+	);
+}
+
+export type VideoFrameSlot = "root" | "frame";
+
+export type VideoFrameProps = SlotProps<VideoFrameSlot> & {
+	src: string;
+	/** Accessible title of the embedded frame. */
+	title?: string | undefined;
+	ratio?: number | undefined;
+};
+
+/** Responsive iframe embed. Slots: `root` `frame`. */
+export function VideoFrame(input: VideoFrameProps) {
+	const [props, rest, slot] = setup(
+		"VideoFrame",
+		input,
+		{},
+		["src", "title", "ratio"],
+		"root" as VideoFrameSlot,
+	);
+	return (
+		<div
+			{...rest}
+			class={slot.class("root", "a-video")}
+			style={slot.style("root", { "aspect-ratio": String(props.ratio ?? 16 / 9) })}
+		>
+			<iframe
+				class={slot.class("frame", "a-video-frame")}
+				style={slot.style("frame")}
+				src={props.src}
+				title={props.title ?? "Video"}
+				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+				allowfullscreen
+			/>
+		</div>
+	);
+}
+
+export type SteppedProgressSlot = "root" | "segment";
+
+export type SteppedProgressProps = SlotProps<SteppedProgressSlot> & {
+	steps: number;
+	value: number;
+	/** Accessible name (default "Progress"). */
+	label?: string | undefined;
+};
+
+/** Slots: `root` `segment`. Segments expose `data-state="done|current|todo"`. */
+export function SteppedProgress(input: SteppedProgressProps) {
+	const [props, rest, slot] = setup(
+		"SteppedProgress",
+		input,
+		{},
+		["steps", "value", "label"],
+		"root" as SteppedProgressSlot,
+	);
+	const n = () => Math.max(1, Math.floor(props.steps) || 1);
+	const segments = () => Array.from({ length: n() }, (_, i) => i);
+	const state = (i: number) => {
+		if (i === props.value - 1) return "current";
+		return i < props.value ? "done" : "todo";
+	};
+	return (
+		<div
+			aria-label={props.label ?? "Progress"}
+			{...rest}
+			class={slot.class("root", "a-stepped")}
+			style={slot.style("root")}
+			role="progressbar"
+			aria-valuenow={props.value}
+			aria-valuemin={0}
+			aria-valuemax={n()}
+		>
+			<For each={segments()}>
+				{(i) => (
+					<span
+						class={slot.class(
+							"segment",
+							"a-stepped-seg",
+							i < props.value && "a-stepped-seg-done",
+							i === props.value - 1 && "a-stepped-seg-current",
+						)}
+						style={slot.style("segment")}
+						data-state={state(i)}
+					/>
+				)}
+			</For>
+		</div>
+	);
+}
+
+export type HeatmapSlot = "root" | "cell";
+
+export type HeatmapProps = SlotProps<HeatmapSlot> & {
+	/** Flat values, typically 7 columns (weeks × days). */
+	values: number[];
+	columns?: number | undefined;
+	/** Accessible summary (default "Activity heatmap"). */
+	label?: string | undefined;
+};
+
+const HEAT_FLOOR = 0.15;
+
+/** Slots: `root` `cell`. Cells expose `--a-heat` (0–1 intensity) for custom colour ramps. */
+export function Heatmap(input: HeatmapProps) {
+	const [props, rest, slot] = setup(
+		"Heatmap",
+		input,
+		{},
+		["values", "columns", "label"],
+		"root" as HeatmapSlot,
+	);
+	const cols = () => Math.max(1, props.columns ?? 7);
+	const safe = (v: number) => (Number.isFinite(v) && v > 0 ? v : 0);
+	const max = () => props.values.reduce((m, v) => Math.max(m, safe(v)), 1);
+	return (
+		<div
+			aria-label={props.label ?? "Activity heatmap"}
+			{...rest}
+			class={slot.class("root", "a-heatmap")}
+			style={slot.style("root", { "grid-template-columns": `repeat(${cols()}, 1fr)` })}
+			role="img"
+		>
+			<For each={props.values}>
+				{(v) => {
+					const intensity = () => safe(v) / max();
+					return (
+						<span
+							class={slot.class("cell", "a-heatmap-cell")}
+							style={slot.style("cell", {
+								opacity: String(HEAT_FLOOR + intensity() * (1 - HEAT_FLOOR)),
+								"--a-heat": String(intensity()),
+							})}
+							title={String(v)}
+						/>
+					);
+				}}
+			</For>
+		</div>
+	);
+}
+
+export type AngleSliderSlot = "root" | "svg" | "track" | "arm" | "knob" | "label";
+
+export type AngleSliderProps = SlotProps<AngleSliderSlot> & {
+	value: number;
+	onChange: (deg: number) => void;
+	size?: number | undefined;
+	/** Accessible name (default "Angle"). */
+	label?: string | undefined;
+	/** Degrees per arrow key press (default 5). */
+	step?: number | undefined;
+};
+
+const KNOB_RADIUS = 7;
+const TRACK_INSET = 8;
+
+/** Slots: `root` `svg` `track` `arm` `knob` `label`. */
+export function AngleSlider(input: AngleSliderProps) {
+	const [props, rest, slot] = setup(
+		"AngleSlider",
+		input,
+		{ size: 120, step: 5 },
+		["value", "onChange", "size", "label", "step"],
+		"root" as AngleSliderSlot,
+	);
+	const size = () => props.size ?? 120;
+	const r = () => size() / 2 - TRACK_INSET;
+	const center = () => size() / 2;
+	const rad = () => (((Number.isFinite(props.value) ? props.value : 0) - 90) * Math.PI) / 180;
+	const x = () => center() + r() * Math.cos(rad());
+	const y = () => center() + r() * Math.sin(rad());
+	const step = () => props.step ?? 5;
+
+	const setFromEvent = (e: PointerEvent) => {
+		const el = e.currentTarget as HTMLElement;
+		const rect = el.getBoundingClientRect();
+		const dx = e.clientX - (rect.left + rect.width / 2);
+		const dy = e.clientY - (rect.top + rect.height / 2);
+		let deg = (Math.atan2(dy, dx) * 180) / Math.PI + 90;
+		if (deg < 0) deg += 360;
+		props.onChange(Math.round(deg) % 360);
+	};
+
+	const onKeyDown = (e: KeyboardEvent) => {
+		const delta =
+			e.key === "ArrowRight" || e.key === "ArrowUp"
+				? step()
+				: e.key === "ArrowLeft" || e.key === "ArrowDown"
+					? -step()
+					: 0;
+		if (delta === 0) return;
+		e.preventDefault();
+		props.onChange((((props.value + delta) % 360) + 360) % 360);
+	};
+
+	return (
+		<div
+			aria-label={props.label ?? "Angle"}
+			{...rest}
+			class={slot.class("root", "a-angle")}
+			style={slot.style("root", { width: `${size()}px`, height: `${size()}px` })}
+			onPointerDown={(e: PointerEvent) => {
+				(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+				setFromEvent(e);
+			}}
+			onPointerMove={(e: PointerEvent) => {
+				if ((e.currentTarget as HTMLElement).hasPointerCapture(e.pointerId)) {
+					setFromEvent(e);
+				}
+			}}
+			role="slider"
+			aria-valuemin={0}
+			aria-valuemax={359}
+			aria-valuenow={props.value}
+			aria-valuetext={`${props.value} degrees`}
+			tabIndex={0}
+			onKeyDown={onKeyDown}
+		>
+			<svg
+				class={slot.class("svg")}
+				width={size()}
+				height={size()}
+				viewBox={`0 0 ${size()} ${size()}`}
+				aria-hidden="true"
+			>
+				<circle
+					class={slot.class("track", "a-angle-track")}
+					cx={center()}
+					cy={center()}
+					r={r()}
+					fill="none"
+				/>
+				<line
+					class={slot.class("arm", "a-angle-arm")}
+					x1={center()}
+					y1={center()}
+					x2={x()}
+					y2={y()}
+				/>
+				<circle class={slot.class("knob", "a-angle-knob")} cx={x()} cy={y()} r={KNOB_RADIUS} />
+			</svg>
+			<span class={slot.class("label", "a-angle-label")}>{props.value}°</span>
+		</div>
+	);
+}
+
+export type ProseProps = BaseProps & {
+	children?: unknown;
+};
+
+/** Long-form typography wrapper. Slots: `root`. */
+export function Prose(input: ProseProps) {
+	const [props, rest, slot] = setup("Prose", input, {}, ["children"]);
+	return (
+		<div {...rest} class={slot.class("root", "a-prose")} style={slot.style("root")}>
+			{props.children}
+		</div>
+	);
+}
+
+export type BleedProps = BaseProps & {
+	x?: string | undefined;
+	children?: unknown;
+};
+
+/** Negative horizontal margin to break out of padding. Slots: `root`. */
+export function Bleed(input: BleedProps) {
+	const [props, rest, slot] = setup("Bleed", input, {}, ["x", "children"]);
+	return (
+		<div
+			{...rest}
+			class={slot.class("root", "a-bleed")}
+			style={slot.style("root", {
+				"margin-left": props.x ?? "-1rem",
+				"margin-right": props.x ?? "-1rem",
+			})}
+		>
+			{props.children}
+		</div>
+	);
+}
+
+export type InsetProps = BaseProps & {
+	children?: unknown;
+};
+
+/** Slots: `root`. */
+export function Inset(input: InsetProps) {
+	const [props, rest, slot] = setup("Inset", input, {}, ["children"]);
+	return (
+		<div {...rest} class={slot.class("root", "a-inset")} style={slot.style("root")}>
+			{props.children}
+		</div>
+	);
+}
+
+export type KanbanColumnSlot = "root" | "header" | "title" | "count" | "body";
+
+export type KanbanColumnProps = SlotProps<KanbanColumnSlot> & {
+	title: string;
+	count?: number | undefined;
+	children?: unknown;
+};
+
+/** Slots: `root` `header` `title` `count` `body`. */
+export function KanbanColumn(input: KanbanColumnProps) {
+	const [props, rest, slot] = setup(
+		"KanbanColumn",
+		input,
+		{},
+		["title", "count", "children"],
+		"root" as KanbanColumnSlot,
+	);
+	return (
+		<section
+			aria-label={props.title}
+			{...rest}
+			class={slot.class("root", "a-kanban-col")}
+			style={slot.style("root")}
+		>
+			<header class={slot.class("header", "a-kanban-col-head")} style={slot.style("header")}>
+				<strong class={slot.class("title")}>{props.title}</strong>
+				<Show when={props.count != null}>
+					<span class={slot.class("count", "a-kanban-count")}>{props.count}</span>
+				</Show>
+			</header>
+			<div class={slot.class("body", "a-kanban-col-body")} style={slot.style("body")}>
+				{props.children}
+			</div>
+		</section>
+	);
+}
+
+export type KanbanCardSlot = "root" | "title" | "meta";
+
+export type KanbanCardProps = SlotProps<KanbanCardSlot> & {
+	title: string;
+	meta?: string | undefined;
+	onClick?: ((e: MouseEvent) => void) | undefined;
+};
+
+/** Slots: `root` `title` `meta`. */
+export function KanbanCard(input: KanbanCardProps) {
+	const [props, rest, slot] = setup(
+		"KanbanCard",
+		input,
+		{},
+		["title", "meta", "onClick"],
+		"root" as KanbanCardSlot,
+	);
+	return (
+		<button
+			{...rest}
+			type="button"
+			class={slot.class("root", "a-kanban-card")}
+			style={slot.style("root")}
+			onClick={(e: MouseEvent) => props.onClick?.(e)}
+		>
+			<span class={slot.class("title", "a-kanban-card-title")}>{props.title}</span>
+			<Show when={props.meta}>
+				<span class={slot.class("meta", "a-kanban-card-meta")}>{props.meta}</span>
+			</Show>
+		</button>
+	);
+}
+
+export type KanbanBoardProps = BaseProps & {
+	children?: unknown;
+};
+
+/** Slots: `root`. */
+export function KanbanBoard(input: KanbanBoardProps) {
+	const [props, rest, slot] = setup("KanbanBoard", input, {}, ["children"]);
+	return (
+		<div {...rest} class={slot.class("root", "a-kanban")} style={slot.style("root")}>
+			{props.children}
+		</div>
+	);
+}
