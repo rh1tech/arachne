@@ -15,12 +15,12 @@ Picture or initials.
 
 **Slots:** `root` `fallback` `image`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `alt` | `string` |  |  |
-| `name` | `string` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
-| `src` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `alt` | `string` |  |  | Image alt text (default: `name`). |
+| `name` | `string` |  | `"Avatar"` | Person's name: used for initials and as the accessible name. |
+| `size` | `"sm" \| "md" \| "lg"` |  | `"md"` | Avatar size. |
+| `src` | `string` |  |  | Image URL; falls back to initials from `name` when missing or broken. |
 
 ```tsx
 <Avatar name="Ada Lovelace" />
@@ -32,11 +32,11 @@ Overlapping avatars with a "+N" overflow chip.
 
 **Slots:** `root` `avatar` `more`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `names` | `string[]` | yes |  |
-| `max` | `number` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `names` | `string[]` | yes |  | People to show (initials come from each name). |
+| `max` | `number` |  | `4` | Avatars shown before collapsing the rest into a `+N` counter. |
+| `size` | `"sm" \| "md" \| "lg"` |  | `"md"` | Avatar size. |
 
 ```tsx
 <AvatarGroup
@@ -51,12 +51,12 @@ Avatar with a presence dot.
 
 **Slots:** `root` `avatar` `dot`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `name` | `string` | yes |  |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
-| `src` | `string` |  |  |
-| `status` | `"accent" \| "warning" \| "success" \| "danger" \| "neutral"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `name` | `string` | yes |  | Person's name (initials and accessible name). |
+| `size` | `"sm" \| "md" \| "lg"` |  |  | Avatar size. |
+| `src` | `string` |  |  | Avatar image URL. |
+| `status` | `"accent" \| "warning" \| "success" \| "danger" \| "neutral"` |  | `"success"` | Colour of the presence dot (e.g. `success` for online). |
 
 ```tsx
 <PresenceAvatar name="Ada Lovelace" status="success" />
@@ -74,13 +74,13 @@ Button showing a user's avatar, name and email.
 
 **Slots:** `root` `avatar` `chevron` `email` `name` `text`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `name` | `string` | yes |  |
-| `email` | `string` |  |  |
-| `end` | `content` |  | Trailing content (default chevron); `null` hides it. |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
-| `src` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `name` | `string` | yes |  | User's name (also used for the avatar initials). |
+| `email` | `string` |  |  | Secondary line under the name. |
+| `end` | `content` |  |  | Trailing content (default chevron); `null` hides it. |
+| `onClick` | `(e: MouseEvent) => void` |  |  | Called when the button is pressed, e.g. to open an account menu. |
+| `src` | `string` |  |  | Avatar image URL. |
 
 ```tsx
 <UserButton name="Ada Lovelace" email="ada@example.com" onClick={() => {}} />
@@ -92,10 +92,18 @@ Workspace switcher button.
 
 **Slots:** `root` `avatar` `chevron` `meta` `name` `plan`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `org` | `OrgOption` | yes |  | The current organisation. |
+| `onClick` | `() => void` |  |  | Called when pressed, e.g. to open an organisation menu. |
+
+**`OrgOption`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `org` | `OrgOption` | yes |  |
-| `onClick` | `() => void` |  |  |
+| `id` | `string` | yes | Organisation id. |
+| `name` | `string` | yes | Organisation name. |
+| `plan` | `string` |  | Plan shown under the name. |
 
 ```tsx
 <OrgSwitcher
@@ -116,14 +124,14 @@ Profile header with cover, avatar, name, handle, bio and actions.
 
 **Slots:** `root` `actions` `avatar` `bio` `cover` `handle` `main` `meta` `name`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `name` | `string` | yes |  |
-| `actions` | `content` |  |  |
-| `bio` | `string` |  |  |
-| `cover` | `string` |  |  |
-| `handle` | `string` |  |  |
-| `src` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `name` | `string` | yes |  | Display name. |
+| `actions` | `content` |  |  | Buttons at the end, e.g. Follow. |
+| `bio` | `string` |  |  | Short bio. |
+| `cover` | `string` |  |  | Cover image URL (a gradient when unset). |
+| `handle` | `string` |  |  | Username, shown with a leading `@`. |
+| `src` | `string` |  |  | Avatar image URL. |
 
 ```tsx
 <ProfileHeader
@@ -144,13 +152,13 @@ Team member row with avatar, email and remove action.
 
 **Slots:** `root` `avatar` `email` `meta` `name` `remove`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `name` | `string` | yes |  |
-| `email` | `string` |  |  |
-| `onRemove` | `() => void` |  |  |
-| `role` | `string` |  | Team role shown as a {@link RoleBadge} (not the ARIA role). |
-| `src` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `name` | `string` | yes |  | Member name. |
+| `email` | `string` |  |  | Email under the name. |
+| `onRemove` | `() => void` |  |  | Shows a remove button; called when it is pressed. |
+| `role` | `string` |  |  | Team role shown as a {@link RoleBadge} (not the ARIA role). |
+| `src` | `string` |  |  | Avatar image URL. |
 
 ```tsx
 function Example() {
@@ -183,14 +191,14 @@ Pending invitation with resend and revoke actions.
 
 **Slots:** `root` `actions` `email` `meta`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `email` | `string` | yes |  |
-| `onResend` | `() => void` |  |  |
-| `onRevoke` | `() => void` |  |  |
-| `resendLabel` | `string` |  |  |
-| `revokeLabel` | `string` |  |  |
-| `role` | `string` |  | Team role shown as a {@link RoleBadge} (not the ARIA role). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `email` | `string` | yes |  | Invited address. |
+| `onResend` | `() => void` |  |  | Shows a resend button; called when it is pressed. |
+| `onRevoke` | `() => void` |  |  | Shows a revoke button; called when it is pressed. |
+| `resendLabel` | `string` |  | `"Resend"` | Resend button text. |
+| `revokeLabel` | `string` |  | `"Revoke"` | Revoke button text. |
+| `role` | `string` |  |  | Team role shown as a {@link RoleBadge} (not the ARIA role). |
 
 ```tsx
 function Example() {
@@ -220,13 +228,13 @@ Discussion entry.
 
 **Slots:** `root` `actions` `author` `avatar` `body` `content` `head` `meta`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `author` | `string` | yes |  |
-| `actions` | `content` |  |  |
-| `avatar` | `string` |  |  |
-| `children` | `content` |  |  |
-| `meta` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `author` | `string` | yes |  | Author name. |
+| `actions` | `content` |  |  | Buttons under the comment, e.g. Reply. |
+| `avatar` | `string` |  |  | Avatar image URL (initials from `author` when unset). |
+| `children` | `content` |  |  | Comment text or content. |
+| `meta` | `string` |  |  | Small line next to the author, e.g. the time. |
 
 ```tsx
 <Comment author="Ada Lovelace" meta="2h ago">
@@ -240,12 +248,12 @@ Chat message bubble, aligned by sender.
 
 **Slots:** `root` `author` `body` `meta`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `from` | `"me" \| "them"` | yes |  |
-| `author` | `string` |  |  |
-| `children` | `content` |  |  |
-| `meta` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `from` | `"me" \| "them"` | yes |  | Who sent it: `me` (aligned right, accent) or `them`. |
+| `author` | `string` |  |  | Sender name above the bubble. |
+| `children` | `content` |  |  | Message content. |
+| `meta` | `string` |  |  | Small line under the bubble, e.g. the time. |
 
 ```tsx
 <Stack gap="0.5rem">
@@ -262,10 +270,10 @@ Chat message bubble, aligned by sender.
 
 Inline
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `name` | `string` | yes |  |
-| `onClick` | `() => void` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `name` | `string` | yes |  | Username (shown with a leading `@`). |
+| `onClick` | `() => void` |  |  | Makes the mention a button, e.g. to open the profile. |
 
 ```tsx
 <Text>
@@ -279,10 +287,18 @@ Emoji reaction toggles.
 
 **Slots:** `root` `reaction`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `reactions` | `Reaction[]` | yes |  | Reactions, in order. |
+| `onToggle` | `(emoji: string) => void` |  |  | Called with the emoji the user toggles; update counts yourself. |
+
+**`Reaction`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `reactions` | `Reaction[]` | yes |  |
-| `onToggle` | `(emoji: string) => void` |  |  |
+| `emoji` | `string` | yes | The reaction emoji. |
+| `count` | `number` | yes | Number of people who reacted. |
+| `active` | `boolean` |  | Whether the current user reacted (pressed state). |
 
 ```tsx
 function Example() {
@@ -313,13 +329,19 @@ Activity feed entry with icon, title, meta and content.
 
 **Slots:** `root` `body` `content` `icon` `meta` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `title` | `string` | yes |  |
-| `children` | `content` |  |  |
-| `icon` | `IconName` |  | Built-in icon name, or pass any node via `iconNode`. |
-| `iconNode` | `content` |  |  |
-| `meta` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `title` | `string` | yes |  | What happened. |
+| `children` | `content` |  |  | Extra detail below the title. |
+| `icon` | `IconName` |  | `"bell"` | Built-in icon name, or pass any node via `iconNode`. |
+| `iconNode` | `content` |  |  | Custom leading content instead of `icon`. |
+| `meta` | `content` |  |  | Small line, e.g. the time. |
+
+**`IconName`** — Material Design Icons path names used by `<Icon />`.
+
+```ts
+type IconName = | "check" | "x" | "plus" | "minus" | "search" | "user" | "users" | "settings" | "menu" | "home" | "heart" | "star" | "bell" | "mail" | "calendar" | "clock" | "edit" | "trash" | "copy" | "download" | "upload" | "link" | "external" | "info" | "warning" | "error" | "success" | "chevron-down" | "chevron-up" | "chevron-left" | "chevron-right" | "arrow-left" | "arrow-right" | "eye" | "eye-off" | "eye-outline" | "lock" | "unlock" | "filter" | "more" | "close" | "spinner" | "sun" | "moon" | "play" | "pause" | "refresh" | "share" | "image" | "file" | "folder" | "zap" | "phone" | "git" | "code";
+```
 
 ```tsx
 <ActivityItem icon="git" title="Ada pushed 3 commits to main" meta="12 minutes ago" />
@@ -331,14 +353,20 @@ Notification row.
 
 **Slots:** `root` `body` `icon` `text` `time` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `title` | `string` | yes |  |
-| `body` | `content` |  |  |
-| `icon` | `IconName` |  |  |
-| `onClick` | `() => void` |  |  |
-| `time` | `content` |  |  |
-| `unread` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `title` | `string` | yes |  | What the notification is about. |
+| `body` | `content` |  |  | Secondary text. |
+| `icon` | `IconName` |  | `"bell"` | Leading icon. |
+| `onClick` | `() => void` |  |  | Makes the item a button, e.g. to open it. |
+| `time` | `content` |  |  | When it arrived. |
+| `unread` | `boolean` |  |  | Show the unread dot and bold title. |
+
+**`IconName`** — Material Design Icons path names used by `<Icon />`.
+
+```ts
+type IconName = | "check" | "x" | "plus" | "minus" | "search" | "user" | "users" | "settings" | "menu" | "home" | "heart" | "star" | "bell" | "mail" | "calendar" | "clock" | "edit" | "trash" | "copy" | "download" | "upload" | "link" | "external" | "info" | "warning" | "error" | "success" | "chevron-down" | "chevron-up" | "chevron-left" | "chevron-right" | "arrow-left" | "arrow-right" | "eye" | "eye-off" | "eye-outline" | "lock" | "unlock" | "filter" | "more" | "close" | "spinner" | "sun" | "moon" | "play" | "pause" | "refresh" | "share" | "image" | "file" | "folder" | "zap" | "phone" | "git" | "code";
+```
 
 ```tsx
 <InboxItem
@@ -363,12 +391,12 @@ Customer quote.
 
 **Slots:** `root` `author` `avatar` `name` `quote` `role`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `author` | `string` | yes |  |
-| `quote` | `content` | yes |  |
-| `avatar` | `string` |  |  |
-| `role` | `string` |  | Author's job title (consumed here; not forwarded as an ARIA role). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `author` | `string` | yes |  | Who said it. |
+| `quote` | `content` | yes |  | The testimonial text. |
+| `avatar` | `string` |  |  | Author avatar URL. |
+| `role` | `string` |  |  | Author's job title (consumed here; not forwarded as an ARIA role). |
 
 ```tsx
 <Testimonial
@@ -384,13 +412,19 @@ Star-rated review.
 
 **Slots:** `root` `author` `body` `star` `stars` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `rating` | `number` | yes |  |
-| `author` | `content` |  |  |
-| `children` | `content` |  |  |
-| `order` | `HeadingLevel` |  | Heading level of the title, to fit the page outline. Default 4. |
-| `title` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `rating` | `number` | yes |  | Stars out of 5. |
+| `author` | `content` |  |  | Reviewer name. |
+| `children` | `content` |  |  | Review text. |
+| `order` | `HeadingLevel` |  | `4` | Heading level of the title, to fit the page outline. Default 4. |
+| `title` | `string` |  |  | Review headline. |
+
+**`HeadingLevel`**
+
+```ts
+type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
+```
 
 ```tsx
 <ReviewCard order={3} rating={4} title="Solid mug" author="Linus T.">
@@ -406,9 +440,24 @@ Row of icon links.
 
 **Slots:** `root` `link`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `SocialLink[]` | yes |  | Links, in order. |
+
+**`SocialLink`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `items` | `SocialLink[]` | yes |  |
+| `icon` | `IconName` | yes | Network icon. |
+| `label` | `string` | yes | Network name (accessible name). |
+| `href` | `string` |  | Renders a real link (opens in a new tab) when set. |
+| `onClick` | `() => void` |  | Click handler (renders a button when there is no `href`). |
+
+**`IconName`** — Material Design Icons path names used by `<Icon />`.
+
+```ts
+type IconName = | "check" | "x" | "plus" | "minus" | "search" | "user" | "users" | "settings" | "menu" | "home" | "heart" | "star" | "bell" | "mail" | "calendar" | "clock" | "edit" | "trash" | "copy" | "download" | "upload" | "link" | "external" | "info" | "warning" | "error" | "success" | "chevron-down" | "chevron-up" | "chevron-left" | "chevron-right" | "arrow-left" | "arrow-right" | "eye" | "eye-off" | "eye-outline" | "lock" | "unlock" | "filter" | "more" | "close" | "spinner" | "sun" | "moon" | "play" | "pause" | "refresh" | "share" | "image" | "file" | "folder" | "zap" | "phone" | "git" | "code";
+```
 
 ```tsx
 <SocialLinks

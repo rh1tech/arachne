@@ -4,13 +4,16 @@ import { Button } from "./button.tsx";
 import { type SlotProps, setup } from "./system.ts";
 
 export type DescriptionItem = {
+	/** Term (rendered as `<dt>`). */
 	label: string;
+	/** Description text or content (rendered as `<dd>`). */
 	value: unknown;
 };
 
 export type DescriptionListSlot = "root" | "row" | "label" | "value";
 
 export type DescriptionListProps = SlotProps<DescriptionListSlot> & {
+	/** Label / value pairs, in order. */
 	items: DescriptionItem[];
 };
 
@@ -47,8 +50,11 @@ export function DescriptionList(input: DescriptionListProps) {
 export type StatSlot = "root" | "label" | "value" | "hint";
 
 export type StatProps = SlotProps<StatSlot> & {
+	/** What the number measures. */
 	label: string;
+	/** The number or content to feature. */
 	value: unknown;
+	/** Small context line, e.g. "vs. last week". */
 	hint?: string | undefined;
 };
 
@@ -82,10 +88,15 @@ export function Stat(input: StatProps) {
 }
 
 export type CopyButtonProps = SlotProps<"root"> & {
+	/** Text written to the clipboard. */
 	value: string;
+	/** Button text before copying. */
 	label?: string | undefined;
+	/** Button text shown briefly after a successful copy. */
 	copiedLabel?: string | undefined;
+	/** Button style (as on `Button`). */
 	variant?: "ghost" | "default" | "soft" | "outline" | "solid" | undefined;
+	/** Button size. */
 	size?: "xs" | "sm" | "md" | "lg" | undefined;
 };
 

@@ -15,21 +15,27 @@ Button (or link when `href` is set).
 
 **Slots:** `root` `end` `label` `spinner` `start`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `disabled` | `boolean` |  |  |
-| `end` | `content` |  |  |
-| `fullWidth` | `boolean` |  |  |
-| `href` | `string` |  | Render as a link. |
-| `iconOnly` | `boolean` |  | Square icon-only button; pass `aria-label`. |
-| `loading` | `boolean` |  | Keeps focus and width; blocks clicks and announces `aria-busy`. |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
-| `size` | `"sm" \| "md" \| "lg" \| "xs"` |  |  |
-| `start` | `content` |  | Leading / trailing content (icons, badges, kbd). |
-| `target` | `string` |  |  |
-| `type` | `"button" \| "submit" \| "reset"` |  |  |
-| `variant` | `"default" \| "link" \| "soft" \| "warning" \| "success" \| "danger" \| "solid" \| "outline" \| "ghost"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Button label. |
+| `disabled` | `boolean` |  |  | Disables the button (also sets `data-disabled`). |
+| `end` | `content` |  |  | Trailing content after the label (icon, badge, `Kbd`). |
+| `fullWidth` | `boolean` |  |  | Stretch to the container's width. |
+| `href` | `string` |  |  | Render as a link. |
+| `iconOnly` | `boolean` |  |  | Square icon-only button; pass `aria-label`. |
+| `loading` | `boolean` |  |  | Keeps focus and width; blocks clicks and announces `aria-busy`. |
+| `onClick` | `(e: MouseEvent) => void` |  |  | Called on click (not while `disabled` or `loading`). |
+| `size` | `"sm" \| "md" \| "lg" \| "xs"` |  | `"md"` | Height and padding. |
+| `start` | `content` |  |  | Leading / trailing content (icons, badges, kbd). |
+| `target` | `string` |  |  | Link target when `href` is set; `_blank` also adds `rel="noopener noreferrer"`. |
+| `type` | `"button" \| "submit" \| "reset"` |  | `"button"` | Native button type; `submit` submits the enclosing form. |
+| `variant` | `"default" \| "link" \| "soft" \| "warning" \| "success" \| "danger" \| "solid" \| "outline" \| "ghost"` |  | `"solid"` | Visual style: `solid` (primary), `default`, `soft`, `outline`, `ghost`, `link`, or a tone (`danger`, `warning`, `success`). |
+
+**`ButtonVariant`**
+
+```ts
+type ButtonVariant = | "solid" | "default" | "soft" | "outline" | "ghost" | "link" | "danger" | "warning" | "success" | undefined;
+```
 
 ```tsx
 <Button onClick={() => {}}>
@@ -41,15 +47,15 @@ Button (or link when `href` is set).
 
 Button that shows a spinner next to its label while busy.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `disabled` | `boolean` |  |  |
-| `loading` | `boolean` |  |  |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
-| `size` | `"sm" \| "md"` |  |  |
-| `type` | `"button" \| "submit" \| "reset"` |  |  |
-| `variant` | `"danger" \| "solid" \| "ghost"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Button label. |
+| `disabled` | `boolean` |  |  | Disables the button. |
+| `loading` | `boolean` |  |  | Show a spinner and block clicks (width stays the same). |
+| `onClick` | `(e: MouseEvent) => void` |  |  | Called when pressed (not while `loading`). |
+| `size` | `"sm" \| "md"` |  |  | Button size. |
+| `type` | `"button" \| "submit" \| "reset"` |  |  | Native button type. |
+| `variant` | `"danger" \| "solid" \| "ghost"` |  |  | Button style. |
 
 ```tsx
 <LoadingButton loading>
@@ -61,13 +67,13 @@ Button that shows a spinner next to its label while busy.
 
 Two-step confirm control (click → confirm).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `content` | yes |  |
-| `onConfirm` | `() => void` | yes |  |
-| `confirmLabel` | `content` |  |  |
-| `size` | `"sm" \| "md"` |  |  |
-| `variant` | `"danger" \| "solid" \| "ghost"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `content` | yes |  | Button label before confirming. |
+| `onConfirm` | `() => void` | yes |  | Called on the second click; the first click only arms the button. |
+| `confirmLabel` | `content` |  | `"Confirm?"` | Label on the second, confirming click. |
+| `size` | `"sm" \| "md"` |  |  | Button size. |
+| `variant` | `"danger" \| "solid" \| "ghost"` |  |  | Button style. |
 
 ```tsx
 <ConfirmButton label="Delete project" onConfirm={() => {}} />
@@ -77,12 +83,12 @@ Two-step confirm control (click → confirm).
 
 Button with browser chrome reset — bring your own look.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `disabled` | `boolean` |  |  |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
-| `type` | `"button" \| "submit" \| "reset"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Button content (no built-in styling). |
+| `disabled` | `boolean` |  |  | Disables the button. |
+| `onClick` | `(e: MouseEvent) => void` |  |  | Called when the button is pressed. |
+| `type` | `"button" \| "submit" \| "reset"` |  | `"button"` | Native button type. |
 
 ```tsx
 <UnstyledButton onClick={() => {}}>
@@ -96,11 +102,11 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Bootstrap-style button group.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `attached` | `boolean` |  |  |
-| `children` | `content` |  |  |
-| `label` | `string` |  | Accessible name for the group. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `attached` | `boolean` |  |  | Join the buttons edge to edge; otherwise they sit apart with a gap. |
+| `children` | `content` |  |  | The `Button`s. |
+| `label` | `string` |  |  | Accessible name for the group. |
 
 ```tsx
 <ButtonGroup label="Text alignment">
@@ -124,15 +130,15 @@ Primary action + caret menu.
 
 **Slots:** `root` `caret` `main` `menu`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `content` | yes |  |
-| `menu` | `{ label: string; onSelect: () => void; danger?: boolean; }[]` | yes |  |
-| `caretLabel` | `string` |  | Accessible name for the caret (default "More actions"). |
-| `disabled` | `boolean` |  |  |
-| `onClick` | `() => void` |  |  |
-| `size` | `"sm" \| "md"` |  |  |
-| `variant` | `"danger" \| "solid" \| "ghost"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `content` | yes |  | Main button label. |
+| `menu` | `{ label: string; onSelect: () => void; danger?: boolean; }[]` | yes |  | Alternative actions in the caret menu: `label`, `onSelect`, optional `danger`. |
+| `caretLabel` | `string` |  | `"More actions"` | Accessible name for the caret (default "More actions"). |
+| `disabled` | `boolean` |  |  | Disables both halves. |
+| `onClick` | `() => void` |  |  | Called when the main button is pressed. |
+| `size` | `"sm" \| "md"` |  |  | Button size. |
+| `variant` | `"danger" \| "solid" \| "ghost"` |  |  | Button style. |
 
 ```tsx
 function Example() {
@@ -166,14 +172,14 @@ Compact buttons with just an icon.
 
 Icon-only button (`label` is its accessible name).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `string` | yes |  |
-| `children` | `content` |  |  |
-| `disabled` | `boolean` |  |  |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
-| `variant` | `"outline" \| "subtle" \| "filled"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `string` | yes |  | Accessible name (required: the button has no visible text). |
+| `children` | `content` |  |  | The icon. |
+| `disabled` | `boolean` |  |  | Disables the button. |
+| `onClick` | `(e: MouseEvent) => void` |  |  | Called when the button is pressed. |
+| `size` | `"sm" \| "md" \| "lg"` |  | `"md"` | Button size. |
+| `variant` | `"outline" \| "subtle" \| "filled"` |  | `"subtle"` | Button style. |
 
 ```tsx
 <ActionIcon label="Edit project" variant="subtle" onClick={() => {}}>
@@ -185,11 +191,11 @@ Icon-only button (`label` is its accessible name).
 
 Dismiss control (×).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `string` |  |  |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
-| `size` | `"sm" \| "md"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `string` |  | `"Close"` | Accessible name of the button. |
+| `onClick` | `(e: MouseEvent) => void` |  |  | Called when the button is clicked. |
+| `size` | `"sm" \| "md"` |  | `"md"` | Button size. |
 
 ```tsx
 <CloseButton onClick={() => {}} />
@@ -201,13 +207,19 @@ Pinned primary action. `children` replaces the icon.
 
 **Slots:** `root` `icon`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `string` | yes |  |
-| `children` | `content` |  |  |
-| `icon` | `IconName` |  |  |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
-| `position` | `"bottom-left" \| "bottom-right"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `string` | yes |  | Accessible name (and tooltip) of the button. |
+| `children` | `content` |  |  | Custom content instead of `icon`. |
+| `icon` | `IconName` |  | `"plus"` | Icon shown in the button. |
+| `onClick` | `(e: MouseEvent) => void` |  |  | Called when the button is pressed. |
+| `position` | `"bottom-left" \| "bottom-right"` |  | `"bottom-right"` | Viewport corner to float in. |
+
+**`IconName`** — Material Design Icons path names used by `<Icon />`.
+
+```ts
+type IconName = | "check" | "x" | "plus" | "minus" | "search" | "user" | "users" | "settings" | "menu" | "home" | "heart" | "star" | "bell" | "mail" | "calendar" | "clock" | "edit" | "trash" | "copy" | "download" | "upload" | "link" | "external" | "info" | "warning" | "error" | "success" | "chevron-down" | "chevron-up" | "chevron-left" | "chevron-right" | "arrow-left" | "arrow-right" | "eye" | "eye-off" | "eye-outline" | "lock" | "unlock" | "filter" | "more" | "close" | "spinner" | "sun" | "moon" | "play" | "pause" | "refresh" | "share" | "image" | "file" | "folder" | "zap" | "phone" | "git" | "code";
+```
 
 ```tsx
 <FloatingActionButton
@@ -229,13 +241,13 @@ Copies `value` to the clipboard. Renders a {@link Button}; `data-copied` while c
 
 **Slots:** `root`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `value` | `string` | yes |  |
-| `copiedLabel` | `string` |  |  |
-| `label` | `string` |  |  |
-| `size` | `"sm" \| "md" \| "lg" \| "xs"` |  |  |
-| `variant` | `"default" \| "soft" \| "solid" \| "outline" \| "ghost"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `string` | yes |  | Text written to the clipboard. |
+| `copiedLabel` | `string` |  | `"Copied"` | Button text shown briefly after a successful copy. |
+| `label` | `string` |  | `"Copy"` | Button text before copying. |
+| `size` | `"sm" \| "md" \| "lg" \| "xs"` |  | `"sm"` | Button size. |
+| `variant` | `"default" \| "soft" \| "solid" \| "outline" \| "ghost"` |  | `"ghost"` | Button style (as on `Button`). |
 
 ```tsx
 <Group gap="0.5rem">
@@ -250,10 +262,10 @@ Monospace id with a copy button.
 
 **Slots:** `root` `button` `label` `value`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `value` | `string` | yes |  |
-| `label` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `string` | yes |  | Id shown and copied. |
+| `label` | `content` |  |  | Label before the id. |
 
 ```tsx
 <CopyId value="prj_8f3k29dz" />
@@ -263,16 +275,16 @@ Monospace id with a copy button.
 
 _No description._
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `copiedLabel` | `content` |  | Label shown after the link was copied (fallback path). Default "Link copied". |
-| `label` | `content` |  |  |
-| `onClick` | `() => boolean \| void` |  | Called after sharing or copying; return `false` from `onClick` to handle sharing yourself. |
-| `onShared` | `(method: "copy" \| "share") => void` |  |  |
-| `size` | `"sm" \| "md"` |  |  |
-| `text` | `string` |  |  |
-| `title` | `string` |  |  |
-| `url` | `string` |  | Link to share (default: the current page URL). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `copiedLabel` | `content` |  | `"Link copied"` | Label shown after the link was copied (fallback path). Default "Link copied". |
+| `label` | `content` |  | `"Share"` | Button label. |
+| `onClick` | `() => boolean \| void` |  |  | Called after sharing or copying; return `false` from `onClick` to handle sharing yourself. |
+| `onShared` | `(method: "copy" \| "share") => void` |  |  | Called after sharing, with how: the native sheet or a copied link. |
+| `size` | `"sm" \| "md"` |  |  | Button size. |
+| `text` | `string` |  |  | Text passed to the share sheet. |
+| `title` | `string` |  |  | Title passed to the share sheet. |
+| `url` | `string` |  |  | Link to share (default: the current page URL). |
 
 ```tsx
 <ShareButton url="https://arachne.dev/ui" title="Arachne UI" />
@@ -288,11 +300,11 @@ Groups of related actions.
 
 WAI-ARIA toolbar for page-level actions: one Tab stop, arrow keys (and Home / End) move focus between its controls.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `label` | `string` |  | Accessible name for the toolbar. |
-| `orientation` | `"horizontal" \| "vertical"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Toolbar buttons (one Tab stop; arrows move between them). |
+| `label` | `string` |  |  | Accessible name for the toolbar. |
+| `orientation` | `"horizontal" \| "vertical"` |  | `"horizontal"` | Layout, and which arrow keys move between buttons. |
 
 ```tsx
 <CommandBar label="Selection actions">
@@ -312,10 +324,10 @@ WAI-ARIA toolbar for page-level actions: one Tab stop, arrow keys (and Home / En
 
 Floating toolbar for contextual actions (e.g. over a selection): a WAI-ARIA toolbar with one Tab stop and arrow-key focus.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `label` | `string` |  | Accessible name for the toolbar. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Toolbar buttons. |
+| `label` | `string` |  |  | Accessible name for the toolbar. |
 
 ```tsx
 <FloatingToolbar label="Text formatting">
@@ -337,12 +349,12 @@ Selection action bar.
 
 **Slots:** `root` `actions` `clear` `count`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `count` | `number` | yes |  |
-| `children` | `content` |  |  |
-| `countLabel` | `(count: number) => unknown` |  | Custom count text (default `N selected`). |
-| `onClear` | `() => void` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `count` | `number` | yes |  | Number of selected items. |
+| `children` | `content` |  |  | Bulk actions for the selection. |
+| `countLabel` | `(count: number) => unknown` |  |  | Custom count text (default `N selected`). |
+| `onClear` | `() => void` |  |  | Shows a clear-selection button; called when it is pressed. |
 
 ```tsx
 function Example() {

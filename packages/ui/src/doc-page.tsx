@@ -8,9 +8,11 @@ import { type SlotProps, setup } from "./system.ts";
 export type DocPageSlot = "root" | "head" | "title" | "description" | "body";
 
 export type DocPageProps = SlotProps<DocPageSlot> & {
+	/** Page title (`<h1>`). */
 	title: string;
 	/** Text or inline content (e.g. with `<Code>` spans). */
 	description?: unknown;
+	/** Page body: `DocExample`s and other content. */
 	children?: unknown;
 };
 
@@ -54,7 +56,9 @@ export type DocExampleProps = SlotProps<DocExampleSlot> & {
 	description?: unknown;
 	/** Source shown under the live preview. */
 	code: string;
+	/** Language for highlighting the code. */
 	language?: string | undefined;
+	/** The live preview. */
 	children?: unknown;
 };
 

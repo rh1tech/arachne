@@ -9,9 +9,13 @@ import { type BaseProps, type SlotProps, setup } from "./system.ts";
 import { ActionIcon } from "./widgets.tsx";
 
 export type UnstyledButtonProps = BaseProps & {
+	/** Native button type. */
 	type?: "button" | "submit" | "reset" | undefined;
+	/** Disables the button. */
 	disabled?: boolean | undefined;
+	/** Called when the button is pressed. */
 	onClick?: ((e: MouseEvent) => void) | undefined;
+	/** Button content (no built-in styling). */
 	children?: unknown;
 };
 
@@ -38,9 +42,11 @@ export function UnstyledButton(input: UnstyledButtonProps) {
 }
 
 export type ButtonGroupProps = BaseProps & {
+	/** Join the buttons edge to edge; otherwise they sit apart with a gap. */
 	attached?: boolean | undefined;
 	/** Accessible name for the group. */
 	label?: string | undefined;
+	/** The `Button`s. */
 	children?: unknown;
 };
 
@@ -65,11 +71,17 @@ export function ButtonGroup(input: ButtonGroupProps) {
 export type SplitButtonSlot = "root" | "main" | "caret" | "menu";
 
 export type SplitButtonProps = SlotProps<SplitButtonSlot> & {
+	/** Main button label. */
 	label: unknown;
+	/** Alternative actions in the caret menu: `label`, `onSelect`, optional `danger`. */
 	menu: Array<{ label: string; onSelect: () => void; danger?: boolean | undefined }>;
+	/** Button style. */
 	variant?: "solid" | "ghost" | "danger" | undefined;
+	/** Button size. */
 	size?: "sm" | "md" | undefined;
+	/** Disables both halves. */
 	disabled?: boolean | undefined;
+	/** Called when the main button is pressed. */
 	onClick?: (() => void) | undefined;
 	/** Accessible name for the caret (default "More actions"). */
 	caretLabel?: string | undefined;
@@ -127,17 +139,24 @@ export function SplitButton(input: SplitButtonProps) {
 }
 
 export type ToggleItem = {
+	/** Option id, passed to `onChange` and matched against `value`. */
 	id: string;
+	/** Option text or content. */
 	label: unknown;
+	/** Shown but can't be toggled. */
 	disabled?: boolean | undefined;
 };
 
 export type ToggleGroupSlot = "root" | "item";
 
 export type ToggleGroupProps = SlotProps<ToggleGroupSlot> & {
+	/** Pressed id (single), ids (`multiple`), or `null` for none. */
 	value: string | string[] | null;
+	/** The options, in order. */
 	items: ToggleItem[];
+	/** Allow several options pressed at once (`value` is an array). */
 	multiple?: boolean | undefined;
+	/** Called with the new pressed id(s) (`null` when the pressed single option is released). */
 	onChange: (value: string | string[] | null) => void;
 	/** Accessible name for the group. */
 	label?: string | undefined;
@@ -198,8 +217,11 @@ export function ToggleGroup(input: ToggleGroupProps) {
 export type AvatarGroupSlot = "root" | "avatar" | "more";
 
 export type AvatarGroupProps = SlotProps<AvatarGroupSlot> & {
+	/** People to show (initials come from each name). */
 	names: string[];
+	/** Avatars shown before collapsing the rest into a `+N` counter. */
 	max?: number | undefined;
+	/** Avatar size. */
 	size?: "sm" | "md" | "lg" | undefined;
 };
 
@@ -237,9 +259,13 @@ export function AvatarGroup(input: AvatarGroupProps) {
 export type NotificationSlot = "root" | "body" | "title" | "content" | "close";
 
 export type NotificationProps = SlotProps<NotificationSlot> & {
+	/** Bold first line. */
 	title?: string | undefined;
+	/** Colour and icon. */
 	tone?: AlertTone | undefined;
+	/** Shows a close button; called when it is pressed. */
 	onClose?: (() => void) | undefined;
+	/** Notification text. */
 	children?: unknown;
 };
 
@@ -284,10 +310,15 @@ export function Notification(input: NotificationProps) {
 export type FloatingActionButtonSlot = "root" | "icon";
 
 export type FloatingActionButtonProps = SlotProps<FloatingActionButtonSlot> & {
+	/** Accessible name (and tooltip) of the button. */
 	label: string;
+	/** Icon shown in the button. */
 	icon?: IconName | undefined;
+	/** Called when the button is pressed. */
 	onClick?: ((e: MouseEvent) => void) | undefined;
+	/** Viewport corner to float in. */
 	position?: "bottom-right" | "bottom-left" | undefined;
+	/** Custom content instead of `icon`. */
 	children?: unknown;
 };
 
@@ -316,16 +347,22 @@ export function FloatingActionButton(input: FloatingActionButtonProps) {
 }
 
 export type BottomNavItem = {
+	/** Item id, passed to `onChange` and matched against `value`. */
 	id: string;
+	/** Item text under the icon. */
 	label: string;
+	/** Item icon. */
 	icon?: IconName | undefined;
 };
 
 export type BottomNavSlot = "root" | "item" | "icon" | "label";
 
 export type BottomNavProps = SlotProps<BottomNavSlot> & {
+	/** Id of the current item. */
 	value: string;
+	/** Navigation items (3–5 work best). */
 	items: BottomNavItem[];
+	/** Called with the id the user picks. */
 	onChange: (id: string) => void;
 	/** Accessible name (default "Bottom"). */
 	label?: string | undefined;
@@ -375,12 +412,19 @@ export function BottomNav(input: BottomNavProps) {
 	);
 }
 
-export type SortableItem = { id: string; label: string };
+export type SortableItem = {
+	/** Item id (stable across reorders). */
+	id: string;
+	/** Item text. */
+	label: string;
+};
 
 export type SortableListSlot = "root" | "item" | "label" | "actions";
 
 export type SortableListProps = SlotProps<SortableListSlot> & {
+	/** Items in their current order (controlled). */
 	items: SortableItem[];
+	/** Called with the reordered items (drag or the move buttons). */
 	onChange: (items: SortableItem[]) => void;
 };
 
@@ -461,6 +505,7 @@ export function SortableList(input: SortableListProps) {
 export type PasswordStrengthSlot = "root" | "bars" | "bar" | "label";
 
 export type PasswordStrengthProps = SlotProps<PasswordStrengthSlot> & {
+	/** The password to rate (strength bar and hints). */
 	password: string;
 	/** Override the five labels (score 0–4). */
 	labels?: [string, string, string, string, string] | undefined;
@@ -521,9 +566,13 @@ export function PasswordStrength(input: PasswordStrengthProps) {
 export type MeterSlot = "root" | "label" | "track" | "bar";
 
 export type MeterProps = SlotProps<MeterSlot> & {
+	/** Current value, between `min` and `max`. */
 	value: number;
+	/** Lower bound. */
 	min?: number | undefined;
+	/** Upper bound. */
 	max?: number | undefined;
+	/** What is measured (shown and used as the accessible name). */
 	label?: string | undefined;
 };
 
@@ -580,10 +629,15 @@ export type CommentSlot =
 	| "actions";
 
 export type CommentProps = SlotProps<CommentSlot> & {
+	/** Author name. */
 	author: string;
+	/** Small line next to the author, e.g. the time. */
 	meta?: string | undefined;
+	/** Avatar image URL (initials from `author` when unset). */
 	avatar?: string | undefined;
+	/** Comment text or content. */
 	children?: unknown;
+	/** Buttons under the comment, e.g. Reply. */
 	actions?: unknown;
 };
 
@@ -618,7 +672,9 @@ export function Comment(input: CommentProps) {
 }
 
 export type SkipLinkProps = BaseProps & {
+	/** Target to jump to (id of your main content). */
 	href?: string | undefined;
+	/** Link text. */
 	children?: unknown;
 };
 
@@ -638,16 +694,22 @@ export function SkipLink(input: SkipLinkProps) {
 }
 
 export type ThumbnavItem = {
+	/** Thumbnail id, passed to `onChange` and matched against `value`. */
 	id: string;
+	/** Thumbnail image URL. */
 	src: string;
+	/** Alternative text (the button's accessible name). */
 	alt?: string | undefined;
 };
 
 export type ThumbnavSlot = "root" | "item" | "image";
 
 export type ThumbnavProps = SlotProps<ThumbnavSlot> & {
+	/** Id of the selected thumbnail. */
 	value: string;
+	/** The thumbnails, in order. */
 	items: ThumbnavItem[];
+	/** Called with the id the user picks. */
 	onChange: (id: string) => void;
 	/** Accessible name (default "Thumbnails"). */
 	label?: string | undefined;
@@ -694,7 +756,9 @@ export function Thumbnav(input: ThumbnavProps) {
 export type LeaderSlot = "root" | "label" | "dots" | "value";
 
 export type LeaderProps = SlotProps<LeaderSlot> & {
+	/** Text on the left. */
 	label: unknown;
+	/** Text on the right; dots fill the space between. */
 	value: unknown;
 };
 
@@ -715,9 +779,11 @@ export type MarqueeSlot = "root" | "track" | "group";
 export type MarqueeProps = SlotProps<MarqueeSlot> & {
 	/** `"soft"` (default) sits on a tinted, bordered strip; `"plain"` has no background or border. */
 	variant?: "soft" | "plain" | undefined;
+	/** Scroll speed. */
 	speed?: "slow" | "normal" | "fast" | undefined;
 	/** Pause scrolling while hovered or focused (default true). */
 	pauseOnHover?: boolean | undefined;
+	/** Content to scroll (rendered twice for a seamless loop). */
 	children?: unknown;
 };
 
@@ -758,11 +824,19 @@ export function Marquee(input: MarqueeProps) {
 	);
 }
 
-export type BarListItem = { id: string; label: string; value: number };
+export type BarListItem = {
+	/** Row id. */
+	id: string;
+	/** Row label. */
+	label: string;
+	/** Row value; bar lengths are relative to the largest. */
+	value: number;
+};
 
 export type BarListSlot = "root" | "item" | "row" | "label" | "value" | "track" | "bar";
 
 export type BarListProps = SlotProps<BarListSlot> & {
+	/** Rows, in display order. */
 	data: BarListItem[];
 	/** Format the value column (default: the raw number). */
 	format?: ((value: number) => unknown) | undefined;
@@ -809,11 +883,15 @@ export type SplitterSlot = "root" | "pane" | "handle";
 export type SplitterProps = SlotProps<SplitterSlot> & {
 	/** Left pane ratio 0–1, default 0.4 (read once, at mount). */
 	initial?: number | undefined;
+	/** Smallest size of the first pane, in percent. */
 	min?: number | undefined;
+	/** Largest size of the first pane, in percent. */
 	max?: number | undefined;
 	/** Accessible name for the handle (default "Resize panes"). */
 	label?: string | undefined;
+	/** First (left) pane content. */
 	left?: unknown;
+	/** Second (right) pane content. */
 	right?: unknown;
 };
 
@@ -910,18 +988,29 @@ export function Splitter(input: SplitterProps) {
 }
 
 export type DataTableColumn<T> = {
+	/** Column id (used by sorting). */
 	id: string;
+	/** Column header text. */
 	header: string;
+	/** Renders a row's cell for this column. */
 	cell: (row: T) => unknown;
+	/** Value to sort by; the column is sortable when set. */
 	sortValue?: ((row: T) => string | number) | undefined;
 };
 
-export type DataTableSort = { id: string; dir: "asc" | "desc" };
+export type DataTableSort = {
+	/** Id of the sorted column. */
+	id: string;
+	/** Sort direction. */
+	dir: "asc" | "desc";
+};
 
 export type DataTableSlot = "root" | "head" | "header" | "sort" | "body" | "row" | "cell" | "empty";
 
 export type DataTableProps<T extends { id: string }> = SlotProps<DataTableSlot> & {
+	/** Column definitions, in order. */
 	columns: Array<DataTableColumn<T>>;
+	/** Row data; each row needs a unique `id`. */
 	rows: T[];
 	/** Accessible name for the table. */
 	label?: string | undefined;
@@ -1081,7 +1170,9 @@ export function DataTable<T extends { id: string }>(input: DataTableProps<T>) {
 export type YearPickerSlot = "root" | "header" | "title" | "grid" | "cell";
 
 export type YearPickerProps = SlotProps<YearPickerSlot> & {
+	/** Selected year. */
 	value?: number | undefined;
+	/** Called with the picked year. */
 	onChange?: ((year: number) => void) | undefined;
 };
 

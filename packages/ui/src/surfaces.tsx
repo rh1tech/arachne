@@ -3,6 +3,7 @@ import { Prose } from "./kit-more.tsx";
 import { type BaseProps, type SlotProps, setup } from "./system.ts";
 
 export type CardProps = BaseProps & {
+	/** `CardHeader`, `CardImage`, `CardContent`, `CardFooter`, or any content. */
 	children?: unknown;
 };
 
@@ -17,6 +18,7 @@ export function Card(input: CardProps) {
 }
 
 export type CardPartProps = BaseProps & {
+	/** Content of this part. */
 	children?: unknown;
 };
 
@@ -71,6 +73,7 @@ export function CardFooter(input: CardPartProps) {
 }
 
 export type CardFooterItemProps = CardPartProps & {
+	/** Makes the item a button; called when pressed. */
 	onClick?: ((e: MouseEvent) => void) | undefined;
 };
 
@@ -93,6 +96,7 @@ export function CardFooterItem(input: CardFooterItemProps) {
 export type PanelProps = BaseProps & {
 	/** Accessible name of the panel's `<nav>` landmark; set it when a page has several panels. */
 	label?: string | undefined;
+	/** `PanelHeading`, `PanelTabs` and `PanelBlock`s. */
 	children?: unknown;
 };
 
@@ -132,8 +136,11 @@ export function PanelTabs(input: CardPartProps) {
 }
 
 export type PanelTabProps = BaseProps & {
+	/** Marks the selected tab. */
 	active?: boolean | undefined;
+	/** Called when the tab is pressed. */
 	onClick?: ((e: MouseEvent) => void) | undefined;
+	/** Tab label. */
 	children?: unknown;
 };
 
@@ -156,8 +163,11 @@ export function PanelTab(input: PanelTabProps) {
 }
 
 export type PanelBlockProps = BaseProps & {
+	/** Marks the selected row. */
 	active?: boolean | undefined;
+	/** Makes the row a button; called when pressed. */
 	onClick?: ((e: MouseEvent) => void) | undefined;
+	/** Row content. */
 	children?: unknown;
 };
 
@@ -191,11 +201,17 @@ export function PanelBlock(input: PanelBlockProps) {
 }
 
 export type TileProps = BaseProps & {
+	/** Outermost tile of a tile layout. */
 	ancestor?: boolean | undefined;
+	/** A tile that contains `child` tiles. */
 	parent?: boolean | undefined;
+	/** A leaf tile holding content. */
 	child?: boolean | undefined;
+	/** Stack the inner tiles vertically. */
 	vertical?: boolean | undefined;
+	/** Width in twelfths. */
 	size?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | undefined;
+	/** Nested tiles or content. */
 	children?: unknown;
 };
 
@@ -231,7 +247,9 @@ export function Tile(input: TileProps) {
 export type MessageTone = "info" | "success" | "warning" | "danger" | "muted";
 
 export type MessageProps = BaseProps & {
+	/** Colour of the message. */
 	tone?: MessageTone | undefined;
+	/** `MessageHeader` and `MessageBody`, or body text. */
 	children?: unknown;
 };
 
@@ -253,9 +271,11 @@ export function Message(input: MessageProps) {
 export type MessageHeaderSlot = "root" | "text" | "close";
 
 export type MessageHeaderProps = SlotProps<MessageHeaderSlot> & {
+	/** Shows a close button; called when it is pressed. */
 	onClose?: (() => void) | undefined;
 	/** Accessible label for the close button (default "Close"). */
 	closeLabel?: string | undefined;
+	/** Header text. */
 	children?: unknown;
 };
 
@@ -300,6 +320,7 @@ export function MessageBody(input: CardPartProps) {
 }
 
 export type BlockProps = BaseProps & {
+	/** Block content. */
 	children?: unknown;
 };
 
@@ -325,9 +346,13 @@ export function Content(input: ContentProps) {
 }
 
 export type PaperProps = BaseProps & {
+	/** Adds a border. */
 	withBorder?: boolean | undefined;
+	/** Adds a soft shadow. */
 	shadow?: boolean | undefined;
+	/** Inner padding. */
 	padding?: "sm" | "md" | "lg" | undefined;
+	/** Paper content. */
 	children?: unknown;
 };
 

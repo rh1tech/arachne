@@ -5,9 +5,13 @@ import { createScrollOverflow, watchScrollOverflow } from "./scroll-overflow.ts"
 import { createId, createSlots, type SlotProps, withDefaults } from "./system.ts";
 
 export type TabItem = {
+	/** Tab id, passed to `onChange` and matched against `value`. */
 	id: string;
+	/** Tab label (text or content). */
 	label: unknown;
+	/** Shown but can't be selected; skipped by arrow keys. */
 	disabled?: boolean | undefined;
+	/** Leading icon or content. */
 	icon?: unknown;
 	/** Trailing content, e.g. a count badge. */
 	badge?: unknown;
@@ -27,11 +31,15 @@ export type TabsSlot =
 	| "scroll";
 
 export type TabsProps = SlotProps<TabsSlot> & {
+	/** The tabs, in order. */
 	items: TabItem[];
+	/** Id of the selected tab. */
 	value: string;
+	/** Called with the id of the tab the user selects. */
 	onChange: (id: string) => void;
 	/** `line` (underline), `pills`, `enclosed` (card tabs) or `segmented`. */
 	variant?: "line" | "pills" | "enclosed" | "segmented" | undefined;
+	/** Tab height and text size. */
 	size?: "sm" | "md" | "lg" | undefined;
 	/** Stretch tabs to fill the row. */
 	grow?: boolean | undefined;

@@ -13,12 +13,18 @@ Headings with a separate visual size and outline level.
 
 Section title. `order` picks the semantic level and `size` only the look, so a small title never breaks the heading outline.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `order` | `HeadingOrder` |  | Heading level (`&lt;h1>`–`&lt;h6>`) for the document outline. Default 2. |
-| `size` | `HeadingOrder` |  | Visual size 1–6 (1 is largest), independent of the level. Default: `order`, else 3. |
-| `spaced` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Heading text. |
+| `order` | `HeadingOrder` |  | `3` | Heading level (`&lt;h1>`–`&lt;h6>`) for the document outline. Default 2. |
+| `size` | `HeadingOrder` |  |  | Visual size 1–6 (1 is largest), independent of the level. Default: `order`, else 3. |
+| `spaced` | `boolean` |  |  | Keep the normal gap before a following `Subtitle`. |
+
+**`HeadingOrder`**
+
+```ts
+type HeadingOrder = 1 | 2 | 3 | 4 | 5 | 6;
+```
 
 ```tsx
 <Title order={3}>
@@ -30,11 +36,17 @@ Section title. `order` picks the semantic level and `size` only the look, so a s
 
 Secondary line under a title.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `order` | `HeadingOrder` |  | Render as a heading at this level; by default a subtitle is a `&lt;p>`. |
-| `size` | `HeadingOrder` |  | Visual size 1–6. Default 5. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Subtitle text. |
+| `order` | `HeadingOrder` |  | `5` | Render as a heading at this level; by default a subtitle is a `&lt;p>`. |
+| `size` | `HeadingOrder` |  | `3` | Visual size 1–6. Default 5. |
+
+**`HeadingOrder`**
+
+```ts
+type HeadingOrder = 1 | 2 | 3 | 4 | 5 | 6;
+```
 
 ```tsx
 <Subtitle>Manage domains, builds and access.</Subtitle>
@@ -44,10 +56,10 @@ Secondary line under a title.
 
 Section heading whose level can change after mount.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `level` | `1 \| 2 \| 3` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Heading text. |
+| `level` | `1 \| 2 \| 3` |  | `2` | Heading level (`h1`–`h3`). |
 
 ```tsx
 <Heading level={3}>
@@ -65,12 +77,12 @@ Body text and long-form content.
 
 Body text.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `as` | `"div" \| "p" \| "span"` |  | Element to render; fixed at mount. |
-| `children` | `content` |  |  |
-| `danger` | `boolean` |  |  |
-| `muted` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `as` | `"div" \| "p" \| "span"` |  |  | Element to render; fixed at mount. |
+| `children` | `content` |  |  | Text content. |
+| `danger` | `boolean` |  |  | Danger colour, e.g. for an inline error. |
+| `muted` | `boolean` |  |  | Secondary (muted) colour. |
 
 ```tsx
 <Text muted>
@@ -82,10 +94,10 @@ Body text.
 
 Typographic container for rich text (headings, paragraphs, lists, links), e.g. rendered Markdown.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `measure` | `boolean` |  | Cap the line length for readability (default true). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Long-form content (headings, paragraphs, lists, links, code). |
+| `measure` | `boolean` |  | `true` | Cap the line length for readability (default true). |
 
 ```tsx
 <Prose>
@@ -105,9 +117,9 @@ Typographic container for rich text (headings, paragraphs, lists, links), e.g. r
 
 Article container with readable text styles.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | `ArticleTitle`, `ArticleMeta` and the article body. |
 
 ```tsx
 <Article>
@@ -123,10 +135,16 @@ Article container with readable text styles.
 
 Article heading.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `order` | `HeadingLevel` |  | Heading level, to fit the page outline. Default 1. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content of this part. |
+| `order` | `HeadingLevel` |  | `1` | Heading level, to fit the page outline. Default 1. |
+
+**`HeadingLevel`**
+
+```ts
+type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
+```
 
 ```tsx
 <Article>
@@ -140,9 +158,9 @@ Article heading.
 
 Article byline / metadata line.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content of this part. |
 
 ```tsx
 <Article>
@@ -157,11 +175,11 @@ Block quote with an optional citation.
 
 **Slots:** `root` `body` `cite`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `cite` | `string` |  |  |
-| `variant` | `"soft" \| "plain"` |  | `"soft"` (default) adds a tinted background; `"plain"` keeps only the accent rule. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | The quotation. |
+| `cite` | `string` |  |  | Who said it (shown under the quote). |
+| `variant` | `"soft" \| "plain"` |  | `"soft"` | `"soft"` (default) adds a tinted background; `"plain"` keeps only the accent rule. |
 
 ```tsx
 <Stack gap="1rem">
@@ -180,11 +198,11 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Text link; `external` opens a new tab with `rel="noreferrer noopener"`.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `href` | `string` | yes |  |
-| `children` | `content` |  |  |
-| `external` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `href` | `string` | yes |  | Link target. |
+| `children` | `content` |  |  | Link text. |
+| `external` | `boolean` |  |  | Open in a new tab (adds `rel="noreferrer noopener"`). |
 
 ```tsx
 <Anchor href="/docs">
@@ -202,10 +220,10 @@ Mark a span you choose, or every match of a search term.
 
 Highlight text you choose (`<mark>`, highlighter-yellow by default). To mark every match of a query inside a string, use `Highlight`.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `tone` | `"accent" \| "warning" \| "success"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Text to highlight. |
+| `tone` | `"accent" \| "warning" \| "success"` |  | `"warning"` | Highlight colour. |
 
 ```tsx
 <Text>
@@ -219,11 +237,11 @@ Mark every case-insensitive match of `highlight` inside `text`, e.g. search resu
 
 **Slots:** `root` `mark`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `highlight` | `string \| string[]` | yes |  |
-| `text` | `string` | yes |  |
-| `tone` | `"accent" \| "warning" \| "success"` |  | Mark colour (default `"warning"`, highlighter yellow), as on `Mark`. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `highlight` | `string \| string[]` | yes |  | Term(s) to mark wherever they occur. |
+| `text` | `string` | yes |  | The full text to show. |
+| `tone` | `"accent" \| "warning" \| "success"` |  | `"warning"` | Mark colour (default `"warning"`, highlighter yellow), as on `Mark`. |
 
 ```tsx
 <Highlight text="Deploy marketing-site to production" highlight="deploy" />
@@ -239,10 +257,10 @@ Fit text into limited space.
 
 Ellipsis after `lines` lines.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `lines` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Text to truncate. |
+| `lines` | `number` |  | `1` | Number of lines shown before the ellipsis. |
 
 ```tsx
 <Truncate style={{ "max-width": "22rem" }} lines={2}>
@@ -258,10 +276,10 @@ UIkit-style dotted leader row.
 
 **Slots:** `root` `dots` `label` `value`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `content` | yes |  |
-| `value` | `content` | yes |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `content` | yes |  | Text on the left. |
+| `value` | `content` | yes |  | Text on the right; dots fill the space between. |
 
 ```tsx
 <Leader label="Espresso" value="$3.50" />
@@ -277,13 +295,13 @@ Numbers, relative times and countdowns.
 
 Formats a number with separators, decimals, prefix and suffix.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `value` | `number` | yes |  |
-| `decimalScale` | `number` |  |  |
-| `prefix` | `string` |  |  |
-| `suffix` | `string` |  |  |
-| `thousandSeparator` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `number` | yes |  | Number to format. |
+| `decimalScale` | `number` |  | `0` | Fixed number of decimals. |
+| `prefix` | `string` |  | `""` | Text before the number, e.g. `$`. |
+| `suffix` | `string` |  | `""` | Text after the number, e.g. `%`. |
+| `thousandSeparator` | `string` |  | `","` | Character between thousands groups. |
 
 ```tsx
 <NumberFormatter value={1234567.891} decimalScale={2} />
@@ -293,9 +311,9 @@ Formats a number with separators, decimals, prefix and suffix.
 
 Relative time such as "5 minutes ago", with the full date in `title`.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `value` | `number` | yes | Absolute timestamp (ms). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `number` | yes |  | Absolute timestamp (ms). |
 
 ```tsx
 <RelativeTime value={Date.now() - 5 * 60_000} />
@@ -307,10 +325,10 @@ Live countdown.
 
 **Slots:** `root` `suffix` `unit` `value`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `to` | `number` | yes | Absolute target timestamp (ms). |
-| `units` | `{ d: string; h: string; m: string; s: string; }` |  | Unit suffixes (default d/h/m/s). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `to` | `number` | yes |  | Absolute target timestamp (ms). |
+| `units` | `{ d: string; h: string; m: string; s: string; }` |  |  | Unit suffixes (default d/h/m/s). |
 
 ```tsx
 <Countdown to={Date.now() + 3 * 86_400_000} />
@@ -322,9 +340,9 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Screen-reader-only text.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Text read by screen readers but not shown. |
 
 ```tsx
 <Button variant="ghost" onClick={() => {}}>
@@ -342,11 +360,17 @@ The built-in icon set.
 
 Built-in SVG icon.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `name` | `IconName` | yes |  |
-| `label` | `string` |  | Accessible name; without it the icon is decorative (`aria-hidden`). |
-| `size` | `number \| "sm" \| "md" \| "lg"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `name` | `IconName` | yes |  | Which built-in icon to draw. |
+| `label` | `string` |  |  | Accessible name; without it the icon is decorative (`aria-hidden`). |
+| `size` | `number \| "sm" \| "md" \| "lg"` |  |  | `sm` / `md` / `lg`, or a size in pixels. |
+
+**`IconName`** — Material Design Icons path names used by `<Icon />`.
+
+```ts
+type IconName = | "check" | "x" | "plus" | "minus" | "search" | "user" | "users" | "settings" | "menu" | "home" | "heart" | "star" | "bell" | "mail" | "calendar" | "clock" | "edit" | "trash" | "copy" | "download" | "upload" | "link" | "external" | "info" | "warning" | "error" | "success" | "chevron-down" | "chevron-up" | "chevron-left" | "chevron-right" | "arrow-left" | "arrow-right" | "eye" | "eye-off" | "eye-outline" | "lock" | "unlock" | "filter" | "more" | "close" | "spinner" | "sun" | "moon" | "play" | "pause" | "refresh" | "share" | "image" | "file" | "folder" | "zap" | "phone" | "git" | "code";
+```
 
 ```tsx
 <Icon name="bell" />
@@ -358,11 +382,17 @@ Colored circular/square icon badge.
 
 **Slots:** `root` `icon`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `name` | `IconName` | yes |  |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
-| `tone` | `"accent" \| "warning" \| "success" \| "danger" \| "muted"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `name` | `IconName` | yes |  | Which built-in icon to draw. |
+| `size` | `"sm" \| "md" \| "lg"` |  | `"md"` | Badge size. |
+| `tone` | `"accent" \| "warning" \| "success" \| "danger" \| "muted"` |  | `"accent"` | Colour of the icon and its tinted background. |
+
+**`IconName`** — Material Design Icons path names used by `<Icon />`.
+
+```ts
+type IconName = | "check" | "x" | "plus" | "minus" | "search" | "user" | "users" | "settings" | "menu" | "home" | "heart" | "star" | "bell" | "mail" | "calendar" | "clock" | "edit" | "trash" | "copy" | "download" | "upload" | "link" | "external" | "info" | "warning" | "error" | "success" | "chevron-down" | "chevron-up" | "chevron-left" | "chevron-right" | "arrow-left" | "arrow-right" | "eye" | "eye-off" | "eye-outline" | "lock" | "unlock" | "filter" | "more" | "close" | "spinner" | "sun" | "moon" | "play" | "pause" | "refresh" | "share" | "image" | "file" | "folder" | "zap" | "phone" | "git" | "code";
+```
 
 ```tsx
 <IconBadge name="zap" tone="accent" />

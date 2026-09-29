@@ -2,9 +2,13 @@ import { For, omitProps, Show } from "@arachne/render";
 import { createId, createSlots, type SlotProps, withDefaults } from "./system.ts";
 
 export type AccordionItem = {
+	/** Item id, passed to `onChange` and matched against `value`. */
 	id: string;
+	/** Header text or content (the toggle button's label). */
 	title: unknown;
+	/** Panel content shown when the item is open. */
 	content: unknown;
+	/** The header can't be toggled. */
 	disabled?: boolean | undefined;
 	/** Leading icon / avatar next to the title. */
 	icon?: unknown;
@@ -24,6 +28,7 @@ export type AccordionSlot =
 	| "content";
 
 type AccordionBase = SlotProps<AccordionSlot> & {
+	/** The sections, in order. */
 	items: AccordionItem[];
 	/** `separated` renders each item as its own card. */
 	variant?: "default" | "separated" | "flush" | undefined;
@@ -33,8 +38,11 @@ type AccordionBase = SlotProps<AccordionSlot> & {
 
 export type AccordionProps =
 	| (AccordionBase & {
+			/** Single mode: one item open at a time (`value` is an id or `null`). */
 			multiple?: false | undefined;
+			/** Id of the open item, or `null` when all are closed. */
 			value: string | null;
+			/** Called with the id to open, or `null` when the open item is closed. */
 			onChange: (id: string | null) => void;
 	  })
 	| (AccordionBase & {

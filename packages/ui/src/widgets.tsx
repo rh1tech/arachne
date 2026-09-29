@@ -4,11 +4,17 @@ import { Icon, type IconName } from "./icons.tsx";
 import { type BaseProps, createId, type SlotProps, type StyleValue, setup } from "./system.ts";
 
 export type GroupProps = BaseProps & {
+	/** Space between items (any CSS length). */
 	gap?: string | undefined;
+	/** Let items wrap onto new lines. */
 	wrap?: boolean | undefined;
+	/** Vertical alignment of the items. */
 	align?: "start" | "center" | "end" | "stretch" | undefined;
+	/** Horizontal distribution of the items. */
 	justify?: "start" | "center" | "end" | "between" | "around" | undefined;
+	/** Items share the row's width equally. */
 	grow?: boolean | undefined;
+	/** Items in a row. */
 	children?: unknown;
 };
 
@@ -46,7 +52,9 @@ export function Group(input: GroupProps) {
 }
 
 export type CenterProps = BaseProps & {
+	/** Shrink to the content (`inline-flex`) instead of filling the width. */
 	inline?: boolean | undefined;
+	/** Content to centre horizontally and vertically. */
 	children?: unknown;
 };
 
@@ -65,7 +73,9 @@ export function Center(input: CenterProps) {
 }
 
 export type SpaceProps = BaseProps & {
+	/** Vertical space (pixels or any CSS length). */
 	h?: string | number | undefined;
+	/** Horizontal space (pixels or any CSS length). */
 	w?: string | number | undefined;
 };
 
@@ -86,11 +96,17 @@ export function Space(input: SpaceProps) {
 }
 
 export type FlexProps = BaseProps & {
+	/** Main axis. */
 	direction?: "row" | "column" | undefined;
+	/** Space between items (any CSS length). */
 	gap?: string | undefined;
+	/** CSS `align-items`. */
 	align?: string | undefined;
+	/** CSS `justify-content`. */
 	justify?: string | undefined;
+	/** Let items wrap. */
 	wrap?: boolean | undefined;
+	/** Flex items. */
 	children?: unknown;
 };
 
@@ -127,7 +143,9 @@ export function Flex(input: FlexProps) {
 export type AspectRatioSlot = "root" | "inner";
 
 export type AspectRatioProps = SlotProps<AspectRatioSlot> & {
+	/** Width divided by height, e.g. `16 / 9`. */
 	ratio?: number | undefined;
+	/** Content that fills the box (images and video are cropped to fit). */
 	children?: unknown;
 };
 
@@ -154,8 +172,11 @@ export function AspectRatio(input: AspectRatioProps) {
 }
 
 export type AffixProps = BaseProps & {
+	/** Viewport corner to pin to. */
 	position?: "top-left" | "top-right" | "bottom-left" | "bottom-right" | undefined;
+	/** Distance from the corner (any CSS length). */
 	offset?: string | undefined;
+	/** Pinned content, e.g. a feedback button. */
 	children?: unknown;
 };
 
@@ -179,8 +200,11 @@ export function Affix(input: AffixProps) {
 }
 
 export type OverlayProps = BaseProps & {
+	/** Blur what is underneath. */
 	blur?: boolean | undefined;
+	/** Called when the overlay is clicked. */
 	onClick?: ((e: MouseEvent) => void) | undefined;
+	/** Content shown centred on the overlay. */
 	children?: unknown;
 };
 
@@ -204,7 +228,9 @@ export function Overlay(input: OverlayProps) {
 export type LoadingOverlaySlot = "root" | "spinner";
 
 export type LoadingOverlayProps = SlotProps<LoadingOverlaySlot> & {
+	/** Show the overlay and spinner. */
 	visible: boolean;
+	/** Accessible name of the spinner. */
 	label?: string | undefined;
 };
 
@@ -235,10 +261,15 @@ export function LoadingOverlay(input: LoadingOverlayProps) {
 export type IndicatorSlot = "root" | "badge";
 
 export type IndicatorProps = SlotProps<IndicatorSlot> & {
+	/** Badge text or count. */
 	label?: string | number | undefined;
+	/** A plain dot instead of a label. */
 	dot?: boolean | undefined;
+	/** Pulse, for ongoing activity. */
 	processing?: boolean | undefined;
+	/** Corner of the child the badge sits on. */
 	position?: "top-end" | "top-start" | "bottom-end" | "bottom-start" | undefined;
+	/** Element to decorate. */
 	children?: unknown;
 };
 
@@ -277,6 +308,7 @@ export function Indicator(input: IndicatorProps) {
 export type ListProps = BaseProps & {
 	/** Render `<ol>` instead of `<ul>`; fixed at mount. */
 	ordered?: boolean | undefined;
+	/** `ListItem`s. */
 	children?: unknown;
 };
 
@@ -304,7 +336,9 @@ export function List(input: ListProps) {
 export type ListItemSlot = "root" | "icon" | "body";
 
 export type ListItemProps = SlotProps<ListItemSlot> & {
+	/** Icon instead of the bullet. */
 	icon?: IconName | undefined;
+	/** Item content. */
 	children?: unknown;
 };
 
@@ -333,7 +367,9 @@ export function ListItem(input: ListItemProps) {
 }
 
 export type ListGroupProps = BaseProps & {
+	/** No outer border or radius (for edge-to-edge use in cards). */
 	flush?: boolean | undefined;
+	/** `ListGroupItem`s. */
 	children?: unknown;
 };
 
@@ -354,10 +390,13 @@ export function ListGroup(input: ListGroupProps) {
 export type ListGroupItemSlot = "root" | "item";
 
 export type ListGroupItemProps = SlotProps<ListGroupItemSlot> & {
+	/** Marks the current row. */
 	active?: boolean | undefined;
+	/** Dims the row and blocks clicks. */
 	disabled?: boolean | undefined;
 	/** Makes the row a button (fixed at mount); the `<li>` becomes the `item` slot. */
 	onClick?: ((e: MouseEvent) => void) | undefined;
+	/** Row content. */
 	children?: unknown;
 };
 
@@ -407,6 +446,7 @@ export function ListGroupItem(input: ListGroupItemProps) {
 }
 
 export type TimelineProps = BaseProps & {
+	/** `TimelineItem`s, oldest or newest first. */
 	children?: unknown;
 };
 
@@ -423,9 +463,13 @@ export function Timeline(input: TimelineProps) {
 export type TimelineItemSlot = "root" | "bullet" | "body" | "title" | "content";
 
 export type TimelineItemProps = SlotProps<TimelineItemSlot> & {
+	/** Event title. */
 	title?: string | undefined;
+	/** Icon in the bullet. */
 	bullet?: IconName | undefined;
+	/** Highlights this event (e.g. the latest). */
 	active?: boolean | undefined;
+	/** Event detail under the title. */
 	children?: unknown;
 };
 
@@ -472,14 +516,21 @@ export function TimelineItem(input: TimelineItemProps) {
 export type NavLinkSlot = "root" | "left" | "main" | "label" | "description" | "right";
 
 export type NavLinkProps = SlotProps<NavLinkSlot> & {
+	/** Link text. */
 	label: string;
 	/** Render as a real link (middle-click, open in new tab, crawlable). Fixed at mount. */
 	href?: string | undefined;
+	/** Secondary line under the label. */
 	description?: string | undefined;
+	/** Marks the current page (`aria-current`). */
 	active?: boolean | undefined;
+	/** Shown but can't be followed. */
 	disabled?: boolean | undefined;
+	/** Leading content, e.g. an icon. */
 	leftSection?: unknown;
+	/** Trailing content, e.g. a badge or chevron. */
 	rightSection?: unknown;
+	/** Click handler (renders a button when there is no `href`). */
 	onClick?: ((e: MouseEvent) => void) | undefined;
 };
 
@@ -564,11 +615,17 @@ export function NavLink(input: NavLinkProps) {
 }
 
 export type ActionIconProps = BaseProps & {
+	/** Accessible name (required: the button has no visible text). */
 	label: string;
+	/** Button style. */
 	variant?: "subtle" | "filled" | "outline" | undefined;
+	/** Button size. */
 	size?: "sm" | "md" | "lg" | undefined;
+	/** Disables the button. */
 	disabled?: boolean | undefined;
+	/** Called when the button is pressed. */
 	onClick?: ((e: MouseEvent) => void) | undefined;
+	/** The icon. */
 	children?: unknown;
 };
 
@@ -605,7 +662,9 @@ export function ActionIcon(input: ActionIconProps) {
 }
 
 export type CollapseProps = BaseProps & {
+	/** Whether the content is shown; height animates on change. */
 	open: boolean;
+	/** Content to show or hide. */
 	children?: unknown;
 };
 
@@ -628,9 +687,13 @@ export function Collapse(input: CollapseProps) {
 export type SpoilerSlot = "root" | "content" | "toggle";
 
 export type SpoilerProps = SlotProps<SpoilerSlot> & {
+	/** Collapsed height in pixels. */
 	maxHeight?: number | undefined;
+	/** Button text while collapsed. */
 	showLabel?: string | undefined;
+	/** Button text while expanded. */
 	hideLabel?: string | undefined;
+	/** Long content to clip. */
 	children?: unknown;
 };
 
@@ -675,7 +738,9 @@ export function Spoiler(input: SpoilerProps) {
 }
 
 export type MarkProps = BaseProps & {
+	/** Highlight colour. */
 	tone?: "accent" | "warning" | "success" | undefined;
+	/** Text to highlight. */
 	children?: unknown;
 };
 
@@ -700,9 +765,11 @@ export function Mark(input: MarkProps) {
 export type QuoteSlot = "root" | "body" | "cite";
 
 export type QuoteProps = SlotProps<QuoteSlot> & {
+	/** Who said it (shown under the quote). */
 	cite?: string | undefined;
 	/** `"soft"` (default) adds a tinted background; `"plain"` keeps only the accent rule. */
 	variant?: "soft" | "plain" | undefined;
+	/** The quotation. */
 	children?: unknown;
 };
 
@@ -738,7 +805,9 @@ export function Quote(input: QuoteProps) {
 }
 
 export type ScrollAreaProps = BaseProps & {
+	/** Height after which the content scrolls (any CSS length). */
 	maxHeight?: string | undefined;
+	/** Scrollable content. */
 	children?: unknown;
 };
 
@@ -759,8 +828,11 @@ export function ScrollArea(input: ScrollAreaProps) {
 }
 
 export type AnchorProps = BaseProps & {
+	/** Link target. */
 	href: string;
+	/** Open in a new tab (adds `rel="noreferrer noopener"`). */
 	external?: boolean | undefined;
+	/** Link text. */
 	children?: unknown;
 };
 
@@ -853,7 +925,9 @@ export type TitleProps = BaseProps & {
 	order?: HeadingOrder | undefined;
 	/** Visual size 1–6 (1 is largest), independent of the level. Default: `order`, else 3. */
 	size?: HeadingOrder | undefined;
+	/** Keep the normal gap before a following `Subtitle`. */
 	spaced?: boolean | undefined;
+	/** Heading text. */
 	children?: unknown;
 };
 
@@ -881,6 +955,7 @@ export type SubtitleProps = BaseProps & {
 	size?: HeadingOrder | undefined;
 	/** Render as a heading at this level; by default a subtitle is a `<p>`. */
 	order?: HeadingOrder | undefined;
+	/** Subtitle text. */
 	children?: unknown;
 };
 
@@ -913,9 +988,13 @@ export function Subtitle(input: SubtitleProps) {
 export type RingProgressSlot = "root" | "track" | "bar" | "label";
 
 export type RingProgressProps = SlotProps<RingProgressSlot> & {
+	/** Progress in percent (0–100). */
 	value: number;
+	/** Diameter in pixels. */
 	size?: number | undefined;
+	/** Ring stroke width in pixels. */
 	thickness?: number | undefined;
+	/** Content in the middle, e.g. `72%`. */
 	label?: unknown;
 };
 

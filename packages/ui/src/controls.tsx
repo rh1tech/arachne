@@ -32,13 +32,19 @@ export type ToggleSlot = "root" | "input" | "label";
 
 export type CheckboxProps = SlotProps<ToggleSlot> &
 	InputPassThrough & {
+		/** Whether it is checked (controlled). */
 		checked?: boolean | undefined;
+		/** Disables the checkbox. */
 		disabled?: boolean | undefined;
+		/** Marks the value invalid (`aria-invalid` and error styling). */
 		invalid?: boolean | undefined;
+		/** Field name submitted with the form. */
 		name?: string | undefined;
 		/** Native `value` submitted with the form. */
 		value?: string | undefined;
+		/** Label text or content, clickable to toggle. */
 		label?: unknown;
+		/** Called on toggle; read `e.target.checked`. */
 		onChange?: ((e: Event) => void) | undefined;
 	};
 
@@ -83,10 +89,15 @@ export function Checkbox(input: CheckboxProps) {
 
 export type SwitchProps = SlotProps<ToggleSlot> &
 	InputPassThrough & {
+		/** Whether it is on (controlled). */
 		checked?: boolean | undefined;
+		/** Disables the switch. */
 		disabled?: boolean | undefined;
+		/** Field name submitted with the form. */
 		name?: string | undefined;
+		/** Label text or content, clickable to toggle. */
 		label?: unknown;
+		/** Called on toggle; read `e.target.checked`. */
 		onChange?: ((e: Event) => void) | undefined;
 	};
 
@@ -126,16 +137,30 @@ export function Switch(input: SwitchProps) {
 	);
 }
 
-export type SelectOption = { value: string; label: string; disabled?: boolean | undefined };
+export type SelectOption = {
+	/** Option value (what `value` / `onChange` use). */
+	value: string;
+	/** Text shown for the option. */
+	label: string;
+	/** Shown but can't be chosen. */
+	disabled?: boolean | undefined;
+};
 
 export type SelectProps = BaseProps &
 	InputPassThrough & {
+		/** Selected option's value (controlled). */
 		value?: string | undefined;
+		/** The options, in order. */
 		options: SelectOption[];
+		/** Disables the select. */
 		disabled?: boolean | undefined;
+		/** Marks the value invalid (`aria-invalid` and error styling). */
 		invalid?: boolean | undefined;
+		/** Field name submitted with the form. */
 		name?: string | undefined;
+		/** Empty first option shown while nothing is selected. */
 		placeholder?: string | undefined;
+		/** Called when the selection changes; read `e.target.value`. */
 		onChange?: ((e: Event) => void) | undefined;
 	};
 
@@ -186,19 +211,31 @@ export function Select(input: SelectProps) {
 	);
 }
 
-export type RadioOption = { value: string; label: unknown; disabled?: boolean | undefined };
+export type RadioOption = {
+	/** Option value (what `value` / `onChange` use). */
+	value: string;
+	/** Text or content shown for the option. */
+	label: unknown;
+	/** Shown but can't be chosen. */
+	disabled?: boolean | undefined;
+};
 
 export type RadioGroupSlot = "root" | "option" | "input" | "label";
 
 export type RadioGroupProps = SlotProps<RadioGroupSlot> & {
+	/** Shared `name` of the radio inputs (also the form field name). */
 	name: string;
+	/** Selected option's value (controlled). */
 	value?: string | undefined;
+	/** The options, in order. */
 	options: RadioOption[];
+	/** Disables every option. */
 	disabled?: boolean | undefined;
 	/** Accessible name for the group. */
 	label?: string | undefined;
 	/** Lay options out in a row. */
 	inline?: boolean | undefined;
+	/** Called when the selection changes; read `e.target.value`. */
 	onChange?: ((e: Event) => void) | undefined;
 };
 

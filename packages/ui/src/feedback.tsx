@@ -6,8 +6,11 @@ export type AlertTone = "info" | "success" | "warning" | "danger";
 export type AlertSlot = "root" | "title" | "body";
 
 export type AlertProps = SlotProps<AlertSlot> & {
+	/** Colour and icon: `info`, `success`, `warning` or `danger`. */
 	tone?: AlertTone | undefined;
+	/** Bold first line. */
 	title?: unknown;
+	/** Message text or content. */
 	children?: unknown;
 };
 
@@ -54,7 +57,9 @@ export function Divider(input: DividerProps) {
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 export type HeadingProps = BaseProps & {
+	/** Heading level (`h1`–`h3`). */
 	level?: 1 | 2 | 3 | undefined;
+	/** Heading text. */
 	children?: unknown;
 };
 

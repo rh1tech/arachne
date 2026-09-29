@@ -10,8 +10,11 @@ import { type BaseProps, createId, type SlotProps, type Slots, setup } from "./s
 import { ActionIcon } from "./widgets.tsx";
 
 export type TreeNode = {
+	/** Node id, passed to `onChange` and matched against `value`. */
 	id: string;
+	/** Node text (also used by type-ahead and `filter`). */
 	label: string;
+	/** Child nodes; a node with children can expand. */
 	children?: TreeNode[] | undefined;
 	/** Leading icon: an icon name or any content. */
 	icon?: IconName | (string & {}) | unknown;
@@ -33,8 +36,11 @@ export type TreeSlot =
 	| "empty";
 
 export type TreeProps = SlotProps<TreeSlot> & {
+	/** Root nodes. */
 	data: TreeNode[];
+	/** Id of the selected node. */
 	value?: string | undefined;
+	/** Called with the id of the node the user selects. */
 	onChange?: ((id: string) => void) | undefined;
 	/** Node ids expanded on mount. */
 	defaultExpanded?: string[] | undefined;
@@ -394,15 +400,20 @@ export function Tree(input: TreeProps) {
 }
 
 export type CarouselSlide = {
+	/** Slide id, passed to `onChange` and matched against `value`. */
 	id: string;
+	/** Slide content. */
 	content: unknown;
 };
 
 export type CarouselSlot = "root" | "viewport" | "slide" | "controls" | "control" | "status";
 
 export type CarouselProps = SlotProps<CarouselSlot> & {
+	/** The slides, in order. */
 	slides: CarouselSlide[];
+	/** Id of the shown slide (controlled); uncontrolled when unset. */
 	value?: string | undefined;
+	/** Called with the id of the slide being shown. */
 	onChange?: ((id: string) => void) | undefined;
 	/** Accessible name (default "Carousel"). */
 	label?: string | undefined;
@@ -519,6 +530,7 @@ export type CalendarConstraints = {
 	min?: string | undefined;
 	/** Latest selectable date, YYYY-MM-DD. */
 	max?: string | undefined;
+	/** Return `true` for days that can't be picked (`YYYY-MM-DD`). */
 	isDateDisabled?: ((iso: string) => boolean) | undefined;
 	/** First column: 0 = Sunday (default) … 6 = Saturday. */
 	weekStartsOn?: Weekday | undefined;
@@ -530,6 +542,7 @@ export type CalendarProps = SlotProps<CalendarSlot> &
 	CalendarConstraints & {
 		/** YYYY-MM-DD */
 		value?: string | undefined;
+		/** Called with the picked day as `YYYY-MM-DD`. */
 		onChange?: ((iso: string) => void) | undefined;
 		/** Focus the active day on mount (used by DatePicker). */
 		autoFocus?: boolean | undefined;
@@ -891,9 +904,13 @@ export type DatePickerSlot = "root" | "label" | "trigger" | "value" | "dropdown"
 
 export type DatePickerProps = SlotProps<DatePickerSlot> &
 	CalendarConstraints & {
+		/** Selected day, `YYYY-MM-DD` (controlled). */
 		value?: string | undefined;
+		/** Called with the picked day as `YYYY-MM-DD`. */
 		onChange?: ((iso: string) => void) | undefined;
+		/** Visible label, linked to the trigger. */
 		label?: string | undefined;
+		/** Trigger text while no day is picked. */
 		placeholder?: string | undefined;
 	};
 
@@ -1017,14 +1034,20 @@ export function DatePicker(input: DatePickerProps) {
 }
 
 export type TableSectionProps = BaseProps & {
+	/** Rows or cell content. */
 	children?: unknown;
 };
 
 export type TableCellProps = TableSectionProps & {
+	/** Columns the cell spans. */
 	colspan?: number | string | undefined;
+	/** Rows the cell spans. */
 	rowspan?: number | string | undefined;
+	/** Which cells a header cell describes. */
 	scope?: "row" | "col" | "rowgroup" | "colgroup" | undefined;
+	/** Ids of the header cells describing this cell. */
 	headers?: string | undefined;
+	/** Short form of the header, read by screen readers. */
 	abbr?: string | undefined;
 };
 
@@ -1059,7 +1082,12 @@ export function Tfoot(input: TableSectionProps) {
 }
 
 /** Table row (clickable when `onClick` is set). */
-export function Tr(input: TableSectionProps & { onClick?: ((e: MouseEvent) => void) | undefined }) {
+export function Tr(
+	input: TableSectionProps & {
+		/** Makes the row clickable. */
+		onClick?: ((e: MouseEvent) => void) | undefined;
+	},
+) {
 	const [props, rest, slot] = setup("Tr", input, {}, ["children"]);
 	return (
 		<tr {...rest} class={slot.class("root", "a-tr")} style={slot.style("root")}>

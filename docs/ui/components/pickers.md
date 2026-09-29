@@ -15,17 +15,23 @@ Trigger + calendar dropdown. Opening focuses the active day; picking a day or Es
 
 **Slots:** `root` `calendar` `dropdown` `label` `trigger` `value`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `isDateDisabled` | `(iso: string) => boolean` |  |  |
-| `label` | `string` |  |  |
-| `locale` | `string` |  | BCP 47 locale for month / day labels (default: runtime locale). |
-| `max` | `string` |  | Latest selectable date, YYYY-MM-DD. |
-| `min` | `string` |  | Earliest selectable date, YYYY-MM-DD. |
-| `onChange` | `(iso: string) => void` |  |  |
-| `placeholder` | `string` |  |  |
-| `value` | `string` |  |  |
-| `weekStartsOn` | `Weekday` |  | First column: 0 = Sunday (default) … 6 = Saturday. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `isDateDisabled` | `(iso: string) => boolean` |  |  | Return `true` for days that can't be picked (`YYYY-MM-DD`). |
+| `label` | `string` |  |  | Visible label, linked to the trigger. |
+| `locale` | `string` |  |  | BCP 47 locale for month / day labels (default: runtime locale). |
+| `max` | `string` |  |  | Latest selectable date, YYYY-MM-DD. |
+| `min` | `string` |  |  | Earliest selectable date, YYYY-MM-DD. |
+| `onChange` | `(iso: string) => void` |  |  | Called with the picked day as `YYYY-MM-DD`. |
+| `placeholder` | `string` |  |  | Trigger text while no day is picked. |
+| `value` | `string` |  |  | Selected day, `YYYY-MM-DD` (controlled). |
+| `weekStartsOn` | `Weekday` |  |  | First column: 0 = Sunday (default) … 6 = Saturday. |
+
+**`Weekday`**
+
+```ts
+type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+```
 
 ```tsx
 function Example() {
@@ -40,11 +46,18 @@ Two-step date range picker (start → end).
 
 **Slots:** `root` `cell` `dropdown` `summary` `trigger`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(range: DateRange) => void` | yes |  | Called after each pick: first with `start` only, then with both ends. |
+| `value` | `DateRange` | yes |  | Selected range (controlled). |
+| `placeholder` | `string` |  | `"Pick date range"` | Trigger text when nothing is picked. |
+
+**`DateRange`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `onChange` | `(range: DateRange) => void` | yes |  |
-| `value` | `DateRange` | yes |  |
-| `placeholder` | `string` |  | Trigger text when nothing is picked. |
+| `start` | `string` |  | First day, `YYYY-MM-DD`. |
+| `end` | `string` |  | Last day, `YYYY-MM-DD` (unset while the second click is pending). |
 
 ```tsx
 function Example() {
@@ -57,13 +70,13 @@ function Example() {
 
 Native date field; forwarded attributes land on the `<input>`.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `invalid` | `boolean` |  |  |
-| `name` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: string) => void` | yes |  | Called with the new value in the native format. |
+| `value` | `string` | yes |  | Value in the native format: `YYYY-MM-DD` (date) or `HH:MM` (time). |
+| `disabled` | `boolean` |  |  | Disables the field. |
+| `invalid` | `boolean` |  |  | Marks the value invalid (`aria-invalid` and error styling). |
+| `name` | `string` |  |  | Field name submitted with the form. |
 
 ```tsx
 function Example() {
@@ -78,16 +91,22 @@ Month grid (WAI-ARIA date grid): one tab stop, ← → ↑ ↓ by day/week, Page
 
 **Slots:** `root` `cell` `day` `grid` `header` `label` `nav` `row` `table` `weekday` `weekdays`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `autoFocus` | `boolean` |  | Focus the active day on mount (used by DatePicker). |
-| `isDateDisabled` | `(iso: string) => boolean` |  |  |
-| `locale` | `string` |  | BCP 47 locale for month / day labels (default: runtime locale). |
-| `max` | `string` |  | Latest selectable date, YYYY-MM-DD. |
-| `min` | `string` |  | Earliest selectable date, YYYY-MM-DD. |
-| `onChange` | `(iso: string) => void` |  |  |
-| `value` | `string` |  | YYYY-MM-DD |
-| `weekStartsOn` | `Weekday` |  | First column: 0 = Sunday (default) … 6 = Saturday. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `autoFocus` | `boolean` |  |  | Focus the active day on mount (used by DatePicker). |
+| `isDateDisabled` | `(iso: string) => boolean` |  |  | Return `true` for days that can't be picked (`YYYY-MM-DD`). |
+| `locale` | `string` |  |  | BCP 47 locale for month / day labels (default: runtime locale). |
+| `max` | `string` |  |  | Latest selectable date, YYYY-MM-DD. |
+| `min` | `string` |  |  | Earliest selectable date, YYYY-MM-DD. |
+| `onChange` | `(iso: string) => void` |  |  | Called with the picked day as `YYYY-MM-DD`. |
+| `value` | `string` |  |  | YYYY-MM-DD |
+| `weekStartsOn` | `Weekday` |  | `0` | First column: 0 = Sunday (default) … 6 = Saturday. |
+
+**`Weekday`**
+
+```ts
+type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+```
 
 ```tsx
 function Example() {
@@ -107,11 +126,11 @@ Month/year picker.
 
 **Slots:** `root` `cell` `grid` `header` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `monthLabels` | `string[]` |  | Month labels (default English short names). |
-| `onChange` | `(ym: string) => void` |  |  |
-| `value` | `string` |  | YYYY-MM |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `monthLabels` | `string[]` |  |  | Month labels (default English short names). |
+| `onChange` | `(ym: string) => void` |  |  | Called with the picked month as `YYYY-MM`. |
+| `value` | `string` |  |  | YYYY-MM |
 
 ```tsx
 function Example() {
@@ -131,10 +150,10 @@ Twelve-year grid with paging.
 
 **Slots:** `root` `cell` `grid` `header` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(year: number) => void` |  |  |
-| `value` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(year: number) => void` |  |  | Called with the picked year. |
+| `value` | `number` |  |  | Selected year. |
 
 ```tsx
 function Example() {
@@ -158,13 +177,13 @@ Times of day.
 
 Native time field; forwarded attributes land on the `<input>`.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `invalid` | `boolean` |  |  |
-| `name` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: string) => void` | yes |  | Called with the new value in the native format. |
+| `value` | `string` | yes |  | Value in the native format: `YYYY-MM-DD` (date) or `HH:MM` (time). |
+| `disabled` | `boolean` |  |  | Disables the field. |
+| `invalid` | `boolean` |  |  | Marks the value invalid (`aria-invalid` and error styling). |
+| `name` | `string` |  |  | Field name submitted with the form. |
 
 ```tsx
 function Example() {
@@ -179,11 +198,11 @@ Hours/minutes picker.
 
 **Slots:** `root` `cell` `column` `header` `value`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `minutesStep` | `number` |  |  |
-| `onChange` | `(time: string) => void` |  |  |
-| `value` | `string` |  | HH:MM |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `minutesStep` | `number` |  | `5` | Minute options' interval. |
+| `onChange` | `(time: string) => void` |  |  | Called with the picked time as `HH:MM`. |
+| `value` | `string` |  | `"12:00"` | HH:MM |
 
 ```tsx
 function Example() {
@@ -209,14 +228,14 @@ Color swatch + hex text field. The text `<input>` is the host; `classes.root` st
 
 **Slots:** `root` `input` `swatch`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `invalid` | `boolean` |  |  |
-| `name` | `string` |  |  |
-| `swatchLabel` | `string` |  | Accessible name for the swatch picker (default "Color"). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: string) => void` | yes |  | Called with the new colour (typed or picked). |
+| `value` | `string` | yes |  | Colour as hex, e.g. `#4f46e5` (controlled). |
+| `disabled` | `boolean` |  |  | Disables the field and swatch. |
+| `invalid` | `boolean` |  |  | Marks the value invalid (`aria-invalid` and error styling). |
+| `name` | `string` |  |  | Field name submitted with the form. |
+| `swatchLabel` | `string` |  | `"Color"` | Accessible name for the swatch picker (default "Color"). |
 
 ```tsx
 function Example() {
@@ -231,11 +250,11 @@ Native color input + swatches.
 
 **Slots:** `root` `native` `swatch` `swatches` `value`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(color: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `swatches` | `string[]` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(color: string) => void` | yes |  | Called with the picked colour. |
+| `value` | `string` | yes | `""` | Selected colour (controlled), e.g. `#1e87f0`. |
+| `swatches` | `string[]` |  |  | Preset colours shown as swatches. |
 
 ```tsx
 function Example() {
@@ -255,15 +274,15 @@ function Example() {
 
 Color chip; renders a `<button>` when `onClick` is set (use `selected` for a picker).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `color` | `string` | yes |  |
-| `children` | `content` |  |  |
-| `label` | `string` |  | Accessible name (default `Color &lt;color>`). |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
-| `selected` | `boolean` |  | Marks the chosen swatch (ring + check; `aria-pressed` when clickable). |
-| `size` | `number` |  |  |
-| `withShadow` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `color` | `string` | yes |  | Any CSS colour. |
+| `children` | `content` |  |  | Content inside the swatch (replaces the check mark when `selected`). |
+| `label` | `string` |  |  | Accessible name (default `Color &lt;color>`). |
+| `onClick` | `(e: MouseEvent) => void` |  |  | Makes the swatch a button; called when it is pressed. |
+| `selected` | `boolean` |  |  | Marks the chosen swatch (ring + check; `aria-pressed` when clickable). |
+| `size` | `number` |  | `28` | Diameter in pixels. |
+| `withShadow` | `boolean` |  |  | Adds a soft drop shadow. |
 
 ```tsx
 function Example() {

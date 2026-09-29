@@ -26,9 +26,20 @@ type Prop = {
 	type: string;
 	required: boolean;
 	description: string;
+	/** Default value from the component's `setup(…, defaults)` / `withDefaults(…)` call. */
+	defaultValue?: string;
 	/** `@deprecated` note, when the prop is deprecated. */
 	deprecated?: string;
 };
+/** A named data type used by props: an object's fields, or an alias's definition. */
+type TypeDoc = {
+	name: string;
+	description: string;
+	fields?: Prop[];
+	/** Definition of a non-object alias, e.g. `"success" | "failed"`. */
+	definition?: string;
+};
+
 type Entry = {
 	category: string;
 	name: string;
@@ -40,6 +51,8 @@ type Entry = {
 	summary: string;
 	slots: string[];
 	props: Prop[];
+	/** Named data types the props use (fields documented), in first-use order. */
+	types: TypeDoc[];
 	code: string;
 	interactive: boolean;
 	/** The example reports callbacks through `action()` (shown in the event log). */
@@ -108,7 +121,106 @@ function slotsOf(propsType: ts.Type, decl: ts.Declaration): string[] {
 		.sort((a, b) => (a === "root" ? -1 : b === "root" ? 1 : a.localeCompare(b)));
 }
 
-function ownProps(propsType: ts.Type, decl: ts.Declaration): Prop[] {
+const UI_SRC = /packages\/ui\/src\//;
+/** Props / fields missing a description, as `file:line Owner.name`. */
+const undocumented: string[] = [];
+const where = (node: ts.Node) => {
+	const sf = node.getSourceFile();
+	return `${sf.fileName.replace(`${ROOT}/`, "")}:${sf.getLineAndCharacterOfPosition(node.getStart()).line + 1}`;
+};
+
+/** Named types declared in the UI sources and referenced from `node`'s type annotations. */
+function referencedTypes(node: ts.Node, out: Map<string, ts.Declaration>) {
+	const visit = (n: ts.Node) => {
+		if (ts.isTypeReferenceNode(n)) {
+			const symbol = checker.getSymbolAtLocation(n.typeName);
+			const target =
+				symbol && symbol.flags & ts.SymbolFlags.Alias ? checker.getAliasedSymbol(symbol) : symbol;
+			const decl = target?.declarations?.find(
+				(d) =>
+					(ts.isTypeAliasDeclaration(d) || ts.isInterfaceDeclaration(d)) &&
+					UI_SRC.test(d.getSourceFile().fileName) &&
+					!SHARED_PROP_FILE.test(d.getSourceFile().fileName),
+			);
+			const name = target?.getName();
+			if (decl && name && !out.has(name) && !/Props$|Slot$/.test(name)) {
+				out.set(name, decl);
+				referencedTypes(decl, out);
+			}
+		}
+		ts.forEachChild(n, visit);
+	};
+	visit(node);
+}
+
+function typeDoc(name: string, decl: ts.Declaration): TypeDoc {
+	const symbol = checker.getSymbolAtLocation((decl as ts.TypeAliasDeclaration).name);
+	const description = symbol
+		? clean(ts.displayPartsToString(symbol.getDocumentationComment(checker)))
+		: "";
+	const node = ts.isTypeAliasDeclaration(decl) ? decl.type : undefined;
+	const isObject = ts.isInterfaceDeclaration(decl) || (node && ts.isTypeLiteralNode(node));
+	if (!isObject) return { name, description, definition: clean(node?.getText() ?? "") };
+	const type = checker.getTypeAtLocation((decl as ts.TypeAliasDeclaration).name);
+	const fields = type.getProperties().map((field) => {
+		const fieldDecl = field.valueDeclaration ?? field.declarations?.[0];
+		const text = clean(ts.displayPartsToString(field.getDocumentationComment(checker)));
+		if (!text && fieldDecl) undocumented.push(`${where(fieldDecl)} ${name}.${field.getName()}`);
+		return {
+			name: field.getName(),
+			type: fieldDecl ? typeText(checker.getTypeOfSymbolAtLocation(field, fieldDecl)) : "unknown",
+			required: (field.flags & ts.SymbolFlags.Optional) === 0,
+			description: text,
+		};
+	});
+	return { name, description, fields };
+}
+
+/** Data types used by a component's own props, documented once per component. */
+function typesOf(propsType: ts.Type, decl: ts.Declaration): TypeDoc[] {
+	const found = new Map<string, ts.Declaration>();
+	for (const prop of propsType.getProperties()) {
+		const declarations = prop.getDeclarations() ?? [];
+		if (declarations.every((d) => SHARED_PROP_FILE.test(d.getSourceFile().fileName))) continue;
+		for (const d of declarations) referencedTypes(d, found);
+	}
+	void decl;
+	return [...found].map(([name, d]) => typeDoc(name, d));
+}
+
+/** `{ key: value }` defaults passed to `setup(name, input, defaults, …)` / `withDefaults(name, defaults, …)`. */
+function defaultsOf(decl: ts.Declaration): Map<string, string> {
+	const out = new Map<string, string>();
+	const visit = (n: ts.Node) => {
+		if (ts.isCallExpression(n)) {
+			const callee = n.expression.getText();
+			const arg =
+				callee === "setup"
+					? n.arguments[2]
+					: callee === "withDefaults"
+						? n.arguments[1]
+						: undefined;
+			if (arg && ts.isObjectLiteralExpression(arg)) {
+				for (const p of arg.properties) {
+					if (ts.isPropertyAssignment(p)) out.set(p.name.getText(), clean(p.initializer.getText()));
+				}
+			}
+		}
+		ts.forEachChild(n, visit);
+	};
+	visit(decl);
+	// Inline fallbacks: `props.size ?? 72`, `props.label ?? "Close"` (literals only).
+	for (const m of decl
+		.getText()
+		.matchAll(/props\.(\w+)\s*\?\?\s*("[^"\n]*"|-?\d+(?:\.\d+)?|true|false)(?![\w.(])/g)) {
+		const [, key, value] = m;
+		if (key && value && !out.has(key)) out.set(key, value);
+	}
+	return out;
+}
+
+function ownProps(propsType: ts.Type, decl: ts.Declaration, owner = ""): Prop[] {
+	const defaults = defaultsOf(decl);
 	const props: Prop[] = [];
 	for (const prop of propsType.getProperties()) {
 		const declarations = prop.getDeclarations() ?? [];
@@ -116,10 +228,19 @@ function ownProps(propsType: ts.Type, decl: ts.Declaration): Prop[] {
 		if (declarations.every((d) => SHARED_PROP_FILE.test(d.getSourceFile().fileName))) continue;
 		const type = checker.getTypeOfSymbolAtLocation(prop, decl);
 		const deprecated = prop.getJsDocTags(checker).find((tag) => tag.name === "deprecated");
+		const own = declarations.find((d) => !SHARED_PROP_FILE.test(d.getSourceFile().fileName));
+		if (
+			!deprecated &&
+			own &&
+			!ts.displayPartsToString(prop.getDocumentationComment(checker)).trim()
+		)
+			undocumented.push(`${where(own)} ${owner}.${prop.getName()}`);
+		const defaultValue = defaults.get(prop.getName());
 		props.push({
 			name: prop.getName(),
 			type: typeText(type),
 			required: (prop.flags & ts.SymbolFlags.Optional) === 0,
+			...(defaultValue !== undefined ? { defaultValue } : {}),
 			description: clean(ts.displayPartsToString(prop.getDocumentationComment(checker))),
 			...(deprecated
 				? { deprecated: clean(ts.displayPartsToString(deprecated.text)) || "Deprecated." }
@@ -360,7 +481,8 @@ for (const category of categories) {
 				parts: member === name ? (parts[name] ?? []) : [],
 				summary: summaryOf(symbol),
 				slots: slotsOf(typed.type, typed.decl),
-				props: ownProps(typed.type, typed.decl),
+				props: ownProps(typed.type, typed.decl, member),
+				types: typesOf(typed.type, typed.decl),
 				code: demos.get(member) ?? snippets.get(member) ?? "",
 				interactive: demos.has(member),
 				logsActions: !demos.has(member) && actionExamples.has(member),
@@ -379,7 +501,16 @@ export type CatalogProp = {
 	type: string;
 	required: boolean;
 	description: string;
+	defaultValue?: string;
 	deprecated?: string;
+};
+
+export type CatalogType = {
+	name: string;
+	description: string;
+	fields?: CatalogProp[];
+	/** Definition of a non-object alias, e.g. \`"success" | "failed"\`. */
+	definition?: string;
 };
 
 export type CatalogEntry = {
@@ -394,6 +525,8 @@ export type CatalogEntry = {
 	summary: string;
 	slots: string[];
 	props: CatalogProp[];
+	/** Named data types the props use, with their fields. */
+	types: CatalogType[];
 	code: string;
 	/** Rendered through an interactive demo (overlays open on demand). */
 	interactive: boolean;
@@ -412,13 +545,31 @@ function componentMarkdown(e: Entry, level = 2): string {
 	// Reference first (props, slots), then the example.
 	if (e.slots.length) lines.push(`**Slots:** ${e.slots.map((s) => `\`${s}\``).join(" ")}`, "");
 	if (e.props.length) {
-		lines.push("| Prop | Type | Required | Description |", "| --- | --- | --- | --- |");
+		lines.push(
+			"| Prop | Type | Required | Default | Description |",
+			"| --- | --- | --- | --- | --- |",
+		);
 		for (const p of e.props) {
+			const description = p.deprecated
+				? `**Deprecated:** ${p.deprecated} ${p.description}`.trim()
+				: p.description;
 			lines.push(
-				`| \`${p.name}\` | \`${escapeCell(p.type)}\` | ${p.required ? "yes" : ""} | ${escapeCell(p.deprecated ? `**Deprecated:** ${p.deprecated} ${p.description}`.trim() : p.description)} |`,
+				`| \`${p.name}\` | \`${escapeCell(p.type)}\` | ${p.required ? "yes" : ""} | ${p.defaultValue ? `\`${escapeCell(p.defaultValue)}\`` : ""} | ${escapeCell(description)} |`,
 			);
 		}
 		lines.push("");
+	}
+	for (const t of e.types) {
+		lines.push(`**\`${t.name}\`**${t.description ? ` — ${t.description}` : ""}`, "");
+		if (t.fields) {
+			lines.push("| Field | Type | Required | Description |", "| --- | --- | --- | --- |");
+			for (const f of t.fields) {
+				lines.push(
+					`| \`${f.name}\` | \`${escapeCell(f.type)}\` | ${f.required ? "yes" : ""} | ${escapeCell(f.description)} |`,
+				);
+			}
+			lines.push("");
+		} else lines.push("```ts", `type ${t.name} = ${t.definition};`, "```", "");
 	}
 	lines.push("```tsx", e.code, "```", "");
 	if (level === 2) lines.push(SHARED_PROPS_NOTE, "");
@@ -524,6 +675,15 @@ for (const file of existsSync(DOCS_DIR) ? readdirSync(DOCS_DIR) : []) {
 	if (!file.endsWith(".md") || outputs.has(path)) continue;
 	if (check) stale.push(path.replace(`${ROOT}/`, ""));
 	else rmSync(path);
+}
+// Every own prop and every field of a documented data type needs a description.
+const missingDocs = [...new Set(undocumented)].sort();
+if (process.argv.includes("--missing")) console.log(missingDocs.join("\n"));
+if (missingDocs.length) {
+	console.error(
+		`${missingDocs.length} props / type fields have no description (run \`bun run ui:docs --missing\` for the list)`,
+	);
+	if (check) process.exit(1);
 }
 if (check && stale.length) {
 	console.error(`UI docs are out of date (run \`bun run ui:docs\`):\n  ${stale.join("\n  ")}`);

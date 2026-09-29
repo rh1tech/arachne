@@ -15,11 +15,17 @@ Inline status message; danger/warning are assertive alerts.
 
 **Slots:** `root` `body` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `title` | `string` |  |  |
-| `tone` | `AlertTone` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Message text or content. |
+| `title` | `string` |  |  | Bold first line. |
+| `tone` | `AlertTone` |  | `"info"` | Colour and icon: `info`, `success`, `warning` or `danger`. |
+
+**`AlertTone`**
+
+```ts
+type AlertTone = "info" | "success" | "warning" | "danger";
+```
 
 ```tsx
 <Alert tone="success" title="Deploy finished">
@@ -33,12 +39,18 @@ Highlighted note block with icon and tone (info, success, warning, danger).
 
 **Slots:** `root` `body` `content` `icon` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `icon` | `content` |  | Replace the tone icon (`null` hides it). |
-| `title` | `string` |  |  |
-| `tone` | `CalloutTone` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Note text or content. |
+| `icon` | `content` |  |  | Replace the tone icon (`null` hides it). |
+| `title` | `string` |  |  | Bold first line. |
+| `tone` | `CalloutTone` |  | `"info"` | Kind of note (sets colour and icon). |
+
+**`CalloutTone`**
+
+```ts
+type CalloutTone = "info" | "tip" | "warning" | "danger" | "note";
+```
 
 ```tsx
 <Callout tone="warning" title="Breaking change">
@@ -58,12 +70,18 @@ Inline notification (distinct from toast host). Danger / warning announce assert
 
 **Slots:** `root` `body` `close` `content` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `onClose` | `() => void` |  |  |
-| `title` | `string` |  |  |
-| `tone` | `AlertTone` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Notification text. |
+| `onClose` | `() => void` |  |  | Shows a close button; called when it is pressed. |
+| `title` | `string` |  |  | Bold first line. |
+| `tone` | `AlertTone` |  | `"info"` | Colour and icon. |
+
+**`AlertTone`**
+
+```ts
+type AlertTone = "info" | "success" | "warning" | "danger";
+```
 
 ```tsx
 function Example() {
@@ -91,11 +109,63 @@ Live region for toasts. Existing toasts keep their DOM when others come and go; 
 
 **Slots:** `root` `action` `copy` `dismiss` `icon` `message` `title` `toast`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `toaster` | `Toaster` | yes |  | The queue to render, from `createToaster()`. |
+| `position` | `ToastPosition` |  | `"bottom-right"` | Screen corner or edge the toasts stack from. |
+| `render` | `(toast: ToastItem, dismiss: () => void) => unknown` |  |  | Custom toast body; receives the item and a dismiss callback. |
+
+**`Toaster`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `toaster` | `Toaster` | yes |  |
-| `position` | `ToastPosition` |  |  |
-| `render` | `(toast: ToastItem, dismiss: () => void) => unknown` |  | Custom toast body; receives the item and a dismiss callback. |
+| `items` | `() => ToastItem[]` | yes | The toasts currently shown (reactive). |
+| `push` | `(input: ToastInput) => string` | yes | Shows a toast; returns its id. |
+| `dismiss` | `(id: string) => void` | yes | Closes a toast by id. |
+| `pause` | `(id: string) => void` | yes | Pause / resume auto-dismiss (hover, focus). |
+| `resume` | `(id: string) => void` | yes | Restarts a paused toast's auto-dismiss timer. |
+| `clear` | `() => void` | yes | Closes every toast. |
+
+**`ToastItem`**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | `string` | yes | Toast id (use it with `dismiss`). |
+| `title` | `string` |  | Bold first line. |
+| `message` | `string` | yes | Toast text. |
+| `tone` | `AlertTone` |  | Colour and icon. |
+| `action` | `ToastAction` |  | Optional action button, e.g. "Undo" or "Retry". |
+| `state` | `"open" \| "closed"` | yes | `closed` while the exit animation plays. |
+
+**`AlertTone`**
+
+```ts
+type AlertTone = "info" | "success" | "warning" | "danger";
+```
+
+**`ToastAction`**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `label` | `string` | yes | Action button text. |
+| `onClick` | `() => void` | yes | Called when the action is pressed (the toast then closes). |
+
+**`ToastInput`**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | `string` |  | Id to reuse (pushing the same id replaces that toast); generated when omitted. |
+| `title` | `string` |  | Bold first line. |
+| `message` | `string` | yes | Toast text. |
+| `tone` | `AlertTone` |  | Colour and icon. |
+| `action` | `ToastAction` |  | Optional action button, e.g. "Undo" or "Retry". |
+| `durationMs` | `number` |  | Auto-dismiss delay; `0` keeps the toast until dismissed. Default 4000. |
+
+**`ToastPosition`**
+
+```ts
+type ToastPosition = | "top-left" | "top-center" | "top-right" | "bottom-left" | "bottom-center" | "bottom-right";
+```
 
 ```tsx
 function Example() {
@@ -137,10 +207,16 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Colored message block for longer contextual notes.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `tone` | `MessageTone` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | `MessageHeader` and `MessageBody`, or body text. |
+| `tone` | `MessageTone` |  |  | Colour of the message. |
+
+**`MessageTone`**
+
+```ts
+type MessageTone = "info" | "success" | "warning" | "danger" | "muted";
+```
 
 ```tsx
 function Example() {
@@ -175,11 +251,11 @@ Message title bar, with an optional close button.
 
 **Slots:** `root` `close` `text`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `closeLabel` | `string` |  | Accessible label for the close button (default "Close"). |
-| `onClose` | `() => void` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Header text. |
+| `closeLabel` | `string` |  | `"Close"` | Accessible label for the close button (default "Close"). |
+| `onClose` | `() => void` |  |  | Shows a close button; called when it is pressed. |
 
 ```tsx
 function Example() {
@@ -208,9 +284,9 @@ function Example() {
 
 Body text of a message.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content of this part. |
 
 ```tsx
 <Message tone="success">
@@ -228,13 +304,19 @@ Full-width page banner.
 
 **Slots:** `root` `action` `body` `close` `content` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `action` | `content` |  |  |
-| `children` | `content` |  |  |
-| `onClose` | `() => void` |  |  |
-| `title` | `string` |  |  |
-| `tone` | `AlertTone` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `action` | `content` |  |  | Call to action at the end, e.g. a `Button`. |
+| `children` | `content` |  |  | Banner text. |
+| `onClose` | `() => void` |  |  | Shows a close button; called when it is pressed. |
+| `title` | `string` |  |  | Bold first line. |
+| `tone` | `AlertTone` |  |  | Colour and icon. |
+
+**`AlertTone`**
+
+```ts
+type AlertTone = "info" | "success" | "warning" | "danger";
+```
 
 ```tsx
 function Example() {
@@ -271,12 +353,12 @@ Site-wide notice strip.
 
 **Slots:** `root` `body` `close`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `dismissible` | `boolean` |  |  |
-| `onDismiss` | `() => void` |  |  |
-| `tone` | `"accent" \| "warning" \| "info" \| "danger"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Announcement text or content. |
+| `dismissible` | `boolean` |  |  | Show a dismiss (×) button. |
+| `onDismiss` | `() => void` |  |  | Called when the dismiss button is pressed; hide the bar here. |
+| `tone` | `"accent" \| "warning" \| "info" \| "danger"` |  | `"info"` | Bar colour. |
 
 ```tsx
 function Example() {
@@ -304,11 +386,11 @@ Upsell banner with a call to action.
 
 **Slots:** `root` `action` `body` `content` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `action` | `content` |  |  |
-| `children` | `content` |  |  |
-| `title` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `action` | `content` |  |  | Upgrade call to action, e.g. a `Button`. |
+| `children` | `content` |  |  | Pitch text. |
+| `title` | `string` |  |  | Headline. |
 
 ```tsx
 <UpgradeBanner
@@ -331,15 +413,15 @@ Cookie consent banner with accept / decline.
 
 **Slots:** `root` `actions` `body` `message` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onAccept` | `() => void` | yes |  |
-| `open` | `boolean` | yes |  |
-| `acceptLabel` | `string` |  |  |
-| `declineLabel` | `string` |  |  |
-| `message` | `string` |  |  |
-| `onDecline` | `() => void` |  |  |
-| `title` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onAccept` | `() => void` | yes |  | Called when the user accepts. |
+| `open` | `boolean` | yes |  | Whether the notice is shown (controlled); hide it once the user chooses. |
+| `acceptLabel` | `string` |  | `"Accept"` | Accept button text. |
+| `declineLabel` | `string` |  | `"Decline"` | Decline button text. |
+| `message` | `string` |  | `"We use cookies to improve your experience. You can accept or decline non-essential cookies."` | Explanation of what the cookies are for. |
+| `onDecline` | `() => void` |  |  | Shows a decline button; called when it is pressed. |
+| `title` | `string` |  | `"Cookies"` | Bold first line. |
 
 ```tsx
 function Example() {
@@ -369,10 +451,10 @@ function Example() {
 
 Banner shown while the browser is offline.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `offline` | `boolean` |  | Force visibility (otherwise listens to navigator.onLine). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  | `"You are offline. Changes may not sync."` | Message shown while offline. |
+| `offline` | `boolean` |  |  | Force visibility (otherwise listens to navigator.onLine). |
 
 ```tsx
 <OfflineNotice offline />
@@ -390,12 +472,12 @@ Placeholder for empty lists.
 
 **Slots:** `root` `action` `description` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `title` | `string` | yes |  |
-| `action` | `content` |  |  |
-| `children` | `content` |  |  |
-| `description` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `title` | `string` | yes |  | Headline, e.g. "No projects yet". |
+| `action` | `content` |  |  | Call to action, e.g. a `Button`. |
+| `children` | `content` |  |  | Extra content below the description. |
+| `description` | `content` |  |  | Explanation under the title. |
 
 ```tsx
 <EmptyState
@@ -411,11 +493,11 @@ Empty search results state.
 
 **Slots:** `root` `icon` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `query` | `string` |  |  |
-| `title` | `string` |  | Override the title text. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Suggestions, e.g. how to broaden the search. |
+| `query` | `string` |  |  | The search that found nothing (quoted in the message). |
+| `title` | `string` |  |  | Override the title text. |
 
 ```tsx
 <NoResults query="kubernetes">
@@ -429,11 +511,11 @@ Error state with description and a recovery action.
 
 **Slots:** `root` `action` `description` `icon` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `action` | `content` |  |  |
-| `description` | `string` |  |  |
-| `title` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `action` | `content` |  |  | Recovery action, e.g. a Retry `Button`. |
+| `description` | `string` |  |  | What went wrong and what to do. |
+| `title` | `string` |  | `"Something went wrong"` | Headline. |
 
 ```tsx
 <ErrorState

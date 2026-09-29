@@ -4,9 +4,13 @@ import { type BaseProps, type SlotProps, setup } from "./system.ts";
 export type AvatarSlot = "root" | "image" | "fallback";
 
 export type AvatarProps = SlotProps<AvatarSlot> & {
+	/** Image URL; falls back to initials from `name` when missing or broken. */
 	src?: string | undefined;
+	/** Image alt text (default: `name`). */
 	alt?: string | undefined;
+	/** Person's name: used for initials and as the accessible name. */
 	name?: string | undefined;
+	/** Avatar size. */
 	size?: "sm" | "md" | "lg" | undefined;
 };
 
@@ -57,9 +61,13 @@ export function Avatar(input: AvatarProps) {
 export type EmptyStateSlot = "root" | "title" | "description" | "action";
 
 export type EmptyStateProps = SlotProps<EmptyStateSlot> & {
+	/** Headline, e.g. "No projects yet". */
 	title: unknown;
+	/** Explanation under the title. */
 	description?: unknown;
+	/** Call to action, e.g. a `Button`. */
 	action?: unknown;
+	/** Extra content below the description. */
 	children?: unknown;
 };
 
@@ -92,7 +100,10 @@ export function EmptyState(input: EmptyStateProps) {
 	);
 }
 
-export type KbdProps = BaseProps & { children?: unknown };
+export type KbdProps = BaseProps & {
+	/** Key or key combination text, e.g. `⌘K`. */
+	children?: unknown;
+};
 
 /** Keyboard key. Slots: `root`. */
 export function Kbd(input: KbdProps) {
@@ -104,7 +115,10 @@ export function Kbd(input: KbdProps) {
 	);
 }
 
-export type CodeProps = BaseProps & { children?: unknown };
+export type CodeProps = BaseProps & {
+	/** Inline code. */
+	children?: unknown;
+};
 
 /** Inline code. Slots: `root`. */
 export function Code(input: CodeProps) {

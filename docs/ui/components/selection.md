@@ -15,15 +15,15 @@ Checkbox. The native `<input>` is the host: `class`, `style` and forwarded attri
 
 **Slots:** `root` `input` `label`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `checked` | `boolean` |  |  |
-| `disabled` | `boolean` |  |  |
-| `invalid` | `boolean` |  |  |
-| `label` | `content` |  |  |
-| `name` | `string` |  |  |
-| `onChange` | `(e: Event) => void` |  |  |
-| `value` | `string` |  | Native `value` submitted with the form. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `checked` | `boolean` |  |  | Whether it is checked (controlled). |
+| `disabled` | `boolean` |  |  | Disables the checkbox. |
+| `invalid` | `boolean` |  |  | Marks the value invalid (`aria-invalid` and error styling). |
+| `label` | `content` |  |  | Label text or content, clickable to toggle. |
+| `name` | `string` |  |  | Field name submitted with the form. |
+| `onChange` | `(e: Event) => void` |  |  | Called on toggle; read `e.target.checked`. |
+| `value` | `string` |  |  | Native `value` submitted with the form. |
 
 ```tsx
 function Example() {
@@ -44,13 +44,13 @@ Multiple-choice checkboxes in a fieldset.
 
 **Slots:** `root` `legend` `option`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string[]) => void` | yes |  |
-| `options` | `{ value: string; label: unknown; disabled?: boolean; }[]` | yes |  |
-| `value` | `string[]` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `legend` | `content` |  | Visible group label rendered as `&lt;legend>`. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: string[]) => void` | yes |  | Called with the new list of checked values. |
+| `options` | `{ value: string; label: unknown; disabled?: boolean; }[]` | yes |  | Options: `value`, `label`, optional `disabled`. |
+| `value` | `string[]` | yes |  | Values of the checked options (controlled). |
+| `disabled` | `boolean` |  |  | Disables every option. |
+| `legend` | `content` |  |  | Visible group label rendered as `&lt;legend>`. |
 
 ```tsx
 const regions = [
@@ -78,10 +78,18 @@ Checklist of items with checkboxes.
 
 **Slots:** `root` `checkbox` `item` `label`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `ChecklistItemData[]` | yes |  | The checklist items (controlled). |
+| `onChange` | `(items: ChecklistItemData[]) => void` | yes |  | Called with the updated items after a tick changes. |
+
+**`ChecklistItemData`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `items` | `ChecklistItemData[]` | yes |  |
-| `onChange` | `(items: ChecklistItemData[]) => void` | yes |  |
+| `id` | `string` | yes | Item id. |
+| `label` | `string` | yes | Item text. |
+| `done` | `boolean` |  | Whether the item is ticked. |
 
 ```tsx
 function Example() {
@@ -110,15 +118,23 @@ Radio group (`role="radiogroup"`). Forwarded attributes land on the group.
 
 **Slots:** `root` `input` `label` `option`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `name` | `string` | yes |  | Shared `name` of the radio inputs (also the form field name). |
+| `options` | `RadioOption[]` | yes |  | The options, in order. |
+| `disabled` | `boolean` |  |  | Disables every option. |
+| `inline` | `boolean` |  |  | Lay options out in a row. |
+| `label` | `string` |  |  | Accessible name for the group. |
+| `onChange` | `(e: Event) => void` |  |  | Called when the selection changes; read `e.target.value`. |
+| `value` | `string` |  |  | Selected option's value (controlled). |
+
+**`RadioOption`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `name` | `string` | yes |  |
-| `options` | `RadioOption[]` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `inline` | `boolean` |  | Lay options out in a row. |
-| `label` | `string` |  | Accessible name for the group. |
-| `onChange` | `(e: Event) => void` |  |  |
-| `value` | `string` |  |  |
+| `value` | `string` | yes | Option value (what `value` / `onChange` use). |
+| `label` | `content` | yes | Text or content shown for the option. |
+| `disabled` | `boolean` |  | Shown but can't be chosen. |
 
 ```tsx
 const plans = [
@@ -149,13 +165,13 @@ Toggle switch (`role="switch"`). Like {@link Checkbox}, the `<input>` (the visib
 
 **Slots:** `root` `input` `label`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `checked` | `boolean` |  |  |
-| `disabled` | `boolean` |  |  |
-| `label` | `content` |  |  |
-| `name` | `string` |  |  |
-| `onChange` | `(e: Event) => void` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `checked` | `boolean` |  |  | Whether it is on (controlled). |
+| `disabled` | `boolean` |  |  | Disables the switch. |
+| `label` | `content` |  |  | Label text or content, clickable to toggle. |
+| `name` | `string` |  |  | Field name submitted with the form. |
+| `onChange` | `(e: Event) => void` |  |  | Called on toggle; read `e.target.checked`. |
 
 ```tsx
 function Example() {
@@ -180,15 +196,23 @@ Pick one or many options from a list.
 
 Native select; forwarded attributes land on `<select>`.
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `options` | `SelectOption[]` | yes |  | The options, in order. |
+| `disabled` | `boolean` |  |  | Disables the select. |
+| `invalid` | `boolean` |  |  | Marks the value invalid (`aria-invalid` and error styling). |
+| `name` | `string` |  |  | Field name submitted with the form. |
+| `onChange` | `(e: Event) => void` |  |  | Called when the selection changes; read `e.target.value`. |
+| `placeholder` | `string` |  |  | Empty first option shown while nothing is selected. |
+| `value` | `string` |  | `""` | Selected option's value (controlled). |
+
+**`SelectOption`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `options` | `SelectOption[]` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `invalid` | `boolean` |  |  |
-| `name` | `string` |  |  |
-| `onChange` | `(e: Event) => void` |  |  |
-| `placeholder` | `string` |  |  |
-| `value` | `string` |  |  |
+| `value` | `string` | yes | Option value (what `value` / `onChange` use). |
+| `label` | `string` | yes | Text shown for the option. |
+| `disabled` | `boolean` |  | Shown but can't be chosen. |
 
 ```tsx
 const plans = [
@@ -214,15 +238,15 @@ function Example() {
 
 Native `<select>` with a value callback.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string) => void` | yes |  |
-| `options` | `{ value: string; label: string; disabled?: boolean; }[]` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `invalid` | `boolean` |  |  |
-| `name` | `string` |  |  |
-| `placeholder` | `string` |  |  |
-| `value` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: string) => void` | yes |  | Called with the selected value. |
+| `options` | `{ value: string; label: string; disabled?: boolean; }[]` | yes |  | Options: `value`, `label`, optional `disabled`. |
+| `disabled` | `boolean` |  |  | Disables the select. |
+| `invalid` | `boolean` |  |  | Marks the value invalid (`aria-invalid` and error styling). |
+| `name` | `string` |  |  | Field name submitted with the form. |
+| `placeholder` | `string` |  |  | Empty first option shown while nothing is selected. |
+| `value` | `string` |  | `""` | Selected option's value (controlled). |
 
 ```tsx
 const regions = [
@@ -250,13 +274,13 @@ Multi-choice listbox dropdown.
 
 **Slots:** `root` `control` `menu` `option`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string[]) => void` | yes |  |
-| `options` | `{ value: string; label: string; disabled?: boolean; }[]` | yes |  |
-| `value` | `string[]` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `placeholder` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: string[]) => void` | yes |  | Called with the new list of selected values. |
+| `options` | `{ value: string; label: string; disabled?: boolean; }[]` | yes |  | Options: `value`, `label`, optional `disabled`. |
+| `value` | `string[]` | yes |  | Values of the selected options (controlled). |
+| `disabled` | `boolean` |  |  | Disables the control. |
+| `placeholder` | `string` |  | `"Select…"` | Trigger text while nothing is selected. |
 
 ```tsx
 const regions = [
@@ -284,17 +308,17 @@ Combobox with suggestion list (↑ ↓ Enter Escape, `aria-activedescendant`). T
 
 **Slots:** `root` `input` `menu` `option`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string) => void` | yes |  |
-| `options` | `string[]` | yes |  |
-| `value` | `string` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `invalid` | `boolean` |  |  |
-| `limit` | `number` |  | Max suggestions shown (default 8). |
-| `name` | `string` |  |  |
-| `placeholder` | `string` |  |  |
-| `renderOption` | `(option: string) => unknown` |  | Render an option (default: the text). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: string) => void` | yes |  | Called with the new text as the user types or picks a suggestion. |
+| `options` | `string[]` | yes |  | Suggestions, filtered by the typed text. |
+| `value` | `string` | yes |  | Current text (controlled). |
+| `disabled` | `boolean` |  |  | Disables the field. |
+| `invalid` | `boolean` |  |  | Marks the value invalid (`aria-invalid` and error styling). |
+| `limit` | `number` |  | `8` | Max suggestions shown (default 8). |
+| `name` | `string` |  |  | Field name submitted with the form. |
+| `placeholder` | `string` |  |  | Hint shown while empty. |
+| `renderOption` | `(option: string) => unknown` |  |  | Render an option (default: the text). |
 
 ```tsx
 function Example() {
@@ -319,16 +343,16 @@ Selectable card wrapping a native radio/checkbox.
 
 **Slots:** `root` `body` `description` `input` `label`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `checked` | `boolean` | yes |  |
-| `label` | `content` | yes |  |
-| `onChange` | `(checked: boolean) => void` | yes |  |
-| `description` | `content` |  |  |
-| `disabled` | `boolean` |  |  |
-| `name` | `string` |  |  |
-| `type` | `"checkbox" \| "radio"` |  |  |
-| `value` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `checked` | `boolean` | yes |  | Whether this card is selected (controlled). |
+| `label` | `content` | yes |  | Card title. |
+| `onChange` | `(checked: boolean) => void` | yes |  | Called with the new checked state. |
+| `description` | `content` |  |  | Text under the title. |
+| `disabled` | `boolean` |  |  | Disables the card. |
+| `name` | `string` |  |  | Input name; cards with the same name form a radio group. |
+| `type` | `"checkbox" \| "radio"` |  | `"radio"` | `radio` for one-of-many cards (share a `name`), `checkbox` for independent ones. |
+| `value` | `string` |  |  | Value submitted with the form. |
 
 ```tsx
 function Example() {
@@ -368,13 +392,13 @@ Toggleable chips.
 
 Toggleable pill (`aria-pressed`).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `checked` | `boolean` |  |  |
-| `children` | `content` |  |  |
-| `disabled` | `boolean` |  |  |
-| `icon` | `content` |  | Leading icon. |
-| `onChange` | `(checked: boolean) => void` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `checked` | `boolean` |  |  | Whether the chip is selected (controlled). |
+| `children` | `content` |  |  | Chip label. |
+| `disabled` | `boolean` |  |  | Disables the chip. |
+| `icon` | `content` |  |  | Leading icon. |
+| `onChange` | `(checked: boolean) => void` |  |  | Called with the new checked state. |
 
 ```tsx
 function Example() {
@@ -393,14 +417,14 @@ Single or multiple choice chips.
 
 **Slots:** `root` `chip` `legend`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string[]) => void` | yes |  |
-| `options` | `{ value: string; label: unknown; disabled?: boolean; }[]` | yes |  |
-| `value` | `string[]` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `legend` | `content` |  |  |
-| `multiple` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: string[]) => void` | yes |  | Called with the new list of selected values. |
+| `options` | `{ value: string; label: unknown; disabled?: boolean; }[]` | yes |  | Chips: `value`, `label`, optional `disabled`. |
+| `value` | `string[]` | yes |  | Values of the selected chips (controlled). |
+| `disabled` | `boolean` |  |  | Disables every chip. |
+| `legend` | `content` |  |  | Group caption (the group's accessible name). |
+| `multiple` | `boolean` |  |  | Allow several chips selected; otherwise picking one replaces the other. |
 
 ```tsx
 function Example() {
@@ -433,12 +457,12 @@ Pressed-button group.
 
 **Slots:** `root` `segment`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `{ id: string; label: string; disabled?: boolean; }[]` | yes |  |
-| `onChange` | `(id: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `label` | `string` |  | Accessible name for the group (default "Options"). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `{ id: string; label: string; disabled?: boolean; }[]` | yes |  | Options: `id`, `label` and optional `disabled`. |
+| `onChange` | `(id: string) => void` | yes |  | Called with the id the user picks. |
+| `value` | `string` | yes |  | Id of the selected option. |
+| `label` | `string` |  | `"Options"` | Accessible name for the group (default "Options"). |
 
 ```tsx
 function Example() {
@@ -464,13 +488,21 @@ Pressed-toggle group.
 
 **Slots:** `root` `item`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `ToggleItem[]` | yes |  | The options, in order. |
+| `onChange` | `(value: string \| string[] \| null) => void` | yes |  | Called with the new pressed id(s) (`null` when the pressed single option is released). |
+| `value` | `string \| string[]` | yes |  | Pressed id (single), ids (`multiple`), or `null` for none. |
+| `label` | `string` |  |  | Accessible name for the group. |
+| `multiple` | `boolean` |  |  | Allow several options pressed at once (`value` is an array). |
+
+**`ToggleItem`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `items` | `ToggleItem[]` | yes |  |
-| `onChange` | `(value: string \| string[] \| null) => void` | yes |  |
-| `value` | `string \| string[]` | yes |  |
-| `label` | `string` |  | Accessible name for the group. |
-| `multiple` | `boolean` |  |  |
+| `id` | `string` | yes | Option id, passed to `onChange` and matched against `value`. |
+| `label` | `content` | yes | Option text or content. |
+| `disabled` | `boolean` |  | Shown but can't be toggled. |
 
 ```tsx
 function Example() {
@@ -501,14 +533,14 @@ Pick a value, a range or an angle.
 
 Range input; forwarded attributes land on `<input type="range">`.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: number) => void` | yes |  |
-| `value` | `number` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `max` | `number` |  |  |
-| `min` | `number` |  |  |
-| `step` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: number) => void` | yes |  | Called with the new value while dragging or using the keyboard. |
+| `value` | `number` | yes |  | Current value (controlled). |
+| `disabled` | `boolean` |  |  | Disables the slider. |
+| `max` | `number` |  | `100` | Highest value. |
+| `min` | `number` |  | `0` | Lowest value. |
+| `step` | `number` |  | `1` | Increment between values (also for arrow keys). |
 
 ```tsx
 function Example() {
@@ -528,16 +560,16 @@ Two-thumb range.
 
 **Slots:** `root` `end` `start`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: [number, number]) => void` | yes |  |
-| `value` | `[number, number]` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `endLabel` | `string` |  |  |
-| `max` | `number` |  |  |
-| `min` | `number` |  |  |
-| `startLabel` | `string` |  |  |
-| `step` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: [number, number]) => void` | yes |  | Called with the new `[start, end]`; handles can't cross. |
+| `value` | `[number, number]` | yes |  | Start and end of the range (controlled). |
+| `disabled` | `boolean` |  |  | Disables both handles. |
+| `endLabel` | `string` |  | `"Range end"` | Accessible name of the end handle. |
+| `max` | `number` |  | `100` | Highest value. |
+| `min` | `number` |  | `0` | Lowest value. |
+| `startLabel` | `string` |  | `"Range start"` | Accessible name of the start handle. |
+| `step` | `number` |  | `1` | Increment between values. |
 
 ```tsx
 function Example() {
@@ -565,13 +597,13 @@ Circular slider for an angle.
 
 **Slots:** `root` `arm` `hub` `knob` `label` `svg` `track`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(deg: number) => void` | yes |  |
-| `value` | `number` | yes |  |
-| `label` | `string` |  | Accessible name (default "Angle"). |
-| `size` | `number` |  |  |
-| `step` | `number` |  | Degrees per arrow key press (default 5). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(deg: number) => void` | yes |  | Called with the new angle while dragging or using the arrow keys. |
+| `value` | `number` | yes |  | Angle in degrees, 0–359 (controlled). |
+| `label` | `string` |  | `"Angle"` | Accessible name (default "Angle"). |
+| `size` | `number` |  | `120` | Diameter in pixels. |
+| `step` | `number` |  | `5` | Degrees per arrow key press (default 5). |
 
 ```tsx
 function Example() {
@@ -593,14 +625,14 @@ Star rating (radio pattern with roving tabindex, arrow keys).
 
 **Slots:** `root` `star`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: number) => void` | yes |  |
-| `value` | `number` | yes |  |
-| `count` | `number` |  |  |
-| `disabled` | `boolean` |  |  |
-| `starLabel` | `(n: number) => string` |  | Accessible label per star, e.g. `(n) => \`${n} of 5\``. |
-| `symbol` | `content` |  | Star glyph (default ★). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: number) => void` | yes |  | Called with the picked rating. |
+| `value` | `number` | yes |  | Current rating (controlled; `0` for none). |
+| `count` | `number` |  | `5` | Number of stars. |
+| `disabled` | `boolean` |  |  | Read-only display. |
+| `starLabel` | `(n: number) => string` |  |  | Accessible label per star, e.g. `(n) => \`${n} of 5\``. |
+| `symbol` | `content` |  | `"★"` | Star glyph (default ★). |
 
 ```tsx
 function Example() {
@@ -617,13 +649,13 @@ Dual-list mover (Mantine TransferList). Rows keep their DOM between moves.
 
 **Slots:** `root` `actions` `item` `list` `pane` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `left` | `string[]` | yes |  |
-| `onChange` | `(next: { left: string[]; right: string[]; }) => void` | yes |  |
-| `right` | `string[]` | yes |  |
-| `leftTitle` | `string` |  |  |
-| `rightTitle` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `left` | `string[]` | yes |  | Items in the left list. |
+| `onChange` | `(next: { left: string[]; right: string[]; }) => void` | yes |  | Called with both lists after items are moved. |
+| `right` | `string[]` | yes |  | Items in the right list. |
+| `leftTitle` | `string` |  | `"Available"` | Heading of the left list. |
+| `rightTitle` | `string` |  | `"Selected"` | Heading of the right list. |
 
 ```tsx
 function Example() {
@@ -652,10 +684,10 @@ List / grid toggle.
 
 **Slots:** `root` `option`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: "grid" \| "list") => void` | yes |  |
-| `value` | `"grid" \| "list"` | yes |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: "grid" \| "list") => void` | yes |  | Called with the view the user picks. |
+| `value` | `"grid" \| "list"` | yes |  | Current view. |
 
 ```tsx
 function Example() {
@@ -675,11 +707,17 @@ Compact / comfortable density switch.
 
 **Slots:** `root` `option`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: Density) => void` | yes |  |
-| `value` | `Density` | yes |  |
-| `label` | `string` |  | Accessible name (default "Density"). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: Density) => void` | yes |  | Called with the density the user picks. |
+| `value` | `Density` | yes |  | Current density. |
+| `label` | `string` |  | `"Density"` | Accessible name (default "Density"). |
+
+**`Density`**
+
+```ts
+type Density = "comfortable" | "compact";
+```
 
 ```tsx
 function Example() {
@@ -697,10 +735,10 @@ function Example() {
 
 Toggle between light and dark themes.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(theme: "dark" \| "light") => void` | yes |  |
-| `value` | `"dark" \| "light"` | yes |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(theme: "dark" \| "light") => void` | yes |  | Called with the theme to switch to; apply it yourself (e.g. `data-theme` on `&lt;html>`). |
+| `value` | `"dark" \| "light"` | yes |  | Current theme. |
 
 ```tsx
 function Example() {
@@ -722,12 +760,19 @@ Inline language picker.
 
 **Slots:** `root` `option`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: string) => void` | yes |  | Called with the picked locale code. |
+| `options` | `LocaleOption[]` | yes |  | Available languages. |
+| `value` | `string` | yes |  | Current locale code (controlled). |
+| `label` | `string` |  | `"Language"` | Accessible name (default "Language"). |
+
+**`LocaleOption`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `onChange` | `(value: string) => void` | yes |  |
-| `options` | `LocaleOption[]` | yes |  |
-| `value` | `string` | yes |  |
-| `label` | `string` |  | Accessible name (default "Language"). |
+| `value` | `string` | yes | Locale code, e.g. `de`. |
+| `label` | `string` | yes | Language name shown to the user. |
 
 ```tsx
 function Example() {

@@ -18,13 +18,21 @@ export type PasswordInputSlot = "root" | "input" | "toggle";
 
 export type PasswordInputProps = SlotProps<PasswordInputSlot> &
 	InputPassThrough & {
+		/** Current password (controlled). */
 		value: string;
+		/** Hint shown while empty. */
 		placeholder?: string | undefined;
+		/** Disables the field. */
 		disabled?: boolean | undefined;
+		/** Marks the value invalid (`aria-invalid` and error styling). */
 		invalid?: boolean | undefined;
+		/** Field name submitted with the form. */
 		name?: string | undefined;
+		/** Accessible name of the reveal button while hidden. */
 		showLabel?: string | undefined;
+		/** Accessible name of the reveal button while shown. */
 		hideLabel?: string | undefined;
+		/** Called with the new password on every edit. */
 		onChange: (value: string) => void;
 	};
 
@@ -80,11 +88,15 @@ export function PasswordInput(input: PasswordInputProps) {
 export type PinInputSlot = "root" | "cell";
 
 export type PinInputProps = SlotProps<PinInputSlot> & {
+	/** Digits entered so far (controlled). */
 	value: string;
+	/** Number of cells. */
 	length?: number | undefined;
+	/** Disables every cell. */
 	disabled?: boolean | undefined;
 	/** Mask digits like a password. */
 	mask?: boolean | undefined;
+	/** Called with the new code on every edit or paste. */
 	onChange: (value: string) => void;
 };
 
@@ -183,12 +195,17 @@ export type ColorInputSlot = "root" | "swatch" | "input";
 
 export type ColorInputProps = SlotProps<ColorInputSlot> &
 	InputPassThrough & {
+		/** Colour as hex, e.g. `#4f46e5` (controlled). */
 		value: string;
+		/** Disables the field and swatch. */
 		disabled?: boolean | undefined;
+		/** Marks the value invalid (`aria-invalid` and error styling). */
 		invalid?: boolean | undefined;
+		/** Field name submitted with the form. */
 		name?: string | undefined;
 		/** Accessible name for the swatch picker (default "Color"). */
 		swatchLabel?: string | undefined;
+		/** Called with the new colour (typed or picked). */
 		onChange: (value: string) => void;
 	};
 
@@ -233,10 +250,15 @@ export function ColorInput(input: ColorInputProps) {
 
 export type DateInputProps = BaseProps &
 	InputPassThrough & {
+		/** Value in the native format: `YYYY-MM-DD` (date) or `HH:MM` (time). */
 		value: string;
+		/** Disables the field. */
 		disabled?: boolean | undefined;
+		/** Marks the value invalid (`aria-invalid` and error styling). */
 		invalid?: boolean | undefined;
+		/** Field name submitted with the form. */
 		name?: string | undefined;
+		/** Called with the new value in the native format. */
 		onChange: (value: string) => void;
 	};
 
@@ -270,10 +292,15 @@ function NativeValueInput(name: string, type: "date" | "time", input: DateInputP
 
 export type JsonInputProps = BaseProps &
 	InputPassThrough & {
+		/** JSON text (controlled). */
 		value: string;
+		/** Disables the field. */
 		disabled?: boolean | undefined;
+		/** Field name submitted with the form. */
 		name?: string | undefined;
+		/** Visible text lines. */
 		rows?: number | undefined;
+		/** Called with the new text on every edit (invalid JSON is flagged, not rejected). */
 		onChange: (value: string) => void;
 	};
 
@@ -305,12 +332,19 @@ export function JsonInput(input: JsonInputProps) {
 
 export type NativeSelectProps = BaseProps &
 	InputPassThrough & {
+		/** Selected option's value (controlled). */
 		value?: string | undefined;
+		/** Options: `value`, `label`, optional `disabled`. */
 		options: Array<{ value: string; label: string; disabled?: boolean | undefined }>;
+		/** Disables the select. */
 		disabled?: boolean | undefined;
+		/** Marks the value invalid (`aria-invalid` and error styling). */
 		invalid?: boolean | undefined;
+		/** Field name submitted with the form. */
 		name?: string | undefined;
+		/** Empty first option shown while nothing is selected. */
 		placeholder?: string | undefined;
+		/** Called with the selected value. */
 		onChange: (value: string) => void;
 	};
 
@@ -362,8 +396,11 @@ export function NativeSelect(input: NativeSelectProps) {
 }
 
 export type FieldsetProps = SlotProps<"root" | "legend"> & {
+	/** Group caption (`<legend>`). */
 	legend?: unknown;
+	/** Disables every control inside. */
 	disabled?: boolean | undefined;
+	/** The grouped fields. */
 	children?: unknown;
 };
 
@@ -391,11 +428,15 @@ export function Fieldset(input: FieldsetProps) {
 export type CheckboxGroupSlot = "root" | "legend" | "option";
 
 export type CheckboxGroupProps = SlotProps<CheckboxGroupSlot> & {
+	/** Values of the checked options (controlled). */
 	value: string[];
+	/** Options: `value`, `label`, optional `disabled`. */
 	options: Array<{ value: string; label: unknown; disabled?: boolean | undefined }>;
+	/** Disables every option. */
 	disabled?: boolean | undefined;
 	/** Visible group label rendered as `<legend>`. */
 	legend?: unknown;
+	/** Called with the new list of checked values. */
 	onChange: (value: string[]) => void;
 };
 
@@ -437,11 +478,15 @@ export function CheckboxGroup(input: CheckboxGroupProps) {
 }
 
 export type ChipProps = BaseProps & {
+	/** Whether the chip is selected (controlled). */
 	checked?: boolean | undefined;
+	/** Disables the chip. */
 	disabled?: boolean | undefined;
 	/** Leading icon. */
 	icon?: unknown;
+	/** Chip label. */
 	children?: unknown;
+	/** Called with the new checked state. */
 	onChange?: ((checked: boolean) => void) | undefined;
 };
 
@@ -474,11 +519,17 @@ export function Chip(input: ChipProps) {
 export type ChipGroupSlot = "root" | "legend" | "chip";
 
 export type ChipGroupProps = SlotProps<ChipGroupSlot> & {
+	/** Values of the selected chips (controlled). */
 	value: string[];
+	/** Chips: `value`, `label`, optional `disabled`. */
 	options: Array<{ value: string; label: unknown; disabled?: boolean | undefined }>;
+	/** Allow several chips selected; otherwise picking one replaces the other. */
 	multiple?: boolean | undefined;
+	/** Disables every chip. */
 	disabled?: boolean | undefined;
+	/** Group caption (the group's accessible name). */
 	legend?: unknown;
+	/** Called with the new list of selected values. */
 	onChange: (value: string[]) => void;
 };
 
@@ -521,13 +572,17 @@ export function ChipGroup(input: ChipGroupProps) {
 }
 
 export type RatingProps = SlotProps<"root" | "star"> & {
+	/** Current rating (controlled; `0` for none). */
 	value: number;
+	/** Number of stars. */
 	count?: number | undefined;
+	/** Read-only display. */
 	disabled?: boolean | undefined;
 	/** Star glyph (default ★). */
 	symbol?: unknown;
 	/** Accessible label per star, e.g. `(n) => \`${n} of 5\``. */
 	starLabel?: ((n: number) => string) | undefined;
+	/** Called with the picked rating. */
 	onChange: (value: number) => void;
 };
 
@@ -599,13 +654,21 @@ export function Rating(input: RatingProps) {
 export type RangeSliderSlot = "root" | "start" | "end";
 
 export type RangeSliderProps = SlotProps<RangeSliderSlot> & {
+	/** Start and end of the range (controlled). */
 	value: [number, number];
+	/** Lowest value. */
 	min?: number | undefined;
+	/** Highest value. */
 	max?: number | undefined;
+	/** Increment between values. */
 	step?: number | undefined;
+	/** Disables both handles. */
 	disabled?: boolean | undefined;
+	/** Accessible name of the start handle. */
 	startLabel?: string | undefined;
+	/** Accessible name of the end handle. */
 	endLabel?: string | undefined;
+	/** Called with the new `[start, end]`; handles can't cross. */
 	onChange: (value: [number, number]) => void;
 };
 
@@ -663,10 +726,15 @@ export function RangeSlider(input: RangeSliderProps) {
 export type MultiSelectSlot = "root" | "control" | "menu" | "option";
 
 export type MultiSelectProps = SlotProps<MultiSelectSlot> & {
+	/** Values of the selected options (controlled). */
 	value: string[];
+	/** Options: `value`, `label`, optional `disabled`. */
 	options: Array<{ value: string; label: string; disabled?: boolean | undefined }>;
+	/** Disables the control. */
 	disabled?: boolean | undefined;
+	/** Trigger text while nothing is selected. */
 	placeholder?: string | undefined;
+	/** Called with the new list of selected values. */
 	onChange: (value: string[]) => void;
 };
 
@@ -765,11 +833,15 @@ export function MultiSelect(input: MultiSelectProps) {
 export type TagsInputSlot = "root" | "tag" | "remove" | "input";
 
 export type TagsInputProps = SlotProps<TagsInputSlot> & {
+	/** Current tags (controlled). */
 	value: string[];
+	/** Disables adding and removing. */
 	disabled?: boolean | undefined;
+	/** Input hint. */
 	placeholder?: string | undefined;
 	/** Render a tag's content (default: the text). */
 	renderTag?: ((tag: string) => unknown) | undefined;
+	/** Called with the new tags (added with Enter or comma; removed with ×). */
 	onChange: (value: string[]) => void;
 };
 
@@ -863,16 +935,23 @@ export type AutocompleteSlot = "root" | "input" | "menu" | "option";
 
 export type AutocompleteProps = SlotProps<AutocompleteSlot> &
 	Omit<InputPassThrough, "autocomplete"> & {
+		/** Current text (controlled). */
 		value: string;
+		/** Suggestions, filtered by the typed text. */
 		options: string[];
+		/** Disables the field. */
 		disabled?: boolean | undefined;
+		/** Marks the value invalid (`aria-invalid` and error styling). */
 		invalid?: boolean | undefined;
+		/** Field name submitted with the form. */
 		name?: string | undefined;
+		/** Hint shown while empty. */
 		placeholder?: string | undefined;
 		/** Max suggestions shown (default 8). */
 		limit?: number | undefined;
 		/** Render an option (default: the text). */
 		renderOption?: ((option: string) => unknown) | undefined;
+		/** Called with the new text as the user types or picks a suggestion. */
 		onChange: (value: string) => void;
 	};
 

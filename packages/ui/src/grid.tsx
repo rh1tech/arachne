@@ -29,10 +29,15 @@ export type ColumnSize =
 export type ColumnsProps = BaseProps & {
 	/** Keep columns side-by-side on mobile (default stacks under 768px). */
 	mobile?: boolean | undefined;
+	/** Wrap columns onto new rows when they don't fit. */
 	multiline?: boolean | undefined;
+	/** Centre the columns horizontally. */
 	centered?: boolean | undefined;
+	/** Centre the columns vertically. */
 	vcentered?: boolean | undefined;
+	/** Space between columns (any CSS length). */
 	gap?: string | undefined;
+	/** `Column`s. */
 	children?: unknown;
 };
 
@@ -65,9 +70,13 @@ export function Columns(input: ColumnsProps) {
 }
 
 export type ColumnProps = BaseProps & {
+	/** Width in twelfths (`1`–`12`) or a named fraction (`half`, `one-third`, …); auto when unset. */
 	size?: ColumnSize | undefined;
+	/** Empty space before the column, in the same units as `size`. */
 	offset?: ColumnSize | undefined;
+	/** Only as wide as its content. */
 	narrow?: boolean | undefined;
+	/** Column content. */
 	children?: unknown;
 };
 
@@ -102,7 +111,9 @@ export type GridProps = BaseProps & {
 	cols?: number | undefined;
 	/** Min track width for auto-fit dense grids, e.g. `12rem`. Overrides `cols` when set. */
 	min?: string | undefined;
+	/** Space between cells (any CSS length). */
 	gap?: string | undefined;
+	/** Grid cells (plain elements or `GridItem`s). */
 	children?: unknown;
 };
 
@@ -131,8 +142,11 @@ export function Grid(input: GridProps) {
 }
 
 export type GridItemProps = BaseProps & {
+	/** Number of columns the cell covers. */
 	span?: number | undefined;
+	/** Column the cell starts at (1-based). */
 	start?: number | undefined;
+	/** Cell content. */
 	children?: unknown;
 };
 
@@ -163,7 +177,9 @@ export function GridItem(input: GridItemProps) {
 }
 
 export type ContainerProps = BaseProps & {
+	/** Maximum width. */
 	size?: "sm" | "md" | "lg" | "full" | undefined;
+	/** Centred, width-constrained content. */
 	children?: unknown;
 };
 
@@ -186,7 +202,9 @@ export function Container(input: ContainerProps) {
 }
 
 export type SectionProps = BaseProps & {
+	/** Vertical padding. */
 	size?: "sm" | "md" | "lg" | undefined;
+	/** Section content. */
 	children?: unknown;
 };
 
@@ -213,7 +231,9 @@ export function Section(input: SectionProps) {
 }
 
 export type LevelProps = BaseProps & {
+	/** Keep the row horizontal on small screens (it stacks by default). */
 	mobile?: boolean | undefined;
+	/** `LevelLeft`, `LevelRight` and/or `LevelItem`s. */
 	children?: unknown;
 };
 
@@ -232,6 +252,7 @@ export function Level(input: LevelProps) {
 }
 
 export type LevelSideProps = BaseProps & {
+	/** Items on this side of the row. */
 	children?: unknown;
 };
 

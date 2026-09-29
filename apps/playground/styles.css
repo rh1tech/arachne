@@ -619,3 +619,36 @@ p.catalog-meta-hint code {
 	border-color: var(--a-accent);
 	color: var(--a-accent);
 }
+
+/* Data types used by the props: name line + field table (or the alias's values). */
+.catalog-types {
+	display: grid;
+	gap: 0.85rem;
+}
+
+.catalog-type-doc {
+	display: grid;
+	gap: 0.4rem;
+}
+
+.catalog-type-name {
+	font-weight: 700;
+}
+
+.catalog-type-definition {
+	display: block;
+	padding: 0.5rem 0.75rem;
+	border: 1px solid var(--a-line);
+	border-radius: var(--a-radius);
+	background: var(--a-paper);
+}
+
+.catalog-prop-default {
+	white-space: nowrap;
+}
+
+.catalog-prop-default code {
+	font-family: var(--a-font-mono);
+	font-size: 0.8rem;
+	color: var(--a-ink);
+}

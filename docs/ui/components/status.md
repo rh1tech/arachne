@@ -9,11 +9,17 @@ Label and mark state: badges, tags, status dots and live indicators.
 
 Count / status pill.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `rounded` | `boolean` |  |  |
-| `tone` | `"accent" \| "warning" \| "success" \| "danger" \| "muted"` |  | Compact count / status pill — prefer Tag for labeled chips. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Badge text. |
+| `rounded` | `boolean` |  |  | Pill shape. |
+| `tone` | `"accent" \| "warning" \| "success" \| "danger" \| "muted"` |  | `"accent"` | Compact count / status pill — prefer Tag for labeled chips. |
+
+**`BadgeTone`**
+
+```ts
+type BadgeTone = "accent" | "success" | "warning" | "danger" | "muted" | undefined;
+```
 
 ```tsx
 <Badge tone="success">
@@ -29,16 +35,22 @@ Small label for categories and filters, optionally removable.
 
 **Slots:** `root` `label` `remove`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `color` | `"accent" \| "dark" \| "light" \| "link" \| "warning" \| "success" \| "info" \| "danger" \| "primary" \| "neutral" \| "black" \| "white"` |  | Color / tone. Prefer semantic colors (primary, success, …). |
-| `light` | `boolean` |  |  |
-| `onRemove` | `() => void` |  |  |
-| `removeLabel` | `string` |  | Accessible label for the remove button (default "Remove"). |
-| `rounded` | `boolean` |  |  |
-| `size` | `"normal" \| "medium" \| "large"` |  |  |
-| `tone` | `"accent" \| "danger" \| "neutral"` |  | **Deprecated:** use `color` |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Tag text. |
+| `color` | `"accent" \| "dark" \| "light" \| "link" \| "warning" \| "success" \| "info" \| "danger" \| "primary" \| "neutral" \| "black" \| "white"` |  |  | Color / tone. Prefer semantic colors (primary, success, …). |
+| `light` | `boolean` |  |  | Pale background with coloured text instead of a solid fill. |
+| `onRemove` | `() => void` |  |  | Shows a remove (×) button; called when it is pressed. |
+| `removeLabel` | `string` |  | `"Remove"` | Accessible label for the remove button (default "Remove"). |
+| `rounded` | `boolean` |  |  | Pill shape. |
+| `size` | `"normal" \| "medium" \| "large"` |  |  | Tag size. |
+| `tone` | `"accent" \| "danger" \| "neutral"` |  | `"neutral"` | **Deprecated:** use `color` |
+
+**`TagColor`**
+
+```ts
+type TagColor = | "neutral" | "black" | "dark" | "light" | "white" | "primary" | "link" | "info" | "success" | "warning" | "danger" | "accent" | undefined;
+```
 
 ```tsx
 <Tag color="success">
@@ -54,11 +66,11 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Group of tags — wraps evenly and supports addon pairs.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `addons` | `boolean` |  |  |
-| `children` | `content` |  |  |
-| `size` | `"medium" \| "large"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `addons` | `boolean` |  |  | Join pairs of tags edge to edge (e.g. a name and a value). |
+| `children` | `content` |  |  | The `Tag`s to group. |
+| `size` | `"medium" \| "large"` |  |  | Size for every tag in the group. |
 
 ```tsx
 <Tags>
@@ -76,11 +88,11 @@ Small marks for state and counts.
 
 Small status indicator (online, busy, …), optionally pulsing.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `string` |  | Accessible name; without it the dot is decorative (`aria-hidden`). |
-| `pulse` | `boolean` |  |  |
-| `tone` | `"accent" \| "warning" \| "success" \| "danger" \| "neutral"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `string` |  |  | Accessible name; without it the dot is decorative (`aria-hidden`). |
+| `pulse` | `boolean` |  |  | Animate a pulse ring (for live states). |
+| `tone` | `"accent" \| "warning" \| "success" \| "danger" \| "neutral"` |  | `"neutral"` | Dot colour. |
 
 ```tsx
 <StatusDot label="Online" tone="success" />
@@ -92,13 +104,13 @@ Corner badge / dot over its children.
 
 **Slots:** `root` `badge`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `dot` | `boolean` |  |  |
-| `label` | `string \| number` |  |  |
-| `position` | `"bottom-start" \| "bottom-end" \| "top-start" \| "top-end"` |  |  |
-| `processing` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Element to decorate. |
+| `dot` | `boolean` |  |  | A plain dot instead of a label. |
+| `label` | `string \| number` |  |  | Badge text or count. |
+| `position` | `"bottom-start" \| "bottom-end" \| "top-start" \| "top-end"` |  | `"top-end"` | Corner of the child the badge sits on. |
+| `processing` | `boolean` |  |  | Pulse, for ongoing activity. |
 
 ```tsx
 <Indicator label={3}>
@@ -120,9 +132,9 @@ Pulsing "Live" pill.
 
 **Slots:** `root` `dot`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `content` |  | `"Live"` | Badge text. |
 
 ```tsx
 <LiveBadge />
@@ -132,10 +144,10 @@ Pulsing "Live" pill.
 
 Count bubble; hidden at 0, capped at `max` (`99+`).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `count` | `number` | yes |  |
-| `max` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `count` | `number` | yes |  | Unread count; hidden at 0. |
+| `max` | `number` |  | `99` | Counts above this show as `max+`. |
 
 ```tsx
 <Text>
@@ -153,9 +165,9 @@ Environment, version, role, priority and severity.
 
 Environment pill (production = danger, staging = warning).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `env` | `string` | yes |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `env` | `string` | yes |  | Environment name; `production`, `staging` and `development` have their own colours. |
 
 ```tsx
 <EnvBadge env="staging" />
@@ -165,9 +177,9 @@ Environment pill (production = danger, staging = warning).
 
 Version label (e.g. `v1.2.0`).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `version` | `string` | yes |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `version` | `string` | yes |  | Version text (a leading `v` is added). |
 
 ```tsx
 <VersionTag version="2.4.0" />
@@ -177,9 +189,9 @@ Version label (e.g. `v1.2.0`).
 
 Member role label (admin, member, …).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `role` | `string` | yes | Team role label (not the ARIA role). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `role` | `string` | yes |  | Team role label (not the ARIA role). |
 
 ```tsx
 <RoleBadge role="Admin" />
@@ -189,9 +201,15 @@ Member role label (admin, member, …).
 
 Issue priority label.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `priority` | `Priority` | yes |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `priority` | `Priority` | yes |  | Priority level; sets the colour. |
+
+**`Priority`**
+
+```ts
+type Priority = "low" | "medium" | "high" | "urgent";
+```
 
 ```tsx
 <PriorityBadge priority="urgent" />
@@ -201,9 +219,15 @@ Issue priority label.
 
 Incident severity label.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `severity` | `Severity` | yes |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `severity` | `Severity` | yes |  | Severity level; sets the colour. |
+
+**`Severity`**
+
+```ts
+type Severity = "info" | "low" | "medium" | "high" | "critical";
+```
 
 ```tsx
 <SeverityBadge severity="critical" />
@@ -219,10 +243,16 @@ Autosave and sync state of a document.
 
 Sync state indicator (synced, syncing, offline, error).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `state` | `SyncState` | yes |  |
-| `label` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `state` | `SyncState` | yes |  | Sync state; sets the icon and text. |
+| `label` | `string` |  |  | Custom text instead of the state name. |
+
+**`SyncState`**
+
+```ts
+type SyncState = "synced" | "syncing" | "error" | "offline";
+```
 
 ```tsx
 <SyncStatus state="syncing" />
@@ -232,10 +262,16 @@ Sync state indicator (synced, syncing, offline, error).
 
 Autosave state (saving, saved, error).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `state` | `AutosaveState` | yes |  |
-| `labels` | `Partial&lt;Record&lt;AutosaveState, string>>` |  | Override the text per state. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `state` | `AutosaveState` | yes |  | Save state; sets the icon and text. |
+| `labels` | `Partial&lt;Record&lt;AutosaveState, string>>` |  |  | Override the text per state. |
+
+**`AutosaveState`**
+
+```ts
+type AutosaveState = "idle" | "saving" | "saved" | "error";
+```
 
 ```tsx
 <AutosaveIndicator state="saved" />
@@ -245,10 +281,10 @@ Autosave state (saving, saved, error).
 
 "Last saved" timestamp.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `at` | `string` | yes |  |
-| `label` | `string` |  | Prefix text (default "Last saved"). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `at` | `string` | yes |  | When it was saved, as display text (e.g. "2 minutes ago"). |
+| `label` | `string` |  | `"Last saved"` | Prefix text (default "Last saved"). |
 
 ```tsx
 <LastSaved at="2 minutes ago" />
@@ -260,9 +296,9 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Animated "someone is typing" indicator.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `string` |  | Accessible name (default "Typing"). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `string` |  | `"Typing"` | Accessible name (default "Typing"). |
 
 ```tsx
 <TypingIndicator label="Grace is typing" />

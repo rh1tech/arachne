@@ -15,11 +15,11 @@ Statistic with label, value and hint.
 
 **Slots:** `root` `hint` `label` `value`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `string` | yes |  |
-| `value` | `content` | yes |  |
-| `hint` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `string` | yes |  | What the number measures. |
+| `value` | `content` | yes |  | The number or content to feature. |
+| `hint` | `string` |  |  | Small context line, e.g. "vs. last week". |
 
 ```tsx
 <Stat label="Active users" value="12,480" hint="+8% this week" />
@@ -31,9 +31,9 @@ Statistic with label, value and hint.
 
 Row of statistics.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | The `Stat`s to show side by side. |
 
 ```tsx
 <StatGroup>
@@ -49,12 +49,12 @@ KPI tile with optional trend.
 
 **Slots:** `root` `hint` `label` `trend` `value`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `content` | yes |  |
-| `value` | `content` | yes |  |
-| `hint` | `content` |  |  |
-| `trend` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `content` | yes |  | What the number measures. |
+| `value` | `content` | yes |  | The featured number or content. |
+| `hint` | `content` |  |  | Context line, e.g. "vs. last month". |
+| `trend` | `number` |  |  | Change in percent (arrow and colour by sign). |
 
 ```tsx
 <StatCard label="MRR" value="$48.2k" hint="vs. last month" trend={6.4} />
@@ -66,11 +66,11 @@ Compact KPI with optional Trend.
 
 **Slots:** `root` `label` `row` `trend` `value`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `content` | yes |  |
-| `value` | `content` | yes |  |
-| `trend` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `content` | yes |  | What the number measures. |
+| `value` | `content` | yes |  | The number or content. |
+| `trend` | `number` |  |  | Change in percent (arrow and colour by sign). |
 
 ```tsx
 <Metric label="p95 latency" value="182 ms" trend={-4} />
@@ -82,10 +82,10 @@ Compact KPI with optional Trend.
 
 **Slots:** `root` `arrow`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `value` | `number` | yes |  |
-| `label` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `number` | yes |  | Change in percent; the sign sets the arrow and colour. |
+| `label` | `content` |  |  | Context after the value, e.g. "vs. last week". |
 
 ```tsx
 <Trend value={-2.3} label="vs. last week" />
@@ -95,10 +95,10 @@ Compact KPI with optional Trend.
 
 Animated number (rAF, eased); jumps straight to the value under reduced motion.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `value` | `number` | yes |  |
-| `duration` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `number` | yes |  | Number to count up to. |
+| `duration` | `number` |  | `800` | Animation length in milliseconds (`0` shows the value immediately). |
 
 ```tsx
 <CountUp value={12480} duration={0} />
@@ -116,12 +116,12 @@ Inline trend line (`currentColor`).
 
 **Slots:** `root` `line`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `data` | `number[]` | yes |  |
-| `height` | `number` |  |  |
-| `label` | `string` |  | Accessible summary; the chart is decorative (`aria-hidden`) without one. |
-| `width` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `data` | `number[]` | yes |  | Values to plot, oldest first. |
+| `height` | `number` |  | `32` | Height in pixels. |
+| `label` | `string` |  |  | Accessible summary; the chart is decorative (`aria-hidden`) without one. |
+| `width` | `number` |  | `120` | Width in pixels. |
 
 ```tsx
 <Sparkline label="Weekly signups" data={[12, 18, 15, 22, 28, 24, 35]} />
@@ -133,10 +133,10 @@ Tiny bar chart.
 
 **Slots:** `root` `bar`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `data` | `number[]` | yes |  |
-| `label` | `string` |  | Accessible description (default "Bar sparkline"). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `data` | `number[]` | yes |  | Values to plot as bars, oldest first. |
+| `label` | `string` |  | `"Bar sparkline"` | Accessible description (default "Bar sparkline"). |
 
 ```tsx
 <SparkBar label="Requests per hour" data={[4, 7, 5, 9, 12, 8, 6, 10]} />
@@ -150,10 +150,18 @@ Ranked horizontal bars.
 
 **Slots:** `root` `bar` `item` `label` `row` `track` `value`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `data` | `BarListItem[]` | yes |  | Rows, in display order. |
+| `format` | `(value: number) => unknown` |  |  | Format the value column (default: the raw number). |
+
+**`BarListItem`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `data` | `BarListItem[]` | yes |  |
-| `format` | `(value: number) => unknown` |  | Format the value column (default: the raw number). |
+| `id` | `string` | yes | Row id. |
+| `label` | `string` | yes | Row label. |
+| `value` | `number` | yes | Row value; bar lengths are relative to the largest. |
 
 ```tsx
 <BarList
@@ -173,12 +181,12 @@ Percentage ring.
 
 **Slots:** `root` `bar` `label` `track`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `value` | `number` | yes |  |
-| `label` | `content` |  |  |
-| `size` | `number` |  |  |
-| `thickness` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `number` | yes |  | Filled share in percent (0–100). |
+| `label` | `content` |  |  | Content in the middle. |
+| `size` | `number` |  | `96` | Diameter in pixels. |
+| `thickness` | `number` |  | `10` | Ring stroke width in pixels. |
 
 ```tsx
 <DonutChart value={68} label="Tests passing" />
@@ -192,11 +200,11 @@ Grid heatmap of values (e.g. activity).
 
 **Slots:** `root` `cell`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `values` | `number[]` | yes | Flat values, typically 7 columns (weeks × days). |
-| `columns` | `number` |  |  |
-| `label` | `string` |  | Accessible summary (default "Activity heatmap"). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `values` | `number[]` | yes |  | Flat values, typically 7 columns (weeks × days). |
+| `columns` | `number` |  | `7` | Cells per row (e.g. 7 for weeks). |
+| `label` | `string` |  | `"Activity heatmap"` | Accessible summary (default "Activity heatmap"). |
 
 ```tsx
 <Heatmap
@@ -220,12 +228,12 @@ Scalar gauge in a known range.
 
 **Slots:** `root` `bar` `label` `track`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `value` | `number` | yes |  |
-| `label` | `string` |  |  |
-| `max` | `number` |  |  |
-| `min` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `number` | yes |  | Current value, between `min` and `max`. |
+| `label` | `string` |  |  | What is measured (shown and used as the accessible name). |
+| `max` | `number` |  | `100` | Upper bound. |
+| `min` | `number` |  | `0` | Lower bound. |
 
 ```tsx
 <Meter value={62} label="Disk usage" />
@@ -237,12 +245,12 @@ Semicircle gauge for a value within a range.
 
 **Slots:** `root` `bar` `label` `svg` `track`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `value` | `number` | yes |  |
-| `label` | `string` |  |  |
-| `max` | `number` |  |  |
-| `size` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `number` | yes |  | Current value, from 0 to `max`. |
+| `label` | `string` |  | `"Gauge"` | What is measured (shown under the value). |
+| `max` | `number` |  | `100` | Value at a full gauge. |
+| `size` | `number` |  | `96` | Width in pixels. |
 
 ```tsx
 <Gauge label="CPU" value={72} />
@@ -254,12 +262,12 @@ Usage of a quota (used / limit) with a meter.
 
 **Slots:** `root` `fill` `header` `label` `meta` `track`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `string` | yes |  |
-| `limit` | `number` | yes |  |
-| `used` | `number` | yes |  |
-| `unit` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `string` | yes |  | What is metered. |
+| `limit` | `number` | yes |  | Plan limit; the bar turns warning / danger as usage nears it. |
+| `used` | `number` | yes |  | Amount used. |
+| `unit` | `string` |  |  | Unit after the numbers, e.g. `GB` or `min`. |
 
 ```tsx
 <UsageMeter label="Build minutes" used={1840} limit={2000} unit="min" />
@@ -271,11 +279,11 @@ Usage of a quota (used / limit) with a meter.
 
 **Slots:** `root`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `totalGb` | `number` | yes |  |
-| `usedGb` | `number` | yes |  |
-| `label` | `string` |  | Label text (default "Storage"). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `totalGb` | `number` | yes |  | Storage available, in GB. |
+| `usedGb` | `number` | yes |  | Storage used, in GB. |
+| `label` | `string` |  | `"Storage"` | Label text (default "Storage"). |
 
 ```tsx
 <StorageBar label="Storage" usedGb={38.2} totalGb={50} />
@@ -289,10 +297,10 @@ Daily uptime history bar.
 
 **Slots:** `root` `day`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `days` | `number[]` | yes | 0–1 values, oldest → newest |
-| `label` | `string` |  | Accessible summary (default "Uptime history"). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `days` | `number[]` | yes |  | 0–1 values, oldest → newest |
+| `label` | `string` |  | `"Uptime history"` | Accessible summary (default "Uptime history"). |
 
 ```tsx
 <UptimeBar

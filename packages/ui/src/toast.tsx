@@ -4,35 +4,55 @@ import { signal } from "@arachne/signals";
 import type { AlertTone } from "./feedback.tsx";
 import { createSlots, type SlotProps, withDefaults } from "./system.ts";
 
-export type ToastAction = { label: string; onClick: () => void };
+export type ToastAction = {
+	/** Action button text. */
+	label: string;
+	/** Called when the action is pressed (the toast then closes). */
+	onClick: () => void;
+};
 
 export type ToastItem = {
+	/** Toast id (use it with `dismiss`). */
 	id: string;
+	/** Bold first line. */
 	title?: string | undefined;
+	/** Toast text. */
 	message: string;
+	/** Colour and icon. */
 	tone?: AlertTone | undefined;
+	/** Optional action button, e.g. "Undo" or "Retry". */
 	action?: ToastAction | undefined;
 	/** `closed` while the exit animation plays. */
 	state: "open" | "closed";
 };
 
 export type ToastInput = {
+	/** Id to reuse (pushing the same id replaces that toast); generated when omitted. */
 	id?: string | undefined;
+	/** Bold first line. */
 	title?: string | undefined;
+	/** Toast text. */
 	message: string;
+	/** Colour and icon. */
 	tone?: AlertTone | undefined;
+	/** Optional action button, e.g. "Undo" or "Retry". */
 	action?: ToastAction | undefined;
 	/** Auto-dismiss delay; `0` keeps the toast until dismissed. Default 4000. */
 	durationMs?: number | undefined;
 };
 
 export type Toaster = {
+	/** The toasts currently shown (reactive). */
 	items: () => ToastItem[];
+	/** Shows a toast; returns its id. */
 	push: (input: ToastInput) => string;
+	/** Closes a toast by id. */
 	dismiss: (id: string) => void;
 	/** Pause / resume auto-dismiss (hover, focus). */
 	pause: (id: string) => void;
+	/** Restarts a paused toast's auto-dismiss timer. */
 	resume: (id: string) => void;
+	/** Closes every toast. */
 	clear: () => void;
 };
 
@@ -158,7 +178,9 @@ export type ToastSlot =
 	| "dismiss";
 
 export type ToastHostProps = SlotProps<ToastSlot> & {
+	/** The queue to render, from `createToaster()`. */
 	toaster: Toaster;
+	/** Screen corner or edge the toasts stack from. */
 	position?: ToastPosition | undefined;
 	/** Custom toast body; receives the item and a dismiss callback. */
 	render?: ((toast: ToastItem, dismiss: () => void) => unknown) | undefined;

@@ -8,8 +8,11 @@ export type HoverCardSlot = "root" | "target" | "dropdown";
 export type HoverCardProps = SlotProps<HoverCardSlot> & {
 	/** Panel content shown on hover/focus. */
 	dropdown: unknown;
+	/** Milliseconds of hover or focus before the card opens. */
 	openDelay?: number | undefined;
+	/** Milliseconds after leaving before the card closes (lets the pointer reach it). */
 	closeDelay?: number | undefined;
+	/** The trigger (hovering or focusing it opens the card). */
 	children?: unknown;
 };
 
@@ -81,9 +84,13 @@ export function HoverCard(input: HoverCardProps) {
 }
 
 export type BurgerProps = BaseProps & {
+	/** Show the close (×) state instead of the three lines. */
 	opened?: boolean | undefined;
+	/** Called when the button is pressed; toggle `opened` here. */
 	onClick?: ((e: MouseEvent) => void) | undefined;
+	/** Accessible name (default: "Open menu" / "Close menu" by state). */
 	label?: string | undefined;
+	/** Button size. */
 	size?: "sm" | "md" | undefined;
 };
 
@@ -114,14 +121,19 @@ export function Burger(input: BurgerProps) {
 }
 
 export type ColorSwatchProps = BaseProps & {
+	/** Any CSS colour. */
 	color: string;
+	/** Diameter in pixels. */
 	size?: number | undefined;
+	/** Adds a soft drop shadow. */
 	withShadow?: boolean | undefined;
 	/** Accessible name (default `Color <color>`). */
 	label?: string | undefined;
 	/** Marks the chosen swatch (ring + check; `aria-pressed` when clickable). */
 	selected?: boolean | undefined;
+	/** Makes the swatch a button; called when it is pressed. */
 	onClick?: ((e: MouseEvent) => void) | undefined;
+	/** Content inside the swatch (replaces the check mark when `selected`). */
 	children?: unknown;
 };
 
@@ -180,6 +192,7 @@ export function ColorSwatch(input: ColorSwatchProps) {
 }
 
 export type VisuallyHiddenProps = BaseProps & {
+	/** Text read by screen readers but not shown. */
 	children?: unknown;
 };
 
@@ -196,7 +209,9 @@ export function VisuallyHidden(input: VisuallyHiddenProps) {
 export type HighlightSlot = "root" | "mark";
 
 export type HighlightProps = SlotProps<HighlightSlot> & {
+	/** The full text to show. */
 	text: string;
+	/** Term(s) to mark wherever they occur. */
 	highlight: string | string[];
 	/** Mark colour (default `"warning"`, highlighter yellow), as on `Mark`. */
 	tone?: "accent" | "warning" | "success" | undefined;
@@ -247,8 +262,11 @@ export function Highlight(input: HighlightProps) {
 }
 
 export type BackgroundImageProps = BaseProps & {
+	/** Image URL (data URIs work too). */
 	src: string;
+	/** Round the corners (theme radius). */
 	radius?: boolean | undefined;
+	/** Content drawn over the image. */
 	children?: unknown;
 };
 
@@ -280,8 +298,11 @@ export function BackgroundImage(input: BackgroundImageProps) {
 }
 
 export type StickyProps = BaseProps & {
+	/** Distance in pixels from the edge it sticks to. */
 	offset?: number | undefined;
+	/** Edge to stick to while scrolling. */
 	position?: "top" | "bottom" | undefined;
+	/** Content to keep in view. */
 	children?: unknown;
 };
 

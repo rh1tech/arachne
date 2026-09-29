@@ -16,10 +16,13 @@ export type CalloutTone = "info" | "tip" | "warning" | "danger" | "note";
 export type CalloutSlot = "root" | "icon" | "body" | "title" | "content";
 
 export type CalloutProps = SlotProps<CalloutSlot> & {
+	/** Kind of note (sets colour and icon). */
 	tone?: CalloutTone | undefined;
+	/** Bold first line. */
 	title?: string | undefined;
 	/** Replace the tone icon (`null` hides it). */
 	icon?: unknown;
+	/** Note text or content. */
 	children?: unknown;
 };
 
@@ -84,9 +87,13 @@ export function Callout(input: CalloutProps) {
 export type ChangelogItemSlot = "root" | "header" | "date" | "title" | "body";
 
 export type ChangelogItemProps = SlotProps<ChangelogItemSlot> & {
+	/** Release version, e.g. `2.4.0`. */
 	version: string;
+	/** Release date text. */
 	date?: string | undefined;
+	/** Release name. */
 	title?: string | undefined;
+	/** What changed. */
 	children?: unknown;
 };
 
@@ -127,6 +134,7 @@ export function ChangelogItem(input: ChangelogItemProps) {
 }
 
 export type VersionTagProps = BaseProps & {
+	/** Version text (a leading `v` is added). */
 	version: string;
 };
 
@@ -146,6 +154,7 @@ export function VersionTag(input: VersionTagProps) {
 export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "HEAD" | "OPTIONS";
 
 export type HttpMethodBadgeProps = BaseProps & {
+	/** HTTP method; sets the colour. */
 	method: HttpMethod;
 };
 
@@ -170,9 +179,13 @@ export function HttpMethodBadge(input: HttpMethodBadgeProps) {
 export type EndpointRowSlot = "root" | "path" | "summary";
 
 export type EndpointRowProps = SlotProps<EndpointRowSlot> & {
+	/** HTTP method. */
 	method: HttpMethod;
+	/** Endpoint path, e.g. `/v1/projects/{id}`. */
 	path: string;
+	/** What the endpoint does. */
 	summary?: string | undefined;
+	/** Makes the row a button, e.g. to open the endpoint's docs. */
 	onClick?: (() => void) | undefined;
 };
 
@@ -216,6 +229,7 @@ export type JsonNode =
 	| { kind: "array"; items: JsonNode[] };
 
 export type JsonTreeProps = BaseProps & {
+	/** The JSON tree to show; objects and arrays can be collapsed. */
 	data: JsonNode;
 };
 
@@ -295,14 +309,18 @@ export function JsonTree(input: JsonTreeProps) {
 export type LogLevel = "debug" | "info" | "warn" | "error";
 
 export type LogLineData = {
+	/** Timestamp text. */
 	time?: string | undefined;
+	/** Severity; sets the colour. */
 	level: LogLevel;
+	/** Log message. */
 	message: string;
 };
 
 export type LogViewerSlot = "root" | "line" | "time" | "level" | "message";
 
 export type LogViewerProps = SlotProps<LogViewerSlot> & {
+	/** Log lines, oldest first. */
 	lines: LogLineData[];
 };
 
@@ -338,7 +356,9 @@ export type ServiceStatusKind = "operational" | "degraded" | "outage" | "mainten
 export type ServiceStatusSlot = "root" | "name" | "status";
 
 export type ServiceStatusProps = SlotProps<ServiceStatusSlot> & {
+	/** Service name. */
 	name: string;
+	/** Current state; sets the dot colour and text. */
 	status: ServiceStatusKind;
 };
 
@@ -434,9 +454,13 @@ export function UptimeBar(input: UptimeBarProps) {
 export type UsageMeterSlot = "root" | "header" | "label" | "meta" | "track" | "fill";
 
 export type UsageMeterProps = SlotProps<UsageMeterSlot> & {
+	/** What is metered. */
 	label: string;
+	/** Amount used. */
 	used: number;
+	/** Plan limit; the bar turns warning / danger as usage nears it. */
 	limit: number;
+	/** Unit after the numbers, e.g. `GB` or `min`. */
 	unit?: string | undefined;
 };
 
@@ -491,8 +515,11 @@ export function UsageMeter(input: UsageMeterProps) {
 export type UpgradeBannerSlot = "root" | "body" | "title" | "content" | "action";
 
 export type UpgradeBannerProps = SlotProps<UpgradeBannerSlot> & {
+	/** Headline. */
 	title?: string | undefined;
+	/** Pitch text. */
 	children?: unknown;
+	/** Upgrade call to action, e.g. a `Button`. */
 	action?: unknown;
 };
 
@@ -539,11 +566,17 @@ export type ProfileHeaderSlot =
 	| "actions";
 
 export type ProfileHeaderProps = SlotProps<ProfileHeaderSlot> & {
+	/** Display name. */
 	name: string;
+	/** Username, shown with a leading `@`. */
 	handle?: string | undefined;
+	/** Short bio. */
 	bio?: string | undefined;
+	/** Avatar image URL. */
 	src?: string | undefined;
+	/** Cover image URL (a gradient when unset). */
 	cover?: string | undefined;
+	/** Buttons at the end, e.g. Follow. */
 	actions?: unknown;
 };
 
@@ -599,11 +632,15 @@ export function ProfileHeader(input: ProfileHeaderProps) {
 export type MemberRowSlot = "root" | "avatar" | "meta" | "name" | "email" | "remove";
 
 export type MemberRowProps = SlotProps<MemberRowSlot> & {
+	/** Member name. */
 	name: string;
+	/** Email under the name. */
 	email?: string | undefined;
 	/** Team role shown as a {@link RoleBadge} (not the ARIA role). */
 	role?: string | undefined;
+	/** Avatar image URL. */
 	src?: string | undefined;
+	/** Shows a remove button; called when it is pressed. */
 	onRemove?: (() => void) | undefined;
 };
 
@@ -672,6 +709,7 @@ export function RoleBadge(input: RoleBadgeProps) {
 export type Priority = "low" | "medium" | "high" | "urgent";
 
 export type PriorityBadgeProps = BaseProps & {
+	/** Priority level; sets the colour. */
 	priority: Priority;
 };
 
@@ -696,6 +734,7 @@ export function PriorityBadge(input: PriorityBadgeProps) {
 export type Severity = "info" | "low" | "medium" | "high" | "critical";
 
 export type SeverityBadgeProps = BaseProps & {
+	/** Severity level; sets the colour. */
 	severity: Severity;
 };
 
@@ -720,8 +759,11 @@ export function SeverityBadge(input: SeverityBadgeProps) {
 export type CommitChipSlot = "root" | "sha" | "message";
 
 export type CommitChipProps = SlotProps<CommitChipSlot> & {
+	/** Full commit hash (the first 7 characters are shown). */
 	sha: string;
+	/** Commit message, shown after the hash. */
 	message?: string | undefined;
+	/** Makes the chip a button, e.g. to open the commit. */
 	onClick?: (() => void) | undefined;
 };
 
@@ -754,6 +796,7 @@ export function CommitChip(input: CommitChipProps) {
 }
 
 export type BranchBadgeProps = BaseProps & {
+	/** Branch name. */
 	name: string;
 };
 
@@ -774,7 +817,9 @@ export function BranchBadge(input: BranchBadgeProps) {
 export type BuildStatusKind = "success" | "failed" | "running" | "queued" | "cancelled";
 
 export type BuildStatusProps = BaseProps & {
+	/** Build state; sets the icon and colour. */
 	status: BuildStatusKind;
+	/** Custom text instead of the status name. */
 	label?: string | undefined;
 };
 
@@ -810,14 +855,18 @@ export function BuildStatus(input: BuildStatusProps) {
 }
 
 export type PipelineStep = {
+	/** Step id. */
 	id: string;
+	/** Step name. */
 	label: string;
+	/** Step state; sets the icon and colour. */
 	status: BuildStatusKind;
 };
 
 export type PipelineSlot = "root" | "step" | "line";
 
 export type PipelineProps = SlotProps<PipelineSlot> & {
+	/** Pipeline steps, in order. */
 	steps: PipelineStep[];
 };
 
@@ -850,7 +899,9 @@ export function Pipeline(input: PipelineProps) {
 export type SyncState = "synced" | "syncing" | "error" | "offline";
 
 export type SyncStatusProps = BaseProps & {
+	/** Sync state; sets the icon and text. */
 	state: SyncState;
+	/** Custom text instead of the state name. */
 	label?: string | undefined;
 };
 
@@ -887,6 +938,7 @@ export function SyncStatus(input: SyncStatusProps) {
 export type AutosaveState = "idle" | "saving" | "saved" | "error";
 
 export type AutosaveIndicatorProps = BaseProps & {
+	/** Save state; sets the icon and text. */
 	state: AutosaveState;
 	/** Override the text per state. */
 	labels?: Partial<Record<AutosaveState, string>> | undefined;
@@ -919,6 +971,7 @@ export function AutosaveIndicator(input: AutosaveIndicatorProps) {
 }
 
 export type LastSavedProps = BaseProps & {
+	/** When it was saved, as display text (e.g. "2 minutes ago"). */
 	at: string;
 	/** Prefix text (default "Last saved"). */
 	label?: string | undefined;
@@ -940,6 +993,7 @@ export function LastSaved(input: LastSavedProps) {
 export type FloatingToolbarProps = BaseProps & {
 	/** Accessible name for the toolbar. */
 	label?: string | undefined;
+	/** Toolbar buttons. */
 	children?: unknown;
 };
 
@@ -985,7 +1039,9 @@ export type Density = "comfortable" | "compact";
 export type DensityToggleSlot = "root" | "option";
 
 export type DensityToggleProps = SlotProps<DensityToggleSlot> & {
+	/** Current density. */
 	value: Density;
+	/** Called with the density the user picks. */
 	onChange: (value: Density) => void;
 	/** Accessible name (default "Density"). */
 	label?: string | undefined;
@@ -1041,9 +1097,11 @@ export function DensityToggle(input: DensityToggleProps) {
 export type NoResultsSlot = "root" | "icon" | "title";
 
 export type NoResultsProps = SlotProps<NoResultsSlot> & {
+	/** The search that found nothing (quoted in the message). */
 	query?: string | undefined;
 	/** Override the title text. */
 	title?: string | undefined;
+	/** Suggestions, e.g. how to broaden the search. */
 	children?: unknown;
 };
 
@@ -1080,8 +1138,11 @@ export function NoResults(input: NoResultsProps) {
 export type ErrorStateSlot = "root" | "icon" | "title" | "description" | "action";
 
 export type ErrorStateProps = SlotProps<ErrorStateSlot> & {
+	/** Headline. */
 	title?: string | undefined;
+	/** What went wrong and what to do. */
 	description?: string | undefined;
+	/** Recovery action, e.g. a Retry `Button`. */
 	action?: unknown;
 };
 
@@ -1123,9 +1184,13 @@ export function ErrorState(input: ErrorStateProps) {
 export type CreditCardPreviewSlot = "root" | "top" | "brand" | "number" | "bottom";
 
 export type CreditCardPreviewProps = SlotProps<CreditCardPreviewSlot> & {
+	/** Card network, e.g. `Visa`. */
 	brand?: string | undefined;
+	/** Last four digits. */
 	last4: string;
+	/** Expiry, e.g. `08/29`. */
 	exp?: string | undefined;
+	/** Cardholder name. */
 	name?: string | undefined;
 };
 
@@ -1170,9 +1235,13 @@ export type InvoiceRowSlot = "root" | "number" | "date" | "status" | "amount";
 export type InvoiceRowProps = SlotProps<InvoiceRowSlot> & {
 	/** Invoice number shown in the row. Also forwarded as the element `id`. */
 	id: string;
+	/** Invoice date text. */
 	date: string;
+	/** Amount text, e.g. `$49.00`. */
 	amount: string;
+	/** Payment state; sets the badge. */
 	status: InvoiceStatus;
+	/** Makes the row a button, e.g. to open the invoice. */
 	onClick?: (() => void) | undefined;
 };
 
@@ -1209,7 +1278,9 @@ export function InvoiceRow(input: InvoiceRowProps) {
 }
 
 export type StorageBarProps = SlotProps<"root"> & {
+	/** Storage used, in GB. */
 	usedGb: number;
+	/** Storage available, in GB. */
 	totalGb: number;
 	/** Label text (default "Storage"). */
 	label?: string | undefined;
@@ -1233,15 +1304,22 @@ export function StorageBar(input: StorageBarProps) {
 }
 
 export type FileTreeNode = {
+	/** Node id, passed to `onSelect` and matched against `selected`. */
 	id: string;
+	/** File or folder name. */
 	name: string;
+	/** `file` or `folder` (sets the icon; folders expand). */
 	kind: "file" | "folder";
+	/** Contents of a folder. */
 	children?: FileTreeNode[] | undefined;
 };
 
 export type FileTreeProps = BaseProps & {
+	/** Root files and folders. */
 	nodes: FileTreeNode[];
+	/** Id of the selected file. */
 	selected?: string | undefined;
+	/** Called with the id of the file the user picks. */
 	onSelect?: ((id: string) => void) | undefined;
 	/** Accessible name for the tree. */
 	label?: string | undefined;
@@ -1323,9 +1401,13 @@ export function FileTree(input: FileTreeProps) {
 export type GaugeSlot = "root" | "svg" | "track" | "bar" | "label";
 
 export type GaugeProps = SlotProps<GaugeSlot> & {
+	/** Current value, from 0 to `max`. */
 	value: number;
+	/** Value at a full gauge. */
 	max?: number | undefined;
+	/** What is measured (shown under the value). */
 	label?: string | undefined;
+	/** Width in pixels. */
 	size?: number | undefined;
 };
 
@@ -1393,12 +1475,17 @@ export function Gauge(input: GaugeProps) {
 export type InviteCardSlot = "root" | "meta" | "email" | "actions";
 
 export type InviteCardProps = SlotProps<InviteCardSlot> & {
+	/** Invited address. */
 	email: string;
 	/** Team role shown as a {@link RoleBadge} (not the ARIA role). */
 	role?: string | undefined;
+	/** Shows a resend button; called when it is pressed. */
 	onResend?: (() => void) | undefined;
+	/** Shows a revoke button; called when it is pressed. */
 	onRevoke?: (() => void) | undefined;
+	/** Resend button text. */
 	resendLabel?: string | undefined;
+	/** Revoke button text. */
 	revokeLabel?: string | undefined;
 };
 

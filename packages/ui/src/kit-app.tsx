@@ -34,9 +34,13 @@ function createCopied(): { copied: () => boolean; copy: (text: string) => Promis
 export type AnnouncementBarSlot = "root" | "body" | "close";
 
 export type AnnouncementBarProps = SlotProps<AnnouncementBarSlot> & {
+	/** Bar colour. */
 	tone?: "info" | "accent" | "warning" | "danger" | undefined;
+	/** Show a dismiss (×) button. */
 	dismissible?: boolean | undefined;
+	/** Called when the dismiss button is pressed; hide the bar here. */
 	onDismiss?: (() => void) | undefined;
+	/** Announcement text or content. */
 	children?: unknown;
 };
 
@@ -78,7 +82,9 @@ export function AnnouncementBar(input: AnnouncementBarProps) {
 export type CommandBarProps = BaseProps & {
 	/** Accessible name for the toolbar. */
 	label?: string | undefined;
+	/** Layout, and which arrow keys move between buttons. */
 	orientation?: "horizontal" | "vertical" | undefined;
+	/** Toolbar buttons (one Tab stop; arrows move between them). */
 	children?: unknown;
 };
 
@@ -127,16 +133,22 @@ export function CommandBar(input: CommandBarProps) {
 }
 
 export type TocItem = {
+	/** Id of the section on the page. */
 	id: string;
+	/** Link text. */
 	label: string;
+	/** Marks the current section. */
 	active?: boolean | undefined;
+	/** Called when the link is chosen (e.g. to scroll there). */
 	onSelect?: (() => void) | undefined;
 };
 
 export type TableOfContentsSlot = "root" | "title" | "list" | "link";
 
 export type TableOfContentsProps = SlotProps<TableOfContentsSlot> & {
+	/** Sections, in page order. */
 	items: TocItem[];
+	/** Small heading above the list. */
 	title?: string | undefined;
 };
 
@@ -184,13 +196,16 @@ export function TableOfContents(input: TableOfContentsProps) {
 }
 
 export type PropertyItem = {
+	/** Property name. */
 	label: string;
+	/** Property value (text or content). */
 	value: unknown;
 };
 
 export type PropertyListSlot = "root" | "row" | "label" | "value";
 
 export type PropertyListProps = SlotProps<PropertyListSlot> & {
+	/** Properties, in order. */
 	items: PropertyItem[];
 };
 
@@ -224,9 +239,13 @@ export function PropertyList(input: PropertyListProps) {
 export type StatCardSlot = "root" | "label" | "value" | "trend" | "hint";
 
 export type StatCardProps = SlotProps<StatCardSlot> & {
+	/** What the number measures. */
 	label: unknown;
+	/** The featured number or content. */
 	value: unknown;
+	/** Context line, e.g. "vs. last month". */
 	hint?: unknown;
+	/** Change in percent (arrow and colour by sign). */
 	trend?: number | undefined;
 };
 
@@ -286,12 +305,17 @@ export function StatCard(input: StatCardProps) {
 export type QuantityInputSlot = "root" | "button" | "value";
 
 export type QuantityInputProps = SlotProps<QuantityInputSlot> & {
+	/** Current quantity (controlled). */
 	value: number;
+	/** Lowest quantity (the − button disables there). */
 	min?: number | undefined;
+	/** Highest quantity (the + button disables there). */
 	max?: number | undefined;
+	/** Disables both buttons. */
 	disabled?: boolean | undefined;
 	/** Accessible name for the stepper group (default "Quantity"). */
 	label?: string | undefined;
+	/** Called with the new quantity. */
 	onChange: (value: number) => void;
 };
 
@@ -351,9 +375,13 @@ export function QuantityInput(input: QuantityInputProps) {
 export type PriceSlot = "root" | "strike" | "amount" | "period";
 
 export type PriceProps = SlotProps<PriceSlot> & {
+	/** Price as a number. */
 	amount: number;
+	/** ISO currency code for formatting, e.g. `USD`. */
 	currency?: string | undefined;
+	/** Billing period after the price, e.g. `month`. */
 	period?: string | undefined;
+	/** Previous price, shown struck through. */
 	strike?: number | undefined;
 };
 
@@ -399,16 +427,23 @@ export function Price(input: PriceProps) {
 export type ProductCardSlot = "root" | "media" | "image" | "badge" | "body" | "title" | "footer";
 
 export type ProductCardProps = SlotProps<ProductCardSlot> & {
+	/** Product name. */
 	title: unknown;
 	/** Heading level of the title, to fit the page outline. Default 4. */
 	order?: HeadingLevel | undefined;
+	/** Product image URL. */
 	image?: string | undefined;
 	/** Alt text for the product image (default: decorative). */
 	imageAlt?: string | undefined;
+	/** Price as a number. */
 	price: number;
+	/** Previous price, shown struck through. */
 	strike?: number | undefined;
+	/** ISO currency code for formatting. */
 	currency?: string | undefined;
+	/** Badge over the image, e.g. "Sale". */
 	badge?: unknown;
+	/** Shows an add-to-cart button; called when it is pressed. */
 	onAdd?: (() => void) | undefined;
 	/** Label for the add button (default "Add"). */
 	addLabel?: unknown;
@@ -475,12 +510,19 @@ export function ProductCard(input: ProductCardProps) {
 export type CartLineSlot = "root" | "image" | "body" | "title" | "quantity" | "remove";
 
 export type CartLineProps = SlotProps<CartLineSlot> & {
+	/** Product name. */
 	title: unknown;
+	/** Unit price as a number. */
 	price: number;
+	/** Quantity in the cart. */
 	quantity: number;
+	/** Product thumbnail URL. */
 	image?: string | undefined;
+	/** ISO currency code for formatting. */
 	currency?: string | undefined;
+	/** Shows quantity buttons; called with the new quantity. */
 	onQuantityChange?: ((value: number) => void) | undefined;
+	/** Shows a remove button; called when it is pressed. */
 	onRemove?: (() => void) | undefined;
 };
 
@@ -538,15 +580,25 @@ export function CartLine(input: CartLineProps) {
 	);
 }
 
-export type OrderSummaryLine = { label: string; value: string; muted?: boolean | undefined };
+export type OrderSummaryLine = {
+	/** Line label, e.g. "Shipping". */
+	label: string;
+	/** Line amount text. */
+	value: string;
+	/** De-emphasise the line. */
+	muted?: boolean | undefined;
+};
 
 export type OrderSummarySlot = "root" | "row" | "total";
 
 export type OrderSummaryProps = SlotProps<OrderSummarySlot> & {
+	/** Summary lines above the total. */
 	lines: OrderSummaryLine[];
+	/** Total amount. */
 	total: unknown;
 	/** Label for the total row (default "Total"). */
 	totalLabel?: unknown;
+	/** Content below the total, e.g. a checkout button. */
 	children?: unknown;
 };
 
@@ -584,14 +636,19 @@ export function OrderSummary(input: OrderSummaryProps) {
 export type ShareButtonProps = BaseProps & {
 	/** Link to share (default: the current page URL). */
 	url?: string | undefined;
+	/** Title passed to the share sheet. */
 	title?: string | undefined;
+	/** Text passed to the share sheet. */
 	text?: string | undefined;
+	/** Button label. */
 	label?: unknown;
 	/** Label shown after the link was copied (fallback path). Default "Link copied". */
 	copiedLabel?: unknown;
+	/** Button size. */
 	size?: "sm" | "md" | undefined;
 	/** Called after sharing or copying; return `false` from `onClick` to handle sharing yourself. */
 	onClick?: (() => boolean | undefined | void) | undefined;
+	/** Called after sharing, with how: the native sheet or a copied link. */
 	onShared?: ((method: "share" | "copy") => void) | undefined;
 };
 
@@ -657,7 +714,9 @@ export function ShareButton(input: ShareButtonProps) {
 export type CopyIdSlot = "root" | "label" | "value" | "button";
 
 export type CopyIdProps = SlotProps<CopyIdSlot> & {
+	/** Id shown and copied. */
 	value: string;
+	/** Label before the id. */
 	label?: unknown;
 };
 
@@ -694,6 +753,7 @@ export function CopyId(input: CopyIdProps) {
 }
 
 export type EnvBadgeProps = BaseProps & {
+	/** Environment name; `production`, `staging` and `development` have their own colours. */
 	env: "production" | "staging" | "development" | string;
 };
 
@@ -714,13 +774,21 @@ export function EnvBadge(input: EnvBadgeProps) {
 	);
 }
 
-export type LocaleOption = { value: string; label: string };
+export type LocaleOption = {
+	/** Locale code, e.g. `de`. */
+	value: string;
+	/** Language name shown to the user. */
+	label: string;
+};
 
 export type LocaleSwitcherSlot = "root" | "option";
 
 export type LocaleSwitcherProps = SlotProps<LocaleSwitcherSlot> & {
+	/** Current locale code (controlled). */
 	value: string;
+	/** Available languages. */
 	options: LocaleOption[];
+	/** Called with the picked locale code. */
 	onChange: (value: string) => void;
 	/** Accessible name (default "Language"). */
 	label?: string | undefined;
@@ -765,12 +833,21 @@ export function LocaleSwitcher(input: LocaleSwitcherProps) {
 	);
 }
 
-export type OrgOption = { id: string; name: string; plan?: string | undefined };
+export type OrgOption = {
+	/** Organisation id. */
+	id: string;
+	/** Organisation name. */
+	name: string;
+	/** Plan shown under the name. */
+	plan?: string | undefined;
+};
 
 export type OrgSwitcherSlot = "root" | "avatar" | "meta" | "name" | "plan" | "chevron";
 
 export type OrgSwitcherProps = SlotProps<OrgSwitcherSlot> & {
+	/** The current organisation. */
 	org: OrgOption;
+	/** Called when pressed, e.g. to open an organisation menu. */
 	onClick?: (() => void) | undefined;
 };
 
@@ -816,11 +893,17 @@ export function OrgSwitcher(input: OrgSwitcherProps) {
 export type InboxItemSlot = "root" | "icon" | "body" | "title" | "text" | "time";
 
 export type InboxItemProps = SlotProps<InboxItemSlot> & {
+	/** What the notification is about. */
 	title: unknown;
+	/** Secondary text. */
 	body?: unknown;
+	/** When it arrived. */
 	time?: unknown;
+	/** Show the unread dot and bold title. */
 	unread?: boolean | undefined;
+	/** Leading icon. */
 	icon?: IconName | undefined;
+	/** Makes the item a button, e.g. to open it. */
 	onClick?: (() => void) | undefined;
 };
 
@@ -868,12 +951,21 @@ export function InboxItem(input: InboxItemProps) {
 	);
 }
 
-export type Reaction = { emoji: string; count: number; active?: boolean | undefined };
+export type Reaction = {
+	/** The reaction emoji. */
+	emoji: string;
+	/** Number of people who reacted. */
+	count: number;
+	/** Whether the current user reacted (pressed state). */
+	active?: boolean | undefined;
+};
 
 export type ReactionBarSlot = "root" | "reaction";
 
 export type ReactionBarProps = SlotProps<ReactionBarSlot> & {
+	/** Reactions, in order. */
 	reactions: Reaction[];
+	/** Called with the emoji the user toggles; update counts yourself. */
 	onToggle?: ((emoji: string) => void) | undefined;
 };
 
@@ -915,7 +1007,9 @@ export function ReactionBar(input: ReactionBarProps) {
 }
 
 export type MentionProps = BaseProps & {
+	/** Username (shown with a leading `@`). */
 	name: string;
+	/** Makes the mention a button, e.g. to open the profile. */
 	onClick?: (() => void) | undefined;
 };
 
@@ -938,7 +1032,9 @@ export function Mention(input: MentionProps) {
 export type BrowserFrameSlot = "root" | "bar" | "url" | "body";
 
 export type BrowserFrameProps = SlotProps<BrowserFrameSlot> & {
+	/** Address shown in the bar. */
 	url?: string | undefined;
+	/** Page content (a screenshot fills the frame). */
 	children?: unknown;
 };
 
@@ -973,6 +1069,7 @@ export function BrowserFrame(input: BrowserFrameProps) {
 export type PhoneFrameSlot = "root" | "notch" | "body";
 
 export type PhoneFrameProps = SlotProps<PhoneFrameSlot> & {
+	/** Screen content (a screenshot fills the screen). */
 	children?: unknown;
 };
 
@@ -1000,14 +1097,18 @@ export function PhoneFrame(input: PhoneFrameProps) {
 }
 
 export type FeatureCompareRow = {
+	/** Feature name. */
 	feature: string;
+	/** One cell per plan: `true` / `false` for a check or cross, or text. */
 	values: Array<boolean | string>;
 };
 
 export type FeatureCompareSlot = "root" | "head" | "row" | "cell";
 
 export type FeatureCompareProps = SlotProps<FeatureCompareSlot> & {
+	/** Plan names (the columns). */
 	plans: string[];
+	/** Features (the rows). */
 	rows: FeatureCompareRow[];
 	/** Header of the first column (default "Feature"). */
 	featureLabel?: unknown;
@@ -1082,7 +1183,9 @@ export function FeatureCompare(input: FeatureCompareProps) {
 export type ViewToggleSlot = "root" | "option";
 
 export type ViewToggleProps = SlotProps<ViewToggleSlot> & {
+	/** Current view. */
 	value: "list" | "grid";
+	/** Called with the view the user picks. */
 	onChange: (value: "list" | "grid") => void;
 };
 
@@ -1125,7 +1228,9 @@ export function ViewToggle(input: ViewToggleProps) {
 }
 
 export type ResultCountProps = BaseProps & {
+	/** Number of results. */
 	count: number;
+	/** Noun after the count, e.g. "deploys". */
 	label?: string | undefined;
 };
 
@@ -1147,7 +1252,9 @@ export function ResultCount(input: ResultCountProps) {
 export type FilterChipSlot = "root" | "remove";
 
 export type FilterChipProps = SlotProps<FilterChipSlot> & {
+	/** Filter text, e.g. "Status: failed". */
 	label: string;
+	/** Shows a remove (×) button; called when it is pressed. */
 	onRemove?: (() => void) | undefined;
 };
 
@@ -1181,10 +1288,13 @@ export function FilterChip(input: FilterChipProps) {
 export type BulkBarSlot = "root" | "count" | "actions" | "clear";
 
 export type BulkBarProps = SlotProps<BulkBarSlot> & {
+	/** Number of selected items. */
 	count: number;
+	/** Shows a clear-selection button; called when it is pressed. */
 	onClear?: (() => void) | undefined;
 	/** Custom count text (default `N selected`). */
 	countLabel?: ((count: number) => unknown) | undefined;
+	/** Bulk actions for the selection. */
 	children?: unknown;
 };
 
@@ -1227,6 +1337,7 @@ export function BulkBar(input: BulkBarProps) {
 export type LiveBadgeSlot = "root" | "dot";
 
 export type LiveBadgeProps = SlotProps<LiveBadgeSlot> & {
+	/** Badge text. */
 	label?: unknown;
 };
 
@@ -1242,7 +1353,9 @@ export function LiveBadge(input: LiveBadgeProps) {
 }
 
 export type UnreadBadgeProps = BaseProps & {
+	/** Unread count; hidden at 0. */
 	count: number;
+	/** Counts above this show as `max+`. */
 	max?: number | undefined;
 };
 
@@ -1269,7 +1382,9 @@ export function UnreadBadge(input: UnreadBadgeProps) {
 export type SecretFieldSlot = "root" | "label" | "value" | "actions";
 
 export type SecretFieldProps = SlotProps<SecretFieldSlot> & {
+	/** The secret (masked until revealed). */
 	value: string;
+	/** Field label. */
 	label?: unknown;
 };
 
@@ -1323,13 +1438,17 @@ export function SecretField(input: SecretFieldProps) {
 export type InfiniteScrollSlot = "root" | "sentinel";
 
 export type InfiniteScrollProps = SlotProps<InfiniteScrollSlot> & {
+	/** Currently loading (prevents duplicate requests, shows a spinner). */
 	loading?: boolean | undefined;
+	/** Whether more items can load. */
 	hasMore?: boolean | undefined;
+	/** Called when the end of the list scrolls into view (or the button is pressed). */
 	onLoadMore: () => void;
 	/** Button text (default "Load more" / "Loading…"). */
 	loadMoreLabel?: unknown;
 	/** How far before the end to start loading (IntersectionObserver `rootMargin`). Default `200px`. */
 	rootMargin?: string | undefined;
+	/** The list rendered so far. */
 	children?: unknown;
 };
 

@@ -10,12 +10,19 @@ import { ActionIcon } from "./widgets.tsx";
 export type CookieConsentSlot = "root" | "body" | "title" | "message" | "actions";
 
 export type CookieConsentProps = SlotProps<CookieConsentSlot> & {
+	/** Whether the notice is shown (controlled); hide it once the user chooses. */
 	open: boolean;
+	/** Bold first line. */
 	title?: string | undefined;
+	/** Explanation of what the cookies are for. */
 	message?: string | undefined;
+	/** Accept button text. */
 	acceptLabel?: string | undefined;
+	/** Decline button text. */
 	declineLabel?: string | undefined;
+	/** Called when the user accepts. */
 	onAccept: () => void;
+	/** Shows a decline button; called when it is pressed. */
 	onDecline?: (() => void) | undefined;
 };
 
@@ -65,6 +72,7 @@ export function CookieConsent(input: CookieConsentProps) {
 export type OfflineNoticeProps = BaseProps & {
 	/** Force visibility (otherwise listens to navigator.onLine). */
 	offline?: boolean | undefined;
+	/** Message shown while offline. */
 	children?: unknown;
 };
 
@@ -196,8 +204,11 @@ export function Hotkey(input: HotkeyProps) {
 export type InlineEditSlot = "root" | "input" | "display" | "icon";
 
 export type InlineEditProps = SlotProps<InlineEditSlot> & {
+	/** Current text (controlled). */
 	value: string;
+	/** Text shown while the value is empty. */
 	placeholder?: string | undefined;
+	/** Called with the new text when an edit is committed (Enter or blur); Escape cancels. */
 	onChange: (value: string) => void;
 	/** Accessible label for the edit button / input. */
 	label?: string | undefined;
@@ -283,7 +294,9 @@ export function InlineEdit(input: InlineEditProps) {
 export type CopyFieldSlot = "root" | "label" | "value" | "action";
 
 export type CopyFieldProps = SlotProps<CopyFieldSlot> & {
+	/** Text shown and copied. */
 	value: string;
+	/** Field label (also the copy button's accessible context). */
 	label?: string | undefined;
 };
 
@@ -337,15 +350,20 @@ export function CopyField(input: CopyFieldProps) {
 }
 
 export type ChecklistItemData = {
+	/** Item id. */
 	id: string;
+	/** Item text. */
 	label: string;
+	/** Whether the item is ticked. */
 	done?: boolean | undefined;
 };
 
 export type ChecklistSlot = "root" | "item" | "checkbox" | "label";
 
 export type ChecklistProps = SlotProps<ChecklistSlot> & {
+	/** The checklist items (controlled). */
 	items: ChecklistItemData[];
+	/** Called with the updated items after a tick changes. */
 	onChange: (items: ChecklistItemData[]) => void;
 };
 
@@ -396,7 +414,9 @@ export function Checklist(input: ChecklistProps) {
 export type FeatureListSlot = "root" | "item" | "icon" | "label";
 
 export type FeatureListProps = SlotProps<FeatureListSlot> & {
+	/** Features, one per line. */
 	items: string[];
+	/** Icon before each feature. */
 	icon?: IconName | undefined;
 };
 
@@ -438,12 +458,19 @@ export type PricingCardSlot =
 	| "action";
 
 export type PricingCardProps = SlotProps<PricingCardSlot> & {
+	/** Plan name. */
 	name: string;
+	/** Price text, e.g. `$20`. */
 	price: string;
+	/** Billing period after the price, e.g. `per month`. */
 	period?: string | undefined;
+	/** Short pitch under the name. */
 	description?: string | undefined;
+	/** Features included in the plan. */
 	features?: string[] | undefined;
+	/** Emphasise this plan (e.g. the recommended one). */
 	highlighted?: boolean | undefined;
+	/** Call to action at the bottom, e.g. a `Button`. */
 	action?: unknown;
 };
 
@@ -487,6 +514,7 @@ export function PricingCard(input: PricingCardProps) {
 }
 
 export type StatGroupProps = BaseProps & {
+	/** The `Stat`s to show side by side. */
 	children?: unknown;
 };
 
@@ -506,8 +534,11 @@ export function StatGroup(input: StatGroupProps) {
 export type DotPaginationSlot = "root" | "dot";
 
 export type DotPaginationProps = SlotProps<DotPaginationSlot> & {
+	/** Number of dots (pages or slides). */
 	count: number;
+	/** Index of the current dot (0-based). */
 	value: number;
+	/** Called with the index the user picks. */
 	onChange: (index: number) => void;
 	/** Accessible name (default "Pagination"). */
 	label?: string | undefined;
@@ -557,7 +588,9 @@ export type BackLinkSlot = "root" | "icon" | "label";
 export type BackLinkProps = SlotProps<BackLinkSlot> & {
 	/** Render as a link. */
 	href?: string | undefined;
+	/** Click handler (renders a button when there is no `href`). */
 	onClick?: ((e: MouseEvent) => void) | undefined;
+	/** Link text. */
 	children?: unknown;
 };
 
@@ -610,11 +643,17 @@ export function BackLink(input: BackLinkProps) {
 export type NextPrevSlot = "root" | "prev" | "next";
 
 export type NextPrevProps = SlotProps<NextPrevSlot> & {
+	/** Shows the previous link; called when it is pressed. */
 	onPrev?: (() => void) | undefined;
+	/** Shows the next link; called when it is pressed. */
 	onNext?: (() => void) | undefined;
+	/** Title of the previous page. */
 	prevLabel?: string | undefined;
+	/** Title of the next page. */
 	nextLabel?: string | undefined;
+	/** Disables the previous link (e.g. on the first page). */
 	prevDisabled?: boolean | undefined;
+	/** Disables the next link (e.g. on the last page). */
 	nextDisabled?: boolean | undefined;
 };
 
@@ -662,9 +701,13 @@ export function NextPrev(input: NextPrevProps) {
 export type FileCardSlot = "root" | "icon" | "text" | "name" | "meta" | "remove";
 
 export type FileCardProps = SlotProps<FileCardSlot> & {
+	/** File name. */
 	name: string;
+	/** Small line, e.g. size and type. */
 	meta?: string | undefined;
+	/** File icon. */
 	icon?: IconName | undefined;
+	/** Shows a remove button; called when it is pressed. */
 	onRemove?: (() => void) | undefined;
 };
 
@@ -708,9 +751,11 @@ export function FileCard(input: FileCardProps) {
 export type VideoFrameSlot = "root" | "frame";
 
 export type VideoFrameProps = SlotProps<VideoFrameSlot> & {
+	/** Embed URL (YouTube, Vimeo, or any page that can be framed). */
 	src: string;
 	/** Accessible title of the embedded frame. */
 	title?: string | undefined;
+	/** Width divided by height, e.g. `16 / 9`. */
 	ratio?: number | undefined;
 };
 
@@ -744,7 +789,9 @@ export function VideoFrame(input: VideoFrameProps) {
 export type SteppedProgressSlot = "root" | "segment";
 
 export type SteppedProgressProps = SlotProps<SteppedProgressSlot> & {
+	/** Number of segments. */
 	steps: number;
+	/** Completed segments. */
 	value: number;
 	/** Accessible name (default "Progress"). */
 	label?: string | undefined;
@@ -802,6 +849,7 @@ export type HeatmapSlot = "root" | "cell";
 export type HeatmapProps = SlotProps<HeatmapSlot> & {
 	/** Flat values, typically 7 columns (weeks × days). */
 	values: number[];
+	/** Cells per row (e.g. 7 for weeks). */
 	columns?: number | undefined;
 	/** Accessible summary (default "Activity heatmap"). */
 	label?: string | undefined;
@@ -854,8 +902,11 @@ export function Heatmap(input: HeatmapProps) {
 export type AngleSliderSlot = "root" | "svg" | "track" | "hub" | "arm" | "knob" | "label";
 
 export type AngleSliderProps = SlotProps<AngleSliderSlot> & {
+	/** Angle in degrees, 0–359 (controlled). */
 	value: number;
+	/** Called with the new angle while dragging or using the arrow keys. */
 	onChange: (deg: number) => void;
+	/** Diameter in pixels. */
 	size?: number | undefined;
 	/** Accessible name (default "Angle"). */
 	label?: string | undefined;
@@ -961,6 +1012,7 @@ export function AngleSlider(input: AngleSliderProps) {
 export type ProseProps = BaseProps & {
 	/** Cap the line length for readability (default true). */
 	measure?: boolean | undefined;
+	/** Long-form content (headings, paragraphs, lists, links, code). */
 	children?: unknown;
 };
 
@@ -982,7 +1034,9 @@ export function Prose(input: ProseProps) {
 }
 
 export type BleedProps = BaseProps & {
+	/** How far to extend past the container on each side (any CSS length). */
 	x?: string | undefined;
+	/** Content to extend. */
 	children?: unknown;
 };
 
@@ -1004,6 +1058,7 @@ export function Bleed(input: BleedProps) {
 }
 
 export type InsetProps = BaseProps & {
+	/** Recessed content. */
 	children?: unknown;
 };
 
@@ -1023,10 +1078,13 @@ export function Inset(input: InsetProps) {
 export type KanbanColumnSlot = "root" | "header" | "title" | "count" | "body";
 
 export type KanbanColumnProps = SlotProps<KanbanColumnSlot> & {
+	/** Column heading (also its accessible name). */
 	title: string;
 	/** Column id reported to `KanbanBoard` `onMove`; enables dropping cards here. */
 	columnId?: string | undefined;
+	/** Number shown next to the title, e.g. the card count. */
 	count?: number | undefined;
+	/** The column's `KanbanCard`s. */
 	children?: unknown;
 };
 
@@ -1066,10 +1124,13 @@ export function KanbanColumn(input: KanbanColumnProps) {
 export type KanbanCardSlot = "root" | "title" | "meta";
 
 export type KanbanCardProps = SlotProps<KanbanCardSlot> & {
+	/** Card title. */
 	title: string;
 	/** Card id reported to `KanbanBoard` `onMove`; makes the card draggable. */
 	cardId?: string | undefined;
+	/** Small line, e.g. issue number or assignee. */
 	meta?: string | undefined;
+	/** Called when the card is clicked (e.g. to open it). */
 	onClick?: ((e: MouseEvent) => void) | undefined;
 };
 
@@ -1123,6 +1184,7 @@ export type KanbanBoardProps = BaseProps & {
 	onMove?: ((cardId: string, toColumnId: string, index: number) => void) | undefined;
 	/** Accessible name for the board. Default "Board". */
 	label?: string | undefined;
+	/** The board's `KanbanColumn`s. */
 	children?: unknown;
 };
 

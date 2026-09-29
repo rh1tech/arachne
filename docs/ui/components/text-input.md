@@ -9,18 +9,18 @@ Fields the user types a value into.
 
 Text field. Every other attribute (`id`, `name`, `autocomplete`, `aria-*`, …) lands on the `<input>`.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `disabled` | `boolean` |  |  |
-| `invalid` | `boolean` |  |  |
-| `name` | `string` |  |  |
-| `onBlur` | `(e: FocusEvent) => void` |  |  |
-| `onFocus` | `(e: FocusEvent) => void` |  |  |
-| `onInput` | `(e: InputEvent) => void` |  |  |
-| `onKeyDown` | `(e: KeyboardEvent) => void` |  |  |
-| `placeholder` | `string` |  |  |
-| `type` | `string` |  |  |
-| `value` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `disabled` | `boolean` |  |  | Disables the field. |
+| `invalid` | `boolean` |  |  | Marks the value invalid (`aria-invalid` and error styling). |
+| `name` | `string` |  |  | Field name submitted with the form. |
+| `onBlur` | `(e: FocusEvent) => void` |  |  | Called when the field loses focus. |
+| `onFocus` | `(e: FocusEvent) => void` |  |  | Called when the field gains focus. |
+| `onInput` | `(e: InputEvent) => void` |  |  | Called on every edit; read `e.target.value`. |
+| `onKeyDown` | `(e: KeyboardEvent) => void` |  |  | Called on key presses. |
+| `placeholder` | `string` |  |  | Hint shown while empty. |
+| `type` | `string` |  | `"text"` | Native input type (`text`, `email`, `url`, `tel`, …). |
+| `value` | `string` |  | `""` | Current text (controlled; update it from `onInput`). |
 
 ```tsx
 function Example() {
@@ -42,16 +42,16 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Multi-line text field.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `disabled` | `boolean` |  |  |
-| `invalid` | `boolean` |  |  |
-| `name` | `string` |  |  |
-| `onBlur` | `(e: FocusEvent) => void` |  |  |
-| `onInput` | `(e: InputEvent) => void` |  |  |
-| `placeholder` | `string` |  |  |
-| `rows` | `number` |  |  |
-| `value` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `disabled` | `boolean` |  |  | Disables the field. |
+| `invalid` | `boolean` |  |  | Marks the value invalid (`aria-invalid` and error styling). |
+| `name` | `string` |  |  | Field name submitted with the form. |
+| `onBlur` | `(e: FocusEvent) => void` |  |  | Called when the field loses focus. |
+| `onInput` | `(e: InputEvent) => void` |  |  | Called on every edit; read `e.target.value`. |
+| `placeholder` | `string` |  |  | Hint shown while empty. |
+| `rows` | `number` |  |  | Visible text lines. |
+| `value` | `string` |  | `""` | Current text (controlled; update it from `onInput`). |
 
 ```tsx
 function Example() {
@@ -80,18 +80,18 @@ Numeric field. Typing keeps a free-form draft (so `15` can be typed with `min=10
 
 **Slots:** `root` `decrement` `increment` `input`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: number) => void` | yes |  |
-| `value` | `number` | yes |  |
-| `decrementLabel` | `string` |  | Accessible labels for the step buttons. |
-| `disabled` | `boolean` |  |  |
-| `incrementLabel` | `string` |  |  |
-| `invalid` | `boolean` |  |  |
-| `max` | `number` |  |  |
-| `min` | `number` |  |  |
-| `name` | `string` |  |  |
-| `step` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: number) => void` | yes |  | Called with the new number (never `NaN`). |
+| `value` | `number` | yes |  | Current value (controlled). |
+| `decrementLabel` | `string` |  | `"Decrease"` | Accessible labels for the step buttons. |
+| `disabled` | `boolean` |  |  | Disables the field and its buttons. |
+| `incrementLabel` | `string` |  | `"Increase"` | Accessible name of the + button. |
+| `invalid` | `boolean` |  |  | Marks the value invalid (`aria-invalid` and error styling). |
+| `max` | `number` |  |  | Highest value; typing above it is clamped on blur. |
+| `min` | `number` |  | `0` | Lowest value; typing below it is clamped on blur. |
+| `name` | `string` |  |  | Field name submitted with the form. |
+| `step` | `number` |  |  | Amount the − / + buttons and arrow keys change the value by. |
 
 ```tsx
 function Example() {
@@ -108,14 +108,14 @@ function Example() {
 
 **Slots:** `root` `button` `value`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: number) => void` | yes |  |
-| `value` | `number` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `label` | `string` |  | Accessible name for the stepper group (default "Quantity"). |
-| `max` | `number` |  |  |
-| `min` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: number) => void` | yes |  | Called with the new quantity. |
+| `value` | `number` | yes |  | Current quantity (controlled). |
+| `disabled` | `boolean` |  |  | Disables both buttons. |
+| `label` | `string` |  | `"Quantity"` | Accessible name for the stepper group (default "Quantity"). |
+| `max` | `number` |  | `99` | Highest quantity (the + button disables there). |
+| `min` | `number` |  | `1` | Lowest quantity (the − button disables there). |
 
 ```tsx
 function Example() {
@@ -136,16 +136,16 @@ Password field with visibility toggle. The `<input>` is the host (`class`, `id`,
 
 **Slots:** `root` `input` `toggle`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `hideLabel` | `string` |  |  |
-| `invalid` | `boolean` |  |  |
-| `name` | `string` |  |  |
-| `placeholder` | `string` |  |  |
-| `showLabel` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: string) => void` | yes |  | Called with the new password on every edit. |
+| `value` | `string` | yes |  | Current password (controlled). |
+| `disabled` | `boolean` |  |  | Disables the field. |
+| `hideLabel` | `string` |  | `"Hide password"` | Accessible name of the reveal button while shown. |
+| `invalid` | `boolean` |  |  | Marks the value invalid (`aria-invalid` and error styling). |
+| `name` | `string` |  |  | Field name submitted with the form. |
+| `placeholder` | `string` |  |  | Hint shown while empty. |
+| `showLabel` | `string` |  | `"Show password"` | Accessible name of the reveal button while hidden. |
 
 ```tsx
 function Example() {
@@ -160,10 +160,10 @@ Four-bar strength meter.
 
 **Slots:** `root` `bar` `bars` `label`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `password` | `string` | yes |  |
-| `labels` | `[string, string, string, string, string]` |  | Override the five labels (score 0–4). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `password` | `string` | yes | `""` | The password to rate (strength bar and hints). |
+| `labels` | `[string, string, string, string, string]` |  |  | Override the five labels (score 0–4). |
 
 ```tsx
 <PasswordStrength password="correct horse" />
@@ -177,15 +177,15 @@ Search field with clear button. The `<input>` is the host; `classes.root` styles
 
 **Slots:** `root` `clear` `icon` `input`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `clearLabel` | `string` |  |  |
-| `disabled` | `boolean` |  |  |
-| `icon` | `content` |  | Leading icon (default: the `search` icon); `null` hides it. |
-| `onSubmit` | `() => void` |  |  |
-| `placeholder` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: string) => void` | yes |  | Called with the new query on every edit (and with `""` when cleared). |
+| `value` | `string` | yes |  | Current query (controlled). |
+| `clearLabel` | `string` |  | `"Clear search"` | Accessible name of the clear (×) button. |
+| `disabled` | `boolean` |  |  | Disables the field. |
+| `icon` | `content` |  |  | Leading icon (default: the `search` icon); `null` hides it. |
+| `onSubmit` | `() => void` |  |  | Called when the user presses Enter. |
+| `placeholder` | `string` |  | `"Search"` | Hint shown while empty. |
 
 ```tsx
 function Example() {
@@ -209,13 +209,13 @@ One-time-code input: one cell per digit, paste fills all cells. Forwarded attrib
 
 **Slots:** `root` `cell`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `length` | `number` |  |  |
-| `mask` | `boolean` |  | Mask digits like a password. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: string) => void` | yes |  | Called with the new code on every edit or paste. |
+| `value` | `string` | yes |  | Digits entered so far (controlled). |
+| `disabled` | `boolean` |  |  | Disables every cell. |
+| `length` | `number` |  | `4` | Number of cells. |
+| `mask` | `boolean` |  |  | Mask digits like a password. |
 
 ```tsx
 function Example() {
@@ -242,13 +242,13 @@ Free-form tag entry (Enter / comma / paste lists, case-insensitive dedupe).
 
 **Slots:** `root` `input` `remove` `tag`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string[]) => void` | yes |  |
-| `value` | `string[]` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `placeholder` | `string` |  |  |
-| `renderTag` | `(tag: string) => unknown` |  | Render a tag's content (default: the text). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: string[]) => void` | yes |  | Called with the new tags (added with Enter or comma; removed with ×). |
+| `value` | `string[]` | yes |  | Current tags (controlled). |
+| `disabled` | `boolean` |  |  | Disables adding and removing. |
+| `placeholder` | `string` |  | `"Add tag"` | Input hint. |
+| `renderTag` | `(tag: string) => unknown` |  |  | Render a tag's content (default: the text). |
 
 ```tsx
 function Example() {
@@ -270,9 +270,9 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Joins inputs and addons into one control.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Inputs, buttons and `InputAddon`s to join edge to edge. |
 
 ```tsx
 <InputGroup>
@@ -290,9 +290,9 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Static addon (text, icon) attached to an input.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Addon text or content, e.g. `https://` or a unit. |
 
 ```tsx
 <InputGroup>
@@ -307,12 +307,12 @@ Click-to-edit text.
 
 **Slots:** `root` `display` `icon` `input`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `label` | `string` |  | Accessible label for the edit button / input. |
-| `placeholder` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: string) => void` | yes |  | Called with the new text when an edit is committed (Enter or blur); Escape cancels. |
+| `value` | `string` | yes |  | Current text (controlled). |
+| `label` | `string` |  |  | Accessible label for the edit button / input. |
+| `placeholder` | `string` |  |  | Text shown while the value is empty. |
 
 ```tsx
 function Example() {
@@ -327,13 +327,13 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 JSON text area that flags invalid JSON (`aria-invalid`, `data-invalid`).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `name` | `string` |  |  |
-| `rows` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(value: string) => void` | yes |  | Called with the new text on every edit (invalid JSON is flagged, not rejected). |
+| `value` | `string` | yes |  | JSON text (controlled). |
+| `disabled` | `boolean` |  |  | Disables the field. |
+| `name` | `string` |  |  | Field name submitted with the form. |
+| `rows` | `number` |  | `6` | Visible text lines. |
 
 ```tsx
 function Example() {
@@ -354,10 +354,10 @@ Masked secret with reveal / copy.
 
 **Slots:** `root` `actions` `label` `value`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `value` | `string` | yes |  |
-| `label` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `string` | yes |  | The secret (masked until revealed). |
+| `label` | `content` |  |  | Field label. |
 
 ```tsx
 <SecretField label="Webhook secret" value="whsec_9f2kQ83m1x" />
@@ -369,10 +369,10 @@ Read-only value with a copy button.
 
 **Slots:** `root` `action` `label` `value`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `value` | `string` | yes |  |
-| `label` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `string` | yes |  | Text shown and copied. |
+| `label` | `string` |  |  | Field label (also the copy button's accessible context). |
 
 ```tsx
 <CopyField label="API key" value="sk_live_51Hx…9fQ2" />

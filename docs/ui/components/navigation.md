@@ -11,15 +11,55 @@ Responsive navbar with nested menus (hover or click), overflow scrolling and a m
 
 **Slots:** `root` `backdrop` `brand` `burger` `close` `desktop` `end` `header` `item` `link` `list` `mobile` `panel` `scroll` `shell` `title` `track` `viewport`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `ctrl` | `NavbarController` | yes |  | Pass a stable controller from `createNavbarController()` (required for multiple navbars). |
+| `items` | `NavMenuItem[]` | yes |  | Top-level items; items with `children` open submenus. |
+| `brand` | `content` |  |  | Logo or name at the start of the bar. |
+| `end` | `content` |  |  | Content at the end of the bar, e.g. buttons. |
+| `label` | `string` |  | `"Primary"` | Accessible name for the desktop `&lt;nav>` (default "Primary"). |
+| `placement` | `NavbarPlacement` |  | `"static"` | Pin the bar to the top of the scrollport / viewport. Default: static |
+| `trigger` | `NavMenuTrigger` |  | `"hover"` | Desktop submenu open mode. Mobile always uses click. Default: hover |
+
+**`NavMenuItem`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `ctrl` | `NavbarController` | yes | Pass a stable controller from `createNavbarController()` (required for multiple navbars). |
-| `items` | `NavMenuItem[]` | yes |  |
-| `brand` | `content` |  |  |
-| `end` | `content` |  |  |
-| `label` | `string` |  | Accessible name for the desktop `&lt;nav>` (default "Primary"). |
-| `placement` | `NavbarPlacement` |  | Pin the bar to the top of the scrollport / viewport. Default: static |
-| `trigger` | `NavMenuTrigger` |  | Desktop submenu open mode. Mobile always uses click. Default: hover |
+| `id` | `string` | yes | Item id; used by the controller to track open submenus. |
+| `label` | `string` | yes | Menu text. |
+| `href` | `string` |  | Link target (renders a link). |
+| `active` | `boolean` |  | Marks the current page (`aria-current`). |
+| `disabled` | `boolean` |  | Shown but can't be chosen. |
+| `onSelect` | `() => void` |  | Called when the item is chosen. |
+| `children` | `NavMenuItem[]` |  | Nested items, shown as a submenu. |
+
+**`NavMenuTrigger`**
+
+```ts
+type NavMenuTrigger = "hover" | "click";
+```
+
+**`NavbarPlacement`**
+
+```ts
+type NavbarPlacement = "static" | "sticky" | "fixed";
+```
+
+**`NavbarController`**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `openPath` | `() => string[]` | yes | Ids of the open submenus, outermost first. |
+| `mobileOpen` | `() => boolean` | yes | Whether the mobile menu is expanded. |
+| `isOpen` | `(id: string) => boolean` | yes | Whether the submenu with this id is open. |
+| `openTo` | `(path: string[]) => void` | yes | Opens the submenus along `path` (and closes the others). |
+| `toggle` | `(path: string[]) => void` | yes | Opens or closes the submenu at the end of `path`. |
+| `closeAll` | `() => void` | yes | Closes every submenu. |
+| `scheduleClose` | `() => void` | yes | Closes the submenus after a short delay (hover intent). |
+| `cancelClose` | `() => void` | yes | Cancels a pending `scheduleClose`. |
+| `setMobileOpen` | `(open: boolean) => void` | yes | Expands or collapses the mobile menu. |
+| `toggleMobile` | `() => void` | yes | Toggles the mobile menu. |
+| `dispose` | `() => void` | yes | Clears timers; call when the navbar is removed. |
 
 ```tsx
 function Example() {
@@ -55,12 +95,12 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Standalone navbar link (renders `<a>` when `href` is set).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `active` | `boolean` |  |  |
-| `children` | `content` |  |  |
-| `href` | `string` |  |  |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `active` | `boolean` |  |  | Marks the current page (`aria-current`). |
+| `children` | `content` |  |  | Link text. |
+| `href` | `string` |  |  | Link target. |
+| `onClick` | `(e: MouseEvent) => void` |  |  | Click handler (renders a button when there is no `href`). |
 
 ```tsx
 <NavbarLink href="#pricing" active>
@@ -78,12 +118,21 @@ Vertical nav list.
 
 **Slots:** `root` `link`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `SidebarItem[]` | yes |  | Navigation items, in order. |
+| `label` | `string` |  | `"Sidebar"` | Accessible name for the nav (default "Sidebar"). |
+| `onChange` | `(id: string) => void` |  |  | Called with the id of the item the user picks. |
+| `value` | `string` |  |  | Id of the current item (marked `aria-current`). |
+
+**`SidebarItem`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `items` | `SidebarItem[]` | yes |  |
-| `label` | `string` |  | Accessible name for the nav (default "Sidebar"). |
-| `onChange` | `(id: string) => void` |  |  |
-| `value` | `string` |  |  |
+| `id` | `string` | yes | Item id, passed to `onChange` and matched against `value`. |
+| `label` | `string` | yes | Item text. |
+| `onSelect` | `() => void` |  | Called when this item is chosen (in addition to `onChange`). |
+| `disabled` | `boolean` |  | Shown but can't be chosen. |
 
 ```tsx
 const sections = [
@@ -104,16 +153,16 @@ Navigation row (button, or `<a>` with `href`).
 
 **Slots:** `root` `description` `label` `left` `main` `right`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `string` | yes |  |
-| `active` | `boolean` |  |  |
-| `description` | `string` |  |  |
-| `disabled` | `boolean` |  |  |
-| `href` | `string` |  | Render as a real link (middle-click, open in new tab, crawlable). Fixed at mount. |
-| `leftSection` | `content` |  |  |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
-| `rightSection` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `string` | yes |  | Link text. |
+| `active` | `boolean` |  |  | Marks the current page (`aria-current`). |
+| `description` | `string` |  |  | Secondary line under the label. |
+| `disabled` | `boolean` |  |  | Shown but can't be followed. |
+| `href` | `string` |  |  | Render as a real link (middle-click, open in new tab, crawlable). Fixed at mount. |
+| `leftSection` | `content` |  |  | Leading content, e.g. an icon. |
+| `onClick` | `(e: MouseEvent) => void` |  |  | Click handler (renders a button when there is no `href`). |
+| `rightSection` | `content` |  |  | Trailing content, e.g. a badge or chevron. |
 
 ```tsx
 <NavLink label="Deploys" description="History and logs" href="#deploys" active />
@@ -127,10 +176,19 @@ Trail of links; the last item is the current page. Links render as `<a>` when `h
 
 **Slots:** `root` `current` `item` `link` `list` `separator`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `BreadcrumbItem[]` | yes |  | Crumbs from the root to the current page (last item). |
+| `separator` | `content` |  | `"/"` | Separator node (default `/`). |
+
+**`BreadcrumbItem`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `items` | `BreadcrumbItem[]` | yes |  |
-| `separator` | `content` |  | Separator node (default `/`). |
+| `label` | `content` | yes | Crumb text or content. |
+| `href` | `string` |  | Link target; without `href` or `onClick` the crumb is plain text (the current page). |
+| `onClick` | `(e: MouseEvent) => void` |  | Click handler (renders a button when there is no `href`). |
+| `icon` | `content` |  | Leading icon or content. |
 
 ```tsx
 <Breadcrumb
@@ -150,16 +208,27 @@ WAI-ARIA tabs: roving tabindex, ← → Home End, linked panels, animated indica
 
 **Slots:** `root` `badge` `icon` `indicator` `list` `panel` `scroll` `tab` `viewport`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `TabItem[]` | yes |  | The tabs, in order. |
+| `onChange` | `(id: string) => void` | yes |  | Called with the id of the tab the user selects. |
+| `value` | `string` | yes |  | Id of the selected tab. |
+| `activation` | `"auto" \| "manual"` |  | `"auto"` | `auto` selects on arrow focus (default); `manual` waits for Enter/Space. |
+| `grow` | `boolean` |  |  | Stretch tabs to fill the row. |
+| `label` | `string` |  |  | Accessible name for the tablist. |
+| `size` | `"sm" \| "md" \| "lg"` |  | `"md"` | Tab height and text size. |
+| `variant` | `"line" \| "pills" \| "enclosed" \| "segmented"` |  | `"line"` | `line` (underline), `pills`, `enclosed` (card tabs) or `segmented`. |
+
+**`TabItem`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `items` | `TabItem[]` | yes |  |
-| `onChange` | `(id: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `activation` | `"auto" \| "manual"` |  | `auto` selects on arrow focus (default); `manual` waits for Enter/Space. |
-| `grow` | `boolean` |  | Stretch tabs to fill the row. |
-| `label` | `string` |  | Accessible name for the tablist. |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
-| `variant` | `"line" \| "pills" \| "enclosed" \| "segmented"` |  | `line` (underline), `pills`, `enclosed` (card tabs) or `segmented`. |
+| `id` | `string` | yes | Tab id, passed to `onChange` and matched against `value`. |
+| `label` | `content` | yes | Tab label (text or content). |
+| `disabled` | `boolean` |  | Shown but can't be selected; skipped by arrow keys. |
+| `icon` | `content` |  | Leading icon or content. |
+| `badge` | `content` |  | Trailing content, e.g. a count badge. |
+| `panel` | `content` |  | Panel content; when any item has one, Tabs renders linked `tabpanel`s. |
 
 ```tsx
 function Example() {
@@ -192,12 +261,20 @@ Step indicator.
 
 **Slots:** `root` `button` `copy` `description` `index` `label` `step`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `StepItem[]` | yes |  | The steps, in order; those before `value` show as complete. |
+| `value` | `string` | yes |  | Current step id (active). Prior steps are complete. |
+| `label` | `string` |  | `"Progress"` | Accessible name (default "Progress"). |
+| `onChange` | `(id: string) => void` |  |  | Makes steps clickable; called with the step id. Without it, steps are plain text. |
+
+**`StepItem`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `items` | `StepItem[]` | yes |  |
-| `value` | `string` | yes | Current step id (active). Prior steps are complete. |
-| `label` | `string` |  | Accessible name (default "Progress"). |
-| `onChange` | `(id: string) => void` |  |  |
+| `id` | `string` | yes | Step id, passed to `onChange` and matched against `value`. |
+| `label` | `string` | yes | Step name. |
+| `description` | `string` |  | Secondary line under the label. |
 
 ```tsx
 function Example() {
@@ -229,15 +306,15 @@ Page navigation with previous/next controls and numbered pages (`variant="simple
 
 **Slots:** `root` `control` `ellipsis` `page` `pages` `status`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(page: number) => void` | yes |  |
-| `page` | `number` | yes |  |
-| `pageCount` | `number` | yes |  |
-| `nextLabel` | `content` |  |  |
-| `previousLabel` | `content` |  |  |
-| `siblings` | `number` |  | Pages shown on each side of the current page (default 1). |
-| `variant` | `"pages" \| "simple"` |  | `simple` = prev/next + status; `pages` = numbered buttons (default). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(page: number) => void` | yes |  | Called with the page the user picks. |
+| `page` | `number` | yes |  | Current page, starting at 1. |
+| `pageCount` | `number` | yes |  | Total number of pages. |
+| `nextLabel` | `content` |  |  | Content of the next-page button (default: an arrow with an accessible "Next page" label). |
+| `previousLabel` | `content` |  |  | Content of the previous-page button (default: an arrow with an accessible "Previous page" label). |
+| `siblings` | `number` |  | `1` | Pages shown on each side of the current page (default 1). |
+| `variant` | `"pages" \| "simple"` |  | `"pages"` | `simple` = prev/next + status; `pages` = numbered buttons (default). |
 
 ```tsx
 function Example() {
@@ -252,12 +329,12 @@ Dot indicators for carousels and slides.
 
 **Slots:** `root` `dot`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `count` | `number` | yes |  |
-| `onChange` | `(index: number) => void` | yes |  |
-| `value` | `number` | yes |  |
-| `label` | `string` |  | Accessible name (default "Pagination"). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `count` | `number` | yes |  | Number of dots (pages or slides). |
+| `onChange` | `(index: number) => void` | yes |  | Called with the index the user picks. |
+| `value` | `number` | yes |  | Index of the current dot (0-based). |
+| `label` | `string` |  | `"Pagination"` | Accessible name (default "Pagination"). |
 
 ```tsx
 function Example() {
@@ -277,14 +354,14 @@ Previous / next navigation pair.
 
 **Slots:** `root` `next` `prev`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `nextDisabled` | `boolean` |  |  |
-| `nextLabel` | `string` |  |  |
-| `onNext` | `() => void` |  |  |
-| `onPrev` | `() => void` |  |  |
-| `prevDisabled` | `boolean` |  |  |
-| `prevLabel` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `nextDisabled` | `boolean` |  |  | Disables the next link (e.g. on the last page). |
+| `nextLabel` | `string` |  | `"Next"` | Title of the next page. |
+| `onNext` | `() => void` |  |  | Shows the next link; called when it is pressed. |
+| `onPrev` | `() => void` |  |  | Shows the previous link; called when it is pressed. |
+| `prevDisabled` | `boolean` |  |  | Disables the previous link (e.g. on the first page). |
+| `prevLabel` | `string` |  | `"Previous"` | Title of the previous page. |
 
 ```tsx
 function Example() {
@@ -314,11 +391,11 @@ function Example() {
 
 **Slots:** `root` `icon` `label`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `href` | `string` |  | Render as a link. |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  | `"Back"` | Link text. |
+| `href` | `string` |  |  | Render as a link. |
+| `onClick` | `(e: MouseEvent) => void` |  |  | Click handler (renders a button when there is no `href`). |
 
 ```tsx
 <BackLink href="#projects">
@@ -338,12 +415,20 @@ Compact pill/sub navigation (UIkit subnav).
 
 **Slots:** `root` `item`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `SubnavItem[]` | yes |  | Navigation items, in order. |
+| `onChange` | `(id: string) => void` | yes |  | Called with the id the user picks. |
+| `value` | `string` | yes |  | Id of the current item. |
+| `label` | `string` |  | `"Sub navigation"` | Accessible name (default "Sub navigation"). |
+
+**`SubnavItem`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `items` | `SubnavItem[]` | yes |  |
-| `onChange` | `(id: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `label` | `string` |  | Accessible name (default "Sub navigation"). |
+| `id` | `string` | yes | Item id, passed to `onChange` and matched against `value`. |
+| `label` | `content` | yes | Item text or content. |
+| `disabled` | `boolean` |  | Shown but can't be chosen. |
 
 ```tsx
 function Example() {
@@ -369,12 +454,26 @@ Icon-only navigation.
 
 **Slots:** `root` `item`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `IconnavItem[]` | yes |  | Navigation items, in order. |
+| `label` | `string` |  | `"Icon navigation"` | Accessible name (default "Icon navigation"). |
+| `onChange` | `(id: string) => void` |  |  | Called with the id the user picks. |
+| `value` | `string` |  |  | Id of the current item. |
+
+**`IconnavItem`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `items` | `IconnavItem[]` | yes |  |
-| `label` | `string` |  | Accessible name (default "Icon navigation"). |
-| `onChange` | `(id: string) => void` |  |  |
-| `value` | `string` |  |  |
+| `id` | `string` | yes | Item id, passed to `onChange` and matched against `value`. |
+| `icon` | `IconName` | yes | Icon shown for the item. |
+| `label` | `string` | yes | Accessible name and tooltip text. |
+
+**`IconName`** — Material Design Icons path names used by `<Icon />`.
+
+```ts
+type IconName = | "check" | "x" | "plus" | "minus" | "search" | "user" | "users" | "settings" | "menu" | "home" | "heart" | "star" | "bell" | "mail" | "calendar" | "clock" | "edit" | "trash" | "copy" | "download" | "upload" | "link" | "external" | "info" | "warning" | "error" | "success" | "chevron-down" | "chevron-up" | "chevron-left" | "chevron-right" | "arrow-left" | "arrow-right" | "eye" | "eye-off" | "eye-outline" | "lock" | "unlock" | "filter" | "more" | "close" | "spinner" | "sun" | "moon" | "play" | "pause" | "refresh" | "share" | "image" | "file" | "folder" | "zap" | "phone" | "git" | "code";
+```
 
 ```tsx
 function Example() {
@@ -400,12 +499,26 @@ Mobile tab bar.
 
 **Slots:** `root` `icon` `item` `label`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `BottomNavItem[]` | yes |  | Navigation items (3–5 work best). |
+| `onChange` | `(id: string) => void` | yes |  | Called with the id the user picks. |
+| `value` | `string` | yes |  | Id of the current item. |
+| `label` | `string` |  | `"Bottom"` | Accessible name (default "Bottom"). |
+
+**`BottomNavItem`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `items` | `BottomNavItem[]` | yes |  |
-| `onChange` | `(id: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `label` | `string` |  | Accessible name (default "Bottom"). |
+| `id` | `string` | yes | Item id, passed to `onChange` and matched against `value`. |
+| `label` | `string` | yes | Item text under the icon. |
+| `icon` | `IconName` |  | Item icon. |
+
+**`IconName`** — Material Design Icons path names used by `<Icon />`.
+
+```ts
+type IconName = | "check" | "x" | "plus" | "minus" | "search" | "user" | "users" | "settings" | "menu" | "home" | "heart" | "star" | "bell" | "mail" | "calendar" | "clock" | "edit" | "trash" | "copy" | "download" | "upload" | "link" | "external" | "info" | "warning" | "error" | "success" | "chevron-down" | "chevron-up" | "chevron-left" | "chevron-right" | "arrow-left" | "arrow-right" | "eye" | "eye-off" | "eye-outline" | "lock" | "unlock" | "filter" | "more" | "close" | "spinner" | "sun" | "moon" | "play" | "pause" | "refresh" | "share" | "image" | "file" | "folder" | "zap" | "phone" | "git" | "code";
+```
 
 ```tsx
 function Example() {
@@ -431,12 +544,12 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Standalone hamburger control (Mantine Burger).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `string` |  |  |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
-| `opened` | `boolean` |  |  |
-| `size` | `"sm" \| "md"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `string` |  |  | Accessible name (default: "Open menu" / "Close menu" by state). |
+| `onClick` | `(e: MouseEvent) => void` |  |  | Called when the button is pressed; toggle `opened` here. |
+| `opened` | `boolean` |  | `false` | Show the close (×) state instead of the three lines. |
+| `size` | `"sm" \| "md"` |  |  | Button size. |
 
 ```tsx
 function Example() {
@@ -466,10 +579,19 @@ Links to sections of the current page.
 
 **Slots:** `root` `link` `list` `title`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `TocItem[]` | yes |  | Sections, in page order. |
+| `title` | `string` |  | `"On this page"` | Small heading above the list. |
+
+**`TocItem`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `items` | `TocItem[]` | yes |  |
-| `title` | `string` |  |  |
+| `id` | `string` | yes | Id of the section on the page. |
+| `label` | `string` | yes | Link text. |
+| `active` | `boolean` |  | Marks the current section. |
+| `onSelect` | `() => void` |  | Called when the link is chosen (e.g. to scroll there). |
 
 ```tsx
 function Example() {
@@ -498,11 +620,18 @@ Highlights the section currently in view, in the page or in the sections' scroll
 
 **Slots:** `root` `item`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `ScrollSpyItem[]` | yes |  | Sections to track, in page order. |
+| `label` | `string` |  | `"On this page"` | Accessible name (default "On this page"). |
+| `offset` | `number` |  | `96` | Pixels from the top at which a section counts as current. |
+
+**`ScrollSpyItem`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `items` | `ScrollSpyItem[]` | yes |  |
-| `label` | `string` |  | Accessible name (default "On this page"). |
-| `offset` | `number` |  |  |
+| `id` | `string` | yes | Id of the section element on the page. |
+| `label` | `content` | yes | Link text. |
 
 ```tsx
 function Example() {
@@ -543,10 +672,10 @@ Jump to content or back to the top.
 
 Visually hidden until focused; jumps to `#main` by default.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `href` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  | `"Skip to content"` | Link text. |
+| `href` | `string` |  | `"#main"` | Target to jump to (id of your main content). |
 
 ```tsx
 function Example() {
@@ -578,11 +707,11 @@ Scroll-to-top control (UIkit totop).
 
 **Slots:** `root`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `label` | `string` |  |  |
-| `offset` | `number` |  | Scroll distance (px) before the button appears (default 320). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Button content (default: an up arrow). |
+| `label` | `string` |  | `"Back to top"` | Accessible name of the button. |
+| `offset` | `number` |  | `320` | Scroll distance (px) before the button appears (default 320). |
 
 ```tsx
 <ToTop offset={-1} />

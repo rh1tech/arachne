@@ -13,15 +13,20 @@ export {
 export { type TabItem, Tabs, type TabsProps } from "./tabs.tsx";
 
 export type BreadcrumbItem = {
+	/** Crumb text or content. */
 	label: unknown;
+	/** Link target; without `href` or `onClick` the crumb is plain text (the current page). */
 	href?: string | undefined;
+	/** Click handler (renders a button when there is no `href`). */
 	onClick?: ((e: MouseEvent) => void) | undefined;
+	/** Leading icon or content. */
 	icon?: unknown;
 };
 
 export type BreadcrumbSlot = "root" | "list" | "item" | "link" | "current" | "separator";
 
 export type BreadcrumbProps = SlotProps<BreadcrumbSlot> & {
+	/** Crumbs from the root to the current page (last item). */
 	items: BreadcrumbItem[];
 	/** Separator node (default `/`). */
 	separator?: unknown;
@@ -95,14 +100,19 @@ export function Breadcrumb(input: BreadcrumbProps) {
 export type PaginationSlot = "root" | "control" | "pages" | "page" | "ellipsis" | "status";
 
 export type PaginationProps = SlotProps<PaginationSlot> & {
+	/** Current page, starting at 1. */
 	page: number;
+	/** Total number of pages. */
 	pageCount: number;
+	/** Called with the page the user picks. */
 	onChange: (page: number) => void;
 	/** `simple` = prev/next + status; `pages` = numbered buttons (default). */
 	variant?: "simple" | "pages" | undefined;
 	/** Pages shown on each side of the current page (default 1). */
 	siblings?: number | undefined;
+	/** Content of the previous-page button (default: an arrow with an accessible "Previous page" label). */
 	previousLabel?: unknown;
+	/** Content of the next-page button (default: an arrow with an accessible "Next page" label). */
 	nextLabel?: unknown;
 };
 

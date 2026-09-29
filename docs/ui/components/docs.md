@@ -15,11 +15,11 @@ Component docs page: title, short description, then example blocks.
 
 **Slots:** `root` `body` `description` `head` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `title` | `string` | yes |  |
-| `children` | `content` |  |  |
-| `description` | `content` |  | Text or inline content (e.g. with `&lt;Code>` spans). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `title` | `string` | yes |  | Page title (`&lt;h1>`). |
+| `children` | `content` |  |  | Page body: `DocExample`s and other content. |
+| `description` | `content` |  |  | Text or inline content (e.g. with `&lt;Code>` spans). |
 
 ```tsx
 <DocPage title="Buttons" description="Trigger an action or an event.">
@@ -33,13 +33,13 @@ Live preview + code snippet — the Bulma docs pattern.
 
 **Slots:** `root` `description` `preview` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `code` | `string` | yes | Source shown under the live preview. |
-| `children` | `content` |  |  |
-| `description` | `content` |  | Text or inline content (e.g. with `&lt;Code>` spans). |
-| `language` | `string` |  |  |
-| `title` | `string` |  | Optional section title above the example (e.g. "Colors"). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `code` | `string` | yes |  | Source shown under the live preview. |
+| `children` | `content` |  |  | The live preview. |
+| `description` | `content` |  |  | Text or inline content (e.g. with `&lt;Code>` spans). |
+| `language` | `string` |  | `"tsx"` | Language for highlighting the code. |
+| `title` | `string` |  |  | Optional section title above the example (e.g. "Colors"). |
 
 ```tsx
 <DocExample title="Primary button" code={"<Button>Save</Button>"}>
@@ -53,14 +53,29 @@ Sidebar catalog with collapsible sections.
 
 **Slots:** `root` `brand` `chevron` `items` `label` `link` `list` `section`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(id: string) => void` | yes |  | Called with the page id the user picks. |
+| `sections` | `DocMenuSection[]` | yes |  | Menu sections, each a page or a group of pages. |
+| `value` | `string` | yes |  | Id of the current page. |
+| `brand` | `content` |  |  | Brand row above the menu (icon + title). |
+| `defaultOpen` | `string[]` |  |  | Section ids forced open; others containing `value` open by default. |
+| `label` | `string` |  | `"Documentation"` | Accessible name (default "Documentation"). |
+
+**`DocMenuSection`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `onChange` | `(id: string) => void` | yes |  |
-| `sections` | `DocMenuSection[]` | yes |  |
-| `value` | `string` | yes |  |
-| `brand` | `content` |  | Brand row above the menu (icon + title). |
-| `defaultOpen` | `string[]` |  | Section ids forced open; others containing `value` open by default. |
-| `label` | `string` |  | Accessible name (default "Documentation"). |
+| `id` | `string` | yes | Section id (used by `defaultOpen`; the page id when the section is a leaf). |
+| `label` | `string` | yes | Section heading. |
+| `items` | `DocMenuItem[]` |  | Nested pages. If omitted, the section itself is a selectable leaf. |
+
+**`DocMenuItem`**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | `string` | yes | Page id, passed to `onChange` and matched against `value`. |
+| `label` | `string` | yes | Menu text. |
 
 ```tsx
 const sections = [

@@ -33,7 +33,12 @@ import {
 	itemComponents,
 } from "../../packages/ui/examples/catalog-map.ts";
 import { exampleGroups } from "../../packages/ui/examples/index.ts";
-import { type CatalogEntry, catalog } from "./catalog.generated.ts";
+import {
+	type CatalogEntry,
+	type CatalogProp,
+	type CatalogType,
+	catalog,
+} from "./catalog.generated.ts";
 
 export const CATALOG_PREFIX = "c-";
 export const FAMILY_PREFIX = "f-";
@@ -162,18 +167,21 @@ function Preview(props: { name: string }) {
 	);
 }
 
-function PropsTable(props: { entry: CatalogEntry }) {
+function PropsTable(props: { rows: CatalogProp[]; first?: string; defaults?: boolean }) {
 	return (
 		<table class="catalog-props">
 			<thead>
 				<tr>
-					<th scope="col">Prop</th>
+					<th scope="col">{props.first ?? "Prop"}</th>
 					<th scope="col">Type</th>
+					<Show when={props.defaults !== false}>
+						<th scope="col">Default</th>
+					</Show>
 					<th scope="col">Description</th>
 				</tr>
 			</thead>
 			<tbody>
-				<For each={props.entry.props}>
+				<For each={props.rows}>
 					{(prop) => (
 						<tr>
 							<td class="catalog-prop-name">
@@ -184,6 +192,11 @@ function PropsTable(props: { entry: CatalogEntry }) {
 							<td>
 								<code class="catalog-type">{prop.type}</code>
 							</td>
+							<Show when={props.defaults !== false}>
+								<td class="catalog-prop-default">
+									{prop.defaultValue ? <code>{prop.defaultValue}</code> : null}
+								</td>
+							</Show>
 							<td class="catalog-prop-desc">
 								{prop.deprecated ? (
 									<>
@@ -220,6 +233,43 @@ function Heading(props: { kind: HeadingKind; order: Level; children: unknown }) 
 	);
 }
 
+/** Data types the props use: an object's fields, or an alias's values. */
+function TypesReference(props: { types: CatalogType[] }) {
+	return (
+		<Show when={props.types.length > 0}>
+			<div class="catalog-types">
+				<For each={props.types}>
+					{(type) => (
+						<div class="catalog-type-doc">
+							<p class="catalog-meta">
+								<span class="catalog-meta-label">Type</span>
+								<code class="catalog-type-name">{type.name}</code>
+								<Show when={type.description}>
+									<span class="catalog-meta-hint">
+										<RichText text={type.description} />
+									</span>
+								</Show>
+							</p>
+							<Show
+								when={type.fields}
+								fallback={
+									<code class="catalog-type catalog-type-definition">{type.definition}</code>
+								}
+							>
+								{(fields: CatalogProp[]) => (
+									<ScrollArea class="catalog-props-scroll" aria-label={`${type.name} fields`}>
+										<PropsTable rows={fields} first="Field" defaults={false} />
+									</ScrollArea>
+								)}
+							</Show>
+						</div>
+					)}
+				</For>
+			</div>
+		</Show>
+	);
+}
+
 /** Props table, slot names and the shared-props note as one compact block. */
 function ApiReference(props: { entry: CatalogEntry; order: Level; kind?: HeadingKind }) {
 	return (
@@ -232,9 +282,10 @@ function ApiReference(props: { entry: CatalogEntry; order: Level; kind?: Heading
 				fallback={<p class="catalog-meta">No component-specific props.</p>}
 			>
 				<ScrollArea class="catalog-props-scroll" aria-label={`${props.entry.name} props`}>
-					<PropsTable entry={props.entry} />
+					<PropsTable rows={props.entry.props} />
 				</ScrollArea>
 			</Show>
+			<TypesReference types={props.entry.types} />
 			<Show when={props.entry.slots.length > 0}>
 				<p class="catalog-meta">
 					<span class="catalog-meta-label">Slots</span>

@@ -6,28 +6,46 @@ import { createScrollOverflow, watchScrollOverflow } from "./scroll-overflow.ts"
 import { type BaseProps, createId, type SlotProps, type Slots, setup } from "./system.ts";
 
 export type NavMenuItem = {
+	/** Item id; used by the controller to track open submenus. */
 	id: string;
+	/** Menu text. */
 	label: string;
+	/** Link target (renders a link). */
 	href?: string | undefined;
+	/** Marks the current page (`aria-current`). */
 	active?: boolean | undefined;
+	/** Shown but can't be chosen. */
 	disabled?: boolean | undefined;
+	/** Called when the item is chosen. */
 	onSelect?: (() => void) | undefined;
+	/** Nested items, shown as a submenu. */
 	children?: NavMenuItem[] | undefined;
 };
 
 export type NavMenuTrigger = "hover" | "click";
 
 export type NavbarController = {
+	/** Ids of the open submenus, outermost first. */
 	openPath: () => string[];
+	/** Whether the mobile menu is expanded. */
 	mobileOpen: () => boolean;
+	/** Whether the submenu with this id is open. */
 	isOpen: (id: string) => boolean;
+	/** Opens the submenus along `path` (and closes the others). */
 	openTo: (path: string[]) => void;
+	/** Opens or closes the submenu at the end of `path`. */
 	toggle: (path: string[]) => void;
+	/** Closes every submenu. */
 	closeAll: () => void;
+	/** Closes the submenus after a short delay (hover intent). */
 	scheduleClose: () => void;
+	/** Cancels a pending `scheduleClose`. */
 	cancelClose: () => void;
+	/** Expands or collapses the mobile menu. */
 	setMobileOpen: (open: boolean) => void;
+	/** Toggles the mobile menu. */
 	toggleMobile: () => void;
+	/** Clears timers; call when the navbar is removed. */
 	dispose: () => void;
 };
 
@@ -523,8 +541,11 @@ function NavBranch(props: BranchProps) {
 export type NavbarPlacement = "static" | "sticky" | "fixed";
 
 export type NavbarProps = SlotProps<NavbarSlot> & {
+	/** Logo or name at the start of the bar. */
 	brand?: unknown;
+	/** Top-level items; items with `children` open submenus. */
 	items: NavMenuItem[];
+	/** Content at the end of the bar, e.g. buttons. */
 	end?: unknown;
 	/** Desktop submenu open mode. Mobile always uses click. Default: hover */
 	trigger?: NavMenuTrigger | undefined;
@@ -727,9 +748,13 @@ export function Navbar(input: NavbarProps) {
 
 /** Simple flat link for custom navbar layouts; renders `<a>` when `href` is set. */
 export type NavbarLinkProps = BaseProps & {
+	/** Marks the current page (`aria-current`). */
 	active?: boolean | undefined;
+	/** Link target. */
 	href?: string | undefined;
+	/** Click handler (renders a button when there is no `href`). */
 	onClick?: ((e: MouseEvent) => void) | undefined;
+	/** Link text. */
 	children?: unknown;
 };
 

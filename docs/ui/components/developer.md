@@ -13,9 +13,9 @@ Inline code and highlighted blocks.
 
 Inline code.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Inline code. |
 
 ```tsx
 <Text>
@@ -29,13 +29,19 @@ Highlighted code with copy button.
 
 **Slots:** `root` `bar` `code` `copy` `language` `pre`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `code` | `string` | yes |  |
-| `copiedLabel` | `string` |  |  |
-| `copyLabel` | `string` |  |  |
-| `language` | `string` |  |  |
-| `radius` | `RadiusName \| (string & {})` |  | Corner radius: `"none"` \| `"sm"` \| `"lg"` or any CSS length (default: the theme radius). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `code` | `string` | yes |  | Source code to highlight and copy. |
+| `copiedLabel` | `string` |  | `"Copied"` | Copy button text shown briefly after copying. |
+| `copyLabel` | `string` |  | `"Copy"` | Copy button text. |
+| `language` | `string` |  | `"tsx"` | Language for highlighting, shown in the header. |
+| `radius` | `(string & {}) \| RadiusName` |  |  | Corner radius: `"none"` \| `"sm"` \| `"lg"` or any CSS length (default: the theme radius). |
+
+**`RadiusName`** — Corner radius scale — `sm` is the kit default.
+
+```ts
+type RadiusName = "none" | "sm" | "lg";
+```
 
 ```tsx
 <CodeBlock
@@ -53,9 +59,16 @@ Unified diff lines.
 
 **Slots:** `root` `line` `prefix`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `lines` | `DiffLine[]` | yes |  | Diff lines, in order. |
+
+**`DiffLine`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `lines` | `DiffLine[]` | yes |  |
+| `type` | `"add" \| "del" \| "ctx"` | yes | `add`, `del` or `ctx` (unchanged context). |
+| `text` | `string` | yes | The line's text (without the `+` / `-` prefix). |
 
 ```tsx
 <Diff
@@ -78,9 +91,9 @@ Keys and shortcuts.
 
 Keyboard key.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Key or key combination text, e.g. `⌘K`. |
 
 ```tsx
 <Text>
@@ -94,12 +107,12 @@ Display a key combo (⌘K, Ctrl+S).
 
 **Slots:** `root` `key` `part` `separator`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `keys` | `string[]` | yes | Keys to show and (with `onTrigger`) listen for, e.g. `["Ctrl", "K"]` or `["⌘", "Shift", "P"]`. |
-| `ignoreInInputs` | `boolean` |  | Ignore the shortcut while typing in inputs (default true). |
-| `onTrigger` | `(e: KeyboardEvent) => void` |  | Bind the combination on `document`; called when it is pressed (default prevented). |
-| `separator` | `content` |  | Separator between keys (default `+`). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `keys` | `string[]` | yes |  | Keys to show and (with `onTrigger`) listen for, e.g. `["Ctrl", "K"]` or `["⌘", "Shift", "P"]`. |
+| `ignoreInInputs` | `boolean` |  |  | Ignore the shortcut while typing in inputs (default true). |
+| `onTrigger` | `(e: KeyboardEvent) => void` |  |  | Bind the combination on `document`; called when it is pressed (default prevented). |
+| `separator` | `content` |  | `"+"` | Separator between keys (default `+`). |
 
 ```tsx
 <Hotkey keys={["⌘", "K"]} />
@@ -117,10 +130,10 @@ Terminal window mock-up.
 
 **Slots:** `root` `bar` `body` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `title` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Terminal text (newlines are kept). |
+| `title` | `string` |  | `"Terminal"` | Window title in the header bar. |
 
 ```tsx
 <Terminal title="zsh">
@@ -134,9 +147,23 @@ Monospace log output with levels and timestamps.
 
 **Slots:** `root` `level` `line` `message` `time`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `lines` | `LogLineData[]` | yes |  | Log lines, oldest first. |
+
+**`LogLineData`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `lines` | `LogLineData[]` | yes |  |
+| `time` | `string` |  | Timestamp text. |
+| `level` | `LogLevel` | yes | Severity; sets the colour. |
+| `message` | `string` | yes | Log message. |
+
+**`LogLevel`**
+
+```ts
+type LogLevel = "debug" | "info" | "warn" | "error";
+```
 
 ```tsx
 <LogViewer
@@ -158,9 +185,9 @@ Read-only JSON views.
 
 Pretty-printed JSON (handles undefined, circular references and BigInt).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `value` | `content` | yes |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `content` | yes |  | Any JSON-serializable value to show, pretty-printed. |
 
 ```tsx
 <JsonViewer value={{ id: "dep_128", status: "ready", regions: ["fra1", "iad1"] }} />
@@ -170,9 +197,15 @@ Pretty-printed JSON (handles undefined, circular references and BigInt).
 
 Collapsible JSON tree.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `data` | `JsonNode` | yes |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `data` | `JsonNode` | yes |  | The JSON tree to show; objects and arrays can be collapsed. |
+
+**`JsonNode`**
+
+```ts
+type JsonNode = | { kind: "primitive"; value: string | number | boolean | null } | { kind: "object"; entries: Array<{ key: string; value: JsonNode }> } | { kind: "array"; items: JsonNode[] };
+```
 
 ```tsx
 const configJson: JsonNode = {
@@ -202,12 +235,21 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 File / folder tree. Rows expose `data-kind`.
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `nodes` | `FileTreeNode[]` | yes |  | Root files and folders. |
+| `label` | `string` |  | `"Files"` | Accessible name for the tree. |
+| `onSelect` | `(id: string) => void` |  |  | Called with the id of the file the user picks. |
+| `selected` | `string` |  |  | Id of the selected file. |
+
+**`FileTreeNode`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `nodes` | `FileTreeNode[]` | yes |  |
-| `label` | `string` |  | Accessible name for the tree. |
-| `onSelect` | `(id: string) => void` |  |  |
-| `selected` | `string` |  |  |
+| `id` | `string` | yes | Node id, passed to `onSelect` and matched against `selected`. |
+| `name` | `string` | yes | File or folder name. |
+| `kind` | `"file" \| "folder"` | yes | `file` or `folder` (sets the icon; folders expand). |
+| `children` | `FileTreeNode[]` |  | Contents of a folder. |
 
 ```tsx
 const repoTree: FileTreeNode[] = [
@@ -246,12 +288,18 @@ API endpoint row: method, path and summary.
 
 **Slots:** `root` `path` `summary`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `method` | `HttpMethod` | yes |  |
-| `path` | `string` | yes |  |
-| `onClick` | `() => void` |  |  |
-| `summary` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `method` | `HttpMethod` | yes |  | HTTP method. |
+| `path` | `string` | yes |  | Endpoint path, e.g. `/v1/projects/{id}`. |
+| `onClick` | `() => void` |  |  | Makes the row a button, e.g. to open the endpoint's docs. |
+| `summary` | `string` |  |  | What the endpoint does. |
+
+**`HttpMethod`**
+
+```ts
+type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "HEAD" | "OPTIONS";
+```
 
 ```tsx
 <EndpointRow
@@ -266,9 +314,15 @@ API endpoint row: method, path and summary.
 
 Coloured HTTP method label (GET, POST, …).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `method` | `HttpMethod` | yes |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `method` | `HttpMethod` | yes |  | HTTP method; sets the colour. |
+
+**`HttpMethod`**
+
+```ts
+type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "HEAD" | "OPTIONS";
+```
 
 ```tsx
 <HttpMethodBadge method="DELETE" />
@@ -286,9 +340,23 @@ CI pipeline of steps with their statuses.
 
 **Slots:** `root` `line` `step`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `steps` | `PipelineStep[]` | yes |  | Pipeline steps, in order. |
+
+**`PipelineStep`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `steps` | `PipelineStep[]` | yes |  |
+| `id` | `string` | yes | Step id. |
+| `label` | `string` | yes | Step name. |
+| `status` | `BuildStatusKind` | yes | Step state; sets the icon and colour. |
+
+**`BuildStatusKind`**
+
+```ts
+type BuildStatusKind = "success" | "failed" | "running" | "queued" | "cancelled";
+```
 
 ```tsx
 <Pipeline
@@ -305,10 +373,16 @@ CI pipeline of steps with their statuses.
 
 CI build status (running, success, failed …).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `status` | `BuildStatusKind` | yes |  |
-| `label` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `status` | `BuildStatusKind` | yes |  | Build state; sets the icon and colour. |
+| `label` | `string` |  |  | Custom text instead of the status name. |
+
+**`BuildStatusKind`**
+
+```ts
+type BuildStatusKind = "success" | "failed" | "running" | "queued" | "cancelled";
+```
 
 ```tsx
 <BuildStatus status="running" />
@@ -320,11 +394,11 @@ Commit SHA and message chip.
 
 **Slots:** `root` `message` `sha`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `sha` | `string` | yes |  |
-| `message` | `string` |  |  |
-| `onClick` | `() => void` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `sha` | `string` | yes |  | Full commit hash (the first 7 characters are shown). |
+| `message` | `string` |  |  | Commit message, shown after the hash. |
+| `onClick` | `() => void` |  |  | Makes the chip a button, e.g. to open the commit. |
 
 ```tsx
 <CommitChip
@@ -338,9 +412,9 @@ Commit SHA and message chip.
 
 Git branch name label.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `name` | `string` | yes |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `name` | `string` | yes |  | Branch name. |
 
 ```tsx
 <BranchBadge name="feat/ui-kit" />
@@ -358,10 +432,16 @@ Service name with its operational status.
 
 **Slots:** `root` `name` `status`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `name` | `string` | yes |  |
-| `status` | `ServiceStatusKind` | yes |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `name` | `string` | yes |  | Service name. |
+| `status` | `ServiceStatusKind` | yes |  | Current state; sets the dot colour and text. |
+
+**`ServiceStatusKind`**
+
+```ts
+type ServiceStatusKind = "operational" | "degraded" | "outage" | "maintenance";
+```
 
 ```tsx
 <ServiceStatus name="Build workers" status="degraded" />
@@ -373,12 +453,12 @@ One release entry in a changelog.
 
 **Slots:** `root` `body` `date` `header` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `version` | `string` | yes |  |
-| `children` | `content` |  |  |
-| `date` | `string` |  |  |
-| `title` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `version` | `string` | yes |  | Release version, e.g. `2.4.0`. |
+| `children` | `content` |  |  | What changed. |
+| `date` | `string` |  |  | Release date text. |
+| `title` | `string` |  |  | Release name. |
 
 ```tsx
 <ChangelogItem version="2.4.0" date="Sep 12, 2026">

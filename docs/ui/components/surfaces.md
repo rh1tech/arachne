@@ -9,9 +9,9 @@ Containers with a visual boundary that group related content.
 
 Content card (Bulma/Mantine/Bootstrap).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | `CardHeader`, `CardImage`, `CardContent`, `CardFooter`, or any content. |
 
 ```tsx
 const cardImage = "/images/cover.jpg";
@@ -39,9 +39,9 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Card header row.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content of this part. |
 
 ```tsx
 <Card>
@@ -56,9 +56,9 @@ Card header row.
 
 Title text inside a card header.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content of this part. |
 
 ```tsx
 <Card>
@@ -72,9 +72,9 @@ Title text inside a card header.
 
 Full-bleed media at the top of a card.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content of this part. |
 
 ```tsx
 const cardImage = "/images/cover.jpg";
@@ -90,9 +90,9 @@ const cardImage = "/images/cover.jpg";
 
 Padded body of a card.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content of this part. |
 
 ```tsx
 <Card>
@@ -104,9 +104,9 @@ Padded body of a card.
 
 Card footer row of actions.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content of this part. |
 
 ```tsx
 <Card>
@@ -122,10 +122,10 @@ Card footer row of actions.
 
 One action cell in a card footer (a button when `onClick` is set).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content of this part. |
+| `onClick` | `(e: MouseEvent) => void` |  |  | Makes the item a button; called when pressed. |
 
 ```tsx
 <Card>
@@ -142,9 +142,9 @@ One action cell in a card footer (a button when `onClick` is set).
 
 Bordered surface for grouping content.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Box content. |
 
 ```tsx
 <Box>Boxes group related content on a raised surface.</Box>
@@ -156,10 +156,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Side panel / filter panel (Bulma).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `label` | `string` |  | Accessible name of the panel's `&lt;nav>` landmark; set it when a page has several panels. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | `PanelHeading`, `PanelTabs` and `PanelBlock`s. |
+| `label` | `string` |  |  | Accessible name of the panel's `&lt;nav>` landmark; set it when a page has several panels. |
 
 ```tsx
 function Example() {
@@ -203,9 +203,9 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Heading row of a panel.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content of this part. |
 
 ```tsx
 <Panel label="Projects">
@@ -218,9 +218,9 @@ Heading row of a panel.
 
 Tab row inside a panel.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content of this part. |
 
 ```tsx
 function Example() {
@@ -244,11 +244,11 @@ function Example() {
 
 One tab in a panel's tab row.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `active` | `boolean` |  |  |
-| `children` | `content` |  |  |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `active` | `boolean` |  |  | Marks the selected tab. |
+| `children` | `content` |  |  | Tab label. |
+| `onClick` | `(e: MouseEvent) => void` |  |  | Called when the tab is pressed. |
 
 ```tsx
 function Example() {
@@ -272,11 +272,11 @@ function Example() {
 
 Panel row; renders a `<button>` when `onClick` is set.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `active` | `boolean` |  |  |
-| `children` | `content` |  |  |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `active` | `boolean` |  |  | Marks the selected row. |
+| `children` | `content` |  |  | Row content. |
+| `onClick` | `(e: MouseEvent) => void` |  |  | Makes the row a button; called when pressed. |
 
 ```tsx
 function Example() {
@@ -305,12 +305,12 @@ Plain surfaces and tile layouts.
 
 Surface paper (Mantine).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `padding` | `"sm" \| "md" \| "lg"` |  |  |
-| `shadow` | `boolean` |  |  |
-| `withBorder` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Paper content. |
+| `padding` | `"sm" \| "md" \| "lg"` |  |  | Inner padding. |
+| `shadow` | `boolean` |  |  | Adds a soft shadow. |
+| `withBorder` | `boolean` |  |  | Adds a border. |
 
 ```tsx
 <Paper padding="lg" shadow withBorder>
@@ -322,14 +322,14 @@ Surface paper (Mantine).
 
 Nestable tile grid (Bulma).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `ancestor` | `boolean` |  |  |
-| `child` | `boolean` |  |  |
-| `children` | `content` |  |  |
-| `parent` | `boolean` |  |  |
-| `size` | `1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 \| 11 \| 12` |  |  |
-| `vertical` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `ancestor` | `boolean` |  |  | Outermost tile of a tile layout. |
+| `child` | `boolean` |  |  | A leaf tile holding content. |
+| `children` | `content` |  |  | Nested tiles or content. |
+| `parent` | `boolean` |  |  | A tile that contains `child` tiles. |
+| `size` | `1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 7 \| 8 \| 9 \| 10 \| 11 \| 12` |  |  | Width in twelfths. |
+| `vertical` | `boolean` |  |  | Stack the inner tiles vertically. |
 
 ```tsx
 <Tile ancestor>
@@ -350,9 +350,9 @@ Nestable tile grid (Bulma).
 
 Vertical spacing block (Bulma).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Block content. |
 
 ```tsx
 <div>
@@ -365,9 +365,9 @@ Vertical spacing block (Bulma).
 
 Recessed panel (canvas background, border) for secondary content inside a surface.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Recessed content. |
 
 ```tsx
 <Inset>

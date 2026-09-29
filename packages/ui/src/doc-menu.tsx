@@ -7,12 +7,16 @@ import { Icon } from "./icons.tsx";
 import { createId, type SlotProps, setup } from "./system.ts";
 
 export type DocMenuItem = {
+	/** Page id, passed to `onChange` and matched against `value`. */
 	id: string;
+	/** Menu text. */
 	label: string;
 };
 
 export type DocMenuSection = {
+	/** Section id (used by `defaultOpen`; the page id when the section is a leaf). */
 	id: string;
+	/** Section heading. */
 	label: string;
 	/** Nested pages. If omitted, the section itself is a selectable leaf. */
 	items?: DocMenuItem[] | undefined;
@@ -31,8 +35,11 @@ export type DocMenuSlot =
 export type DocMenuProps = SlotProps<DocMenuSlot> & {
 	/** Brand row above the menu (icon + title). */
 	brand?: unknown;
+	/** Menu sections, each a page or a group of pages. */
 	sections: DocMenuSection[];
+	/** Id of the current page. */
 	value: string;
+	/** Called with the page id the user picks. */
 	onChange: (id: string) => void;
 	/** Section ids forced open; others containing `value` open by default. */
 	defaultOpen?: string[] | undefined;

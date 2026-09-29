@@ -6,7 +6,16 @@ export type CatalogProp = {
 	type: string;
 	required: boolean;
 	description: string;
+	defaultValue?: string;
 	deprecated?: string;
+};
+
+export type CatalogType = {
+	name: string;
+	description: string;
+	fields?: CatalogProp[];
+	/** Definition of a non-object alias, e.g. `"success" | "failed"`. */
+	definition?: string;
 };
 
 export type CatalogEntry = {
@@ -21,6 +30,8 @@ export type CatalogEntry = {
 	summary: string;
 	slots: string[];
 	props: CatalogProp[];
+	/** Named data types the props use, with their fields. */
+	types: CatalogType[];
 	code: string;
 	/** Rendered through an interactive demo (overlays open on demand). */
 	interactive: boolean;
@@ -40,21 +51,23 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Items to stack."
 			},
 			{
 				"name": "direction",
 				"type": "\"column\" | \"row\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"column\"",
+				"description": "Stack vertically (`column`) or horizontally (`row`)."
 			},
 			{
 				"name": "gap",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Space between children (any CSS length)."
 			}
 		],
+		"types": [],
 		"code": "<Stack gap=\"0.5rem\">\n\t<Text>First</Text>\n\t<Text>Second</Text>\n\t<Text>Third</Text>\n</Stack>",
 		"interactive": false,
 		"logsActions": false
@@ -70,39 +83,40 @@ export const catalog: CatalogEntry[] = [
 				"name": "align",
 				"type": "\"start\" | \"center\" | \"end\" | \"stretch\"",
 				"required": false,
-				"description": ""
+				"description": "Vertical alignment of the items."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Items in a row."
 			},
 			{
 				"name": "gap",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Space between items (any CSS length)."
 			},
 			{
 				"name": "grow",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Items share the row's width equally."
 			},
 			{
 				"name": "justify",
 				"type": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\"",
 				"required": false,
-				"description": ""
+				"description": "Horizontal distribution of the items."
 			},
 			{
 				"name": "wrap",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Let items wrap onto new lines."
 			}
 		],
+		"types": [],
 		"code": "<Group gap=\"0.5rem\">\n\t<Button variant=\"ghost\" onClick={() => {}}>\n\t\tCancel\n\t</Button>\n\t<Button onClick={() => {}}>Save</Button>\n</Group>",
 		"interactive": false,
 		"logsActions": true
@@ -118,39 +132,40 @@ export const catalog: CatalogEntry[] = [
 				"name": "align",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "CSS `align-items`."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Flex items."
 			},
 			{
 				"name": "direction",
 				"type": "\"column\" | \"row\"",
 				"required": false,
-				"description": ""
+				"description": "Main axis."
 			},
 			{
 				"name": "gap",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Space between items (any CSS length)."
 			},
 			{
 				"name": "justify",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "CSS `justify-content`."
 			},
 			{
 				"name": "wrap",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Let items wrap."
 			}
 		],
+		"types": [],
 		"code": "<Flex justify=\"space-between\" align=\"center\">\n\t<Text>Invoices</Text>\n\t<Button size=\"sm\" onClick={() => {}}>\n\t\tExport\n\t</Button>\n</Flex>",
 		"interactive": false,
 		"logsActions": true
@@ -168,19 +183,20 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Grid cells (plain elements or `GridItem`s)."
 			},
 			{
 				"name": "cols",
 				"type": "number",
 				"required": false,
+				"defaultValue": "12",
 				"description": "Column count (CSS grid). Default 12."
 			},
 			{
 				"name": "gap",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Space between cells (any CSS length)."
 			},
 			{
 				"name": "min",
@@ -189,6 +205,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Min track width for auto-fit dense grids, e.g. `12rem`. Overrides `cols` when set."
 			}
 		],
+		"types": [],
 		"code": "<Grid cols={3} gap=\"0.75rem\">\n\t<Box>1</Box>\n\t<Box>2</Box>\n\t<Box>3</Box>\n\t<Box>4</Box>\n\t<Box>5</Box>\n\t<Box>6</Box>\n</Grid>",
 		"interactive": false,
 		"logsActions": false
@@ -205,21 +222,22 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Cell content."
 			},
 			{
 				"name": "span",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"description": "Number of columns the cell covers."
 			},
 			{
 				"name": "start",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"description": "Column the cell starts at (1-based)."
 			}
 		],
+		"types": [],
 		"code": "<Grid cols={3} gap=\"0.75rem\">\n\t<GridItem span={2}>\n\t\t<Box>Spans two columns</Box>\n\t</GridItem>\n\t<Box>One</Box>\n</Grid>",
 		"interactive": false,
 		"logsActions": false
@@ -237,19 +255,19 @@ export const catalog: CatalogEntry[] = [
 				"name": "centered",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Centre the columns horizontally."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "`Column`s."
 			},
 			{
 				"name": "gap",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Space between columns (any CSS length)."
 			},
 			{
 				"name": "mobile",
@@ -261,15 +279,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "multiline",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Wrap columns onto new rows when they don't fit."
 			},
 			{
 				"name": "vcentered",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Centre the columns vertically."
 			}
 		],
+		"types": [],
 		"code": "<Columns gap=\"1rem\">\n\t<Column>\n\t\t<Box>Auto</Box>\n\t</Column>\n\t<Column size={6}>\n\t\t<Box>Half</Box>\n\t</Column>\n\t<Column>\n\t\t<Box>Auto</Box>\n\t</Column>\n</Columns>",
 		"interactive": false,
 		"logsActions": false
@@ -286,25 +305,32 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Column content."
 			},
 			{
 				"name": "narrow",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Only as wide as its content."
 			},
 			{
 				"name": "offset",
 				"type": "ColumnSize",
 				"required": false,
-				"description": ""
+				"description": "Empty space before the column, in the same units as `size`."
 			},
 			{
 				"name": "size",
 				"type": "ColumnSize",
 				"required": false,
-				"description": ""
+				"description": "Width in twelfths (`1`–`12`) or a named fraction (`half`, `one-third`, …); auto when unset."
+			}
+		],
+		"types": [
+			{
+				"name": "ColumnSize",
+				"description": "",
+				"definition": "| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | \"full\" | \"four-fifths\" | \"three-quarters\" | \"two-thirds\" | \"three-fifths\" | \"half\" | \"two-fifths\" | \"one-third\" | \"one-quarter\" | \"one-fifth\" | \"narrow\" | \"auto\""
 			}
 		],
 		"code": "<Columns>\n\t<Column size={4}>\n\t\t<Box>One third</Box>\n\t</Column>\n\t<Column>\n\t\t<Box>Rest</Box>\n\t</Column>\n</Columns>",
@@ -322,15 +348,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Centred, width-constrained content."
 			},
 			{
 				"name": "size",
 				"type": "\"full\" | \"sm\" | \"md\" | \"lg\"",
 				"required": false,
-				"description": ""
+				"description": "Maximum width."
 			}
 		],
+		"types": [],
 		"code": "<Container size=\"sm\">\n\t<Box>Content constrained to the small container width.</Box>\n</Container>",
 		"interactive": false,
 		"logsActions": false
@@ -346,15 +373,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Section content."
 			},
 			{
 				"name": "size",
 				"type": "\"sm\" | \"md\" | \"lg\"",
 				"required": false,
-				"description": ""
+				"description": "Vertical padding."
 			}
 		],
+		"types": [],
 		"code": "<Section size=\"sm\">\n\t<Title order={3}>Pricing</Title>\n\t<Text>Sections add vertical rhythm between page regions.</Text>\n</Section>",
 		"interactive": false,
 		"logsActions": false
@@ -374,15 +402,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "`LevelLeft`, `LevelRight` and/or `LevelItem`s."
 			},
 			{
 				"name": "mobile",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Keep the row horizontal on small screens (it stacks by default)."
 			}
 		],
+		"types": [],
 		"code": "<Level>\n\t<LevelLeft>\n\t\t<LevelItem>\n\t\t\t<strong>128 deploys</strong>\n\t\t</LevelItem>\n\t</LevelLeft>\n\t<LevelRight>\n\t\t<LevelItem>\n\t\t\t<Button size=\"sm\" onClick={() => {}}>\n\t\t\t\tNew deploy\n\t\t\t</Button>\n\t\t</LevelItem>\n\t</LevelRight>\n</Level>",
 		"interactive": false,
 		"logsActions": true
@@ -399,9 +428,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Items on this side of the row."
 			}
 		],
+		"types": [],
 		"code": "<Level>\n\t<LevelLeft>\n\t\t<LevelItem>Left side</LevelItem>\n\t</LevelLeft>\n</Level>",
 		"interactive": false,
 		"logsActions": false
@@ -418,9 +448,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Items on this side of the row."
 			}
 		],
+		"types": [],
 		"code": "<Level>\n\t<LevelRight>\n\t\t<LevelItem>Right side</LevelItem>\n\t</LevelRight>\n</Level>",
 		"interactive": false,
 		"logsActions": false
@@ -437,9 +468,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Items on this side of the row."
 			}
 		],
+		"types": [],
 		"code": "<Level>\n\t<LevelItem>\n\t\t<Text>Deploys</Text>\n\t</LevelItem>\n\t<LevelItem>\n\t\t<strong>128</strong>\n\t</LevelItem>\n</Level>",
 		"interactive": false,
 		"logsActions": false
@@ -459,9 +491,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "`MediaLeft`, `MediaContent` and `MediaRight`."
 			}
 		],
+		"types": [],
 		"code": "<Media>\n\t<MediaLeft>\n\t\t<Avatar name=\"Ada Lovelace\" />\n\t</MediaLeft>\n\t<MediaContent>\n\t\t<strong>Ada Lovelace</strong> <Text muted>opened #421</Text>\n\t</MediaContent>\n\t<MediaRight>\n\t\t<Text muted>2h</Text>\n\t</MediaRight>\n</Media>",
 		"interactive": false,
 		"logsActions": false
@@ -478,9 +511,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of this part."
 			}
 		],
+		"types": [],
 		"code": "<Media>\n\t<MediaLeft>\n\t\t<Avatar name=\"Grace Hopper\" />\n\t</MediaLeft>\n\t<MediaContent>Left slot holds the avatar or thumbnail.</MediaContent>\n</Media>",
 		"interactive": false,
 		"logsActions": false
@@ -497,9 +531,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of this part."
 			}
 		],
+		"types": [],
 		"code": "<Media>\n\t<MediaLeft>\n\t\t<Avatar name=\"Grace Hopper\" />\n\t</MediaLeft>\n\t<MediaContent>The content column grows to fill the row.</MediaContent>\n</Media>",
 		"interactive": false,
 		"logsActions": false
@@ -516,9 +551,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of this part."
 			}
 		],
+		"types": [],
 		"code": "<Media>\n\t<MediaContent>Row content</MediaContent>\n\t<MediaRight>\n\t\t<Button size=\"sm\" variant=\"ghost\" onClick={() => {}}>\n\t\t\tReply\n\t\t</Button>\n\t</MediaRight>\n</Media>",
 		"interactive": false,
 		"logsActions": true
@@ -535,15 +571,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content to centre horizontally and vertically."
 			},
 			{
 				"name": "inline",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Shrink to the content (`inline-flex`) instead of filling the width."
 			}
 		],
+		"types": [],
 		"code": "<Center style={{ \"min-height\": \"6rem\" }}>\n\t<Text muted>Centered on both axes</Text>\n</Center>",
 		"interactive": false,
 		"logsActions": false
@@ -560,15 +597,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "h",
 				"type": "string | number",
 				"required": false,
-				"description": ""
+				"description": "Vertical space (pixels or any CSS length)."
 			},
 			{
 				"name": "w",
 				"type": "string | number",
 				"required": false,
-				"description": ""
+				"description": "Horizontal space (pixels or any CSS length)."
 			}
 		],
+		"types": [],
 		"code": "<div>\n\t<Text>Above</Text>\n\t<Space h=\"1.5rem\" />\n\t<Text>Below, 1.5rem later</Text>\n</div>",
 		"interactive": false,
 		"logsActions": false
@@ -581,6 +619,7 @@ export const catalog: CatalogEntry[] = [
 		"summary": "Horizontal rule.",
 		"slots": [],
 		"props": [],
+		"types": [],
 		"code": "<Stack gap=\"0.75rem\">\n\t<Text>Account</Text>\n\t<Divider />\n\t<Text>Billing</Text>\n</Stack>",
 		"interactive": false,
 		"logsActions": false
@@ -599,15 +638,17 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content that fills the box (images and video are cropped to fit)."
 			},
 			{
 				"name": "ratio",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "16 / 9",
+				"description": "Width divided by height, e.g. `16 / 9`."
 			}
 		],
+		"types": [],
 		"code": "<AspectRatio style={{ \"max-width\": \"20rem\" }} ratio={16 / 9}>\n\t<img src=\"/images/16-9.jpg\" alt=\"16 by 9 placeholder\" />\n</AspectRatio>",
 		"interactive": false,
 		"logsActions": false
@@ -623,15 +664,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Scrollable content."
 			},
 			{
 				"name": "maxHeight",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Height after which the content scrolls (any CSS length)."
 			}
 		],
+		"types": [],
 		"code": "<ScrollArea maxHeight=\"6rem\">\n\t<Stack gap=\"0.35rem\">\n\t\t<Text>Deploy #128</Text>\n\t\t<Text>Deploy #127</Text>\n\t\t<Text>Deploy #126</Text>\n\t\t<Text>Deploy #125</Text>\n\t\t<Text>Deploy #124</Text>\n\t\t<Text>Deploy #123</Text>\n\t</Stack>\n</ScrollArea>",
 		"interactive": false,
 		"logsActions": false
@@ -651,39 +693,44 @@ export const catalog: CatalogEntry[] = [
 				"name": "initial",
 				"type": "number",
 				"required": false,
+				"defaultValue": "0.4",
 				"description": "Left pane ratio 0–1, default 0.4 (read once, at mount)."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Resize panes\"",
 				"description": "Accessible name for the handle (default \"Resize panes\")."
 			},
 			{
 				"name": "left",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "First (left) pane content."
 			},
 			{
 				"name": "max",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "0.8",
+				"description": "Largest size of the first pane, in percent."
 			},
 			{
 				"name": "min",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "0.2",
+				"description": "Smallest size of the first pane, in percent."
 			},
 			{
 				"name": "right",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Second (right) pane content."
 			}
 		],
+		"types": [],
 		"code": "<Splitter\n\tstyle={{ height: \"8rem\" }}\n\tlabel=\"Resize panes\"\n\tinitial={40}\n\tleft={<Text>Files</Text>}\n\tright={<Text>Editor</Text>}\n/>",
 		"interactive": false,
 		"logsActions": false
@@ -699,15 +746,17 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Items to pack; each keeps its own height."
 			},
 			{
 				"name": "columns",
 				"type": "2 | 3 | 4",
 				"required": false,
-				"description": ""
+				"defaultValue": "3",
+				"description": "Number of columns."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst notes = [\n\t\t{ title: \"Release 2.4\", body: \"Dark theme, a component reference and interactive examples.\" },\n\t\t{ title: \"Standup\", body: \"Ship the tree search.\" },\n\t\t{\n\t\t\ttitle: \"Design review\",\n\t\t\tbody: \"Tighten the button group borders, fix the burger icon, make quote backgrounds optional and give the tree folder icons.\",\n\t\t},\n\t\t{ title: \"Bug\", body: \"PIN input needed two Backspaces.\" },\n\t\t{ title: \"Idea\", body: \"Masonry packs cards of different heights into columns without gaps.\" },\n\t\t{ title: \"Reading\", body: \"WAI-ARIA tree pattern.\" },\n\t];\n\treturn (\n\t\t<Masonry columns={3}>\n\t\t\t<For each={notes}>\n\t\t\t\t{(note) => (\n\t\t\t\t\t<Paper withBorder padding=\"md\">\n\t\t\t\t\t\t<strong>{note.title}</strong>\n\t\t\t\t\t\t<Text muted>{note.body}</Text>\n\t\t\t\t\t</Paper>\n\t\t\t\t)}\n\t\t\t</For>\n\t\t</Masonry>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -723,9 +772,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Items in a horizontally scrolling row."
 			}
 		],
+		"types": [],
 		"code": "<Reel>\n\t<img src=\"/images/1.jpg\" alt=\"Slide 1\" width=\"240\" height=\"160\" />\n\t<img src=\"/images/2.jpg\" alt=\"Slide 2\" width=\"240\" height=\"160\" />\n\t<img src=\"/images/3.jpg\" alt=\"Slide 3\" width=\"240\" height=\"160\" />\n\t<img src=\"/images/4.jpg\" alt=\"Slide 4\" width=\"240\" height=\"160\" />\n</Reel>",
 		"interactive": false,
 		"logsActions": false
@@ -741,15 +791,17 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content to extend."
 			},
 			{
 				"name": "x",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"-1rem\"",
+				"description": "How far to extend past the container on each side (any CSS length)."
 			}
 		],
+		"types": [],
 		"code": "<Bleed x=\"1rem\">\n\t<Text>Full-width strip that ignores its container's padding.</Text>\n</Bleed>",
 		"interactive": false,
 		"logsActions": false
@@ -771,7 +823,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Main content."
 			},
 			{
 				"name": "contentAs",
@@ -783,15 +835,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "header",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of the top bar."
 			},
 			{
 				"name": "sidebar",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of the side column, e.g. a `SidebarNav`."
 			}
 		],
+		"types": [],
 		"code": "const sections = [\n\t{ id: \"overview\", label: \"Overview\" },\n\t{ id: \"deploys\", label: \"Deploys\" },\n\t{ id: \"settings\", label: \"Settings\" },\n];\n\nfunction Example() {\n\tconst page = signal(\"deploys\");\n\treturn (\n\t\t<AppShell\n\t\t\tcontentAs=\"div\"\n\t\t\theader={<strong>Acme Console</strong>}\n\t\t\tsidebar={<SidebarNav label=\"Main\" items={sections} value={page()} onChange={page.set} />}\n\t\t>\n\t\t\t<Text>{sections.find((s) => s.id === page())?.label} page</Text>\n\t\t</AppShell>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -815,27 +868,28 @@ export const catalog: CatalogEntry[] = [
 				"name": "title",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Page title (rendered as `<h1>`)."
 			},
 			{
 				"name": "actions",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Buttons aligned to the end of the header."
 			},
 			{
 				"name": "breadcrumb",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Breadcrumb above the title."
 			},
 			{
 				"name": "description",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Text under the title."
 			}
 		],
+		"types": [],
 		"code": "<PageHeader\n\ttitle=\"Deploys\"\n\tdescription=\"Every push to a branch creates a deploy.\"\n\tactions={<Button onClick={() => {}}>New deploy</Button>}\n/>",
 		"interactive": false,
 		"logsActions": true
@@ -855,19 +909,31 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "`HeroHead`, `HeroBody` and `HeroFoot`, or plain content."
 			},
 			{
 				"name": "size",
 				"type": "HeroSize",
 				"required": false,
-				"description": ""
+				"description": "Height: `sm` / `md` / `lg`, `half` screen or `full` screen."
 			},
 			{
 				"name": "tone",
 				"type": "HeroTone",
 				"required": false,
-				"description": ""
+				"description": "Background colour scheme."
+			}
+		],
+		"types": [
+			{
+				"name": "HeroSize",
+				"description": "",
+				"definition": "\"sm\" | \"md\" | \"lg\" | \"half\" | \"full\""
+			},
+			{
+				"name": "HeroTone",
+				"description": "",
+				"definition": "\"default\" | \"accent\" | \"dark\" | \"light\""
 			}
 		],
 		"code": "<Hero tone=\"accent\" size=\"sm\">\n\t<HeroBody>\n\t\t<Title order={2} size={3}>\n\t\t\tShip faster with Arachne\n\t\t</Title>\n\t\t<Text>Signals, SSR and 330+ accessible components.</Text>\n\t</HeroBody>\n</Hero>",
@@ -886,9 +952,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of this part."
 			}
 		],
+		"types": [],
 		"code": "<Hero tone=\"dark\" size=\"sm\">\n\t<HeroHead>\n\t\t<strong>Arachne</strong>\n\t</HeroHead>\n\t<HeroBody>Hero head sits at the top, for a navbar or brand.</HeroBody>\n</Hero>",
 		"interactive": false,
 		"logsActions": false
@@ -905,9 +972,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of this part."
 			}
 		],
+		"types": [],
 		"code": "<Hero size=\"sm\">\n\t<HeroBody>The body grows to fill the hero and centres its content.</HeroBody>\n</Hero>",
 		"interactive": false,
 		"logsActions": false
@@ -924,9 +992,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of this part."
 			}
 		],
+		"types": [],
 		"code": "<Hero tone=\"light\" size=\"sm\">\n\t<HeroBody>Hero with a footer row.</HeroBody>\n\t<HeroFoot>\n\t\t<Text muted>Trusted by 2,000 teams</Text>\n\t</HeroFoot>\n</Hero>",
 		"interactive": false,
 		"logsActions": false
@@ -943,9 +1012,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Footer content."
 			}
 		],
+		"types": [],
 		"code": "<Footer>\n\t<Text muted>© 2026 Acme Inc. · Privacy · Terms</Text>\n</Footer>",
 		"interactive": false,
 		"logsActions": false
@@ -970,19 +1040,45 @@ export const catalog: CatalogEntry[] = [
 				"name": "brand",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Logo or name."
 			},
 			{
 				"name": "columns",
 				"type": "{ title: string; links: SiteFooterLink[]; }[]",
 				"required": false,
-				"description": ""
+				"description": "Link columns: each a `title` and its `links`."
 			},
 			{
 				"name": "meta",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Bottom line, e.g. copyright."
+			}
+		],
+		"types": [
+			{
+				"name": "SiteFooterLink",
+				"description": "",
+				"fields": [
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Link text."
+					},
+					{
+						"name": "href",
+						"type": "string",
+						"required": false,
+						"description": "Renders a real link when set."
+					},
+					{
+						"name": "onClick",
+						"type": "() => void",
+						"required": false,
+						"description": "Click handler (renders a button when there is no `href`)."
+					}
+				]
 			}
 		],
 		"code": "<SiteFooter\n\tbrand=\"Arachne\"\n\tcolumns={[\n\t\t{\n\t\t\ttitle: \"Product\",\n\t\t\tlinks: [\n\t\t\t\t{ label: \"Pricing\", href: \"#pricing\" },\n\t\t\t\t{ label: \"Changelog\", href: \"#changelog\" },\n\t\t\t],\n\t\t},\n\t\t{\n\t\t\ttitle: \"Company\",\n\t\t\tlinks: [\n\t\t\t\t{ label: \"About\", href: \"#about\" },\n\t\t\t\t{ label: \"Careers\", href: \"#careers\" },\n\t\t\t],\n\t\t},\n\t]}\n\tmeta=\"© 2026 Arachne\"\n/>",
@@ -1001,21 +1097,24 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content to keep in view."
 			},
 			{
 				"name": "offset",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "0",
+				"description": "Distance in pixels from the edge it sticks to."
 			},
 			{
 				"name": "position",
 				"type": "\"top\" | \"bottom\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"top\"",
+				"description": "Edge to stick to while scrolling."
 			}
 		],
+		"types": [],
 		"code": "<Sticky offset={8}>\n\t<Paper withBorder>Sticks 8px from the top while its container scrolls.</Paper>\n</Sticky>",
 		"interactive": false,
 		"logsActions": false
@@ -1032,15 +1131,17 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Bar content, e.g. a message and a Save button."
 			},
 			{
 				"name": "position",
 				"type": "\"top\" | \"bottom\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"bottom\"",
+				"description": "Edge the bar sticks to."
 			}
 		],
+		"types": [],
 		"code": "<StickyBar position=\"bottom\">\n\t<Text>You have unsaved changes.</Text>\n\t<Button size=\"sm\" onClick={() => {}}>\n\t\tSave\n\t</Button>\n</StickyBar>",
 		"interactive": false,
 		"logsActions": true
@@ -1057,21 +1158,23 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Pinned content, e.g. a feedback button."
 			},
 			{
 				"name": "offset",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Distance from the corner (any CSS length)."
 			},
 			{
 				"name": "position",
 				"type": "\"top-left\" | \"top-right\" | \"bottom-left\" | \"bottom-right\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"bottom-right\"",
+				"description": "Viewport corner to pin to."
 			}
 		],
+		"types": [],
 		"code": "<Affix position=\"bottom-right\" offset=\"1rem\">\n\t<Button size=\"sm\" onClick={() => {}}>\n\t\tFeedback\n\t</Button>\n</Affix>",
 		"interactive": false,
 		"logsActions": true
@@ -1094,9 +1197,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "`CardHeader`, `CardImage`, `CardContent`, `CardFooter`, or any content."
 			}
 		],
+		"types": [],
 		"code": "const cardImage = \"/images/cover.jpg\";\n\n<Card style={{ \"max-width\": \"22rem\" }}>\n\t<CardImage>\n\t\t<img src={cardImage} alt=\"Project cover\" width=\"640\" height=\"280\" />\n\t</CardImage>\n\t<CardContent>\n\t\t<strong>marketing-site</strong>\n\t\t<Text muted>Deployed 4 minutes ago from main.</Text>\n\t</CardContent>\n\t<CardFooter>\n\t\t<CardFooterItem onClick={() => {}}>Visit</CardFooterItem>\n\t\t<CardFooterItem onClick={() => {}}>Logs</CardFooterItem>\n\t</CardFooter>\n</Card>",
 		"interactive": false,
 		"logsActions": true
@@ -1113,9 +1217,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of this part."
 			}
 		],
+		"types": [],
 		"code": "<Card>\n\t<CardHeader>\n\t\t<CardHeaderTitle>Billing</CardHeaderTitle>\n\t</CardHeader>\n\t<CardContent>Pro plan · renews Oct 1</CardContent>\n</Card>",
 		"interactive": false,
 		"logsActions": false
@@ -1132,9 +1237,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of this part."
 			}
 		],
+		"types": [],
 		"code": "<Card>\n\t<CardHeader>\n\t\t<CardHeaderTitle>Billing</CardHeaderTitle>\n\t</CardHeader>\n</Card>",
 		"interactive": false,
 		"logsActions": false
@@ -1151,9 +1257,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of this part."
 			}
 		],
+		"types": [],
 		"code": "const cardImage = \"/images/cover.jpg\";\n\n<Card style={{ \"max-width\": \"22rem\" }}>\n\t<CardImage>\n\t\t<img src={cardImage} alt=\"Project cover\" width=\"640\" height=\"280\" />\n\t</CardImage>\n</Card>",
 		"interactive": false,
 		"logsActions": false
@@ -1170,9 +1277,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of this part."
 			}
 		],
+		"types": [],
 		"code": "<Card>\n\t<CardContent>Card content is padded and flows like body text.</CardContent>\n</Card>",
 		"interactive": false,
 		"logsActions": false
@@ -1189,9 +1297,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of this part."
 			}
 		],
+		"types": [],
 		"code": "<Card>\n\t<CardContent>Delete this project?</CardContent>\n\t<CardFooter>\n\t\t<CardFooterItem onClick={() => {}}>Cancel</CardFooterItem>\n\t\t<CardFooterItem onClick={() => {}}>Delete</CardFooterItem>\n\t</CardFooter>\n</Card>",
 		"interactive": false,
 		"logsActions": true
@@ -1208,15 +1317,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of this part."
 			},
 			{
 				"name": "onClick",
 				"type": "(e: MouseEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Makes the item a button; called when pressed."
 			}
 		],
+		"types": [],
 		"code": "<Card>\n\t<CardFooter>\n\t\t<CardFooterItem onClick={() => {}}>\n\t\t\tSave\n\t\t</CardFooterItem>\n\t\t<CardFooterItem onClick={() => {}}>Cancel</CardFooterItem>\n\t</CardFooter>\n</Card>",
 		"interactive": false,
 		"logsActions": true
@@ -1232,9 +1342,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Box content."
 			}
 		],
+		"types": [],
 		"code": "<Box>Boxes group related content on a raised surface.</Box>",
 		"interactive": false,
 		"logsActions": false
@@ -1255,7 +1366,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "`PanelHeading`, `PanelTabs` and `PanelBlock`s."
 			},
 			{
 				"name": "label",
@@ -1264,6 +1375,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Accessible name of the panel's `<nav>` landmark; set it when a page has several panels."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst repos = [\n\t\t{ name: \"arachne\", visibility: \"public\" },\n\t\t{ name: \"marketing-site\", visibility: \"private\" },\n\t\t{ name: \"design-tokens\", visibility: \"public\" },\n\t];\n\tconst tab = signal(\"all\");\n\tconst active = signal(\"arachne\");\n\tconst shown = () => repos.filter((r) => tab() === \"all\" || r.visibility === tab());\n\treturn (\n\t\t<Panel label=\"Repositories\" style={{ \"max-width\": \"22rem\" }}>\n\t\t\t<PanelHeading>Repositories</PanelHeading>\n\t\t\t<PanelTabs>\n\t\t\t\t<For each={[\"all\", \"public\", \"private\"]}>\n\t\t\t\t\t{(id) => (\n\t\t\t\t\t\t<PanelTab active={tab() === id} onClick={() => tab.set(id)}>\n\t\t\t\t\t\t\t{id[0]?.toUpperCase() + id.slice(1)}\n\t\t\t\t\t\t</PanelTab>\n\t\t\t\t\t)}\n\t\t\t\t</For>\n\t\t\t</PanelTabs>\n\t\t\t<For each={shown()}>\n\t\t\t\t{(repo) => (\n\t\t\t\t\t<PanelBlock active={active() === repo.name} onClick={() => active.set(repo.name)}>\n\t\t\t\t\t\t{repo.name}\n\t\t\t\t\t</PanelBlock>\n\t\t\t\t)}\n\t\t\t</For>\n\t\t</Panel>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -1280,9 +1392,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of this part."
 			}
 		],
+		"types": [],
 		"code": "<Panel label=\"Projects\">\n\t<PanelHeading>Repositories</PanelHeading>\n\t<PanelBlock>arachne</PanelBlock>\n</Panel>",
 		"interactive": false,
 		"logsActions": false
@@ -1299,9 +1412,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of this part."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst tab = signal(\"all\");\n\treturn (\n\t\t<Panel label=\"Filter tabs\">\n\t\t\t<PanelTabs>\n\t\t\t\t<PanelTab active={tab() === \"all\"} onClick={() => tab.set(\"all\")}>\n\t\t\t\t\tAll\n\t\t\t\t</PanelTab>\n\t\t\t\t<PanelTab active={tab() === \"forks\"} onClick={() => tab.set(\"forks\")}>\n\t\t\t\t\tForks\n\t\t\t\t</PanelTab>\n\t\t\t</PanelTabs>\n\t\t</Panel>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -1318,21 +1432,22 @@ export const catalog: CatalogEntry[] = [
 				"name": "active",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Marks the selected tab."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Tab label."
 			},
 			{
 				"name": "onClick",
 				"type": "(e: MouseEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Called when the tab is pressed."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst tab = signal(\"all\");\n\treturn (\n\t\t<Panel label=\"Sources\">\n\t\t\t<PanelTabs>\n\t\t\t\t<PanelTab active={tab() === \"all\"} onClick={() => tab.set(\"all\")}>\n\t\t\t\t\tAll\n\t\t\t\t</PanelTab>\n\t\t\t\t<PanelTab active={tab() === \"forks\"} onClick={() => tab.set(\"forks\")}>\n\t\t\t\t\tForks\n\t\t\t\t</PanelTab>\n\t\t\t</PanelTabs>\n\t\t</Panel>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -1349,21 +1464,22 @@ export const catalog: CatalogEntry[] = [
 				"name": "active",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Marks the selected row."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Row content."
 			},
 			{
 				"name": "onClick",
 				"type": "(e: MouseEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Makes the row a button; called when pressed."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst active = signal(\"marketing-site\");\n\treturn (\n\t\t<Panel label=\"Recent projects\">\n\t\t\t<PanelBlock\n\t\t\t\tactive={active() === \"marketing-site\"}\n\t\t\t\tonClick={() => active.set(\"marketing-site\")}\n\t\t\t>\n\t\t\t\tmarketing-site\n\t\t\t</PanelBlock>\n\t\t\t<PanelBlock active={active() === \"docs\"} onClick={() => active.set(\"docs\")}>\n\t\t\t\tdocs\n\t\t\t</PanelBlock>\n\t\t</Panel>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -1380,27 +1496,28 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Paper content."
 			},
 			{
 				"name": "padding",
 				"type": "\"sm\" | \"md\" | \"lg\"",
 				"required": false,
-				"description": ""
+				"description": "Inner padding."
 			},
 			{
 				"name": "shadow",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Adds a soft shadow."
 			},
 			{
 				"name": "withBorder",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Adds a border."
 			}
 		],
+		"types": [],
 		"code": "<Paper padding=\"lg\" shadow withBorder>\n\tPaper is the plainest surface: padding, radius, optional border and shadow.\n</Paper>",
 		"interactive": false,
 		"logsActions": false
@@ -1417,39 +1534,40 @@ export const catalog: CatalogEntry[] = [
 				"name": "ancestor",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Outermost tile of a tile layout."
 			},
 			{
 				"name": "child",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "A leaf tile holding content."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Nested tiles or content."
 			},
 			{
 				"name": "parent",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "A tile that contains `child` tiles."
 			},
 			{
 				"name": "size",
 				"type": "1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12",
 				"required": false,
-				"description": ""
+				"description": "Width in twelfths."
 			},
 			{
 				"name": "vertical",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Stack the inner tiles vertically."
 			}
 		],
+		"types": [],
 		"code": "<Tile ancestor>\n\t<Tile parent size={8}>\n\t\t<Tile child>\n\t\t\t<Box>Wide tile</Box>\n\t\t</Tile>\n\t</Tile>\n\t<Tile parent>\n\t\t<Tile child>\n\t\t\t<Box>Narrow</Box>\n\t\t</Tile>\n\t</Tile>\n</Tile>",
 		"interactive": false,
 		"logsActions": false
@@ -1466,9 +1584,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Block content."
 			}
 		],
+		"types": [],
 		"code": "<div>\n\t<Block>A block adds the standard bottom margin between siblings.</Block>\n\t<Block>Like this second one.</Block>\n</div>",
 		"interactive": false,
 		"logsActions": false
@@ -1485,9 +1604,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Recessed content."
 			}
 		],
+		"types": [],
 		"code": "<Inset>\n\t<Text muted>Recessed area for secondary content, like a settings preview.</Text>\n</Inset>",
 		"interactive": false,
 		"logsActions": false
@@ -1504,12 +1624,13 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Heading text."
 			},
 			{
 				"name": "order",
 				"type": "HeadingOrder",
 				"required": false,
+				"defaultValue": "3",
 				"description": "Heading level (`<h1>`–`<h6>`) for the document outline. Default 2."
 			},
 			{
@@ -1522,7 +1643,14 @@ export const catalog: CatalogEntry[] = [
 				"name": "spaced",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Keep the normal gap before a following `Subtitle`."
+			}
+		],
+		"types": [
+			{
+				"name": "HeadingOrder",
+				"description": "",
+				"definition": "1 | 2 | 3 | 4 | 5 | 6"
 			}
 		],
 		"code": "<Title order={3}>\n\tProject settings\n</Title>",
@@ -1541,19 +1669,28 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Subtitle text."
 			},
 			{
 				"name": "order",
 				"type": "HeadingOrder",
 				"required": false,
+				"defaultValue": "5",
 				"description": "Render as a heading at this level; by default a subtitle is a `<p>`."
 			},
 			{
 				"name": "size",
 				"type": "HeadingOrder",
 				"required": false,
+				"defaultValue": "3",
 				"description": "Visual size 1–6. Default 5."
+			}
+		],
+		"types": [
+			{
+				"name": "HeadingOrder",
+				"description": "",
+				"definition": "1 | 2 | 3 | 4 | 5 | 6"
 			}
 		],
 		"code": "<Subtitle>Manage domains, builds and access.</Subtitle>",
@@ -1572,15 +1709,17 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Heading text."
 			},
 			{
 				"name": "level",
 				"type": "1 | 2 | 3",
 				"required": false,
-				"description": ""
+				"defaultValue": "2",
+				"description": "Heading level (`h1`–`h3`)."
 			}
 		],
+		"types": [],
 		"code": "<Heading level={3}>\n\tTeam members\n</Heading>",
 		"interactive": false,
 		"logsActions": false
@@ -1603,21 +1742,22 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Text content."
 			},
 			{
 				"name": "danger",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Danger colour, e.g. for an inline error."
 			},
 			{
 				"name": "muted",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Secondary (muted) colour."
 			}
 		],
+		"types": [],
 		"code": "<Text muted>\n\tLast deployed 4 minutes ago by Ada.\n</Text>",
 		"interactive": false,
 		"logsActions": false
@@ -1634,15 +1774,17 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Long-form content (headings, paragraphs, lists, links, code)."
 			},
 			{
 				"name": "measure",
 				"type": "boolean",
 				"required": false,
+				"defaultValue": "true",
 				"description": "Cap the line length for readability (default true)."
 			}
 		],
+		"types": [],
 		"code": "<Prose>\n\t<h3>Release notes</h3>\n\t<p>\n\t\tThis release focuses on <a href=\"#a11y\">accessibility</a>: every overlay now traps focus\n\t\tand restores it on close.\n\t</p>\n\t<ul>\n\t\t<li>Keyboard support for menus and trees</li>\n\t\t<li>Reduced-motion aware transitions</li>\n\t</ul>\n</Prose>",
 		"interactive": false,
 		"logsActions": false
@@ -1662,9 +1804,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "`ArticleTitle`, `ArticleMeta` and the article body."
 			}
 		],
+		"types": [],
 		"code": "<Article>\n\t<ArticleTitle order={3}>Designing a kit-wide customization system</ArticleTitle>\n\t<ArticleMeta>Ada Lovelace · Sep 12, 2026 · 6 min read</ArticleMeta>\n\t<p>Every component forwards attributes and exposes named slots…</p>\n</Article>",
 		"interactive": false,
 		"logsActions": false
@@ -1681,13 +1824,21 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of this part."
 			},
 			{
 				"name": "order",
 				"type": "HeadingLevel",
 				"required": false,
+				"defaultValue": "1",
 				"description": "Heading level, to fit the page outline. Default 1."
+			}
+		],
+		"types": [
+			{
+				"name": "HeadingLevel",
+				"description": "",
+				"definition": "1 | 2 | 3 | 4 | 5 | 6"
 			}
 		],
 		"code": "<Article>\n\t<ArticleTitle order={3}>\n\t\tDesigning a kit-wide customization system\n\t</ArticleTitle>\n</Article>",
@@ -1706,9 +1857,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of this part."
 			}
 		],
+		"types": [],
 		"code": "<Article>\n\t<ArticleTitle order={3}>Release 2.4</ArticleTitle>\n\t<ArticleMeta>Grace Hopper · Sep 1, 2026</ArticleMeta>\n</Article>",
 		"interactive": false,
 		"logsActions": false
@@ -1729,21 +1881,23 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "The quotation."
 			},
 			{
 				"name": "cite",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Who said it (shown under the quote)."
 			},
 			{
 				"name": "variant",
 				"type": "\"soft\" | \"plain\"",
 				"required": false,
+				"defaultValue": "\"soft\"",
 				"description": "`\"soft\"` (default) adds a tinted background; `\"plain\"` keeps only the accent rule."
 			}
 		],
+		"types": [],
 		"code": "<Stack gap=\"1rem\">\n\t<Quote cite=\"Grace Hopper\">\n\t\tThe most dangerous phrase in the language is “we've always done it this way.”\n\t</Quote>\n\t<Quote variant=\"plain\" cite=\"Alan Kay\">\n\t\tThe best way to predict the future is to invent it.\n\t</Quote>\n</Stack>",
 		"interactive": false,
 		"logsActions": false
@@ -1759,21 +1913,22 @@ export const catalog: CatalogEntry[] = [
 				"name": "href",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Link target."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Link text."
 			},
 			{
 				"name": "external",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Open in a new tab (adds `rel=\"noreferrer noopener\"`)."
 			}
 		],
+		"types": [],
 		"code": "<Anchor href=\"/docs\">\n\tRead the docs\n</Anchor>",
 		"interactive": false,
 		"logsActions": false
@@ -1790,15 +1945,17 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Text to highlight."
 			},
 			{
 				"name": "tone",
 				"type": "\"accent\" | \"warning\" | \"success\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"warning\"",
+				"description": "Highlight colour."
 			}
 		],
+		"types": [],
 		"code": "<Text>\n\tDeploys run on <Mark>every push</Mark> to main.\n</Text>",
 		"interactive": false,
 		"logsActions": false
@@ -1818,21 +1975,23 @@ export const catalog: CatalogEntry[] = [
 				"name": "highlight",
 				"type": "string | string[]",
 				"required": true,
-				"description": ""
+				"description": "Term(s) to mark wherever they occur."
 			},
 			{
 				"name": "text",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "The full text to show."
 			},
 			{
 				"name": "tone",
 				"type": "\"accent\" | \"warning\" | \"success\"",
 				"required": false,
+				"defaultValue": "\"warning\"",
 				"description": "Mark colour (default `\"warning\"`, highlighter yellow), as on `Mark`."
 			}
 		],
+		"types": [],
 		"code": "<Highlight text=\"Deploy marketing-site to production\" highlight=\"deploy\" />",
 		"interactive": false,
 		"logsActions": false
@@ -1849,15 +2008,17 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Text to truncate."
 			},
 			{
 				"name": "lines",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "1",
+				"description": "Number of lines shown before the ellipsis."
 			}
 		],
+		"types": [],
 		"code": "<Truncate style={{ \"max-width\": \"22rem\" }} lines={2}>\n\tThe customization system covers every component: attributes are forwarded to the host\n\telement, classes and styles target named slots, unstyled drops the built-in look, and\n\tconfigureUI sets app-wide defaults. Text past the second line is cut with an ellipsis.\n</Truncate>",
 		"interactive": false,
 		"logsActions": false
@@ -1879,15 +2040,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "content",
 				"required": true,
-				"description": ""
+				"description": "Text on the left."
 			},
 			{
 				"name": "value",
 				"type": "content",
 				"required": true,
-				"description": ""
+				"description": "Text on the right; dots fill the space between."
 			}
 		],
+		"types": [],
 		"code": "<Leader label=\"Espresso\" value=\"$3.50\" />",
 		"interactive": false,
 		"logsActions": false
@@ -1904,33 +2066,38 @@ export const catalog: CatalogEntry[] = [
 				"name": "value",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Number to format."
 			},
 			{
 				"name": "decimalScale",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "0",
+				"description": "Fixed number of decimals."
 			},
 			{
 				"name": "prefix",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"\"",
+				"description": "Text before the number, e.g. `$`."
 			},
 			{
 				"name": "suffix",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"\"",
+				"description": "Text after the number, e.g. `%`."
 			},
 			{
 				"name": "thousandSeparator",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\",\"",
+				"description": "Character between thousands groups."
 			}
 		],
+		"types": [],
 		"code": "<NumberFormatter value={1234567.891} decimalScale={2} />",
 		"interactive": false,
 		"logsActions": false
@@ -1950,6 +2117,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Absolute timestamp (ms)."
 			}
 		],
+		"types": [],
 		"code": "<RelativeTime value={Date.now() - 5 * 60_000} />",
 		"interactive": false,
 		"logsActions": false
@@ -1980,6 +2148,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Unit suffixes (default d/h/m/s)."
 			}
 		],
+		"types": [],
 		"code": "<Countdown to={Date.now() + 3 * 86_400_000} />",
 		"interactive": false,
 		"logsActions": false
@@ -1995,9 +2164,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Text read by screen readers but not shown."
 			}
 		],
+		"types": [],
 		"code": "<Button variant=\"ghost\" onClick={() => {}}>\n\t★<VisuallyHidden>Add to favourites</VisuallyHidden>\n</Button>",
 		"interactive": false,
 		"logsActions": true
@@ -2014,7 +2184,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "name",
 				"type": "IconName",
 				"required": true,
-				"description": ""
+				"description": "Which built-in icon to draw."
 			},
 			{
 				"name": "label",
@@ -2026,7 +2196,14 @@ export const catalog: CatalogEntry[] = [
 				"name": "size",
 				"type": "number | \"sm\" | \"md\" | \"lg\"",
 				"required": false,
-				"description": ""
+				"description": "`sm` / `md` / `lg`, or a size in pixels."
+			}
+		],
+		"types": [
+			{
+				"name": "IconName",
+				"description": "Material Design Icons path names used by `<Icon />`.",
+				"definition": "| \"check\" | \"x\" | \"plus\" | \"minus\" | \"search\" | \"user\" | \"users\" | \"settings\" | \"menu\" | \"home\" | \"heart\" | \"star\" | \"bell\" | \"mail\" | \"calendar\" | \"clock\" | \"edit\" | \"trash\" | \"copy\" | \"download\" | \"upload\" | \"link\" | \"external\" | \"info\" | \"warning\" | \"error\" | \"success\" | \"chevron-down\" | \"chevron-up\" | \"chevron-left\" | \"chevron-right\" | \"arrow-left\" | \"arrow-right\" | \"eye\" | \"eye-off\" | \"eye-outline\" | \"lock\" | \"unlock\" | \"filter\" | \"more\" | \"close\" | \"spinner\" | \"sun\" | \"moon\" | \"play\" | \"pause\" | \"refresh\" | \"share\" | \"image\" | \"file\" | \"folder\" | \"zap\" | \"phone\" | \"git\" | \"code\""
 			}
 		],
 		"code": "<Icon name=\"bell\" />",
@@ -2048,19 +2225,28 @@ export const catalog: CatalogEntry[] = [
 				"name": "name",
 				"type": "IconName",
 				"required": true,
-				"description": ""
+				"description": "Which built-in icon to draw."
 			},
 			{
 				"name": "size",
 				"type": "\"sm\" | \"md\" | \"lg\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"md\"",
+				"description": "Badge size."
 			},
 			{
 				"name": "tone",
 				"type": "\"accent\" | \"warning\" | \"success\" | \"danger\" | \"muted\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"accent\"",
+				"description": "Colour of the icon and its tinted background."
+			}
+		],
+		"types": [
+			{
+				"name": "IconName",
+				"description": "Material Design Icons path names used by `<Icon />`.",
+				"definition": "| \"check\" | \"x\" | \"plus\" | \"minus\" | \"search\" | \"user\" | \"users\" | \"settings\" | \"menu\" | \"home\" | \"heart\" | \"star\" | \"bell\" | \"mail\" | \"calendar\" | \"clock\" | \"edit\" | \"trash\" | \"copy\" | \"download\" | \"upload\" | \"link\" | \"external\" | \"info\" | \"warning\" | \"error\" | \"success\" | \"chevron-down\" | \"chevron-up\" | \"chevron-left\" | \"chevron-right\" | \"arrow-left\" | \"arrow-right\" | \"eye\" | \"eye-off\" | \"eye-outline\" | \"lock\" | \"unlock\" | \"filter\" | \"more\" | \"close\" | \"spinner\" | \"sun\" | \"moon\" | \"play\" | \"pause\" | \"refresh\" | \"share\" | \"image\" | \"file\" | \"folder\" | \"zap\" | \"phone\" | \"git\" | \"code\""
 			}
 		],
 		"code": "<IconBadge name=\"zap\" tone=\"accent\" />",
@@ -2085,25 +2271,25 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Button label."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the button (also sets `data-disabled`)."
 			},
 			{
 				"name": "end",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Trailing content after the label (icon, badge, `Kbd`)."
 			},
 			{
 				"name": "fullWidth",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Stretch to the container's width."
 			},
 			{
 				"name": "href",
@@ -2127,13 +2313,14 @@ export const catalog: CatalogEntry[] = [
 				"name": "onClick",
 				"type": "(e: MouseEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Called on click (not while `disabled` or `loading`)."
 			},
 			{
 				"name": "size",
 				"type": "\"sm\" | \"md\" | \"lg\" | \"xs\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"md\"",
+				"description": "Height and padding."
 			},
 			{
 				"name": "start",
@@ -2145,19 +2332,28 @@ export const catalog: CatalogEntry[] = [
 				"name": "target",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Link target when `href` is set; `_blank` also adds `rel=\"noopener noreferrer\"`."
 			},
 			{
 				"name": "type",
 				"type": "\"button\" | \"submit\" | \"reset\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"button\"",
+				"description": "Native button type; `submit` submits the enclosing form."
 			},
 			{
 				"name": "variant",
 				"type": "\"default\" | \"link\" | \"soft\" | \"warning\" | \"success\" | \"danger\" | \"solid\" | \"outline\" | \"ghost\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"solid\"",
+				"description": "Visual style: `solid` (primary), `default`, `soft`, `outline`, `ghost`, `link`, or a tone (`danger`, `warning`, `success`)."
+			}
+		],
+		"types": [
+			{
+				"name": "ButtonVariant",
+				"description": "",
+				"definition": "| \"solid\" | \"default\" | \"soft\" | \"outline\" | \"ghost\" | \"link\" | \"danger\" | \"warning\" | \"success\" | undefined"
 			}
 		],
 		"code": "<Button onClick={() => {}}>\n\tSave changes\n</Button>",
@@ -2176,45 +2372,46 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Button label."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the button."
 			},
 			{
 				"name": "loading",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Show a spinner and block clicks (width stays the same)."
 			},
 			{
 				"name": "onClick",
 				"type": "(e: MouseEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Called when pressed (not while `loading`)."
 			},
 			{
 				"name": "size",
 				"type": "\"sm\" | \"md\"",
 				"required": false,
-				"description": ""
+				"description": "Button size."
 			},
 			{
 				"name": "type",
 				"type": "\"button\" | \"submit\" | \"reset\"",
 				"required": false,
-				"description": ""
+				"description": "Native button type."
 			},
 			{
 				"name": "variant",
 				"type": "\"danger\" | \"solid\" | \"ghost\"",
 				"required": false,
-				"description": ""
+				"description": "Button style."
 			}
 		],
+		"types": [],
 		"code": "<LoadingButton loading>\n\tSaving…\n</LoadingButton>",
 		"interactive": false,
 		"logsActions": false
@@ -2231,33 +2428,35 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "content",
 				"required": true,
-				"description": ""
+				"description": "Button label before confirming."
 			},
 			{
 				"name": "onConfirm",
 				"type": "() => void",
 				"required": true,
-				"description": ""
+				"description": "Called on the second click; the first click only arms the button."
 			},
 			{
 				"name": "confirmLabel",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Confirm?\"",
+				"description": "Label on the second, confirming click."
 			},
 			{
 				"name": "size",
 				"type": "\"sm\" | \"md\"",
 				"required": false,
-				"description": ""
+				"description": "Button size."
 			},
 			{
 				"name": "variant",
 				"type": "\"danger\" | \"solid\" | \"ghost\"",
 				"required": false,
-				"description": ""
+				"description": "Button style."
 			}
 		],
+		"types": [],
 		"code": "<ConfirmButton label=\"Delete project\" onConfirm={() => {}} />",
 		"interactive": false,
 		"logsActions": true
@@ -2274,27 +2473,29 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Button content (no built-in styling)."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the button."
 			},
 			{
 				"name": "onClick",
 				"type": "(e: MouseEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Called when the button is pressed."
 			},
 			{
 				"name": "type",
 				"type": "\"button\" | \"submit\" | \"reset\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"button\"",
+				"description": "Native button type."
 			}
 		],
+		"types": [],
 		"code": "<UnstyledButton onClick={() => {}}>\n\tPlain clickable text\n</UnstyledButton>",
 		"interactive": false,
 		"logsActions": true
@@ -2310,13 +2511,13 @@ export const catalog: CatalogEntry[] = [
 				"name": "attached",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Join the buttons edge to edge; otherwise they sit apart with a gap."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "The `Button`s."
 			},
 			{
 				"name": "label",
@@ -2325,6 +2526,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Accessible name for the group."
 			}
 		],
+		"types": [],
 		"code": "<ButtonGroup label=\"Text alignment\">\n\t<Button variant=\"outline\" onClick={() => {}}>\n\t\tLeft\n\t</Button>\n\t<Button variant=\"outline\" onClick={() => {}}>\n\t\tCenter\n\t</Button>\n\t<Button variant=\"outline\" onClick={() => {}}>\n\t\tRight\n\t</Button>\n</ButtonGroup>",
 		"interactive": false,
 		"logsActions": true
@@ -2345,45 +2547,47 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "content",
 				"required": true,
-				"description": ""
+				"description": "Main button label."
 			},
 			{
 				"name": "menu",
 				"type": "{ label: string; onSelect: () => void; danger?: boolean; }[]",
 				"required": true,
-				"description": ""
+				"description": "Alternative actions in the caret menu: `label`, `onSelect`, optional `danger`."
 			},
 			{
 				"name": "caretLabel",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"More actions\"",
 				"description": "Accessible name for the caret (default \"More actions\")."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables both halves."
 			},
 			{
 				"name": "onClick",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Called when the main button is pressed."
 			},
 			{
 				"name": "size",
 				"type": "\"sm\" | \"md\"",
 				"required": false,
-				"description": ""
+				"description": "Button size."
 			},
 			{
 				"name": "variant",
 				"type": "\"danger\" | \"solid\" | \"ghost\"",
 				"required": false,
-				"description": ""
+				"description": "Button style."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst strategy = signal(\"Merge\");\n\tconst merged = signal(\"\");\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<SplitButton\n\t\t\t\tlabel={strategy()}\n\t\t\t\tcaretLabel=\"More merge options\"\n\t\t\t\tonClick={() => merged.set(`${strategy()} done`)}\n\t\t\t\tmenu={[\n\t\t\t\t\t{ label: \"Merge\", onSelect: () => strategy.set(\"Merge\") },\n\t\t\t\t\t{ label: \"Squash and merge\", onSelect: () => strategy.set(\"Squash and merge\") },\n\t\t\t\t\t{ label: \"Rebase and merge\", onSelect: () => strategy.set(\"Rebase and merge\") },\n\t\t\t\t]}\n\t\t\t/>\n\t\t\t<Text muted>{merged() || \"Pick a strategy from the caret menu.\"}</Text>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -2400,39 +2604,42 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Accessible name (required: the button has no visible text)."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "The icon."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the button."
 			},
 			{
 				"name": "onClick",
 				"type": "(e: MouseEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Called when the button is pressed."
 			},
 			{
 				"name": "size",
 				"type": "\"sm\" | \"md\" | \"lg\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"md\"",
+				"description": "Button size."
 			},
 			{
 				"name": "variant",
 				"type": "\"outline\" | \"subtle\" | \"filled\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"subtle\"",
+				"description": "Button style."
 			}
 		],
+		"types": [],
 		"code": "<ActionIcon label=\"Edit project\" variant=\"subtle\" onClick={() => {}}>\n\t<Icon name=\"edit\" />\n</ActionIcon>",
 		"interactive": false,
 		"logsActions": true
@@ -2449,21 +2656,24 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Close\"",
+				"description": "Accessible name of the button."
 			},
 			{
 				"name": "onClick",
 				"type": "(e: MouseEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Called when the button is clicked."
 			},
 			{
 				"name": "size",
 				"type": "\"sm\" | \"md\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"md\"",
+				"description": "Button size."
 			}
 		],
+		"types": [],
 		"code": "<CloseButton onClick={() => {}} />",
 		"interactive": false,
 		"logsActions": true
@@ -2483,31 +2693,40 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Accessible name (and tooltip) of the button."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Custom content instead of `icon`."
 			},
 			{
 				"name": "icon",
 				"type": "IconName",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"plus\"",
+				"description": "Icon shown in the button."
 			},
 			{
 				"name": "onClick",
 				"type": "(e: MouseEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Called when the button is pressed."
 			},
 			{
 				"name": "position",
 				"type": "\"bottom-left\" | \"bottom-right\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"bottom-right\"",
+				"description": "Viewport corner to float in."
+			}
+		],
+		"types": [
+			{
+				"name": "IconName",
+				"description": "Material Design Icons path names used by `<Icon />`.",
+				"definition": "| \"check\" | \"x\" | \"plus\" | \"minus\" | \"search\" | \"user\" | \"users\" | \"settings\" | \"menu\" | \"home\" | \"heart\" | \"star\" | \"bell\" | \"mail\" | \"calendar\" | \"clock\" | \"edit\" | \"trash\" | \"copy\" | \"download\" | \"upload\" | \"link\" | \"external\" | \"info\" | \"warning\" | \"error\" | \"success\" | \"chevron-down\" | \"chevron-up\" | \"chevron-left\" | \"chevron-right\" | \"arrow-left\" | \"arrow-right\" | \"eye\" | \"eye-off\" | \"eye-outline\" | \"lock\" | \"unlock\" | \"filter\" | \"more\" | \"close\" | \"spinner\" | \"sun\" | \"moon\" | \"play\" | \"pause\" | \"refresh\" | \"share\" | \"image\" | \"file\" | \"folder\" | \"zap\" | \"phone\" | \"git\" | \"code\""
 			}
 		],
 		"code": "<FloatingActionButton\n\tlabel=\"New project\"\n\ticon=\"plus\"\n\tonClick={() => {}}\n/>",
@@ -2528,33 +2747,38 @@ export const catalog: CatalogEntry[] = [
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Text written to the clipboard."
 			},
 			{
 				"name": "copiedLabel",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Copied\"",
+				"description": "Button text shown briefly after a successful copy."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Copy\"",
+				"description": "Button text before copying."
 			},
 			{
 				"name": "size",
 				"type": "\"sm\" | \"md\" | \"lg\" | \"xs\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"sm\"",
+				"description": "Button size."
 			},
 			{
 				"name": "variant",
 				"type": "\"default\" | \"soft\" | \"solid\" | \"outline\" | \"ghost\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"ghost\"",
+				"description": "Button style (as on `Button`)."
 			}
 		],
+		"types": [],
 		"code": "<Group gap=\"0.5rem\">\n\t<code>bun add @arachne/ui</code>\n\t<CopyButton value=\"bun add @arachne/ui\" />\n</Group>",
 		"interactive": false,
 		"logsActions": false
@@ -2576,15 +2800,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Id shown and copied."
 			},
 			{
 				"name": "label",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Label before the id."
 			}
 		],
+		"types": [],
 		"code": "<CopyId value=\"prj_8f3k29dz\" />",
 		"interactive": false,
 		"logsActions": false
@@ -2601,13 +2826,15 @@ export const catalog: CatalogEntry[] = [
 				"name": "copiedLabel",
 				"type": "content",
 				"required": false,
+				"defaultValue": "\"Link copied\"",
 				"description": "Label shown after the link was copied (fallback path). Default \"Link copied\"."
 			},
 			{
 				"name": "label",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Share\"",
+				"description": "Button label."
 			},
 			{
 				"name": "onClick",
@@ -2619,25 +2846,25 @@ export const catalog: CatalogEntry[] = [
 				"name": "onShared",
 				"type": "(method: \"copy\" | \"share\") => void",
 				"required": false,
-				"description": ""
+				"description": "Called after sharing, with how: the native sheet or a copied link."
 			},
 			{
 				"name": "size",
 				"type": "\"sm\" | \"md\"",
 				"required": false,
-				"description": ""
+				"description": "Button size."
 			},
 			{
 				"name": "text",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Text passed to the share sheet."
 			},
 			{
 				"name": "title",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Title passed to the share sheet."
 			},
 			{
 				"name": "url",
@@ -2646,6 +2873,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Link to share (default: the current page URL)."
 			}
 		],
+		"types": [],
 		"code": "<ShareButton url=\"https://arachne.dev/ui\" title=\"Arachne UI\" />",
 		"interactive": false,
 		"logsActions": false
@@ -2662,7 +2890,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Toolbar buttons (one Tab stop; arrows move between them)."
 			},
 			{
 				"name": "label",
@@ -2674,9 +2902,11 @@ export const catalog: CatalogEntry[] = [
 				"name": "orientation",
 				"type": "\"horizontal\" | \"vertical\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"horizontal\"",
+				"description": "Layout, and which arrow keys move between buttons."
 			}
 		],
+		"types": [],
 		"code": "<CommandBar label=\"Selection actions\">\n\t<Button size=\"sm\" variant=\"ghost\" onClick={() => {}}>\n\t\tArchive\n\t</Button>\n\t<Button size=\"sm\" variant=\"ghost\" onClick={() => {}}>\n\t\tMove\n\t</Button>\n\t<Button size=\"sm\" variant=\"ghost\" onClick={() => {}}>\n\t\tDelete\n\t</Button>\n</CommandBar>",
 		"interactive": false,
 		"logsActions": true
@@ -2693,7 +2923,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Toolbar buttons."
 			},
 			{
 				"name": "label",
@@ -2702,6 +2932,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Accessible name for the toolbar."
 			}
 		],
+		"types": [],
 		"code": "<FloatingToolbar label=\"Text formatting\">\n\t<Button size=\"sm\" variant=\"ghost\" onClick={() => {}}>\n\t\tBold\n\t</Button>\n\t<Button size=\"sm\" variant=\"ghost\" onClick={() => {}}>\n\t\tItalic\n\t</Button>\n\t<Button size=\"sm\" variant=\"ghost\" onClick={() => {}}>\n\t\tLink\n\t</Button>\n</FloatingToolbar>",
 		"interactive": false,
 		"logsActions": true
@@ -2723,13 +2954,13 @@ export const catalog: CatalogEntry[] = [
 				"name": "count",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Number of selected items."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Bulk actions for the selection."
 			},
 			{
 				"name": "countLabel",
@@ -2741,9 +2972,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "onClear",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Shows a clear-selection button; called when it is pressed."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst selected = signal(3);\n\treturn (\n\t\t<Show\n\t\t\twhen={selected() > 0}\n\t\t\tfallback={\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => selected.set(3)}>\n\t\t\t\t\tSelect 3 deploys\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<BulkBar count={selected()} onClear={() => selected.set(0)}>\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => selected.set(0)}>\n\t\t\t\t\tArchive\n\t\t\t\t</Button>\n\t\t\t</BulkBar>\n\t\t</Show>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -2759,63 +2991,66 @@ export const catalog: CatalogEntry[] = [
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the field."
 			},
 			{
 				"name": "invalid",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Marks the value invalid (`aria-invalid` and error styling)."
 			},
 			{
 				"name": "name",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Field name submitted with the form."
 			},
 			{
 				"name": "onBlur",
 				"type": "(e: FocusEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Called when the field loses focus."
 			},
 			{
 				"name": "onFocus",
 				"type": "(e: FocusEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Called when the field gains focus."
 			},
 			{
 				"name": "onInput",
 				"type": "(e: InputEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Called on every edit; read `e.target.value`."
 			},
 			{
 				"name": "onKeyDown",
 				"type": "(e: KeyboardEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Called on key presses."
 			},
 			{
 				"name": "placeholder",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Hint shown while empty."
 			},
 			{
 				"name": "type",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"text\"",
+				"description": "Native input type (`text`, `email`, `url`, `tel`, …)."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"\"",
+				"description": "Current text (controlled; update it from `onInput`)."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst name = signal(\"\");\n\treturn (\n\t\t<TextInput\n\t\t\taria-label=\"Full name\"\n\t\t\tplaceholder=\"Ada Lovelace\"\n\t\t\tvalue={name()}\n\t\t\tonInput={(e) => name.set((e.target as HTMLInputElement).value)}\n\t\t/>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -2831,51 +3066,53 @@ export const catalog: CatalogEntry[] = [
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the field."
 			},
 			{
 				"name": "invalid",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Marks the value invalid (`aria-invalid` and error styling)."
 			},
 			{
 				"name": "name",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Field name submitted with the form."
 			},
 			{
 				"name": "onBlur",
 				"type": "(e: FocusEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Called when the field loses focus."
 			},
 			{
 				"name": "onInput",
 				"type": "(e: InputEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Called on every edit; read `e.target.value`."
 			},
 			{
 				"name": "placeholder",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Hint shown while empty."
 			},
 			{
 				"name": "rows",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"description": "Visible text lines."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"\"",
+				"description": "Current text (controlled; update it from `onInput`)."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst message = signal(\"\");\n\treturn (\n\t\t<TextArea\n\t\t\taria-label=\"Message\"\n\t\t\trows={3}\n\t\t\tplaceholder=\"Tell us what happened…\"\n\t\t\tvalue={message()}\n\t\t\tonInput={(e) => message.set((e.target as HTMLInputElement).value)}\n\t\t/>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -2897,63 +3134,67 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: number) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new number (never `NaN`)."
 			},
 			{
 				"name": "value",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Current value (controlled)."
 			},
 			{
 				"name": "decrementLabel",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Decrease\"",
 				"description": "Accessible labels for the step buttons."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the field and its buttons."
 			},
 			{
 				"name": "incrementLabel",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Increase\"",
+				"description": "Accessible name of the + button."
 			},
 			{
 				"name": "invalid",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Marks the value invalid (`aria-invalid` and error styling)."
 			},
 			{
 				"name": "max",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"description": "Highest value; typing above it is clamped on blur."
 			},
 			{
 				"name": "min",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "0",
+				"description": "Lowest value; typing below it is clamped on blur."
 			},
 			{
 				"name": "name",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Field name submitted with the form."
 			},
 			{
 				"name": "step",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"description": "Amount the − / + buttons and arrow keys change the value by."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst seats = signal(5);\n\treturn (\n\t\t<NumberInput aria-label=\"Seats\" min={1} max={50} value={seats()} onChange={seats.set} />\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -2974,39 +3215,43 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: number) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new quantity."
 			},
 			{
 				"name": "value",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Current quantity (controlled)."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables both buttons."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Quantity\"",
 				"description": "Accessible name for the stepper group (default \"Quantity\")."
 			},
 			{
 				"name": "max",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "99",
+				"description": "Highest quantity (the + button disables there)."
 			},
 			{
 				"name": "min",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "1",
+				"description": "Lowest quantity (the − button disables there)."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst quantity = signal(2);\n\treturn <QuantityInput min={1} max={10} value={quantity()} onChange={quantity.set} />;\n}",
 		"interactive": false,
 		"logsActions": false
@@ -3027,51 +3272,54 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: string) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new password on every edit."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Current password (controlled)."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the field."
 			},
 			{
 				"name": "hideLabel",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Hide password\"",
+				"description": "Accessible name of the reveal button while shown."
 			},
 			{
 				"name": "invalid",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Marks the value invalid (`aria-invalid` and error styling)."
 			},
 			{
 				"name": "name",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Field name submitted with the form."
 			},
 			{
 				"name": "placeholder",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Hint shown while empty."
 			},
 			{
 				"name": "showLabel",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Show password\"",
+				"description": "Accessible name of the reveal button while hidden."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst password = signal(\"\");\n\treturn <PasswordInput aria-label=\"Password\" value={password()} onChange={password.set} />;\n}",
 		"interactive": false,
 		"logsActions": false
@@ -3093,7 +3341,8 @@ export const catalog: CatalogEntry[] = [
 				"name": "password",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"defaultValue": "\"\"",
+				"description": "The password to rate (strength bar and hints)."
 			},
 			{
 				"name": "labels",
@@ -3102,6 +3351,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Override the five labels (score 0–4)."
 			}
 		],
+		"types": [],
 		"code": "<PasswordStrength password=\"correct horse\" />",
 		"interactive": false,
 		"logsActions": false
@@ -3122,25 +3372,26 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: string) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new query on every edit (and with `\"\"` when cleared)."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Current query (controlled)."
 			},
 			{
 				"name": "clearLabel",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Clear search\"",
+				"description": "Accessible name of the clear (×) button."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the field."
 			},
 			{
 				"name": "icon",
@@ -3152,15 +3403,17 @@ export const catalog: CatalogEntry[] = [
 				"name": "onSubmit",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Called when the user presses Enter."
 			},
 			{
 				"name": "placeholder",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Search\"",
+				"description": "Hint shown while empty."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst query = signal(\"\");\n\treturn (\n\t\t<SearchInput\n\t\t\taria-label=\"Search projects\"\n\t\t\tplaceholder=\"Search projects\"\n\t\t\tvalue={query()}\n\t\t\tonChange={query.set}\n\t\t/>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -3179,25 +3432,26 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: string) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new code on every edit or paste."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Digits entered so far (controlled)."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables every cell."
 			},
 			{
 				"name": "length",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "4",
+				"description": "Number of cells."
 			},
 			{
 				"name": "mask",
@@ -3206,6 +3460,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Mask digits like a password."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst code = signal(\"\");\n\treturn (\n\t\t<>\n\t\t\t<PinInput\n\t\t\t\taria-label=\"Verification code\"\n\t\t\t\tlength={6}\n\t\t\t\tvalue={code()}\n\t\t\t\tonChange={code.set}\n\t\t\t/>\n\t\t\t<Text muted>{code().length === 6 ? `Verifying ${code()}…` : \"Enter the 6-digit code.\"}</Text>\n\t\t</>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -3226,25 +3481,26 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: string[]) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new tags (added with Enter or comma; removed with ×)."
 			},
 			{
 				"name": "value",
 				"type": "string[]",
 				"required": true,
-				"description": ""
+				"description": "Current tags (controlled)."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables adding and removing."
 			},
 			{
 				"name": "placeholder",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Add tag\"",
+				"description": "Input hint."
 			},
 			{
 				"name": "renderTag",
@@ -3253,6 +3509,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Render a tag's content (default: the text)."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst topics = signal([\"signals\", \"ssr\"]);\n\treturn (\n\t\t<TagsInput\n\t\t\taria-label=\"Topics\"\n\t\t\tplaceholder=\"Add a topic and press Enter\"\n\t\t\tvalue={topics()}\n\t\t\tonChange={topics.set}\n\t\t/>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -3270,9 +3527,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Inputs, buttons and `InputAddon`s to join edge to edge."
 			}
 		],
+		"types": [],
 		"code": "<InputGroup>\n\t<InputAddon>https://</InputAddon>\n\t<TextInput aria-label=\"Subdomain\" value=\"acme\" />\n\t<InputAddon>.arachne.app</InputAddon>\n</InputGroup>",
 		"interactive": false,
 		"logsActions": false
@@ -3289,9 +3547,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Addon text or content, e.g. `https://` or a unit."
 			}
 		],
+		"types": [],
 		"code": "<InputGroup>\n\t<InputAddon>$</InputAddon>\n\t<TextInput aria-label=\"Amount\" value=\"49.00\" />\n</InputGroup>",
 		"interactive": false,
 		"logsActions": false
@@ -3312,13 +3571,13 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: string) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new text when an edit is committed (Enter or blur); Escape cancels."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Current text (controlled)."
 			},
 			{
 				"name": "label",
@@ -3330,9 +3589,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "placeholder",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Text shown while the value is empty."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst name = signal(\"Marketing site\");\n\treturn <InlineEdit label=\"Project name\" value={name()} onChange={name.set} />;\n}",
 		"interactive": false,
 		"logsActions": false
@@ -3348,33 +3608,35 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: string) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new text on every edit (invalid JSON is flagged, not rejected)."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "JSON text (controlled)."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the field."
 			},
 			{
 				"name": "name",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Field name submitted with the form."
 			},
 			{
 				"name": "rows",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "6",
+				"description": "Visible text lines."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst config = signal('{\\n  \"region\": \"fra1\",\\n  \"replicas\": 2\\n}');\n\treturn <JsonInput aria-label=\"Config JSON\" value={config()} onChange={config.set} />;\n}",
 		"interactive": false,
 		"logsActions": false
@@ -3396,15 +3658,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "The secret (masked until revealed)."
 			},
 			{
 				"name": "label",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Field label."
 			}
 		],
+		"types": [],
 		"code": "<SecretField label=\"Webhook secret\" value=\"whsec_9f2kQ83m1x\" />",
 		"interactive": false,
 		"logsActions": false
@@ -3426,15 +3689,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Text shown and copied."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Field label (also the copy button's accessible context)."
 			}
 		],
+		"types": [],
 		"code": "<CopyField label=\"API key\" value=\"sk_live_51Hx…9fQ2\" />",
 		"interactive": false,
 		"logsActions": false
@@ -3455,37 +3719,37 @@ export const catalog: CatalogEntry[] = [
 				"name": "checked",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Whether it is checked (controlled)."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the checkbox."
 			},
 			{
 				"name": "invalid",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Marks the value invalid (`aria-invalid` and error styling)."
 			},
 			{
 				"name": "label",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Label text or content, clickable to toggle."
 			},
 			{
 				"name": "name",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Field name submitted with the form."
 			},
 			{
 				"name": "onChange",
 				"type": "(e: Event) => void",
 				"required": false,
-				"description": ""
+				"description": "Called on toggle; read `e.target.checked`."
 			},
 			{
 				"name": "value",
@@ -3494,6 +3758,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Native `value` submitted with the form."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst updates = signal(true);\n\treturn (\n\t\t<Checkbox\n\t\t\tlabel=\"Email me about product updates\"\n\t\t\tchecked={updates()}\n\t\t\tonChange={(e) => updates.set((e.target as HTMLInputElement).checked)}\n\t\t/>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -3514,25 +3779,25 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: string[]) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new list of checked values."
 			},
 			{
 				"name": "options",
 				"type": "{ value: string; label: unknown; disabled?: boolean; }[]",
 				"required": true,
-				"description": ""
+				"description": "Options: `value`, `label`, optional `disabled`."
 			},
 			{
 				"name": "value",
 				"type": "string[]",
 				"required": true,
-				"description": ""
+				"description": "Values of the checked options (controlled)."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables every option."
 			},
 			{
 				"name": "legend",
@@ -3541,6 +3806,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Visible group label rendered as `<legend>`."
 			}
 		],
+		"types": [],
 		"code": "const regions = [\n\t{ value: \"fra1\", label: \"Frankfurt\" },\n\t{ value: \"iad1\", label: \"Washington, D.C.\" },\n\t{ value: \"hnd1\", label: \"Tokyo\" },\n];\n\nfunction Example() {\n\tconst selected = signal([\"fra1\"]);\n\treturn (\n\t\t<CheckboxGroup\n\t\t\tlegend=\"Regions\"\n\t\t\toptions={regions}\n\t\t\tvalue={selected()}\n\t\t\tonChange={selected.set}\n\t\t/>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -3562,13 +3828,39 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "ChecklistItemData[]",
 				"required": true,
-				"description": ""
+				"description": "The checklist items (controlled)."
 			},
 			{
 				"name": "onChange",
 				"type": "(items: ChecklistItemData[]) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the updated items after a tick changes."
+			}
+		],
+		"types": [
+			{
+				"name": "ChecklistItemData",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Item id."
+					},
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Item text."
+					},
+					{
+						"name": "done",
+						"type": "boolean",
+						"required": false,
+						"description": "Whether the item is ticked."
+					}
+				]
 			}
 		],
 		"code": "function Example() {\n\tconst items = signal<ChecklistItemData[]>([\n\t\t{ id: \"domain\", label: \"Connect a domain\", done: true },\n\t\t{ id: \"invite\", label: \"Invite your team\", done: true },\n\t\t{ id: \"deploy\", label: \"Ship your first deploy\" },\n\t]);\n\tconst done = () => items().filter((i) => i.done).length;\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Checklist items={items()} onChange={items.set} />\n\t\t\t<Text muted>\n\t\t\t\t{done()} of {items().length} done\n\t\t\t</Text>\n\t\t</Stack>\n\t);\n}",
@@ -3591,19 +3883,19 @@ export const catalog: CatalogEntry[] = [
 				"name": "name",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Shared `name` of the radio inputs (also the form field name)."
 			},
 			{
 				"name": "options",
 				"type": "RadioOption[]",
 				"required": true,
-				"description": ""
+				"description": "The options, in order."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables every option."
 			},
 			{
 				"name": "inline",
@@ -3621,13 +3913,39 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(e: Event) => void",
 				"required": false,
-				"description": ""
+				"description": "Called when the selection changes; read `e.target.value`."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Selected option's value (controlled)."
+			}
+		],
+		"types": [
+			{
+				"name": "RadioOption",
+				"description": "",
+				"fields": [
+					{
+						"name": "value",
+						"type": "string",
+						"required": true,
+						"description": "Option value (what `value` / `onChange` use)."
+					},
+					{
+						"name": "label",
+						"type": "content",
+						"required": true,
+						"description": "Text or content shown for the option."
+					},
+					{
+						"name": "disabled",
+						"type": "boolean",
+						"required": false,
+						"description": "Shown but can't be chosen."
+					}
+				]
 			}
 		],
 		"code": "const plans = [\n\t{ value: \"free\", label: \"Free\" },\n\t{ value: \"pro\", label: \"Pro\" },\n\t{ value: \"team\", label: \"Team\" },\n];\n\nfunction Example() {\n\tconst plan = signal(\"pro\");\n\treturn (\n\t\t<RadioGroup\n\t\t\tlabel=\"Plan\"\n\t\t\tname=\"plan\"\n\t\t\toptions={plans}\n\t\t\tvalue={plan()}\n\t\t\tonChange={(e) => plan.set((e.target as HTMLInputElement).value)}\n\t\t/>\n\t);\n}",
@@ -3649,33 +3967,34 @@ export const catalog: CatalogEntry[] = [
 				"name": "checked",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Whether it is on (controlled)."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the switch."
 			},
 			{
 				"name": "label",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Label text or content, clickable to toggle."
 			},
 			{
 				"name": "name",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Field name submitted with the form."
 			},
 			{
 				"name": "onChange",
 				"type": "(e: Event) => void",
 				"required": false,
-				"description": ""
+				"description": "Called on toggle; read `e.target.checked`."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst previews = signal(true);\n\treturn (\n\t\t<Switch\n\t\t\tlabel=\"Preview deploys\"\n\t\t\tchecked={previews()}\n\t\t\tonChange={(e) => previews.set((e.target as HTMLInputElement).checked)}\n\t\t/>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -3692,43 +4011,70 @@ export const catalog: CatalogEntry[] = [
 				"name": "options",
 				"type": "SelectOption[]",
 				"required": true,
-				"description": ""
+				"description": "The options, in order."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the select."
 			},
 			{
 				"name": "invalid",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Marks the value invalid (`aria-invalid` and error styling)."
 			},
 			{
 				"name": "name",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Field name submitted with the form."
 			},
 			{
 				"name": "onChange",
 				"type": "(e: Event) => void",
 				"required": false,
-				"description": ""
+				"description": "Called when the selection changes; read `e.target.value`."
 			},
 			{
 				"name": "placeholder",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Empty first option shown while nothing is selected."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"\"",
+				"description": "Selected option's value (controlled)."
+			}
+		],
+		"types": [
+			{
+				"name": "SelectOption",
+				"description": "",
+				"fields": [
+					{
+						"name": "value",
+						"type": "string",
+						"required": true,
+						"description": "Option value (what `value` / `onChange` use)."
+					},
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Text shown for the option."
+					},
+					{
+						"name": "disabled",
+						"type": "boolean",
+						"required": false,
+						"description": "Shown but can't be chosen."
+					}
+				]
 			}
 		],
 		"code": "const plans = [\n\t{ value: \"free\", label: \"Free\" },\n\t{ value: \"pro\", label: \"Pro\" },\n\t{ value: \"team\", label: \"Team\" },\n];\n\nfunction Example() {\n\tconst plan = signal(\"pro\");\n\treturn (\n\t\t<Select\n\t\t\taria-label=\"Plan\"\n\t\t\toptions={plans}\n\t\t\tvalue={plan()}\n\t\t\tonChange={(e) => plan.set((e.target as HTMLInputElement).value)}\n\t\t/>\n\t);\n}",
@@ -3747,45 +4093,47 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: string) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the selected value."
 			},
 			{
 				"name": "options",
 				"type": "{ value: string; label: string; disabled?: boolean; }[]",
 				"required": true,
-				"description": ""
+				"description": "Options: `value`, `label`, optional `disabled`."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the select."
 			},
 			{
 				"name": "invalid",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Marks the value invalid (`aria-invalid` and error styling)."
 			},
 			{
 				"name": "name",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Field name submitted with the form."
 			},
 			{
 				"name": "placeholder",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Empty first option shown while nothing is selected."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"\"",
+				"description": "Selected option's value (controlled)."
 			}
 		],
+		"types": [],
 		"code": "const regions = [\n\t{ value: \"fra1\", label: \"Frankfurt\" },\n\t{ value: \"iad1\", label: \"Washington, D.C.\" },\n\t{ value: \"hnd1\", label: \"Tokyo\" },\n];\n\nfunction Example() {\n\tconst region = signal(\"fra1\");\n\treturn (\n\t\t<NativeSelect\n\t\t\taria-label=\"Region\"\n\t\t\toptions={regions}\n\t\t\tvalue={region()}\n\t\t\tonChange={region.set}\n\t\t/>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -3807,33 +4155,35 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: string[]) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new list of selected values."
 			},
 			{
 				"name": "options",
 				"type": "{ value: string; label: string; disabled?: boolean; }[]",
 				"required": true,
-				"description": ""
+				"description": "Options: `value`, `label`, optional `disabled`."
 			},
 			{
 				"name": "value",
 				"type": "string[]",
 				"required": true,
-				"description": ""
+				"description": "Values of the selected options (controlled)."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the control."
 			},
 			{
 				"name": "placeholder",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Select…\"",
+				"description": "Trigger text while nothing is selected."
 			}
 		],
+		"types": [],
 		"code": "const regions = [\n\t{ value: \"fra1\", label: \"Frankfurt\" },\n\t{ value: \"iad1\", label: \"Washington, D.C.\" },\n\t{ value: \"hnd1\", label: \"Tokyo\" },\n];\n\nfunction Example() {\n\tconst selected = signal([\"fra1\", \"iad1\"]);\n\treturn (\n\t\t<MultiSelect\n\t\t\taria-label=\"Regions\"\n\t\t\toptions={regions}\n\t\t\tvalue={selected()}\n\t\t\tonChange={selected.set}\n\t\t/>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -3855,49 +4205,50 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: string) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new text as the user types or picks a suggestion."
 			},
 			{
 				"name": "options",
 				"type": "string[]",
 				"required": true,
-				"description": ""
+				"description": "Suggestions, filtered by the typed text."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Current text (controlled)."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the field."
 			},
 			{
 				"name": "invalid",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Marks the value invalid (`aria-invalid` and error styling)."
 			},
 			{
 				"name": "limit",
 				"type": "number",
 				"required": false,
+				"defaultValue": "8",
 				"description": "Max suggestions shown (default 8)."
 			},
 			{
 				"name": "name",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Field name submitted with the form."
 			},
 			{
 				"name": "placeholder",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Hint shown while empty."
 			},
 			{
 				"name": "renderOption",
@@ -3906,6 +4257,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Render an option (default: the text)."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst country = signal(\"\");\n\treturn (\n\t\t<Autocomplete\n\t\t\taria-label=\"Country\"\n\t\t\tplaceholder=\"Start typing a country\"\n\t\t\tvalue={country()}\n\t\t\toptions={[\"Germany\", \"Japan\", \"United Kingdom\", \"United States\"]}\n\t\t\tonChange={country.set}\n\t\t/>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -3927,51 +4279,53 @@ export const catalog: CatalogEntry[] = [
 				"name": "checked",
 				"type": "boolean",
 				"required": true,
-				"description": ""
+				"description": "Whether this card is selected (controlled)."
 			},
 			{
 				"name": "label",
 				"type": "content",
 				"required": true,
-				"description": ""
+				"description": "Card title."
 			},
 			{
 				"name": "onChange",
 				"type": "(checked: boolean) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new checked state."
 			},
 			{
 				"name": "description",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Text under the title."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the card."
 			},
 			{
 				"name": "name",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Input name; cards with the same name form a radio group."
 			},
 			{
 				"name": "type",
 				"type": "\"checkbox\" | \"radio\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"radio\"",
+				"description": "`radio` for one-of-many cards (share a `name`), `checkbox` for independent ones."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Value submitted with the form."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst plan = signal(\"pro\");\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<ChoiceCard\n\t\t\t\ttype=\"radio\"\n\t\t\t\tname=\"plan\"\n\t\t\t\tvalue=\"free\"\n\t\t\t\tchecked={plan() === \"free\"}\n\t\t\t\tlabel=\"Free\"\n\t\t\t\tdescription=\"For side projects\"\n\t\t\t\tonChange={(checked) => checked && plan.set(\"free\")}\n\t\t\t/>\n\t\t\t<ChoiceCard\n\t\t\t\ttype=\"radio\"\n\t\t\t\tname=\"plan\"\n\t\t\t\tvalue=\"pro\"\n\t\t\t\tchecked={plan() === \"pro\"}\n\t\t\t\tlabel=\"Pro\"\n\t\t\t\tdescription=\"$20 per seat / month\"\n\t\t\t\tonChange={(checked) => checked && plan.set(\"pro\")}\n\t\t\t/>\n\t\t</Group>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -3988,19 +4342,19 @@ export const catalog: CatalogEntry[] = [
 				"name": "checked",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Whether the chip is selected (controlled)."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Chip label."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the chip."
 			},
 			{
 				"name": "icon",
@@ -4012,9 +4366,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(checked: boolean) => void",
 				"required": false,
-				"description": ""
+				"description": "Called with the new checked state."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst on = signal(true);\n\treturn (\n\t\t<Chip checked={on()} onChange={on.set}>\n\t\t\tTypeScript\n\t\t</Chip>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -4035,39 +4390,40 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: string[]) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new list of selected values."
 			},
 			{
 				"name": "options",
 				"type": "{ value: string; label: unknown; disabled?: boolean; }[]",
 				"required": true,
-				"description": ""
+				"description": "Chips: `value`, `label`, optional `disabled`."
 			},
 			{
 				"name": "value",
 				"type": "string[]",
 				"required": true,
-				"description": ""
+				"description": "Values of the selected chips (controlled)."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables every chip."
 			},
 			{
 				"name": "legend",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Group caption (the group's accessible name)."
 			},
 			{
 				"name": "multiple",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Allow several chips selected; otherwise picking one replaces the other."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst frameworks = signal([\"arachne\"]);\n\treturn (\n\t\t<ChipGroup\n\t\t\tlegend=\"Frameworks\"\n\t\t\tmultiple\n\t\t\toptions={[\n\t\t\t\t{ value: \"arachne\", label: \"Arachne\" },\n\t\t\t\t{ value: \"solid\", label: \"Solid\" },\n\t\t\t\t{ value: \"svelte\", label: \"Svelte\" },\n\t\t\t]}\n\t\t\tvalue={frameworks()}\n\t\t\tonChange={frameworks.set}\n\t\t/>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -4087,27 +4443,29 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "{ id: string; label: string; disabled?: boolean; }[]",
 				"required": true,
-				"description": ""
+				"description": "Options: `id`, `label` and optional `disabled`."
 			},
 			{
 				"name": "onChange",
 				"type": "(id: string) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the id the user picks."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Id of the selected option."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Options\"",
 				"description": "Accessible name for the group (default \"Options\")."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst range = signal(\"7d\");\n\treturn (\n\t\t<Segmented\n\t\t\tlabel=\"Range\"\n\t\t\titems={[\n\t\t\t\t{ id: \"24h\", label: \"24h\" },\n\t\t\t\t{ id: \"7d\", label: \"7 days\" },\n\t\t\t\t{ id: \"30d\", label: \"30 days\" },\n\t\t\t]}\n\t\t\tvalue={range()}\n\t\t\tonChange={range.set}\n\t\t/>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -4127,19 +4485,19 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "ToggleItem[]",
 				"required": true,
-				"description": ""
+				"description": "The options, in order."
 			},
 			{
 				"name": "onChange",
 				"type": "(value: string | string[] | null) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new pressed id(s) (`null` when the pressed single option is released)."
 			},
 			{
 				"name": "value",
 				"type": "string | string[]",
 				"required": true,
-				"description": ""
+				"description": "Pressed id (single), ids (`multiple`), or `null` for none."
 			},
 			{
 				"name": "label",
@@ -4151,7 +4509,33 @@ export const catalog: CatalogEntry[] = [
 				"name": "multiple",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Allow several options pressed at once (`value` is an array)."
+			}
+		],
+		"types": [
+			{
+				"name": "ToggleItem",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Option id, passed to `onChange` and matched against `value`."
+					},
+					{
+						"name": "label",
+						"type": "content",
+						"required": true,
+						"description": "Option text or content."
+					},
+					{
+						"name": "disabled",
+						"type": "boolean",
+						"required": false,
+						"description": "Shown but can't be toggled."
+					}
+				]
 			}
 		],
 		"code": "function Example() {\n\tconst formats = signal<string[]>([\"bold\"]);\n\treturn (\n\t\t<ToggleGroup\n\t\t\tlabel=\"Formatting\"\n\t\t\tmultiple\n\t\t\titems={[\n\t\t\t\t{ id: \"bold\", label: \"Bold\" },\n\t\t\t\t{ id: \"italic\", label: \"Italic\" },\n\t\t\t\t{ id: \"underline\", label: \"Underline\" },\n\t\t\t]}\n\t\t\tvalue={formats()}\n\t\t\tonChange={(next) => formats.set(Array.isArray(next) ? next : next ? [next] : [])}\n\t\t/>\n\t);\n}",
@@ -4170,39 +4554,43 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: number) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new value while dragging or using the keyboard."
 			},
 			{
 				"name": "value",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Current value (controlled)."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the slider."
 			},
 			{
 				"name": "max",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "100",
+				"description": "Highest value."
 			},
 			{
 				"name": "min",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "0",
+				"description": "Lowest value."
 			},
 			{
 				"name": "step",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "1",
+				"description": "Increment between values (also for arrow keys)."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst volume = signal(60);\n\treturn (\n\t\t<>\n\t\t\t<Slider aria-label=\"Volume\" value={volume()} onChange={volume.set} />\n\t\t\t<Text muted>Volume: {volume()}</Text>\n\t\t</>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -4223,51 +4611,57 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: [number, number]) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new `[start, end]`; handles can't cross."
 			},
 			{
 				"name": "value",
 				"type": "[number, number]",
 				"required": true,
-				"description": ""
+				"description": "Start and end of the range (controlled)."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables both handles."
 			},
 			{
 				"name": "endLabel",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Range end\"",
+				"description": "Accessible name of the end handle."
 			},
 			{
 				"name": "max",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "100",
+				"description": "Highest value."
 			},
 			{
 				"name": "min",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "0",
+				"description": "Lowest value."
 			},
 			{
 				"name": "startLabel",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Range start\"",
+				"description": "Accessible name of the start handle."
 			},
 			{
 				"name": "step",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "1",
+				"description": "Increment between values."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst range = signal<[number, number]>([40, 120]);\n\treturn (\n\t\t<>\n\t\t\t<RangeSlider\n\t\t\t\taria-label=\"Price range\"\n\t\t\t\tmin={0}\n\t\t\t\tmax={200}\n\t\t\t\tvalue={range()}\n\t\t\t\tonChange={range.set}\n\t\t\t/>\n\t\t\t<Text muted>\n\t\t\t\t${range()[0]} – ${range()[1]}\n\t\t\t</Text>\n\t\t</>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -4292,33 +4686,37 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(deg: number) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new angle while dragging or using the arrow keys."
 			},
 			{
 				"name": "value",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Angle in degrees, 0–359 (controlled)."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Angle\"",
 				"description": "Accessible name (default \"Angle\")."
 			},
 			{
 				"name": "size",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "120",
+				"description": "Diameter in pixels."
 			},
 			{
 				"name": "step",
 				"type": "number",
 				"required": false,
+				"defaultValue": "5",
 				"description": "Degrees per arrow key press (default 5)."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst angle = signal(135);\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<AngleSlider value={angle()} onChange={angle.set} />\n\t\t\t<Text muted>{angle()}°</Text>\n\t\t</Group>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -4337,25 +4735,26 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: number) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the picked rating."
 			},
 			{
 				"name": "value",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Current rating (controlled; `0` for none)."
 			},
 			{
 				"name": "count",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "5",
+				"description": "Number of stars."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Read-only display."
 			},
 			{
 				"name": "starLabel",
@@ -4367,9 +4766,11 @@ export const catalog: CatalogEntry[] = [
 				"name": "symbol",
 				"type": "content",
 				"required": false,
+				"defaultValue": "\"★\"",
 				"description": "Star glyph (default ★)."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst stars = signal(4);\n\treturn <Rating aria-label=\"Rating\" value={stars()} onChange={stars.set} />;\n}",
 		"interactive": false,
 		"logsActions": false
@@ -4392,33 +4793,36 @@ export const catalog: CatalogEntry[] = [
 				"name": "left",
 				"type": "string[]",
 				"required": true,
-				"description": ""
+				"description": "Items in the left list."
 			},
 			{
 				"name": "onChange",
 				"type": "(next: { left: string[]; right: string[]; }) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with both lists after items are moved."
 			},
 			{
 				"name": "right",
 				"type": "string[]",
 				"required": true,
-				"description": ""
+				"description": "Items in the right list."
 			},
 			{
 				"name": "leftTitle",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Available\"",
+				"description": "Heading of the left list."
 			},
 			{
 				"name": "rightTitle",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Selected\"",
+				"description": "Heading of the right list."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst lists = signal({ left: [\"Frankfurt\", \"Tokyo\", \"São Paulo\"], right: [\"Washington, D.C.\"] });\n\treturn (\n\t\t<TransferList\n\t\t\tleftTitle=\"Available\"\n\t\t\trightTitle=\"Selected\"\n\t\t\tleft={lists().left}\n\t\t\tright={lists().right}\n\t\t\tonChange={lists.set}\n\t\t/>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -4438,15 +4842,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: \"grid\" | \"list\") => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the view the user picks."
 			},
 			{
 				"name": "value",
 				"type": "\"grid\" | \"list\"",
 				"required": true,
-				"description": ""
+				"description": "Current view."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst view = signal<\"list\" | \"grid\">(\"list\");\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<ViewToggle value={view()} onChange={view.set} />\n\t\t\t<Text muted>Showing a {view()}</Text>\n\t\t</Group>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -4466,19 +4871,27 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: Density) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the density the user picks."
 			},
 			{
 				"name": "value",
 				"type": "Density",
 				"required": true,
-				"description": ""
+				"description": "Current density."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Density\"",
 				"description": "Accessible name (default \"Density\")."
+			}
+		],
+		"types": [
+			{
+				"name": "Density",
+				"description": "",
+				"definition": "\"comfortable\" | \"compact\""
 			}
 		],
 		"code": "function Example() {\n\tconst density = signal<Density>(\"compact\");\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<DensityToggle value={density()} onChange={density.set} />\n\t\t\t<Text muted>Density: {density()}</Text>\n\t\t</Group>\n\t);\n}",
@@ -4497,15 +4910,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(theme: \"dark\" | \"light\") => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the theme to switch to; apply it yourself (e.g. `data-theme` on `<html>`)."
 			},
 			{
 				"name": "value",
 				"type": "\"dark\" | \"light\"",
 				"required": true,
-				"description": ""
+				"description": "Current theme."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst theme = signal<\"light\" | \"dark\">(\"light\");\n\treturn (\n\t\t<Paper withBorder class={theme() === \"dark\" ? \"a-theme-dark\" : undefined}>\n\t\t\t<Group gap=\"0.75rem\">\n\t\t\t\t<ThemeToggle value={theme()} onChange={theme.set} />\n\t\t\t\t<Text>This panel is in the {theme()} theme.</Text>\n\t\t\t</Group>\n\t\t</Paper>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -4525,25 +4939,46 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: string) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the picked locale code."
 			},
 			{
 				"name": "options",
 				"type": "LocaleOption[]",
 				"required": true,
-				"description": ""
+				"description": "Available languages."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Current locale code (controlled)."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Language\"",
 				"description": "Accessible name (default \"Language\")."
+			}
+		],
+		"types": [
+			{
+				"name": "LocaleOption",
+				"description": "",
+				"fields": [
+					{
+						"name": "value",
+						"type": "string",
+						"required": true,
+						"description": "Locale code, e.g. `de`."
+					},
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Language name shown to the user."
+					}
+				]
 			}
 		],
 		"code": "function Example() {\n\tconst locale = signal(\"en\");\n\treturn (\n\t\t<LocaleSwitcher\n\t\t\tlabel=\"Language\"\n\t\t\tvalue={locale()}\n\t\t\toptions={[\n\t\t\t\t{ value: \"en\", label: \"English\" },\n\t\t\t\t{ value: \"de\", label: \"Deutsch\" },\n\t\t\t\t{ value: \"ja\", label: \"日本語\" },\n\t\t\t]}\n\t\t\tonChange={locale.set}\n\t\t/>\n\t);\n}",
@@ -4569,13 +5004,13 @@ export const catalog: CatalogEntry[] = [
 				"name": "isDateDisabled",
 				"type": "(iso: string) => boolean",
 				"required": false,
-				"description": ""
+				"description": "Return `true` for days that can't be picked (`YYYY-MM-DD`)."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Visible label, linked to the trigger."
 			},
 			{
 				"name": "locale",
@@ -4599,25 +5034,32 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(iso: string) => void",
 				"required": false,
-				"description": ""
+				"description": "Called with the picked day as `YYYY-MM-DD`."
 			},
 			{
 				"name": "placeholder",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Trigger text while no day is picked."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Selected day, `YYYY-MM-DD` (controlled)."
 			},
 			{
 				"name": "weekStartsOn",
 				"type": "Weekday",
 				"required": false,
 				"description": "First column: 0 = Sunday (default) … 6 = Saturday."
+			}
+		],
+		"types": [
+			{
+				"name": "Weekday",
+				"description": "",
+				"definition": "0 | 1 | 2 | 3 | 4 | 5 | 6"
 			}
 		],
 		"code": "function Example() {\n\tconst due = signal(\"2026-09-29\");\n\treturn <DatePicker value={due()} onChange={due.set} label=\"Due date\" />;\n}",
@@ -4642,19 +5084,40 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(range: DateRange) => void",
 				"required": true,
-				"description": ""
+				"description": "Called after each pick: first with `start` only, then with both ends."
 			},
 			{
 				"name": "value",
 				"type": "DateRange",
 				"required": true,
-				"description": ""
+				"description": "Selected range (controlled)."
 			},
 			{
 				"name": "placeholder",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Pick date range\"",
 				"description": "Trigger text when nothing is picked."
+			}
+		],
+		"types": [
+			{
+				"name": "DateRange",
+				"description": "",
+				"fields": [
+					{
+						"name": "start",
+						"type": "string",
+						"required": false,
+						"description": "First day, `YYYY-MM-DD`."
+					},
+					{
+						"name": "end",
+						"type": "string",
+						"required": false,
+						"description": "Last day, `YYYY-MM-DD` (unset while the second click is pending)."
+					}
+				]
 			}
 		],
 		"code": "function Example() {\n\tconst range = signal<DateRange>({ start: \"2026-10-05\", end: \"2026-10-09\" });\n\treturn <DateRangePicker placeholder=\"Select dates\" value={range()} onChange={range.set} />;\n}",
@@ -4673,33 +5136,34 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: string) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new value in the native format."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Value in the native format: `YYYY-MM-DD` (date) or `HH:MM` (time)."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the field."
 			},
 			{
 				"name": "invalid",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Marks the value invalid (`aria-invalid` and error styling)."
 			},
 			{
 				"name": "name",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Field name submitted with the form."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst date = signal(\"2026-10-01\");\n\treturn <DateInput aria-label=\"Start date\" value={date()} onChange={date.set} />;\n}",
 		"interactive": false,
 		"logsActions": false
@@ -4734,7 +5198,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "isDateDisabled",
 				"type": "(iso: string) => boolean",
 				"required": false,
-				"description": ""
+				"description": "Return `true` for days that can't be picked (`YYYY-MM-DD`)."
 			},
 			{
 				"name": "locale",
@@ -4758,7 +5222,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(iso: string) => void",
 				"required": false,
-				"description": ""
+				"description": "Called with the picked day as `YYYY-MM-DD`."
 			},
 			{
 				"name": "value",
@@ -4770,7 +5234,15 @@ export const catalog: CatalogEntry[] = [
 				"name": "weekStartsOn",
 				"type": "Weekday",
 				"required": false,
+				"defaultValue": "0",
 				"description": "First column: 0 = Sunday (default) … 6 = Saturday."
+			}
+		],
+		"types": [
+			{
+				"name": "Weekday",
+				"description": "",
+				"definition": "0 | 1 | 2 | 3 | 4 | 5 | 6"
 			}
 		],
 		"code": "function Example() {\n\tconst date = signal(\"2026-09-29\");\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Calendar value={date()} onChange={date.set} />\n\t\t\t<Text muted>Selected: {date()}</Text>\n\t\t</Stack>\n\t);\n}",
@@ -4801,7 +5273,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(ym: string) => void",
 				"required": false,
-				"description": ""
+				"description": "Called with the picked month as `YYYY-MM`."
 			},
 			{
 				"name": "value",
@@ -4810,6 +5282,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "YYYY-MM"
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst month = signal(\"2026-10\");\n\treturn (\n\t\t<>\n\t\t\t<MonthPicker value={month()} onChange={month.set} />\n\t\t\t<Text muted>Selected: {month()}</Text>\n\t\t</>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -4832,15 +5305,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(year: number) => void",
 				"required": false,
-				"description": ""
+				"description": "Called with the picked year."
 			},
 			{
 				"name": "value",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"description": "Selected year."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst year = signal(2026);\n\treturn (\n\t\t<>\n\t\t\t<YearPicker value={year()} onChange={year.set} />\n\t\t\t<Text muted>Selected: {year()}</Text>\n\t\t</>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -4857,33 +5331,34 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: string) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new value in the native format."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Value in the native format: `YYYY-MM-DD` (date) or `HH:MM` (time)."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the field."
 			},
 			{
 				"name": "invalid",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Marks the value invalid (`aria-invalid` and error styling)."
 			},
 			{
 				"name": "name",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Field name submitted with the form."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst time = signal(\"09:30\");\n\treturn <TimeInput aria-label=\"Start time\" value={time()} onChange={time.set} />;\n}",
 		"interactive": false,
 		"logsActions": false
@@ -4906,21 +5381,24 @@ export const catalog: CatalogEntry[] = [
 				"name": "minutesStep",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "5",
+				"description": "Minute options' interval."
 			},
 			{
 				"name": "onChange",
 				"type": "(time: string) => void",
 				"required": false,
-				"description": ""
+				"description": "Called with the picked time as `HH:MM`."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"12:00\"",
 				"description": "HH:MM"
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst time = signal(\"09:30\");\n\treturn (\n\t\t<>\n\t\t\t<TimePicker value={time()} onChange={time.set} />\n\t\t\t<Text muted>Selected: {time()}</Text>\n\t\t</>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -4941,39 +5419,41 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(value: string) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new colour (typed or picked)."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Colour as hex, e.g. `#4f46e5` (controlled)."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the field and swatch."
 			},
 			{
 				"name": "invalid",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Marks the value invalid (`aria-invalid` and error styling)."
 			},
 			{
 				"name": "name",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Field name submitted with the form."
 			},
 			{
 				"name": "swatchLabel",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Color\"",
 				"description": "Accessible name for the swatch picker (default \"Color\")."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst color = signal(\"#4f46e5\");\n\treturn <ColorInput aria-label=\"Brand colour\" value={color()} onChange={color.set} />;\n}",
 		"interactive": false,
 		"logsActions": false
@@ -4996,21 +5476,23 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(color: string) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the picked colour."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"defaultValue": "\"\"",
+				"description": "Selected colour (controlled), e.g. `#1e87f0`."
 			},
 			{
 				"name": "swatches",
 				"type": "string[]",
 				"required": false,
-				"description": ""
+				"description": "Preset colours shown as swatches."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst color = signal(\"#1e87f0\");\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<ColorPicker value={color()} onChange={color.set} />\n\t\t\t<Text muted>\n\t\t\t\tSelected: <code>{color()}</code>\n\t\t\t</Text>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -5027,13 +5509,13 @@ export const catalog: CatalogEntry[] = [
 				"name": "color",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Any CSS colour."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content inside the swatch (replaces the check mark when `selected`)."
 			},
 			{
 				"name": "label",
@@ -5045,7 +5527,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "onClick",
 				"type": "(e: MouseEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Makes the swatch a button; called when it is pressed."
 			},
 			{
 				"name": "selected",
@@ -5057,15 +5539,17 @@ export const catalog: CatalogEntry[] = [
 				"name": "size",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "28",
+				"description": "Diameter in pixels."
 			},
 			{
 				"name": "withShadow",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Adds a soft drop shadow."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst brand = signal(\"#fca311\");\n\tconst colors = [\"#fca311\", \"#14213d\", \"#e11d48\", \"#047857\", \"#7c3aed\", \"#0ea5e9\"];\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Group gap=\"0.5rem\">\n\t\t\t\t<For each={colors}>\n\t\t\t\t\t{(color) => (\n\t\t\t\t\t\t<ColorSwatch\n\t\t\t\t\t\t\tcolor={color}\n\t\t\t\t\t\t\tselected={brand() === color}\n\t\t\t\t\t\t\tonClick={() => brand.set(color)}\n\t\t\t\t\t\t/>\n\t\t\t\t\t)}\n\t\t\t\t</For>\n\t\t\t</Group>\n\t\t\t<Text muted>\n\t\t\t\tBrand colour: <code>{brand()}</code>\n\t\t\t</Text>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -5082,45 +5566,46 @@ export const catalog: CatalogEntry[] = [
 				"name": "accept",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Allowed file types, e.g. `image/*,.pdf`."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the field."
 			},
 			{
 				"name": "invalid",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Marks the value invalid (`aria-invalid` and error styling)."
 			},
 			{
 				"name": "multiple",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Allow choosing several files."
 			},
 			{
 				"name": "name",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Field name submitted with the form."
 			},
 			{
 				"name": "onChange",
 				"type": "(e: Event) => void",
 				"required": false,
-				"description": ""
+				"description": "Called when the selection changes; read `e.target.files`."
 			},
 			{
 				"name": "required",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "A file must be chosen before the form submits."
 			}
 		],
+		"types": [],
 		"code": "<FileInput aria-label=\"Attachment\" />",
 		"interactive": false,
 		"logsActions": false
@@ -5141,33 +5626,35 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(files: File[]) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the chosen files."
 			},
 			{
 				"name": "accept",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Allowed file types, e.g. `image/*,.pdf`."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Choose file\"",
+				"description": "Button label."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the button."
 			},
 			{
 				"name": "multiple",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Allow choosing several files."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst file = signal(\"\");\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<FileButton accept=\"image/*\" onChange={(files) => file.set(files[0]?.name ?? \"\")}>\n\t\t\t\tUpload avatar\n\t\t\t</FileButton>\n\t\t\t<Text muted>{file() || \"No file chosen\"}</Text>\n\t\t</Group>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -5188,33 +5675,34 @@ export const catalog: CatalogEntry[] = [
 				"name": "onDrop",
 				"type": "(files: File[]) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the dropped or chosen files."
 			},
 			{
 				"name": "accept",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Allowed file types, e.g. `image/*,.pdf`; other files are ignored."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Instructions shown in the drop area."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Ignore drops and clicks."
 			},
 			{
 				"name": "multiple",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Accept several files at once."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst files = signal<string[]>([]);\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Dropzone\n\t\t\t\tmultiple\n\t\t\t\taccept=\".csv\"\n\t\t\t\tonDrop={(dropped) => files.set(dropped.map((f) => f.name))}\n\t\t\t>\n\t\t\t\tDrop CSV files here, or click to browse\n\t\t\t</Dropzone>\n\t\t\t<Text muted>{files().length ? files().join(\", \") : \"No files yet\"}</Text>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -5239,27 +5727,28 @@ export const catalog: CatalogEntry[] = [
 				"name": "name",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "File name."
 			},
 			{
 				"name": "progress",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Upload progress in percent (0–100)."
 			},
 			{
 				"name": "error",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Error message; shows the failed state."
 			},
 			{
 				"name": "onCancel",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Shows a cancel button; called when it is pressed."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst progress = signal(12);\n\tconst cancelled = signal(false);\n\t// Simulated upload; effects run only in the browser.\n\teffect(() => {\n\t\tconst timer = setInterval(() => {\n\t\t\tif (!cancelled() && progress() < 100) progress.set(Math.min(100, progress() + 8));\n\t\t}, 400);\n\t\treturn () => clearInterval(timer);\n\t});\n\treturn (\n\t\t<Show\n\t\t\twhen={!cancelled()}\n\t\t\tfallback={\n\t\t\t\t<Button\n\t\t\t\t\tsize=\"sm\"\n\t\t\t\t\tvariant=\"outline\"\n\t\t\t\t\tonClick={() => {\n\t\t\t\t\t\tprogress.set(0);\n\t\t\t\t\t\tcancelled.set(false);\n\t\t\t\t\t}}\n\t\t\t\t>\n\t\t\t\t\tUpload again\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<UploadItem\n\t\t\t\tname=\"hero@2x.png\"\n\t\t\t\tprogress={progress()}\n\t\t\t\tonCancel={() => cancelled.set(true)}\n\t\t\t/>\n\t\t</Show>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -5283,25 +5772,33 @@ export const catalog: CatalogEntry[] = [
 				"name": "name",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "File name."
 			},
 			{
 				"name": "icon",
 				"type": "IconName",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"file\"",
+				"description": "File icon."
 			},
 			{
 				"name": "meta",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Small line, e.g. size and type."
 			},
 			{
 				"name": "onRemove",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Shows a remove button; called when it is pressed."
+			}
+		],
+		"types": [
+			{
+				"name": "IconName",
+				"description": "Material Design Icons path names used by `<Icon />`.",
+				"definition": "| \"check\" | \"x\" | \"plus\" | \"minus\" | \"search\" | \"user\" | \"users\" | \"settings\" | \"menu\" | \"home\" | \"heart\" | \"star\" | \"bell\" | \"mail\" | \"calendar\" | \"clock\" | \"edit\" | \"trash\" | \"copy\" | \"download\" | \"upload\" | \"link\" | \"external\" | \"info\" | \"warning\" | \"error\" | \"success\" | \"chevron-down\" | \"chevron-up\" | \"chevron-left\" | \"chevron-right\" | \"arrow-left\" | \"arrow-right\" | \"eye\" | \"eye-off\" | \"eye-outline\" | \"lock\" | \"unlock\" | \"filter\" | \"more\" | \"close\" | \"spinner\" | \"sun\" | \"moon\" | \"play\" | \"pause\" | \"refresh\" | \"share\" | \"image\" | \"file\" | \"folder\" | \"zap\" | \"phone\" | \"git\" | \"code\""
 			}
 		],
 		"code": "function Example() {\n\tconst attached = signal(true);\n\treturn (\n\t\t<Show\n\t\t\twhen={attached()}\n\t\t\tfallback={\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => attached.set(true)}>\n\t\t\t\t\tAttach Q3-report.pdf\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<FileCard\n\t\t\t\tname=\"Q3-report.pdf\"\n\t\t\t\tmeta=\"2.4 MB · PDF\"\n\t\t\t\tonRemove={() => attached.set(false)}\n\t\t\t/>\n\t\t</Show>\n\t);\n}",
@@ -5335,19 +5832,19 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "The control(s), e.g. a `TextInput`."
 			},
 			{
 				"name": "error",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Error message; replaces `help`, marks the control invalid."
 			},
 			{
 				"name": "expanded",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Grow to fill the row."
 			},
 			{
 				"name": "grouped",
@@ -5359,13 +5856,13 @@ export const catalog: CatalogEntry[] = [
 				"name": "groupedMultiline",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "With `grouped`: wrap the controls onto several lines."
 			},
 			{
 				"name": "help",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Hint under the control."
 			},
 			{
 				"name": "horizontal",
@@ -5377,21 +5874,22 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Label text or content."
 			},
 			{
 				"name": "labelFor",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Id of the control the label names; also links `help` / `error` via `aria-describedby`."
 			},
 			{
 				"name": "narrow",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Only as wide as its content."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst project = signal(\"marketing-site\");\n\tconst invalid = () => !/^[a-z0-9-]+$/.test(project());\n\treturn (\n\t\t<FormField\n\t\t\tlabel=\"Project name\"\n\t\t\tlabelFor=\"field-project\"\n\t\t\thelp=\"Lowercase letters, numbers and dashes.\"\n\t\t\terror={invalid() ? \"Use only lowercase letters, numbers and dashes.\" : undefined}\n\t\t>\n\t\t\t<TextInput\n\t\t\t\tid=\"field-project\"\n\t\t\t\tinvalid={invalid()}\n\t\t\t\tvalue={project()}\n\t\t\t\tonInput={(e) => project.set((e.target as HTMLInputElement).value)}\n\t\t\t/>\n\t\t</FormField>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -5408,27 +5906,28 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "The input and its icons."
 			},
 			{
 				"name": "expanded",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Grow to fill the row."
 			},
 			{
 				"name": "iconsLeft",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Reserve space for a leading icon inside the input."
 			},
 			{
 				"name": "iconsRight",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Reserve space for a trailing icon inside the input."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst email = signal(\"\");\n\treturn (\n\t\t<FormField label=\"Email\" labelFor=\"control-email\">\n\t\t\t<Control expanded>\n\t\t\t\t<TextInput\n\t\t\t\t\tid=\"control-email\"\n\t\t\t\t\ttype=\"email\"\n\t\t\t\t\tplaceholder=\"you@example.com\"\n\t\t\t\t\tvalue={email()}\n\t\t\t\t\tonInput={(e) => email.set((e.target as HTMLInputElement).value)}\n\t\t\t\t/>\n\t\t\t</Control>\n\t\t</FormField>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -5445,15 +5944,17 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Help text."
 			},
 			{
 				"name": "tone",
 				"type": "\"success\" | \"danger\" | \"muted\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"muted\"",
+				"description": "Colour: `muted` hint, `success` or `danger`."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst user = signal(\"ada\");\n\tconst taken = () => [\"admin\", \"root\"].includes(user());\n\treturn (\n\t\t<FormField label=\"Username\" labelFor=\"help-user\">\n\t\t\t<TextInput\n\t\t\t\tid=\"help-user\"\n\t\t\t\tvalue={user()}\n\t\t\t\tonInput={(e) => user.set((e.target as HTMLInputElement).value)}\n\t\t\t/>\n\t\t\t<Help tone={taken() ? \"danger\" : \"success\"}>\n\t\t\t\t{taken() ? \"That username is taken.\" : \"This username is available.\"}\n\t\t\t</Help>\n\t\t</FormField>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -5470,15 +5971,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Label text."
 			},
 			{
 				"name": "for",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Id of the control this label names."
 			}
 		],
+		"types": [],
 		"code": "<Label for=\"project-name\">\n\tProject name\n</Label>",
 		"interactive": false,
 		"logsActions": false
@@ -5501,27 +6003,29 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "The section's fields."
 			},
 			{
 				"name": "description",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Text under the heading."
 			},
 			{
 				"name": "order",
 				"type": "2 | 3 | 4 | 5 | 6",
 				"required": false,
+				"defaultValue": "3",
 				"description": "Heading level of the title, to fit the page outline. Default 3."
 			},
 			{
 				"name": "title",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Section heading."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst name = signal(\"Ada Lovelace\");\n\treturn (\n\t\t<FormSection title=\"Profile\" description=\"Shown on your public page.\">\n\t\t\t<FormField label=\"Display name\" labelFor=\"section-name\">\n\t\t\t\t<TextInput\n\t\t\t\t\tid=\"section-name\"\n\t\t\t\t\tvalue={name()}\n\t\t\t\t\tonInput={(e) => name.set((e.target as HTMLInputElement).value)}\n\t\t\t\t/>\n\t\t\t</FormField>\n\t\t</FormSection>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -5544,33 +6048,36 @@ export const catalog: CatalogEntry[] = [
 				"name": "bordered",
 				"type": "boolean",
 				"required": false,
+				"defaultValue": "true",
 				"description": "Visually emphasize as a bordered panel. Default true."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "The area's fields."
 			},
 			{
 				"name": "description",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Text under the heading."
 			},
 			{
 				"name": "order",
 				"type": "2 | 3 | 4 | 5 | 6",
 				"required": false,
+				"defaultValue": "4",
 				"description": "Heading level of the title, to fit the page outline. Default 4."
 			},
 			{
 				"name": "title",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Area heading."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst failed = signal(true);\n\tconst weekly = signal(false);\n\treturn (\n\t\t<FormArea\n\t\t\torder={3}\n\t\t\ttitle=\"Notifications\"\n\t\t\tdescription=\"Choose what we email you about.\"\n\t\t\tbordered\n\t\t>\n\t\t\t<Checkbox\n\t\t\t\tlabel=\"Failed deploys\"\n\t\t\t\tchecked={failed()}\n\t\t\t\tonChange={(e) => failed.set((e.target as HTMLInputElement).checked)}\n\t\t\t/>\n\t\t\t<Checkbox\n\t\t\t\tlabel=\"Weekly summary\"\n\t\t\t\tchecked={weekly()}\n\t\t\t\tonChange={(e) => weekly.set((e.target as HTMLInputElement).checked)}\n\t\t\t/>\n\t\t</FormArea>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -5590,21 +6097,22 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "The grouped fields."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables every control inside."
 			},
 			{
 				"name": "legend",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Group caption (`<legend>`)."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst street = signal(\"\");\n\tconst city = signal(\"\");\n\treturn (\n\t\t<Fieldset legend=\"Shipping address\">\n\t\t\t<FormField label=\"Street\" labelFor=\"fs-street\">\n\t\t\t\t<TextInput\n\t\t\t\t\tid=\"fs-street\"\n\t\t\t\t\tvalue={street()}\n\t\t\t\t\tonInput={(e) => street.set((e.target as HTMLInputElement).value)}\n\t\t\t\t/>\n\t\t\t</FormField>\n\t\t\t<FormField label=\"City\" labelFor=\"fs-city\">\n\t\t\t\t<TextInput\n\t\t\t\t\tid=\"fs-city\"\n\t\t\t\t\tvalue={city()}\n\t\t\t\t\tonInput={(e) => city.set((e.target as HTMLInputElement).value)}\n\t\t\t\t/>\n\t\t\t</FormField>\n\t\t</Fieldset>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -5620,9 +6128,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Form buttons, aligned to the end."
 			}
 		],
+		"types": [],
 		"code": "<form\n\tonSubmit={(e: SubmitEvent) => {\n\t\te.preventDefault();\n\t\t() => {}();\n\t}}\n>\n\t<FormFooter>\n\t\t<Button variant=\"ghost\" onClick={() => {}}>\n\t\t\tCancel\n\t\t</Button>\n\t\t<Button type=\"submit\">Save changes</Button>\n\t</FormFooter>\n</form>",
 		"interactive": false,
 		"logsActions": true
@@ -5645,25 +6154,25 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "content",
 				"required": true,
-				"description": ""
+				"description": "Setting name."
 			},
 			{
 				"name": "control",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "The control at the end of the row (switch, select, button, …)."
 			},
 			{
 				"name": "description",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Explanation under the name."
 			},
 			{
 				"name": "descriptionId",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Id for the description, to point a control's `aria-describedby` at."
 			},
 			{
 				"name": "labelId",
@@ -5672,6 +6181,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Ids for the label / description, so the control can reference them."
 			}
 		],
+		"types": [],
 		"code": "<SettingsRow\n\tlabel=\"Default branch\"\n\tdescription=\"Pushes to this branch deploy to production.\"\n\tcontrol={<Code>main</Code>}\n/>",
 		"interactive": false,
 		"logsActions": false
@@ -5688,33 +6198,34 @@ export const catalog: CatalogEntry[] = [
 				"name": "checked",
 				"type": "boolean",
 				"required": true,
-				"description": ""
+				"description": "Whether the setting is on (controlled)."
 			},
 			{
 				"name": "label",
 				"type": "content",
 				"required": true,
-				"description": ""
+				"description": "Setting name (the switch's accessible name)."
 			},
 			{
 				"name": "onChange",
 				"type": "(checked: boolean) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the new state."
 			},
 			{
 				"name": "description",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Explanation under the name (the switch's accessible description)."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the switch."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst previews = signal(true);\n\treturn (\n\t\t<ToggleRow\n\t\t\tlabel=\"Preview deploys\"\n\t\t\tdescription=\"Deploy every pull request to a unique URL.\"\n\t\t\tchecked={previews()}\n\t\t\tonChange={previews.set}\n\t\t/>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -5736,21 +6247,23 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "The destructive control, e.g. a danger `Button`."
 			},
 			{
 				"name": "description",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "What the destructive action does."
 			},
 			{
 				"name": "title",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Danger zone\"",
+				"description": "Section heading."
 			}
 		],
+		"types": [],
 		"code": "<DangerZone\n\ttitle=\"Delete project\"\n\tdescription=\"This permanently removes all deploys and domains.\"\n>\n\t<Button variant=\"danger\" onClick={() => {}}>\n\t\tDelete marketing-site\n\t</Button>\n</DangerZone>",
 		"interactive": false,
 		"logsActions": true
@@ -5770,39 +6283,42 @@ export const catalog: CatalogEntry[] = [
 				"name": "backLabel",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Back\"",
+				"description": "Back button text."
 			},
 			{
 				"name": "canBack",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Enables the Back button."
 			},
 			{
 				"name": "canNext",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Enables the Next button."
 			},
 			{
 				"name": "nextLabel",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Continue\"",
+				"description": "Next button text (e.g. \"Finish\" on the last step)."
 			},
 			{
 				"name": "onBack",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Called when Back is pressed."
 			},
 			{
 				"name": "onNext",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Called when Next is pressed."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst steps = [\"Account\", \"Team\", \"Billing\", \"Done\"];\n\tconst step = signal(0);\n\treturn (\n\t\t<Stack gap=\"0.75rem\">\n\t\t\t<Text>\n\t\t\t\tStep {step() + 1} of {steps.length}: <strong>{steps[step()]}</strong>\n\t\t\t</Text>\n\t\t\t<WizardNav\n\t\t\t\tcanBack={step() > 0}\n\t\t\t\tcanNext={step() < steps.length - 1}\n\t\t\t\tnextLabel={step() === steps.length - 2 ? \"Finish\" : \"Continue\"}\n\t\t\t\tonBack={() => step.set(step() - 1)}\n\t\t\t\tonNext={() => step.set(step() + 1)}\n\t\t\t/>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -5845,37 +6361,172 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "NavMenuItem[]",
 				"required": true,
-				"description": ""
+				"description": "Top-level items; items with `children` open submenus."
 			},
 			{
 				"name": "brand",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Logo or name at the start of the bar."
 			},
 			{
 				"name": "end",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content at the end of the bar, e.g. buttons."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Primary\"",
 				"description": "Accessible name for the desktop `<nav>` (default \"Primary\")."
 			},
 			{
 				"name": "placement",
 				"type": "NavbarPlacement",
 				"required": false,
+				"defaultValue": "\"static\"",
 				"description": "Pin the bar to the top of the scrollport / viewport. Default: static"
 			},
 			{
 				"name": "trigger",
 				"type": "NavMenuTrigger",
 				"required": false,
+				"defaultValue": "\"hover\"",
 				"description": "Desktop submenu open mode. Mobile always uses click. Default: hover"
+			}
+		],
+		"types": [
+			{
+				"name": "NavMenuItem",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Item id; used by the controller to track open submenus."
+					},
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Menu text."
+					},
+					{
+						"name": "href",
+						"type": "string",
+						"required": false,
+						"description": "Link target (renders a link)."
+					},
+					{
+						"name": "active",
+						"type": "boolean",
+						"required": false,
+						"description": "Marks the current page (`aria-current`)."
+					},
+					{
+						"name": "disabled",
+						"type": "boolean",
+						"required": false,
+						"description": "Shown but can't be chosen."
+					},
+					{
+						"name": "onSelect",
+						"type": "() => void",
+						"required": false,
+						"description": "Called when the item is chosen."
+					},
+					{
+						"name": "children",
+						"type": "NavMenuItem[]",
+						"required": false,
+						"description": "Nested items, shown as a submenu."
+					}
+				]
+			},
+			{
+				"name": "NavMenuTrigger",
+				"description": "",
+				"definition": "\"hover\" | \"click\""
+			},
+			{
+				"name": "NavbarPlacement",
+				"description": "",
+				"definition": "\"static\" | \"sticky\" | \"fixed\""
+			},
+			{
+				"name": "NavbarController",
+				"description": "",
+				"fields": [
+					{
+						"name": "openPath",
+						"type": "() => string[]",
+						"required": true,
+						"description": "Ids of the open submenus, outermost first."
+					},
+					{
+						"name": "mobileOpen",
+						"type": "() => boolean",
+						"required": true,
+						"description": "Whether the mobile menu is expanded."
+					},
+					{
+						"name": "isOpen",
+						"type": "(id: string) => boolean",
+						"required": true,
+						"description": "Whether the submenu with this id is open."
+					},
+					{
+						"name": "openTo",
+						"type": "(path: string[]) => void",
+						"required": true,
+						"description": "Opens the submenus along `path` (and closes the others)."
+					},
+					{
+						"name": "toggle",
+						"type": "(path: string[]) => void",
+						"required": true,
+						"description": "Opens or closes the submenu at the end of `path`."
+					},
+					{
+						"name": "closeAll",
+						"type": "() => void",
+						"required": true,
+						"description": "Closes every submenu."
+					},
+					{
+						"name": "scheduleClose",
+						"type": "() => void",
+						"required": true,
+						"description": "Closes the submenus after a short delay (hover intent)."
+					},
+					{
+						"name": "cancelClose",
+						"type": "() => void",
+						"required": true,
+						"description": "Cancels a pending `scheduleClose`."
+					},
+					{
+						"name": "setMobileOpen",
+						"type": "(open: boolean) => void",
+						"required": true,
+						"description": "Expands or collapses the mobile menu."
+					},
+					{
+						"name": "toggleMobile",
+						"type": "() => void",
+						"required": true,
+						"description": "Toggles the mobile menu."
+					},
+					{
+						"name": "dispose",
+						"type": "() => void",
+						"required": true,
+						"description": "Clears timers; call when the navbar is removed."
+					}
+				]
 			}
 		],
 		"code": "function Example() {\n\tconst ctrl = createNavbarController();\n\teffect(() => () => ctrl.dispose());\n\treturn (\n\t\t<Navbar\n\t\t\tctrl={ctrl}\n\t\t\tlabel=\"Main\"\n\t\t\tbrand={<strong>Acme</strong>}\n\t\t\titems={[\n\t\t\t\t{ id: \"product\", label: \"Product\", active: true },\n\t\t\t\t{\n\t\t\t\t\tid: \"resources\",\n\t\t\t\t\tlabel: \"Resources\",\n\t\t\t\t\tchildren: [\n\t\t\t\t\t\t{ id: \"docs\", label: \"Docs\", href: \"#docs\" },\n\t\t\t\t\t\t{ id: \"blog\", label: \"Blog\", href: \"#blog\" },\n\t\t\t\t\t],\n\t\t\t\t},\n\t\t\t\t{ id: \"pricing\", label: \"Pricing\", href: \"#pricing\" },\n\t\t\t]}\n\t\t/>\n\t);\n}",
@@ -5894,27 +6545,28 @@ export const catalog: CatalogEntry[] = [
 				"name": "active",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Marks the current page (`aria-current`)."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Link text."
 			},
 			{
 				"name": "href",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Link target."
 			},
 			{
 				"name": "onClick",
 				"type": "(e: MouseEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Click handler (renders a button when there is no `href`)."
 			}
 		],
+		"types": [],
 		"code": "<NavbarLink href=\"#pricing\" active>\n\tPricing\n</NavbarLink>",
 		"interactive": false,
 		"logsActions": false
@@ -5934,25 +6586,58 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "SidebarItem[]",
 				"required": true,
-				"description": ""
+				"description": "Navigation items, in order."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Sidebar\"",
 				"description": "Accessible name for the nav (default \"Sidebar\")."
 			},
 			{
 				"name": "onChange",
 				"type": "(id: string) => void",
 				"required": false,
-				"description": ""
+				"description": "Called with the id of the item the user picks."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Id of the current item (marked `aria-current`)."
+			}
+		],
+		"types": [
+			{
+				"name": "SidebarItem",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Item id, passed to `onChange` and matched against `value`."
+					},
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Item text."
+					},
+					{
+						"name": "onSelect",
+						"type": "() => void",
+						"required": false,
+						"description": "Called when this item is chosen (in addition to `onChange`)."
+					},
+					{
+						"name": "disabled",
+						"type": "boolean",
+						"required": false,
+						"description": "Shown but can't be chosen."
+					}
+				]
 			}
 		],
 		"code": "const sections = [\n\t{ id: \"overview\", label: \"Overview\" },\n\t{ id: \"deploys\", label: \"Deploys\" },\n\t{ id: \"settings\", label: \"Settings\" },\n];\n\nfunction Example() {\n\tconst page = signal(\"deploys\");\n\treturn <SidebarNav label=\"Project\" items={sections} value={page()} onChange={page.set} />;\n}",
@@ -5978,25 +6663,25 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Link text."
 			},
 			{
 				"name": "active",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Marks the current page (`aria-current`)."
 			},
 			{
 				"name": "description",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Secondary line under the label."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Shown but can't be followed."
 			},
 			{
 				"name": "href",
@@ -6008,21 +6693,22 @@ export const catalog: CatalogEntry[] = [
 				"name": "leftSection",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Leading content, e.g. an icon."
 			},
 			{
 				"name": "onClick",
 				"type": "(e: MouseEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Click handler (renders a button when there is no `href`)."
 			},
 			{
 				"name": "rightSection",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Trailing content, e.g. a badge or chevron."
 			}
 		],
+		"types": [],
 		"code": "<NavLink label=\"Deploys\" description=\"History and logs\" href=\"#deploys\" active />",
 		"interactive": false,
 		"logsActions": false
@@ -6045,13 +6731,46 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "BreadcrumbItem[]",
 				"required": true,
-				"description": ""
+				"description": "Crumbs from the root to the current page (last item)."
 			},
 			{
 				"name": "separator",
 				"type": "content",
 				"required": false,
+				"defaultValue": "\"/\"",
 				"description": "Separator node (default `/`)."
+			}
+		],
+		"types": [
+			{
+				"name": "BreadcrumbItem",
+				"description": "",
+				"fields": [
+					{
+						"name": "label",
+						"type": "content",
+						"required": true,
+						"description": "Crumb text or content."
+					},
+					{
+						"name": "href",
+						"type": "string",
+						"required": false,
+						"description": "Link target; without `href` or `onClick` the crumb is plain text (the current page)."
+					},
+					{
+						"name": "onClick",
+						"type": "(e: MouseEvent) => void",
+						"required": false,
+						"description": "Click handler (renders a button when there is no `href`)."
+					},
+					{
+						"name": "icon",
+						"type": "content",
+						"required": false,
+						"description": "Leading icon or content."
+					}
+				]
 			}
 		],
 		"code": "<Breadcrumb\n\titems={[\n\t\t{ label: \"Projects\", href: \"#projects\" },\n\t\t{ label: \"marketing-site\", href: \"#marketing-site\" },\n\t\t{ label: \"Deploys\" },\n\t]}\n/>",
@@ -6079,24 +6798,25 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "TabItem[]",
 				"required": true,
-				"description": ""
+				"description": "The tabs, in order."
 			},
 			{
 				"name": "onChange",
 				"type": "(id: string) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the id of the tab the user selects."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Id of the selected tab."
 			},
 			{
 				"name": "activation",
 				"type": "\"auto\" | \"manual\"",
 				"required": false,
+				"defaultValue": "\"auto\"",
 				"description": "`auto` selects on arrow focus (default); `manual` waits for Enter/Space."
 			},
 			{
@@ -6115,13 +6835,59 @@ export const catalog: CatalogEntry[] = [
 				"name": "size",
 				"type": "\"sm\" | \"md\" | \"lg\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"md\"",
+				"description": "Tab height and text size."
 			},
 			{
 				"name": "variant",
 				"type": "\"line\" | \"pills\" | \"enclosed\" | \"segmented\"",
 				"required": false,
+				"defaultValue": "\"line\"",
 				"description": "`line` (underline), `pills`, `enclosed` (card tabs) or `segmented`."
+			}
+		],
+		"types": [
+			{
+				"name": "TabItem",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Tab id, passed to `onChange` and matched against `value`."
+					},
+					{
+						"name": "label",
+						"type": "content",
+						"required": true,
+						"description": "Tab label (text or content)."
+					},
+					{
+						"name": "disabled",
+						"type": "boolean",
+						"required": false,
+						"description": "Shown but can't be selected; skipped by arrow keys."
+					},
+					{
+						"name": "icon",
+						"type": "content",
+						"required": false,
+						"description": "Leading icon or content."
+					},
+					{
+						"name": "badge",
+						"type": "content",
+						"required": false,
+						"description": "Trailing content, e.g. a count badge."
+					},
+					{
+						"name": "panel",
+						"type": "content",
+						"required": false,
+						"description": "Panel content; when any item has one, Tabs renders linked `tabpanel`s."
+					}
+				]
 			}
 		],
 		"code": "function Example() {\n\tconst tab = signal(\"deploys\");\n\treturn (\n\t\t<Tabs\n\t\t\tlabel=\"Project\"\n\t\t\tvalue={tab()}\n\t\t\tonChange={tab.set}\n\t\t\titems={[\n\t\t\t\t{ id: \"overview\", label: \"Overview\", panel: <Text>Traffic and status at a glance.</Text> },\n\t\t\t\t{\n\t\t\t\t\tid: \"deploys\",\n\t\t\t\t\tlabel: \"Deploys\",\n\t\t\t\t\tbadge: \"12\",\n\t\t\t\t\tpanel: <Text>Every push creates a deploy.</Text>,\n\t\t\t\t},\n\t\t\t\t{ id: \"settings\", label: \"Settings\", panel: <Text>Domains, builds and access.</Text> },\n\t\t\t]}\n\t\t/>\n\t);\n}",
@@ -6147,7 +6913,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "StepItem[]",
 				"required": true,
-				"description": ""
+				"description": "The steps, in order; those before `value` show as complete."
 			},
 			{
 				"name": "value",
@@ -6159,13 +6925,40 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Progress\"",
 				"description": "Accessible name (default \"Progress\")."
 			},
 			{
 				"name": "onChange",
 				"type": "(id: string) => void",
 				"required": false,
-				"description": ""
+				"description": "Makes steps clickable; called with the step id. Without it, steps are plain text."
+			}
+		],
+		"types": [
+			{
+				"name": "StepItem",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Step id, passed to `onChange` and matched against `value`."
+					},
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Step name."
+					},
+					{
+						"name": "description",
+						"type": "string",
+						"required": false,
+						"description": "Secondary line under the label."
+					}
+				]
 			}
 		],
 		"code": "function Example() {\n\tconst step = signal(\"shipping\");\n\treturn (\n\t\t<Steps\n\t\t\tlabel=\"Checkout\"\n\t\t\titems={[\n\t\t\t\t{ id: \"cart\", label: \"Cart\" },\n\t\t\t\t{ id: \"shipping\", label: \"Shipping\", description: \"Address and method\" },\n\t\t\t\t{ id: \"payment\", label: \"Payment\" },\n\t\t\t]}\n\t\t\tvalue={step()}\n\t\t\tonChange={step.set}\n\t\t/>\n\t);\n}",
@@ -6191,45 +6984,48 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(page: number) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the page the user picks."
 			},
 			{
 				"name": "page",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Current page, starting at 1."
 			},
 			{
 				"name": "pageCount",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Total number of pages."
 			},
 			{
 				"name": "nextLabel",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of the next-page button (default: an arrow with an accessible \"Next page\" label)."
 			},
 			{
 				"name": "previousLabel",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of the previous-page button (default: an arrow with an accessible \"Previous page\" label)."
 			},
 			{
 				"name": "siblings",
 				"type": "number",
 				"required": false,
+				"defaultValue": "1",
 				"description": "Pages shown on each side of the current page (default 1)."
 			},
 			{
 				"name": "variant",
 				"type": "\"pages\" | \"simple\"",
 				"required": false,
+				"defaultValue": "\"pages\"",
 				"description": "`simple` = prev/next + status; `pages` = numbered buttons (default)."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst page = signal(3);\n\treturn <Pagination page={page()} pageCount={12} onChange={page.set} />;\n}",
 		"interactive": false,
 		"logsActions": false
@@ -6249,27 +7045,29 @@ export const catalog: CatalogEntry[] = [
 				"name": "count",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Number of dots (pages or slides)."
 			},
 			{
 				"name": "onChange",
 				"type": "(index: number) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the index the user picks."
 			},
 			{
 				"name": "value",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Index of the current dot (0-based)."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Pagination\"",
 				"description": "Accessible name (default \"Pagination\")."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst slide = signal(1);\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<DotPagination count={5} value={slide()} onChange={slide.set} />\n\t\t\t<Text muted>Slide {slide() + 1} of 5</Text>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -6290,39 +7088,42 @@ export const catalog: CatalogEntry[] = [
 				"name": "nextDisabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the next link (e.g. on the last page)."
 			},
 			{
 				"name": "nextLabel",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Next\"",
+				"description": "Title of the next page."
 			},
 			{
 				"name": "onNext",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Shows the next link; called when it is pressed."
 			},
 			{
 				"name": "onPrev",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Shows the previous link; called when it is pressed."
 			},
 			{
 				"name": "prevDisabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Disables the previous link (e.g. on the first page)."
 			},
 			{
 				"name": "prevLabel",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Previous\"",
+				"description": "Title of the previous page."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst pages = [\"Installation\", \"Theming\", \"Customization\", \"Accessibility\"];\n\tconst page = signal(1);\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Text>\n\t\t\t\tReading: <strong>{pages[page()]}</strong>\n\t\t\t</Text>\n\t\t\t<NextPrev\n\t\t\t\tprevLabel={pages[page() - 1] ?? \"Start\"}\n\t\t\t\tnextLabel={pages[page() + 1] ?? \"End\"}\n\t\t\t\tprevDisabled={page() === 0}\n\t\t\t\tnextDisabled={page() === pages.length - 1}\n\t\t\t\tonPrev={() => page.set(page() - 1)}\n\t\t\t\tonNext={() => page.set(page() + 1)}\n\t\t\t/>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -6343,7 +7144,8 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Back\"",
+				"description": "Link text."
 			},
 			{
 				"name": "href",
@@ -6355,9 +7157,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "onClick",
 				"type": "(e: MouseEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Click handler (renders a button when there is no `href`)."
 			}
 		],
+		"types": [],
 		"code": "<BackLink href=\"#projects\">\n\tAll projects\n</BackLink>",
 		"interactive": false,
 		"logsActions": false
@@ -6377,25 +7180,52 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "SubnavItem[]",
 				"required": true,
-				"description": ""
+				"description": "Navigation items, in order."
 			},
 			{
 				"name": "onChange",
 				"type": "(id: string) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the id the user picks."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Id of the current item."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Sub navigation\"",
 				"description": "Accessible name (default \"Sub navigation\")."
+			}
+		],
+		"types": [
+			{
+				"name": "SubnavItem",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Item id, passed to `onChange` and matched against `value`."
+					},
+					{
+						"name": "label",
+						"type": "content",
+						"required": true,
+						"description": "Item text or content."
+					},
+					{
+						"name": "disabled",
+						"type": "boolean",
+						"required": false,
+						"description": "Shown but can't be chosen."
+					}
+				]
 			}
 		],
 		"code": "function Example() {\n\tconst filter = signal(\"all\");\n\treturn (\n\t\t<Subnav\n\t\t\tlabel=\"Filter\"\n\t\t\tvalue={filter()}\n\t\t\tonChange={filter.set}\n\t\t\titems={[\n\t\t\t\t{ id: \"all\", label: \"All\" },\n\t\t\t\t{ id: \"production\", label: \"Production\" },\n\t\t\t\t{ id: \"preview\", label: \"Preview\" },\n\t\t\t]}\n\t\t/>\n\t);\n}",
@@ -6417,25 +7247,57 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "IconnavItem[]",
 				"required": true,
-				"description": ""
+				"description": "Navigation items, in order."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Icon navigation\"",
 				"description": "Accessible name (default \"Icon navigation\")."
 			},
 			{
 				"name": "onChange",
 				"type": "(id: string) => void",
 				"required": false,
-				"description": ""
+				"description": "Called with the id the user picks."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Id of the current item."
+			}
+		],
+		"types": [
+			{
+				"name": "IconnavItem",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Item id, passed to `onChange` and matched against `value`."
+					},
+					{
+						"name": "icon",
+						"type": "IconName",
+						"required": true,
+						"description": "Icon shown for the item."
+					},
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Accessible name and tooltip text."
+					}
+				]
+			},
+			{
+				"name": "IconName",
+				"description": "Material Design Icons path names used by `<Icon />`.",
+				"definition": "| \"check\" | \"x\" | \"plus\" | \"minus\" | \"search\" | \"user\" | \"users\" | \"settings\" | \"menu\" | \"home\" | \"heart\" | \"star\" | \"bell\" | \"mail\" | \"calendar\" | \"clock\" | \"edit\" | \"trash\" | \"copy\" | \"download\" | \"upload\" | \"link\" | \"external\" | \"info\" | \"warning\" | \"error\" | \"success\" | \"chevron-down\" | \"chevron-up\" | \"chevron-left\" | \"chevron-right\" | \"arrow-left\" | \"arrow-right\" | \"eye\" | \"eye-off\" | \"eye-outline\" | \"lock\" | \"unlock\" | \"filter\" | \"more\" | \"close\" | \"spinner\" | \"sun\" | \"moon\" | \"play\" | \"pause\" | \"refresh\" | \"share\" | \"image\" | \"file\" | \"folder\" | \"zap\" | \"phone\" | \"git\" | \"code\""
 			}
 		],
 		"code": "function Example() {\n\tconst section = signal(\"home\");\n\treturn (\n\t\t<Iconnav\n\t\t\tlabel=\"Workspace\"\n\t\t\tvalue={section()}\n\t\t\tonChange={section.set}\n\t\t\titems={[\n\t\t\t\t{ id: \"home\", icon: \"home\", label: \"Home\" },\n\t\t\t\t{ id: \"alerts\", icon: \"bell\", label: \"Alerts\" },\n\t\t\t\t{ id: \"settings\", icon: \"settings\", label: \"Settings\" },\n\t\t\t]}\n\t\t/>\n\t);\n}",
@@ -6459,25 +7321,57 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "BottomNavItem[]",
 				"required": true,
-				"description": ""
+				"description": "Navigation items (3–5 work best)."
 			},
 			{
 				"name": "onChange",
 				"type": "(id: string) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the id the user picks."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Id of the current item."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Bottom\"",
 				"description": "Accessible name (default \"Bottom\")."
+			}
+		],
+		"types": [
+			{
+				"name": "BottomNavItem",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Item id, passed to `onChange` and matched against `value`."
+					},
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Item text under the icon."
+					},
+					{
+						"name": "icon",
+						"type": "IconName",
+						"required": false,
+						"description": "Item icon."
+					}
+				]
+			},
+			{
+				"name": "IconName",
+				"description": "Material Design Icons path names used by `<Icon />`.",
+				"definition": "| \"check\" | \"x\" | \"plus\" | \"minus\" | \"search\" | \"user\" | \"users\" | \"settings\" | \"menu\" | \"home\" | \"heart\" | \"star\" | \"bell\" | \"mail\" | \"calendar\" | \"clock\" | \"edit\" | \"trash\" | \"copy\" | \"download\" | \"upload\" | \"link\" | \"external\" | \"info\" | \"warning\" | \"error\" | \"success\" | \"chevron-down\" | \"chevron-up\" | \"chevron-left\" | \"chevron-right\" | \"arrow-left\" | \"arrow-right\" | \"eye\" | \"eye-off\" | \"eye-outline\" | \"lock\" | \"unlock\" | \"filter\" | \"more\" | \"close\" | \"spinner\" | \"sun\" | \"moon\" | \"play\" | \"pause\" | \"refresh\" | \"share\" | \"image\" | \"file\" | \"folder\" | \"zap\" | \"phone\" | \"git\" | \"code\""
 			}
 		],
 		"code": "function Example() {\n\tconst tab = signal(\"home\");\n\treturn (\n\t\t<BottomNav\n\t\t\tlabel=\"Primary\"\n\t\t\titems={[\n\t\t\t\t{ id: \"home\", label: \"Home\", icon: \"home\" },\n\t\t\t\t{ id: \"search\", label: \"Search\", icon: \"search\" },\n\t\t\t\t{ id: \"inbox\", label: \"Inbox\", icon: \"bell\" },\n\t\t\t]}\n\t\t\tvalue={tab()}\n\t\t\tonChange={tab.set}\n\t\t/>\n\t);\n}",
@@ -6495,27 +7389,29 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Accessible name (default: \"Open menu\" / \"Close menu\" by state)."
 			},
 			{
 				"name": "onClick",
 				"type": "(e: MouseEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Called when the button is pressed; toggle `opened` here."
 			},
 			{
 				"name": "opened",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"defaultValue": "false",
+				"description": "Show the close (×) state instead of the three lines."
 			},
 			{
 				"name": "size",
 				"type": "\"sm\" | \"md\"",
 				"required": false,
-				"description": ""
+				"description": "Button size."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst opened = signal(false);\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<Burger\n\t\t\t\topened={opened()}\n\t\t\t\tlabel={opened() ? \"Close navigation\" : \"Open navigation\"}\n\t\t\t\tonClick={() => opened.set(!opened())}\n\t\t\t/>\n\t\t\t<Text muted>Navigation is {opened() ? \"open\" : \"closed\"}</Text>\n\t\t</Group>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -6537,13 +7433,46 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "TocItem[]",
 				"required": true,
-				"description": ""
+				"description": "Sections, in page order."
 			},
 			{
 				"name": "title",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"On this page\"",
+				"description": "Small heading above the list."
+			}
+		],
+		"types": [
+			{
+				"name": "TocItem",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Id of the section on the page."
+					},
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Link text."
+					},
+					{
+						"name": "active",
+						"type": "boolean",
+						"required": false,
+						"description": "Marks the current section."
+					},
+					{
+						"name": "onSelect",
+						"type": "() => void",
+						"required": false,
+						"description": "Called when the link is chosen (e.g. to scroll there)."
+					}
+				]
 			}
 		],
 		"code": "function Example() {\n\tconst current = signal(\"install\");\n\tconst sections = [\n\t\t{ id: \"install\", label: \"Installation\" },\n\t\t{ id: \"usage\", label: \"Usage\" },\n\t\t{ id: \"theming\", label: \"Theming\" },\n\t];\n\treturn (\n\t\t<TableOfContents\n\t\t\ttitle=\"On this page\"\n\t\t\titems={sections.map((s) => ({\n\t\t\t\t...s,\n\t\t\t\tactive: current() === s.id,\n\t\t\t\tonSelect: () => current.set(s.id),\n\t\t\t}))}\n\t\t/>\n\t);\n}",
@@ -6565,19 +7494,41 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "ScrollSpyItem[]",
 				"required": true,
-				"description": ""
+				"description": "Sections to track, in page order."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"On this page\"",
 				"description": "Accessible name (default \"On this page\")."
 			},
 			{
 				"name": "offset",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "96",
+				"description": "Pixels from the top at which a section counts as current."
+			}
+		],
+		"types": [
+			{
+				"name": "ScrollSpyItem",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Id of the section element on the page."
+					},
+					{
+						"name": "label",
+						"type": "content",
+						"required": true,
+						"description": "Link text."
+					}
+				]
 			}
 		],
 		"code": "function Example() {\n\tconst sections = [\n\t\t{ id: \"spy-intro\", label: \"Introduction\", text: \"What Arachne UI is and when to use it.\" },\n\t\t{\n\t\t\tid: \"spy-install\",\n\t\t\tlabel: \"Installation\",\n\t\t\ttext: \"Add the package and import the stylesheet.\",\n\t\t},\n\t\t{ id: \"spy-usage\", label: \"Usage\", text: \"Render components and wire their state.\" },\n\t];\n\treturn (\n\t\t<Group align=\"start\" gap=\"1.5rem\">\n\t\t\t<ScrollSpy label=\"Article sections\" offset={8} items={sections} />\n\t\t\t<ScrollArea maxHeight=\"9rem\" aria-label=\"Article\">\n\t\t\t\t<For each={sections}>\n\t\t\t\t\t{(section) => (\n\t\t\t\t\t\t<section id={section.id} style={{ \"min-height\": \"7rem\" }}>\n\t\t\t\t\t\t\t<strong>{section.label}</strong>\n\t\t\t\t\t\t\t<Text muted>{section.text}</Text>\n\t\t\t\t\t\t</section>\n\t\t\t\t\t)}\n\t\t\t\t</For>\n\t\t\t</ScrollArea>\n\t\t</Group>\n\t);\n}",
@@ -6596,15 +7547,18 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Skip to content\"",
+				"description": "Link text."
 			},
 			{
 				"name": "href",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"#main\"",
+				"description": "Target to jump to (id of your main content)."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tlet link: HTMLAnchorElement | undefined;\n\treturn (\n\t\t<Box style={{ position: \"relative\", \"padding-top\": \"3rem\" }}>\n\t\t\t<SkipLink\n\t\t\t\thref=\"#main\"\n\t\t\t\tref={(el: HTMLElement) => {\n\t\t\t\t\tlink = el as HTMLAnchorElement;\n\t\t\t\t}}\n\t\t\t>\n\t\t\t\tSkip to content\n\t\t\t</SkipLink>\n\t\t\t<Group gap=\"0.75rem\">\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => link?.focus()}>\n\t\t\t\t\tReveal the skip link\n\t\t\t\t</Button>\n\t\t\t\t<Text muted>It appears only while focused — keyboard users meet it first on Tab.</Text>\n\t\t\t</Group>\n\t\t</Box>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -6623,21 +7577,24 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Button content (default: an up arrow)."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Back to top\"",
+				"description": "Accessible name of the button."
 			},
 			{
 				"name": "offset",
 				"type": "number",
 				"required": false,
+				"defaultValue": "320",
 				"description": "Scroll distance (px) before the button appears (default 320)."
 			}
 		],
+		"types": [],
 		"code": "<ToTop offset={-1} />",
 		"interactive": false,
 		"logsActions": false
@@ -6663,19 +7620,19 @@ export const catalog: CatalogEntry[] = [
 				"name": "onClose",
 				"type": "() => void",
 				"required": true,
-				"description": ""
+				"description": "Called when the user closes it (close button, Escape, backdrop); set `open` to false."
 			},
 			{
 				"name": "open",
 				"type": "boolean",
 				"required": true,
-				"description": ""
+				"description": "Whether the dialog is shown (controlled)."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Body content."
 			},
 			{
 				"name": "closeOnBackdrop",
@@ -6693,13 +7650,13 @@ export const catalog: CatalogEntry[] = [
 				"name": "description",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Text under the title; also the dialog's accessible description."
 			},
 			{
 				"name": "footer",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Bottom bar content, usually the action buttons."
 			},
 			{
 				"name": "hideClose",
@@ -6741,9 +7698,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "title",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Heading; also the dialog's accessible name."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst open = signal(false);\n\treturn (\n\t\t<>\n\t\t\t<Button onClick={() => open.set(true)}>Open modal</Button>\n\t\t\t<Modal\n\t\t\t\topen={open()}\n\t\t\t\tonClose={() => open.set(false)}\n\t\t\t\ttitle=\"Edit profile\"\n\t\t\t\tdescription=\"Changes are saved when you press Save.\"\n\t\t\t\tfooter={\n\t\t\t\t\t<Group gap=\"0.5rem\">\n\t\t\t\t\t\t<Button variant=\"ghost\" onClick={() => open.set(false)}>\n\t\t\t\t\t\t\tCancel\n\t\t\t\t\t\t</Button>\n\t\t\t\t\t\t<Button onClick={() => open.set(false)}>Save</Button>\n\t\t\t\t\t</Group>\n\t\t\t\t}\n\t\t\t>\n\t\t\t\tModal body content.\n\t\t\t</Modal>\n\t\t</>\n\t);\n}",
 		"interactive": true,
 		"logsActions": false
@@ -6769,51 +7727,54 @@ export const catalog: CatalogEntry[] = [
 				"name": "message",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "The question to confirm."
 			},
 			{
 				"name": "onCancel",
 				"type": "() => void",
 				"required": true,
-				"description": ""
+				"description": "Called on cancel, Escape or backdrop click."
 			},
 			{
 				"name": "onConfirm",
 				"type": "() => void",
 				"required": true,
-				"description": ""
+				"description": "Called when the user confirms."
 			},
 			{
 				"name": "open",
 				"type": "boolean",
 				"required": true,
-				"description": ""
+				"description": "Whether the dialog is shown (controlled)."
 			},
 			{
 				"name": "cancelLabel",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Cancel\"",
+				"description": "Cancel button text."
 			},
 			{
 				"name": "confirmLabel",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Confirm\"",
+				"description": "Confirm button text."
 			},
 			{
 				"name": "danger",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Destructive action: the confirm button uses the danger style."
 			},
 			{
 				"name": "title",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Dialog heading."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst open = signal(false);\n\treturn (\n\t\t<>\n\t\t\t<Button variant=\"danger\" onClick={() => open.set(true)}>\n\t\t\t\tDelete project\n\t\t\t</Button>\n\t\t\t<ConfirmDialog\n\t\t\t\topen={open()}\n\t\t\t\tdanger\n\t\t\t\ttitle=\"Delete project?\"\n\t\t\t\tmessage=\"This cannot be undone.\"\n\t\t\t\tconfirmLabel=\"Delete\"\n\t\t\t\tonConfirm={() => open.set(false)}\n\t\t\t\tonCancel={() => open.set(false)}\n\t\t\t/>\n\t\t</>\n\t);\n}",
 		"interactive": true,
 		"logsActions": false
@@ -6840,19 +7801,19 @@ export const catalog: CatalogEntry[] = [
 				"name": "onClose",
 				"type": "() => void",
 				"required": true,
-				"description": ""
+				"description": "Called when the user closes it (close button, Escape, backdrop); set `open` to false."
 			},
 			{
 				"name": "open",
 				"type": "boolean",
 				"required": true,
-				"description": ""
+				"description": "Whether the dialog is shown (controlled)."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Body content."
 			},
 			{
 				"name": "closeOnBackdrop",
@@ -6870,13 +7831,13 @@ export const catalog: CatalogEntry[] = [
 				"name": "description",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Text under the title; also the dialog's accessible description."
 			},
 			{
 				"name": "footer",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Bottom bar content, usually the action buttons."
 			},
 			{
 				"name": "hideClose",
@@ -6906,21 +7867,23 @@ export const catalog: CatalogEntry[] = [
 				"name": "side",
 				"type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"right\"",
+				"description": "Edge the drawer slides in from."
 			},
 			{
 				"name": "size",
 				"type": "\"full\" | \"sm\" | \"md\" | \"lg\"",
 				"required": false,
-				"description": ""
+				"description": "Width (or height, for top / bottom)."
 			},
 			{
 				"name": "title",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Heading; also the dialog's accessible name."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst open = signal(false);\n\treturn (\n\t\t<>\n\t\t\t<Button onClick={() => open.set(true)}>Open drawer</Button>\n\t\t\t<Drawer open={open()} onClose={() => open.set(false)} title=\"Filters\">\n\t\t\t\tDrawer content.\n\t\t\t</Drawer>\n\t\t</>\n\t);\n}",
 		"interactive": true,
 		"logsActions": false
@@ -6947,19 +7910,19 @@ export const catalog: CatalogEntry[] = [
 				"name": "onClose",
 				"type": "() => void",
 				"required": true,
-				"description": ""
+				"description": "Called when the user closes it (close button, Escape, backdrop); set `open` to false."
 			},
 			{
 				"name": "open",
 				"type": "boolean",
 				"required": true,
-				"description": ""
+				"description": "Whether the dialog is shown (controlled)."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Body content."
 			},
 			{
 				"name": "closeOnBackdrop",
@@ -6977,13 +7940,13 @@ export const catalog: CatalogEntry[] = [
 				"name": "description",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Text under the title; also the dialog's accessible description."
 			},
 			{
 				"name": "footer",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Bottom bar content, usually the action buttons."
 			},
 			{
 				"name": "hideClose",
@@ -7013,9 +7976,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "title",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Heading; also the dialog's accessible name."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst open = signal(false);\n\treturn (\n\t\t<>\n\t\t\t<Button onClick={() => open.set(true)}>Open sheet</Button>\n\t\t\t<BottomSheet open={open()} onClose={() => open.set(false)} title=\"Share\">\n\t\t\t\tSheet content.\n\t\t\t</BottomSheet>\n\t\t</>\n\t);\n}",
 		"interactive": true,
 		"logsActions": false
@@ -7037,13 +8001,13 @@ export const catalog: CatalogEntry[] = [
 				"name": "onOpenChange",
 				"type": "(open: boolean) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the next open state (trigger click, Escape, outside click)."
 			},
 			{
 				"name": "open",
 				"type": "boolean",
 				"required": true,
-				"description": ""
+				"description": "Whether the panel is open (controlled)."
 			},
 			{
 				"name": "arrow",
@@ -7055,12 +8019,13 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Panel content."
 			},
 			{
 				"name": "label",
 				"type": "content",
 				"required": false,
+				"defaultValue": "\"Open\"",
 				"description": "Label for the built-in trigger button"
 			},
 			{
@@ -7073,13 +8038,45 @@ export const catalog: CatalogEntry[] = [
 				"name": "placement",
 				"type": "PopoverPlacement",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"bottom-start\"",
+				"description": "Preferred side and alignment; flips and shifts to stay in view."
 			},
 			{
 				"name": "trigger",
 				"type": "(api: PopoverTriggerApi) => unknown",
 				"required": false,
 				"description": "Render your own trigger: `trigger={(t) => <MyButton {...t.attrs} />}`."
+			}
+		],
+		"types": [
+			{
+				"name": "PopoverTriggerApi",
+				"description": "Attributes to spread on a custom trigger so it stays wired for a11y.",
+				"fields": [
+					{
+						"name": "open",
+						"type": "boolean",
+						"required": true,
+						"description": "Whether the panel is open."
+					},
+					{
+						"name": "toggle",
+						"type": "() => void",
+						"required": true,
+						"description": "Opens or closes the panel."
+					},
+					{
+						"name": "attrs",
+						"type": "{ \"aria-expanded\": boolean; \"aria-controls\": string; \"aria-haspopup\": \"dialog\"; onClick: () => void; }",
+						"required": true,
+						"description": "ARIA and event attributes to spread onto your trigger element."
+					}
+				]
+			},
+			{
+				"name": "PopoverPlacement",
+				"description": "",
+				"definition": "| \"bottom-start\" | \"bottom-end\" | \"bottom\" | \"top-start\" | \"top-end\" | \"top\""
 			}
 		],
 		"code": "function Example() {\n\tconst open = signal(false);\n\treturn (\n\t\t<Popover open={open()} onOpenChange={open.set} label=\"Share\" panelLabel=\"Share project\">\n\t\t\tAnyone with the link can view this project.\n\t\t</Popover>\n\t);\n}",
@@ -7108,21 +8105,24 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "The trigger (hovering or focusing it opens the card)."
 			},
 			{
 				"name": "closeDelay",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "160",
+				"description": "Milliseconds after leaving before the card closes (lets the pointer reach it)."
 			},
 			{
 				"name": "openDelay",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "120",
+				"description": "Milliseconds of hover or focus before the card opens."
 			}
 		],
+		"types": [],
 		"code": "<HoverCard dropdown={<Text>Ada Lovelace · Analyst of engines</Text>}>\n\t<Anchor href=\"#ada\">@ada</Anchor>\n</HoverCard>",
 		"interactive": false,
 		"logsActions": false
@@ -7143,45 +8143,50 @@ export const catalog: CatalogEntry[] = [
 				"name": "content",
 				"type": "content",
 				"required": true,
-				"description": ""
+				"description": "Tooltip text or content."
 			},
 			{
 				"name": "arrow",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"defaultValue": "true",
+				"description": "Show an arrow pointing at the target."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "The element the tooltip describes (shown on hover and focus)."
 			},
 			{
 				"name": "closeDelay",
 				"type": "number",
 				"required": false,
+				"defaultValue": "80",
 				"description": "Delay before hiding, ms (default 80) — lets the pointer reach the tooltip."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Never show the tooltip."
 			},
 			{
 				"name": "openDelay",
 				"type": "number",
 				"required": false,
+				"defaultValue": "250",
 				"description": "Delay before showing on hover, ms (default 250). Focus shows immediately."
 			},
 			{
 				"name": "placement",
 				"type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"top\"",
+				"description": "Preferred side; flips to stay in view."
 			}
 		],
+		"types": [],
 		"code": "<Tooltip content=\"Copies the deploy URL\">\n\t<Button variant=\"outline\" onClick={() => {}}>\n\t\tCopy link\n\t</Button>\n</Tooltip>",
 		"interactive": false,
 		"logsActions": true
@@ -7207,13 +8212,13 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "MenuItem[]",
 				"required": true,
-				"description": ""
+				"description": "Actions, separators (`{ type: \"separator\" }`) and group labels (`{ type: \"label\" }`)."
 			},
 			{
 				"name": "open",
 				"type": "boolean",
 				"required": true,
-				"description": ""
+				"description": "Whether the menu is shown (controlled)."
 			},
 			{
 				"name": "label",
@@ -7231,7 +8236,74 @@ export const catalog: CatalogEntry[] = [
 				"name": "placement",
 				"type": "MenuPlacement",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"bottom-start\"",
+				"description": "Preferred position relative to the trigger; flips to stay in view."
+			}
+		],
+		"types": [
+			{
+				"name": "MenuItem",
+				"description": "",
+				"definition": "MenuAction | { type: \"separator\" } | { type: \"label\"; label: unknown }"
+			},
+			{
+				"name": "MenuAction",
+				"description": "",
+				"fields": [
+					{
+						"name": "type",
+						"type": "\"item\"",
+						"required": false,
+						"description": "Marks a regular action (the default for items without `type`)."
+					},
+					{
+						"name": "label",
+						"type": "content",
+						"required": true,
+						"description": "Item text or content."
+					},
+					{
+						"name": "onSelect",
+						"type": "() => void",
+						"required": true,
+						"description": "Called when the item is chosen (click, Enter or Space); the menu then closes."
+					},
+					{
+						"name": "danger",
+						"type": "boolean",
+						"required": false,
+						"description": "Destructive action: danger colour."
+					},
+					{
+						"name": "disabled",
+						"type": "boolean",
+						"required": false,
+						"description": "Shown but can't be chosen; skipped by arrow keys."
+					},
+					{
+						"name": "icon",
+						"type": "content",
+						"required": false,
+						"description": "Leading icon or content."
+					},
+					{
+						"name": "shortcut",
+						"type": "string",
+						"required": false,
+						"description": "Right-aligned hint, e.g. `⌘K`."
+					},
+					{
+						"name": "description",
+						"type": "string",
+						"required": false,
+						"description": "Secondary line under the label."
+					}
+				]
+			},
+			{
+				"name": "MenuPlacement",
+				"description": "",
+				"definition": "\"bottom-start\" | \"bottom-end\" | \"top-start\" | \"top-end\""
 			}
 		],
 		"code": "function Example() {\n\tconst open = signal(false);\n\tconst last = signal(\"\");\n\tconst pick = (label: string) => () => last.set(label);\n\treturn (\n\t\t<Group gap=\"0.75rem\">\n\t\t\t<div style={{ position: \"relative\" }}>\n\t\t\t\t<Button variant=\"outline\" aria-expanded={open()} onClick={() => open.set(!open())}>\n\t\t\t\t\tProject actions ▾\n\t\t\t\t</Button>\n\t\t\t\t<Menu\n\t\t\t\t\topen={open()}\n\t\t\t\t\tonClose={() => open.set(false)}\n\t\t\t\t\tlabel=\"Project actions\"\n\t\t\t\t\titems={[\n\t\t\t\t\t\t{ type: \"label\", label: \"marketing-site\" },\n\t\t\t\t\t\t{ label: \"Rename\", onSelect: pick(\"Rename\") },\n\t\t\t\t\t\t{ label: \"Duplicate\", onSelect: pick(\"Duplicate\") },\n\t\t\t\t\t\t{ type: \"separator\" },\n\t\t\t\t\t\t{ label: \"Delete\", onSelect: pick(\"Delete\"), danger: true },\n\t\t\t\t\t]}\n\t\t\t\t/>\n\t\t\t</div>\n\t\t\t<Text muted>{last() ? `Chose “${last()}”` : \"Nothing chosen yet\"}</Text>\n\t\t</Group>\n\t);\n}",
@@ -7254,13 +8326,51 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "ContextMenuItem[]",
 				"required": true,
-				"description": ""
+				"description": "Menu items, in order."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "The area that opens the menu on right-click, Shift+F10 or the ContextMenu key."
+			}
+		],
+		"types": [
+			{
+				"name": "ContextMenuItem",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Item id."
+					},
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Item text."
+					},
+					{
+						"name": "danger",
+						"type": "boolean",
+						"required": false,
+						"description": "Destructive action: danger colour."
+					},
+					{
+						"name": "disabled",
+						"type": "boolean",
+						"required": false,
+						"description": "Shown but can't be chosen."
+					},
+					{
+						"name": "onSelect",
+						"type": "() => void",
+						"required": true,
+						"description": "Called when the item is chosen; the menu then closes."
+					}
+				]
 			}
 		],
 		"code": "<ContextMenu\n\titems={[\n\t\t{ id: \"open\", label: \"Open\", onSelect: () => {} },\n\t\t{ id: \"rename\", label: \"Rename\", onSelect: () => {} },\n\t\t{ id: \"delete\", label: \"Delete\", danger: true, onSelect: () => {} },\n\t]}\n>\n\t<Paper withBorder>Right-click this file card</Paper>\n</ContextMenu>",
@@ -7288,25 +8398,58 @@ export const catalog: CatalogEntry[] = [
 				"name": "actions",
 				"type": "SpotlightAction[]",
 				"required": true,
-				"description": ""
+				"description": "Actions to search and run."
 			},
 			{
 				"name": "onClose",
 				"type": "() => void",
 				"required": true,
-				"description": ""
+				"description": "Called on Escape, backdrop click or after an action runs; set `open` to false."
 			},
 			{
 				"name": "open",
 				"type": "boolean",
 				"required": true,
-				"description": ""
+				"description": "Whether the palette is shown (controlled)."
 			},
 			{
 				"name": "placeholder",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Search actions…\"",
+				"description": "Search field hint."
+			}
+		],
+		"types": [
+			{
+				"name": "SpotlightAction",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Action id."
+					},
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Action name; what the search matches."
+					},
+					{
+						"name": "description",
+						"type": "string",
+						"required": false,
+						"description": "Secondary line under the label."
+					},
+					{
+						"name": "onSelect",
+						"type": "() => void",
+						"required": true,
+						"description": "Called when the action is chosen; the palette then closes."
+					}
+				]
 			}
 		],
 		"code": "function Example() {\n\tconst open = signal(false);\n\treturn (\n\t\t<>\n\t\t\t<Button onClick={() => open.set(true)}>Open command palette</Button>\n\t\t\t<Spotlight\n\t\t\t\topen={open()}\n\t\t\t\tonClose={() => open.set(false)}\n\t\t\t\tactions={[\n\t\t\t\t\t{ id: \"new\", label: \"New file\", onSelect: () => open.set(false) },\n\t\t\t\t\t{ id: \"open\", label: \"Open recent\", onSelect: () => open.set(false) },\n\t\t\t\t\t{ id: \"settings\", label: \"Settings\", onSelect: () => open.set(false) },\n\t\t\t\t]}\n\t\t\t/>\n\t\t</>\n\t);\n}",
@@ -7332,25 +8475,51 @@ export const catalog: CatalogEntry[] = [
 				"name": "images",
 				"type": "LightboxImage[]",
 				"required": true,
-				"description": ""
+				"description": "The images, in order."
 			},
 			{
 				"name": "index",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Index of the shown image; `null` closes the viewer."
 			},
 			{
 				"name": "onClose",
 				"type": "() => void",
 				"required": true,
-				"description": ""
+				"description": "Called on Escape, backdrop click or the close button; set `index` to `null`."
 			},
 			{
 				"name": "onChange",
 				"type": "(index: number) => void",
 				"required": false,
-				"description": ""
+				"description": "Called with the next index when the user moves with ← / → or the arrows."
+			}
+		],
+		"types": [
+			{
+				"name": "LightboxImage",
+				"description": "",
+				"fields": [
+					{
+						"name": "src",
+						"type": "string",
+						"required": true,
+						"description": "Image URL."
+					},
+					{
+						"name": "alt",
+						"type": "string",
+						"required": false,
+						"description": "Alternative text (also the viewer's accessible name)."
+					},
+					{
+						"name": "caption",
+						"type": "string",
+						"required": false,
+						"description": "Caption under the image."
+					}
+				]
 			}
 		],
 		"code": "function Example() {\n\tconst index = signal<number | null>(null);\n\tconst images = [\n\t\t{ src: \"/images/one.jpg\", alt: \"Blue placeholder\" },\n\t\t{ src: \"/images/two.jpg\", alt: \"Green placeholder\" },\n\t\t{ src: \"/images/three.jpg\", alt: \"Orange placeholder\" },\n\t];\n\treturn (\n\t\t<>\n\t\t\t<Button onClick={() => index.set(0)}>Open gallery</Button>\n\t\t\t{index() !== null ? (\n\t\t\t\t<Lightbox\n\t\t\t\t\timages={images}\n\t\t\t\t\tindex={index() ?? 0}\n\t\t\t\t\tonChange={index.set}\n\t\t\t\t\tonClose={() => index.set(null)}\n\t\t\t\t/>\n\t\t\t) : null}\n\t\t</>\n\t);\n}",
@@ -7368,21 +8537,22 @@ export const catalog: CatalogEntry[] = [
 				"name": "blur",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Blur what is underneath."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content shown centred on the overlay."
 			},
 			{
 				"name": "onClick",
 				"type": "(e: MouseEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Called when the overlay is clicked."
 			}
 		],
+		"types": [],
 		"code": "<Box style={{ position: \"relative\", \"min-height\": \"6rem\" }}>\n\t<Text>Content under the overlay</Text>\n\t<Overlay blur />\n</Box>",
 		"interactive": false,
 		"logsActions": false
@@ -7403,19 +8573,27 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Message text or content."
 			},
 			{
 				"name": "title",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Bold first line."
 			},
 			{
 				"name": "tone",
 				"type": "AlertTone",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"info\"",
+				"description": "Colour and icon: `info`, `success`, `warning` or `danger`."
+			}
+		],
+		"types": [
+			{
+				"name": "AlertTone",
+				"description": "",
+				"definition": "\"info\" | \"success\" | \"warning\" | \"danger\""
 			}
 		],
 		"code": "<Alert tone=\"success\" title=\"Deploy finished\">\n\tmarketing-site is live on production.\n</Alert>",
@@ -7440,7 +8618,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Note text or content."
 			},
 			{
 				"name": "icon",
@@ -7452,13 +8630,21 @@ export const catalog: CatalogEntry[] = [
 				"name": "title",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Bold first line."
 			},
 			{
 				"name": "tone",
 				"type": "CalloutTone",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"info\"",
+				"description": "Kind of note (sets colour and icon)."
+			}
+		],
+		"types": [
+			{
+				"name": "CalloutTone",
+				"description": "",
+				"definition": "\"info\" | \"tip\" | \"warning\" | \"danger\" | \"note\""
 			}
 		],
 		"code": "<Callout tone=\"warning\" title=\"Breaking change\">\n\t<code>size</code> no longer sets the heading level — use <code>order</code>.\n</Callout>",
@@ -7483,25 +8669,33 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Notification text."
 			},
 			{
 				"name": "onClose",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Shows a close button; called when it is pressed."
 			},
 			{
 				"name": "title",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Bold first line."
 			},
 			{
 				"name": "tone",
 				"type": "AlertTone",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"info\"",
+				"description": "Colour and icon."
+			}
+		],
+		"types": [
+			{
+				"name": "AlertTone",
+				"description": "",
+				"definition": "\"info\" | \"success\" | \"warning\" | \"danger\""
 			}
 		],
 		"code": "function Example() {\n\tconst visible = signal(true);\n\treturn (\n\t\t<Show\n\t\t\twhen={visible()}\n\t\t\tfallback={\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => visible.set(true)}>\n\t\t\t\t\tShow notification\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<Notification tone=\"info\" title=\"New sign-in\" onClose={() => visible.set(false)}>\n\t\t\t\tChrome on macOS, Berlin — just now.\n\t\t\t</Notification>\n\t\t</Show>\n\t);\n}",
@@ -7529,19 +8723,176 @@ export const catalog: CatalogEntry[] = [
 				"name": "toaster",
 				"type": "Toaster",
 				"required": true,
-				"description": ""
+				"description": "The queue to render, from `createToaster()`."
 			},
 			{
 				"name": "position",
 				"type": "ToastPosition",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"bottom-right\"",
+				"description": "Screen corner or edge the toasts stack from."
 			},
 			{
 				"name": "render",
 				"type": "(toast: ToastItem, dismiss: () => void) => unknown",
 				"required": false,
 				"description": "Custom toast body; receives the item and a dismiss callback."
+			}
+		],
+		"types": [
+			{
+				"name": "Toaster",
+				"description": "",
+				"fields": [
+					{
+						"name": "items",
+						"type": "() => ToastItem[]",
+						"required": true,
+						"description": "The toasts currently shown (reactive)."
+					},
+					{
+						"name": "push",
+						"type": "(input: ToastInput) => string",
+						"required": true,
+						"description": "Shows a toast; returns its id."
+					},
+					{
+						"name": "dismiss",
+						"type": "(id: string) => void",
+						"required": true,
+						"description": "Closes a toast by id."
+					},
+					{
+						"name": "pause",
+						"type": "(id: string) => void",
+						"required": true,
+						"description": "Pause / resume auto-dismiss (hover, focus)."
+					},
+					{
+						"name": "resume",
+						"type": "(id: string) => void",
+						"required": true,
+						"description": "Restarts a paused toast's auto-dismiss timer."
+					},
+					{
+						"name": "clear",
+						"type": "() => void",
+						"required": true,
+						"description": "Closes every toast."
+					}
+				]
+			},
+			{
+				"name": "ToastItem",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Toast id (use it with `dismiss`)."
+					},
+					{
+						"name": "title",
+						"type": "string",
+						"required": false,
+						"description": "Bold first line."
+					},
+					{
+						"name": "message",
+						"type": "string",
+						"required": true,
+						"description": "Toast text."
+					},
+					{
+						"name": "tone",
+						"type": "AlertTone",
+						"required": false,
+						"description": "Colour and icon."
+					},
+					{
+						"name": "action",
+						"type": "ToastAction",
+						"required": false,
+						"description": "Optional action button, e.g. \"Undo\" or \"Retry\"."
+					},
+					{
+						"name": "state",
+						"type": "\"open\" | \"closed\"",
+						"required": true,
+						"description": "`closed` while the exit animation plays."
+					}
+				]
+			},
+			{
+				"name": "AlertTone",
+				"description": "",
+				"definition": "\"info\" | \"success\" | \"warning\" | \"danger\""
+			},
+			{
+				"name": "ToastAction",
+				"description": "",
+				"fields": [
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Action button text."
+					},
+					{
+						"name": "onClick",
+						"type": "() => void",
+						"required": true,
+						"description": "Called when the action is pressed (the toast then closes)."
+					}
+				]
+			},
+			{
+				"name": "ToastInput",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": false,
+						"description": "Id to reuse (pushing the same id replaces that toast); generated when omitted."
+					},
+					{
+						"name": "title",
+						"type": "string",
+						"required": false,
+						"description": "Bold first line."
+					},
+					{
+						"name": "message",
+						"type": "string",
+						"required": true,
+						"description": "Toast text."
+					},
+					{
+						"name": "tone",
+						"type": "AlertTone",
+						"required": false,
+						"description": "Colour and icon."
+					},
+					{
+						"name": "action",
+						"type": "ToastAction",
+						"required": false,
+						"description": "Optional action button, e.g. \"Undo\" or \"Retry\"."
+					},
+					{
+						"name": "durationMs",
+						"type": "number",
+						"required": false,
+						"description": "Auto-dismiss delay; `0` keeps the toast until dismissed. Default 4000."
+					}
+				]
+			},
+			{
+				"name": "ToastPosition",
+				"description": "",
+				"definition": "| \"top-left\" | \"top-center\" | \"top-right\" | \"bottom-left\" | \"bottom-center\" | \"bottom-right\""
 			}
 		],
 		"code": "function Example() {\n\tconst toaster = createToaster();\n\treturn (\n\t\t<>\n\t\t\t<Group gap=\"0.5rem\">\n\t\t\t\t<Button onClick={() => toaster.push({ title: \"Saved\", message: \"Your changes are live.\" })}>\n\t\t\t\t\tInfo toast\n\t\t\t\t</Button>\n\t\t\t\t<Button\n\t\t\t\t\tvariant=\"success\"\n\t\t\t\t\tonClick={() => toaster.push({ tone: \"success\", message: \"Deployment finished.\" })}\n\t\t\t\t>\n\t\t\t\t\tSuccess\n\t\t\t\t</Button>\n\t\t\t\t<Button\n\t\t\t\t\tvariant=\"danger\"\n\t\t\t\t\tonClick={() =>\n\t\t\t\t\t\ttoaster.push({\n\t\t\t\t\t\t\ttone: \"danger\",\n\t\t\t\t\t\t\tmessage: \"Build failed.\",\n\t\t\t\t\t\t\taction: { label: \"Retry\", onClick: () => {} },\n\t\t\t\t\t\t})\n\t\t\t\t\t}\n\t\t\t\t>\n\t\t\t\t\tError with action\n\t\t\t\t</Button>\n\t\t\t</Group>\n\t\t\t<ToastHost toaster={toaster} aria-label=\"Demo notifications\" />\n\t\t</>\n\t);\n}",
@@ -7562,13 +8913,20 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "`MessageHeader` and `MessageBody`, or body text."
 			},
 			{
 				"name": "tone",
 				"type": "MessageTone",
 				"required": false,
-				"description": ""
+				"description": "Colour of the message."
+			}
+		],
+		"types": [
+			{
+				"name": "MessageTone",
+				"description": "",
+				"definition": "\"info\" | \"success\" | \"warning\" | \"danger\" | \"muted\""
 			}
 		],
 		"code": "function Example() {\n\tconst visible = signal(true);\n\treturn (\n\t\t<Show\n\t\t\twhen={visible()}\n\t\t\tfallback={\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => visible.set(true)}>\n\t\t\t\t\tShow message\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<Message tone=\"info\">\n\t\t\t\t<MessageHeader onClose={() => visible.set(false)}>Scheduled maintenance</MessageHeader>\n\t\t\t\t<MessageBody>\n\t\t\t\t\tBuilds pause on Sunday 02:00–03:00 UTC while we upgrade the runners.\n\t\t\t\t</MessageBody>\n\t\t\t</Message>\n\t\t</Show>\n\t);\n}",
@@ -7591,21 +8949,23 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Header text."
 			},
 			{
 				"name": "closeLabel",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Close\"",
 				"description": "Accessible label for the close button (default \"Close\")."
 			},
 			{
 				"name": "onClose",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Shows a close button; called when it is pressed."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst visible = signal(true);\n\treturn (\n\t\t<Show\n\t\t\twhen={visible()}\n\t\t\tfallback={\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => visible.set(true)}>\n\t\t\t\t\tShow message\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<Message tone=\"warning\">\n\t\t\t\t<MessageHeader onClose={() => visible.set(false)}>\n\t\t\t\t\tUsage limit\n\t\t\t\t</MessageHeader>\n\t\t\t\t<MessageBody>You've used 92% of this month's build minutes.</MessageBody>\n\t\t\t</Message>\n\t\t</Show>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -7622,9 +8982,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content of this part."
 			}
 		],
+		"types": [],
 		"code": "<Message tone=\"success\">\n\t<MessageBody>Your domain is verified.</MessageBody>\n</Message>",
 		"interactive": false,
 		"logsActions": false
@@ -7648,31 +9009,38 @@ export const catalog: CatalogEntry[] = [
 				"name": "action",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Call to action at the end, e.g. a `Button`."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Banner text."
 			},
 			{
 				"name": "onClose",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Shows a close button; called when it is pressed."
 			},
 			{
 				"name": "title",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Bold first line."
 			},
 			{
 				"name": "tone",
 				"type": "AlertTone",
 				"required": false,
-				"description": ""
+				"description": "Colour and icon."
+			}
+		],
+		"types": [
+			{
+				"name": "AlertTone",
+				"description": "",
+				"definition": "\"info\" | \"success\" | \"warning\" | \"danger\""
 			}
 		],
 		"code": "function Example() {\n\tconst visible = signal(true);\n\treturn (\n\t\t<Show\n\t\t\twhen={visible()}\n\t\t\tfallback={\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => visible.set(true)}>\n\t\t\t\t\tShow banner\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<Banner\n\t\t\t\ttone=\"warning\"\n\t\t\t\ttitle=\"Payment failed\"\n\t\t\t\taction={\n\t\t\t\t\t<Button size=\"sm\" onClick={() => visible.set(false)}>\n\t\t\t\t\t\tUpdate card\n\t\t\t\t\t</Button>\n\t\t\t\t}\n\t\t\t\tonClose={() => visible.set(false)}\n\t\t\t>\n\t\t\t\tYour card ending in 4242 was declined.\n\t\t\t</Banner>\n\t\t</Show>\n\t);\n}",
@@ -7695,27 +9063,29 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Announcement text or content."
 			},
 			{
 				"name": "dismissible",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Show a dismiss (×) button."
 			},
 			{
 				"name": "onDismiss",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Called when the dismiss button is pressed; hide the bar here."
 			},
 			{
 				"name": "tone",
 				"type": "\"accent\" | \"warning\" | \"info\" | \"danger\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"info\"",
+				"description": "Bar colour."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst visible = signal(true);\n\treturn (\n\t\t<Show\n\t\t\twhen={visible()}\n\t\t\tfallback={\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => visible.set(true)}>\n\t\t\t\t\tShow announcement again\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<AnnouncementBar tone=\"accent\" dismissible onDismiss={() => visible.set(false)}>\n\t\t\t\tArachne 2.4 is out — dark theme and a new component reference.\n\t\t\t</AnnouncementBar>\n\t\t</Show>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -7738,21 +9108,22 @@ export const catalog: CatalogEntry[] = [
 				"name": "action",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Upgrade call to action, e.g. a `Button`."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Pitch text."
 			},
 			{
 				"name": "title",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Headline."
 			}
 		],
+		"types": [],
 		"code": "<UpgradeBanner\n\ttitle=\"You're at 92% of your build minutes\"\n\taction={<Button onClick={() => {}}>Upgrade</Button>}\n>\n\tPro includes 10,000 minutes and concurrent builds.\n</UpgradeBanner>",
 		"interactive": false,
 		"logsActions": true
@@ -7775,45 +9146,50 @@ export const catalog: CatalogEntry[] = [
 				"name": "onAccept",
 				"type": "() => void",
 				"required": true,
-				"description": ""
+				"description": "Called when the user accepts."
 			},
 			{
 				"name": "open",
 				"type": "boolean",
 				"required": true,
-				"description": ""
+				"description": "Whether the notice is shown (controlled); hide it once the user chooses."
 			},
 			{
 				"name": "acceptLabel",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Accept\"",
+				"description": "Accept button text."
 			},
 			{
 				"name": "declineLabel",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Decline\"",
+				"description": "Decline button text."
 			},
 			{
 				"name": "message",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"We use cookies to improve your experience. You can accept or decline non-essential cookies.\"",
+				"description": "Explanation of what the cookies are for."
 			},
 			{
 				"name": "onDecline",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Shows a decline button; called when it is pressed."
 			},
 			{
 				"name": "title",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Cookies\"",
+				"description": "Bold first line."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst choice = signal<\"accepted\" | \"declined\" | null>(null);\n\treturn (\n\t\t<>\n\t\t\t<CookieConsent\n\t\t\t\topen={choice() === null}\n\t\t\t\tmessage=\"We use cookies to keep you signed in and to measure usage.\"\n\t\t\t\tonAccept={() => choice.set(\"accepted\")}\n\t\t\t\tonDecline={() => choice.set(\"declined\")}\n\t\t\t/>\n\t\t\t<Show when={choice()}>\n\t\t\t\t<Group gap=\"0.75rem\">\n\t\t\t\t\t<Text muted>Cookies {choice()}.</Text>\n\t\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => choice.set(null)}>\n\t\t\t\t\t\tAsk again\n\t\t\t\t\t</Button>\n\t\t\t\t</Group>\n\t\t\t</Show>\n\t\t</>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -7830,7 +9206,8 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"You are offline. Changes may not sync.\"",
+				"description": "Message shown while offline."
 			},
 			{
 				"name": "offline",
@@ -7839,6 +9216,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Force visibility (otherwise listens to navigator.onLine)."
 			}
 		],
+		"types": [],
 		"code": "<OfflineNotice offline />",
 		"interactive": false,
 		"logsActions": false
@@ -7860,27 +9238,28 @@ export const catalog: CatalogEntry[] = [
 				"name": "title",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Headline, e.g. \"No projects yet\"."
 			},
 			{
 				"name": "action",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Call to action, e.g. a `Button`."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Extra content below the description."
 			},
 			{
 				"name": "description",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Explanation under the title."
 			}
 		],
+		"types": [],
 		"code": "<EmptyState\n\ttitle=\"No projects yet\"\n\tdescription=\"Create a project to start deploying.\"\n\taction={<Button onClick={() => {}}>New project</Button>}\n/>",
 		"interactive": false,
 		"logsActions": true
@@ -7901,13 +9280,13 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Suggestions, e.g. how to broaden the search."
 			},
 			{
 				"name": "query",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "The search that found nothing (quoted in the message)."
 			},
 			{
 				"name": "title",
@@ -7916,6 +9295,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Override the title text."
 			}
 		],
+		"types": [],
 		"code": "<NoResults query=\"kubernetes\">\n\tTry a shorter query or clear the filters.\n</NoResults>",
 		"interactive": false,
 		"logsActions": false
@@ -7938,21 +9318,23 @@ export const catalog: CatalogEntry[] = [
 				"name": "action",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Recovery action, e.g. a Retry `Button`."
 			},
 			{
 				"name": "description",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "What went wrong and what to do."
 			},
 			{
 				"name": "title",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Something went wrong\"",
+				"description": "Headline."
 			}
 		],
+		"types": [],
 		"code": "<ErrorState\n\tdescription=\"We couldn't load your deploys. Check your connection and try again.\"\n\taction={\n\t\t<Button variant=\"outline\" onClick={() => {}}>\n\t\t\tRetry\n\t\t</Button>\n\t}\n/>",
 		"interactive": false,
 		"logsActions": true
@@ -7968,15 +9350,18 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Loading\"",
+				"description": "Accessible name announced to screen readers."
 			},
 			{
 				"name": "size",
 				"type": "\"sm\" | \"md\" | \"lg\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"md\"",
+				"description": "Spinner size."
 			}
 		],
+		"types": [],
 		"code": "<Spinner label=\"Loading deploys\" />",
 		"interactive": false,
 		"logsActions": false
@@ -7996,31 +9381,46 @@ export const catalog: CatalogEntry[] = [
 				"name": "value",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Current progress, from 0 to `max`."
 			},
 			{
 				"name": "color",
 				"type": "\"warning\" | \"success\" | \"info\" | \"danger\" | \"primary\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"primary\"",
+				"description": "Bar colour."
 			},
 			{
 				"name": "indeterminate",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Unknown duration: an animated bar instead of `value`."
 			},
 			{
 				"name": "max",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "100",
+				"description": "Value at 100%."
 			},
 			{
 				"name": "size",
 				"type": "\"sm\" | \"md\" | \"lg\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"md\"",
+				"description": "Bar thickness."
+			}
+		],
+		"types": [
+			{
+				"name": "ProgressColor",
+				"description": "",
+				"definition": "\"primary\" | \"info\" | \"success\" | \"warning\" | \"danger\" | undefined"
+			},
+			{
+				"name": "ProgressSize",
+				"description": "",
+				"definition": "\"sm\" | \"md\" | \"lg\" | undefined"
 			}
 		],
 		"code": "<Progress value={64} color=\"success\" />",
@@ -8042,21 +9442,23 @@ export const catalog: CatalogEntry[] = [
 				"name": "steps",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Number of segments."
 			},
 			{
 				"name": "value",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Completed segments."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Progress\"",
 				"description": "Accessible name (default \"Progress\")."
 			}
 		],
+		"types": [],
 		"code": "<SteppedProgress label=\"Onboarding\" steps={4} value={2} />",
 		"interactive": false,
 		"logsActions": false
@@ -8078,27 +9480,30 @@ export const catalog: CatalogEntry[] = [
 				"name": "value",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Progress in percent (0–100)."
 			},
 			{
 				"name": "label",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content in the middle, e.g. `72%`."
 			},
 			{
 				"name": "size",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "72",
+				"description": "Diameter in pixels."
 			},
 			{
 				"name": "thickness",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "6",
+				"description": "Ring stroke width in pixels."
 			}
 		],
+		"types": [],
 		"code": "<RingProgress value={72} label=\"72%\" />",
 		"interactive": false,
 		"logsActions": false
@@ -8120,27 +9525,30 @@ export const catalog: CatalogEntry[] = [
 				"name": "value",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Progress in percent (0–100)."
 			},
 			{
 				"name": "label",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content in the middle, e.g. `64%`."
 			},
 			{
 				"name": "size",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "120",
+				"description": "Width in pixels."
 			},
 			{
 				"name": "thickness",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "10",
+				"description": "Arc stroke width in pixels."
 			}
 		],
+		"types": [],
 		"code": "<SemiCircleProgress value={64} label=\"64%\" />",
 		"interactive": false,
 		"logsActions": false
@@ -8159,21 +9567,24 @@ export const catalog: CatalogEntry[] = [
 				"name": "visible",
 				"type": "boolean",
 				"required": true,
-				"description": ""
+				"description": "Show the bar (hide it when navigation finishes)."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Loading\"",
 				"description": "Accessible name (default \"Loading\")."
 			},
 			{
 				"name": "value",
 				"type": "number",
 				"required": false,
+				"defaultValue": "30",
 				"description": "0–100; omit for indeterminate."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst progress = signal(40);\n\tconst running = signal(true);\n\t// Trickle towards 90% while \"navigating\" (effects run only in the browser).\n\teffect(() => {\n\t\tif (!running()) return;\n\t\tconst timer = setInterval(\n\t\t\t() => progress.set(Math.min(90, progress() + (90 - progress()) * 0.2)),\n\t\t\t300,\n\t\t);\n\t\treturn () => clearInterval(timer);\n\t});\n\treturn (\n\t\t<Stack gap=\"0.75rem\" style={{ \"padding-top\": \"0.75rem\" }}>\n\t\t\t{/* Pinned to the top of the page (here: of the preview). */}\n\t\t\t<NavigationProgress visible={progress() < 100} value={progress()} />\n\t\t\t<Group gap=\"0.5rem\">\n\t\t\t\t<Button\n\t\t\t\t\tsize=\"sm\"\n\t\t\t\t\tonClick={() => {\n\t\t\t\t\t\tprogress.set(5);\n\t\t\t\t\t\trunning.set(true);\n\t\t\t\t\t}}\n\t\t\t\t>\n\t\t\t\t\tStart navigation\n\t\t\t\t</Button>\n\t\t\t\t<Button\n\t\t\t\t\tsize=\"sm\"\n\t\t\t\t\tvariant=\"outline\"\n\t\t\t\t\tonClick={() => {\n\t\t\t\t\t\trunning.set(false);\n\t\t\t\t\t\tprogress.set(100);\n\t\t\t\t\t}}\n\t\t\t\t>\n\t\t\t\t\tFinish\n\t\t\t\t</Button>\n\t\t\t\t<Text muted>{progress() >= 100 ? \"Done\" : `${Math.round(progress())}%`}</Text>\n\t\t\t</Group>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -8192,15 +9603,17 @@ export const catalog: CatalogEntry[] = [
 				"name": "visible",
 				"type": "boolean",
 				"required": true,
-				"description": ""
+				"description": "Show the overlay and spinner."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Loading\"",
+				"description": "Accessible name of the spinner."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst loading = signal(true);\n\tconst refresh = () => loading.set(true);\n\t// Pretend each refresh takes 1.5 s (effects run only in the browser).\n\teffect(() => {\n\t\tif (!loading()) return;\n\t\tconst timer = setTimeout(() => loading.set(false), 1500);\n\t\treturn () => clearTimeout(timer);\n\t});\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Box style={{ position: \"relative\", \"min-height\": \"6rem\" }}>\n\t\t\t\t<Text>Deploy list</Text>\n\t\t\t\t<LoadingOverlay visible={loading()} label=\"Refreshing\" />\n\t\t\t</Box>\n\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={refresh} disabled={loading()}>\n\t\t\t\tRefresh\n\t\t\t</Button>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -8217,15 +9630,18 @@ export const catalog: CatalogEntry[] = [
 				"name": "height",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"0.9rem\"",
+				"description": "Height (any CSS length)."
 			},
 			{
 				"name": "width",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"100%\"",
+				"description": "Width (any CSS length)."
 			}
 		],
+		"types": [],
 		"code": "<Skeleton width=\"16rem\" height=\"1.25rem\" />",
 		"interactive": false,
 		"logsActions": false
@@ -8245,9 +9661,11 @@ export const catalog: CatalogEntry[] = [
 				"name": "lines",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "3",
+				"description": "Number of placeholder lines."
 			}
 		],
+		"types": [],
 		"code": "<SkeletonText lines={3} />",
 		"interactive": false,
 		"logsActions": false
@@ -8264,6 +9682,7 @@ export const catalog: CatalogEntry[] = [
 			"text"
 		],
 		"props": [],
+		"types": [],
 		"code": "<SkeletonCard />",
 		"interactive": false,
 		"logsActions": false
@@ -8284,13 +9703,14 @@ export const catalog: CatalogEntry[] = [
 				"name": "onLoad",
 				"type": "() => void",
 				"required": true,
-				"description": ""
+				"description": "Called when the user asks for more."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"You're all caught up\"",
+				"description": "Button label."
 			},
 			{
 				"name": "endLabel",
@@ -8302,15 +9722,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "hasMore",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Whether more items can load; shows `endLabel` when false."
 			},
 			{
 				"name": "loading",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Show a spinner and disable the button."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst count = signal(3);\n\tconst loading = signal(false);\n\tconst load = () => {\n\t\tloading.set(true);\n\t\tsetTimeout(() => {\n\t\t\tcount.set(count() + 3);\n\t\t\tloading.set(false);\n\t\t}, 500);\n\t};\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<For each={Array.from({ length: count() }, (_, i) => i + 1)}>\n\t\t\t\t{(n) => <Text>Activity #{n}</Text>}\n\t\t\t</For>\n\t\t\t<LoadMore\n\t\t\t\tonLoad={load}\n\t\t\t\tloading={loading()}\n\t\t\t\thasMore={count() < 12}\n\t\t\t\tendLabel=\"That's everything.\"\n\t\t\t>\n\t\t\t\tLoad 3 more\n\t\t\t</LoadMore>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -8330,39 +9751,42 @@ export const catalog: CatalogEntry[] = [
 				"name": "onLoadMore",
 				"type": "() => void",
 				"required": true,
-				"description": ""
+				"description": "Called when the end of the list scrolls into view (or the button is pressed)."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "The list rendered so far."
 			},
 			{
 				"name": "hasMore",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Whether more items can load."
 			},
 			{
 				"name": "loading",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Currently loading (prevents duplicate requests, shows a spinner)."
 			},
 			{
 				"name": "loadMoreLabel",
 				"type": "content",
 				"required": false,
+				"defaultValue": "\"Load more\"",
 				"description": "Button text (default \"Load more\" / \"Loading…\")."
 			},
 			{
 				"name": "rootMargin",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"200px\"",
 				"description": "How far before the end to start loading (IntersectionObserver `rootMargin`). Default `200px`."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst deploys = signal(Array.from({ length: 6 }, (_, i) => 128 - i));\n\tconst loading = signal(false);\n\tconst hasMore = () => deploys().length < 30;\n\tconst loadMore = () => {\n\t\tif (loading() || !hasMore()) return;\n\t\tloading.set(true);\n\t\tsetTimeout(() => {\n\t\t\tconst last = deploys()[deploys().length - 1] ?? 128;\n\t\t\tdeploys.set([...deploys(), ...Array.from({ length: 6 }, (_, i) => last - 1 - i)]);\n\t\t\tloading.set(false);\n\t\t}, 600);\n\t};\n\treturn (\n\t\t<ScrollArea maxHeight=\"12rem\">\n\t\t\t<InfiniteScroll onLoadMore={loadMore} hasMore={hasMore()} loading={loading()}>\n\t\t\t\t<Stack gap=\"0.5rem\">\n\t\t\t\t\t<For each={deploys()}>{(n) => <Text>Deploy #{n}</Text>}</For>\n\t\t\t\t</Stack>\n\t\t\t</InfiniteScroll>\n\t\t</ScrollArea>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -8378,19 +9802,27 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Badge text."
 			},
 			{
 				"name": "rounded",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Pill shape."
 			},
 			{
 				"name": "tone",
 				"type": "\"accent\" | \"warning\" | \"success\" | \"danger\" | \"muted\"",
 				"required": false,
+				"defaultValue": "\"accent\"",
 				"description": "Compact count / status pill — prefer Tag for labeled chips."
+			}
+		],
+		"types": [
+			{
+				"name": "BadgeTone",
+				"description": "",
+				"definition": "\"accent\" | \"success\" | \"warning\" | \"danger\" | \"muted\" | undefined"
 			}
 		],
 		"code": "<Badge tone=\"success\">\n\tActive\n</Badge>",
@@ -8414,7 +9846,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Tag text."
 			},
 			{
 				"name": "color",
@@ -8426,38 +9858,47 @@ export const catalog: CatalogEntry[] = [
 				"name": "light",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Pale background with coloured text instead of a solid fill."
 			},
 			{
 				"name": "onRemove",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Shows a remove (×) button; called when it is pressed."
 			},
 			{
 				"name": "removeLabel",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Remove\"",
 				"description": "Accessible label for the remove button (default \"Remove\")."
 			},
 			{
 				"name": "rounded",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Pill shape."
 			},
 			{
 				"name": "size",
 				"type": "\"normal\" | \"medium\" | \"large\"",
 				"required": false,
-				"description": ""
+				"description": "Tag size."
 			},
 			{
 				"name": "tone",
 				"type": "\"accent\" | \"danger\" | \"neutral\"",
 				"required": false,
+				"defaultValue": "\"neutral\"",
 				"description": "",
 				"deprecated": "use `color`"
+			}
+		],
+		"types": [
+			{
+				"name": "TagColor",
+				"description": "",
+				"definition": "| \"neutral\" | \"black\" | \"dark\" | \"light\" | \"white\" | \"primary\" | \"link\" | \"info\" | \"success\" | \"warning\" | \"danger\" | \"accent\" | undefined"
 			}
 		],
 		"code": "<Tag color=\"success\">\n\tDeployed\n</Tag>",
@@ -8476,21 +9917,22 @@ export const catalog: CatalogEntry[] = [
 				"name": "addons",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Join pairs of tags edge to edge (e.g. a name and a value)."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "The `Tag`s to group."
 			},
 			{
 				"name": "size",
 				"type": "\"medium\" | \"large\"",
 				"required": false,
-				"description": ""
+				"description": "Size for every tag in the group."
 			}
 		],
+		"types": [],
 		"code": "<Tags>\n\t<Tag>typescript</Tag>\n\t<Tag>ssr</Tag>\n\t<Tag color=\"info\">signals</Tag>\n</Tags>",
 		"interactive": false,
 		"logsActions": false
@@ -8513,15 +9955,17 @@ export const catalog: CatalogEntry[] = [
 				"name": "pulse",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Animate a pulse ring (for live states)."
 			},
 			{
 				"name": "tone",
 				"type": "\"accent\" | \"warning\" | \"success\" | \"danger\" | \"neutral\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"neutral\"",
+				"description": "Dot colour."
 			}
 		],
+		"types": [],
 		"code": "<StatusDot label=\"Online\" tone=\"success\" />",
 		"interactive": false,
 		"logsActions": false
@@ -8541,33 +9985,35 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Element to decorate."
 			},
 			{
 				"name": "dot",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "A plain dot instead of a label."
 			},
 			{
 				"name": "label",
 				"type": "string | number",
 				"required": false,
-				"description": ""
+				"description": "Badge text or count."
 			},
 			{
 				"name": "position",
 				"type": "\"bottom-start\" | \"bottom-end\" | \"top-start\" | \"top-end\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"top-end\"",
+				"description": "Corner of the child the badge sits on."
 			},
 			{
 				"name": "processing",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Pulse, for ongoing activity."
 			}
 		],
+		"types": [],
 		"code": "<Indicator label={3}>\n\t<Button variant=\"outline\" onClick={() => {}}>\n\t\tInbox\n\t</Button>\n</Indicator>",
 		"interactive": false,
 		"logsActions": true
@@ -8587,9 +10033,11 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Live\"",
+				"description": "Badge text."
 			}
 		],
+		"types": [],
 		"code": "<LiveBadge />",
 		"interactive": false,
 		"logsActions": false
@@ -8606,15 +10054,17 @@ export const catalog: CatalogEntry[] = [
 				"name": "count",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Unread count; hidden at 0."
 			},
 			{
 				"name": "max",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "99",
+				"description": "Counts above this show as `max+`."
 			}
 		],
+		"types": [],
 		"code": "<Text>\n\tInbox <UnreadBadge count={4} />\n</Text>",
 		"interactive": false,
 		"logsActions": false
@@ -8631,9 +10081,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "env",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Environment name; `production`, `staging` and `development` have their own colours."
 			}
 		],
+		"types": [],
 		"code": "<EnvBadge env=\"staging\" />",
 		"interactive": false,
 		"logsActions": false
@@ -8650,9 +10101,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "version",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Version text (a leading `v` is added)."
 			}
 		],
+		"types": [],
 		"code": "<VersionTag version=\"2.4.0\" />",
 		"interactive": false,
 		"logsActions": false
@@ -8672,6 +10124,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Team role label (not the ARIA role)."
 			}
 		],
+		"types": [],
 		"code": "<RoleBadge role=\"Admin\" />",
 		"interactive": false,
 		"logsActions": false
@@ -8688,7 +10141,14 @@ export const catalog: CatalogEntry[] = [
 				"name": "priority",
 				"type": "Priority",
 				"required": true,
-				"description": ""
+				"description": "Priority level; sets the colour."
+			}
+		],
+		"types": [
+			{
+				"name": "Priority",
+				"description": "",
+				"definition": "\"low\" | \"medium\" | \"high\" | \"urgent\""
 			}
 		],
 		"code": "<PriorityBadge priority=\"urgent\" />",
@@ -8707,7 +10167,14 @@ export const catalog: CatalogEntry[] = [
 				"name": "severity",
 				"type": "Severity",
 				"required": true,
-				"description": ""
+				"description": "Severity level; sets the colour."
+			}
+		],
+		"types": [
+			{
+				"name": "Severity",
+				"description": "",
+				"definition": "\"info\" | \"low\" | \"medium\" | \"high\" | \"critical\""
 			}
 		],
 		"code": "<SeverityBadge severity=\"critical\" />",
@@ -8726,13 +10193,20 @@ export const catalog: CatalogEntry[] = [
 				"name": "state",
 				"type": "SyncState",
 				"required": true,
-				"description": ""
+				"description": "Sync state; sets the icon and text."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Custom text instead of the state name."
+			}
+		],
+		"types": [
+			{
+				"name": "SyncState",
+				"description": "",
+				"definition": "\"synced\" | \"syncing\" | \"error\" | \"offline\""
 			}
 		],
 		"code": "<SyncStatus state=\"syncing\" />",
@@ -8751,13 +10225,20 @@ export const catalog: CatalogEntry[] = [
 				"name": "state",
 				"type": "AutosaveState",
 				"required": true,
-				"description": ""
+				"description": "Save state; sets the icon and text."
 			},
 			{
 				"name": "labels",
 				"type": "Partial<Record<AutosaveState, string>>",
 				"required": false,
 				"description": "Override the text per state."
+			}
+		],
+		"types": [
+			{
+				"name": "AutosaveState",
+				"description": "",
+				"definition": "\"idle\" | \"saving\" | \"saved\" | \"error\""
 			}
 		],
 		"code": "<AutosaveIndicator state=\"saved\" />",
@@ -8776,15 +10257,17 @@ export const catalog: CatalogEntry[] = [
 				"name": "at",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "When it was saved, as display text (e.g. \"2 minutes ago\")."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Last saved\"",
 				"description": "Prefix text (default \"Last saved\")."
 			}
 		],
+		"types": [],
 		"code": "<LastSaved at=\"2 minutes ago\" />",
 		"interactive": false,
 		"logsActions": false
@@ -8800,9 +10283,11 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Typing\"",
 				"description": "Accessible name (default \"Typing\")."
 			}
 		],
+		"types": [],
 		"code": "<TypingIndicator label=\"Grace is typing\" />",
 		"interactive": false,
 		"logsActions": false
@@ -8826,39 +10311,40 @@ export const catalog: CatalogEntry[] = [
 				"name": "bordered",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Borders around every cell."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Table parts: `Thead`, `Tbody`, `Tfoot` (or native elements)."
 			},
 			{
 				"name": "fullwidth",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Stretch to the container's width."
 			},
 			{
 				"name": "hoverable",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Highlight the row under the pointer."
 			},
 			{
 				"name": "narrow",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Compact cell padding."
 			},
 			{
 				"name": "striped",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Alternate row shading."
 			}
 		],
+		"types": [],
 		"code": "<Table striped fullwidth>\n\t<thead>\n\t\t<tr>\n\t\t\t<th scope=\"col\">Project</th>\n\t\t\t<th scope=\"col\">Status</th>\n\t\t</tr>\n\t</thead>\n\t<tbody>\n\t\t<tr>\n\t\t\t<td>marketing-site</td>\n\t\t\t<td>Ready</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>docs</td>\n\t\t\t<td>Building</td>\n\t\t</tr>\n\t</tbody>\n</Table>",
 		"interactive": false,
 		"logsActions": false
@@ -8875,9 +10361,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Rows or cell content."
 			}
 		],
+		"types": [],
 		"code": "<Table>\n\t<Thead>\n\t\t<Tr>\n\t\t\t<Th scope=\"col\">Invoice</Th>\n\t\t\t<Th scope=\"col\">Amount</Th>\n\t\t</Tr>\n\t</Thead>\n\t<Tbody>\n\t\t<Tr>\n\t\t\t<Td>INV-014</Td>\n\t\t\t<Td>$49.00</Td>\n\t\t</Tr>\n\t</Tbody>\n</Table>",
 		"interactive": false,
 		"logsActions": false
@@ -8894,9 +10381,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Rows or cell content."
 			}
 		],
+		"types": [],
 		"code": "<Table>\n\t<Tbody>\n\t\t<Tr>\n\t\t\t<Td>INV-014</Td>\n\t\t\t<Td>$49.00</Td>\n\t\t</Tr>\n\t\t<Tr>\n\t\t\t<Td>INV-013</Td>\n\t\t\t<Td>$49.00</Td>\n\t\t</Tr>\n\t</Tbody>\n</Table>",
 		"interactive": false,
 		"logsActions": false
@@ -8913,9 +10401,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Rows or cell content."
 			}
 		],
+		"types": [],
 		"code": "<Table>\n\t<Tbody>\n\t\t<Tr>\n\t\t\t<Td>INV-014</Td>\n\t\t\t<Td>$49.00</Td>\n\t\t</Tr>\n\t</Tbody>\n\t<Tfoot>\n\t\t<Tr>\n\t\t\t<Th scope=\"row\">Total</Th>\n\t\t\t<Td>$49.00</Td>\n\t\t</Tr>\n\t</Tfoot>\n</Table>",
 		"interactive": false,
 		"logsActions": false
@@ -8932,15 +10421,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Rows or cell content."
 			},
 			{
 				"name": "onClick",
 				"type": "(e: MouseEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Makes the row clickable."
 			}
 		],
+		"types": [],
 		"code": "<Table>\n\t<Tbody>\n\t\t<Tr>\n\t\t\t<Td>INV-014</Td>\n\t\t\t<Td>Paid</Td>\n\t\t</Tr>\n\t</Tbody>\n</Table>",
 		"interactive": false,
 		"logsActions": false
@@ -8957,39 +10447,40 @@ export const catalog: CatalogEntry[] = [
 				"name": "abbr",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Short form of the header, read by screen readers."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Rows or cell content."
 			},
 			{
 				"name": "colspan",
 				"type": "string | number",
 				"required": false,
-				"description": ""
+				"description": "Columns the cell spans."
 			},
 			{
 				"name": "headers",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Ids of the header cells describing this cell."
 			},
 			{
 				"name": "rowspan",
 				"type": "string | number",
 				"required": false,
-				"description": ""
+				"description": "Rows the cell spans."
 			},
 			{
 				"name": "scope",
 				"type": "\"row\" | \"col\" | \"rowgroup\" | \"colgroup\"",
 				"required": false,
-				"description": ""
+				"description": "Which cells a header cell describes."
 			}
 		],
+		"types": [],
 		"code": "<Table>\n\t<Thead>\n\t\t<Tr>\n\t\t\t<Th scope=\"col\">\n\t\t\t\tStatus\n\t\t\t</Th>\n\t\t</Tr>\n\t</Thead>\n</Table>",
 		"interactive": false,
 		"logsActions": false
@@ -9006,39 +10497,40 @@ export const catalog: CatalogEntry[] = [
 				"name": "abbr",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Short form of the header, read by screen readers."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Rows or cell content."
 			},
 			{
 				"name": "colspan",
 				"type": "string | number",
 				"required": false,
-				"description": ""
+				"description": "Columns the cell spans."
 			},
 			{
 				"name": "headers",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Ids of the header cells describing this cell."
 			},
 			{
 				"name": "rowspan",
 				"type": "string | number",
 				"required": false,
-				"description": ""
+				"description": "Rows the cell spans."
 			},
 			{
 				"name": "scope",
 				"type": "\"row\" | \"col\" | \"rowgroup\" | \"colgroup\"",
 				"required": false,
-				"description": ""
+				"description": "Which cells a header cell describes."
 			}
 		],
+		"types": [],
 		"code": "<Table>\n\t<Tbody>\n\t\t<Tr>\n\t\t\t<Td>Paid</Td>\n\t\t</Tr>\n\t</Tbody>\n</Table>",
 		"interactive": false,
 		"logsActions": false
@@ -9064,13 +10556,13 @@ export const catalog: CatalogEntry[] = [
 				"name": "columns",
 				"type": "DataTableColumn<T>[]",
 				"required": true,
-				"description": ""
+				"description": "Column definitions, in order."
 			},
 			{
 				"name": "rows",
 				"type": "T[]",
 				"required": true,
-				"description": ""
+				"description": "Row data; each row needs a unique `id`."
 			},
 			{
 				"name": "defaultSort",
@@ -9097,6 +10589,56 @@ export const catalog: CatalogEntry[] = [
 				"description": "Notified after a header click changes the sort."
 			}
 		],
+		"types": [
+			{
+				"name": "DataTableColumn",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Column id (used by sorting)."
+					},
+					{
+						"name": "header",
+						"type": "string",
+						"required": true,
+						"description": "Column header text."
+					},
+					{
+						"name": "cell",
+						"type": "(row: T) => unknown",
+						"required": true,
+						"description": "Renders a row's cell for this column."
+					},
+					{
+						"name": "sortValue",
+						"type": "(row: T) => string | number",
+						"required": false,
+						"description": "Value to sort by; the column is sortable when set."
+					}
+				]
+			},
+			{
+				"name": "DataTableSort",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Id of the sorted column."
+					},
+					{
+						"name": "dir",
+						"type": "\"asc\" | \"desc\"",
+						"required": true,
+						"description": "Sort direction."
+					}
+				]
+			}
+		],
 		"code": "<DataTable\n\tlabel=\"Deploys\"\n\trows={[\n\t\t{ id: \"128\", branch: \"main\", duration: 102 },\n\t\t{ id: \"127\", branch: \"feat/ui-kit\", duration: 88 },\n\t\t{ id: \"126\", branch: \"main\", duration: 131 },\n\t]}\n\tcolumns={[\n\t\t{ id: \"id\", header: \"Deploy\", cell: (r: { id: string }) => `#${r.id}` },\n\t\t{ id: \"branch\", header: \"Branch\", cell: (r: { branch: string }) => r.branch },\n\t\t{\n\t\t\tid: \"duration\",\n\t\t\theader: \"Duration\",\n\t\t\tcell: (r: { duration: number }) => `${r.duration}s`,\n\t\t\tsortValue: (r: { duration: number }) => r.duration,\n\t\t},\n\t]}\n/>",
 		"interactive": false,
 		"logsActions": false
@@ -9118,7 +10660,27 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "DescriptionItem[]",
 				"required": true,
-				"description": ""
+				"description": "Label / value pairs, in order."
+			}
+		],
+		"types": [
+			{
+				"name": "DescriptionItem",
+				"description": "",
+				"fields": [
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Term (rendered as `<dt>`)."
+					},
+					{
+						"name": "value",
+						"type": "content",
+						"required": true,
+						"description": "Description text or content (rendered as `<dd>`)."
+					}
+				]
 			}
 		],
 		"code": "<DescriptionList\n\titems={[\n\t\t{ label: \"Region\", value: \"eu-central-1\" },\n\t\t{ label: \"Runtime\", value: \"Bun 1.3\" },\n\t\t{ label: \"Created\", value: \"Sep 3, 2026\" },\n\t]}\n/>",
@@ -9142,7 +10704,27 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "PropertyItem[]",
 				"required": true,
-				"description": ""
+				"description": "Properties, in order."
+			}
+		],
+		"types": [
+			{
+				"name": "PropertyItem",
+				"description": "",
+				"fields": [
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Property name."
+					},
+					{
+						"name": "value",
+						"type": "content",
+						"required": true,
+						"description": "Property value (text or content)."
+					}
+				]
 			}
 		],
 		"code": "<PropertyList\n\titems={[\n\t\t{ label: \"Status\", value: \"Active\" },\n\t\t{ label: \"Owner\", value: \"Ada Lovelace\" },\n\t\t{ label: \"Region\", value: \"eu-central-1\" },\n\t]}\n/>",
@@ -9163,7 +10745,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "`ListItem`s."
 			},
 			{
 				"name": "ordered",
@@ -9172,6 +10754,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Render `<ol>` instead of `<ul>`; fixed at mount."
 			}
 		],
+		"types": [],
 		"code": "<List>\n\t<ListItem>Install the package</ListItem>\n\t<ListItem>Import the stylesheet</ListItem>\n\t<ListItem>Render your first component</ListItem>\n</List>",
 		"interactive": false,
 		"logsActions": false
@@ -9192,13 +10775,20 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Item content."
 			},
 			{
 				"name": "icon",
 				"type": "IconName",
 				"required": false,
-				"description": ""
+				"description": "Icon instead of the bullet."
+			}
+		],
+		"types": [
+			{
+				"name": "IconName",
+				"description": "Material Design Icons path names used by `<Icon />`.",
+				"definition": "| \"check\" | \"x\" | \"plus\" | \"minus\" | \"search\" | \"user\" | \"users\" | \"settings\" | \"menu\" | \"home\" | \"heart\" | \"star\" | \"bell\" | \"mail\" | \"calendar\" | \"clock\" | \"edit\" | \"trash\" | \"copy\" | \"download\" | \"upload\" | \"link\" | \"external\" | \"info\" | \"warning\" | \"error\" | \"success\" | \"chevron-down\" | \"chevron-up\" | \"chevron-left\" | \"chevron-right\" | \"arrow-left\" | \"arrow-right\" | \"eye\" | \"eye-off\" | \"eye-outline\" | \"lock\" | \"unlock\" | \"filter\" | \"more\" | \"close\" | \"spinner\" | \"sun\" | \"moon\" | \"play\" | \"pause\" | \"refresh\" | \"share\" | \"image\" | \"file\" | \"folder\" | \"zap\" | \"phone\" | \"git\" | \"code\""
 			}
 		],
 		"code": "<List ordered>\n\t<ListItem>Install the package</ListItem>\n\t<ListItem>Import the stylesheet</ListItem>\n</List>",
@@ -9219,15 +10809,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "`ListGroupItem`s."
 			},
 			{
 				"name": "flush",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "No outer border or radius (for edge-to-edge use in cards)."
 			}
 		],
+		"types": [],
 		"code": "<ListGroup>\n\t<ListGroupItem>Profile</ListGroupItem>\n\t<ListGroupItem>Security</ListGroupItem>\n\t<ListGroupItem>Notifications</ListGroupItem>\n</ListGroup>",
 		"interactive": false,
 		"logsActions": false
@@ -9247,19 +10838,19 @@ export const catalog: CatalogEntry[] = [
 				"name": "active",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Marks the current row."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Row content."
 			},
 			{
 				"name": "disabled",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Dims the row and blocks clicks."
 			},
 			{
 				"name": "onClick",
@@ -9268,6 +10859,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Makes the row a button (fixed at mount); the `<li>` becomes the `item` slot."
 			}
 		],
+		"types": [],
 		"code": "<ListGroup>\n\t<ListGroupItem>Profile</ListGroupItem>\n\t<ListGroupItem>Security</ListGroupItem>\n</ListGroup>",
 		"interactive": false,
 		"logsActions": false
@@ -9285,9 +10877,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "`TimelineItem`s, oldest or newest first."
 			}
 		],
+		"types": [],
 		"code": "<Timeline>\n\t<TimelineItem title=\"Build started\" bullet=\"play\">\n\t\t09:41\n\t</TimelineItem>\n\t<TimelineItem title=\"Tests passed\" bullet=\"check\">\n\t\t09:43\n\t</TimelineItem>\n\t<TimelineItem title=\"Deployed to production\" bullet=\"zap\" active>\n\t\t09:44\n\t</TimelineItem>\n</Timeline>",
 		"interactive": false,
 		"logsActions": false
@@ -9310,25 +10903,32 @@ export const catalog: CatalogEntry[] = [
 				"name": "active",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Highlights this event (e.g. the latest)."
 			},
 			{
 				"name": "bullet",
 				"type": "IconName",
 				"required": false,
-				"description": ""
+				"description": "Icon in the bullet."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Event detail under the title."
 			},
 			{
 				"name": "title",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Event title."
+			}
+		],
+		"types": [
+			{
+				"name": "IconName",
+				"description": "Material Design Icons path names used by `<Icon />`.",
+				"definition": "| \"check\" | \"x\" | \"plus\" | \"minus\" | \"search\" | \"user\" | \"users\" | \"settings\" | \"menu\" | \"home\" | \"heart\" | \"star\" | \"bell\" | \"mail\" | \"calendar\" | \"clock\" | \"edit\" | \"trash\" | \"copy\" | \"download\" | \"upload\" | \"link\" | \"external\" | \"info\" | \"warning\" | \"error\" | \"success\" | \"chevron-down\" | \"chevron-up\" | \"chevron-left\" | \"chevron-right\" | \"arrow-left\" | \"arrow-right\" | \"eye\" | \"eye-off\" | \"eye-outline\" | \"lock\" | \"unlock\" | \"filter\" | \"more\" | \"close\" | \"spinner\" | \"sun\" | \"moon\" | \"play\" | \"pause\" | \"refresh\" | \"share\" | \"image\" | \"file\" | \"folder\" | \"zap\" | \"phone\" | \"git\" | \"code\""
 			}
 		],
 		"code": "<Timeline>\n\t<TimelineItem title=\"Deployed to production\" bullet=\"zap\" active>\n\t\t09:44 by Ada\n\t</TimelineItem>\n</Timeline>",
@@ -9356,7 +10956,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "data",
 				"type": "TreeNode[]",
 				"required": true,
-				"description": ""
+				"description": "Root nodes."
 			},
 			{
 				"name": "defaultExpanded",
@@ -9368,6 +10968,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "emptyLabel",
 				"type": "content",
 				"required": false,
+				"defaultValue": "\"No matches\"",
 				"description": "Shown when `filter` matches nothing (default \"No matches\")."
 			},
 			{
@@ -9380,6 +10981,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "filter",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"\"",
 				"description": "Show only nodes whose label contains this text (case-insensitive), plus their ancestors, expanded, with the match highlighted."
 			},
 			{
@@ -9398,7 +11000,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(id: string) => void",
 				"required": false,
-				"description": ""
+				"description": "Called with the id of the node the user selects."
 			},
 			{
 				"name": "onToggle",
@@ -9410,7 +11012,56 @@ export const catalog: CatalogEntry[] = [
 				"name": "value",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Id of the selected node."
+			}
+		],
+		"types": [
+			{
+				"name": "TreeNode",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Node id, passed to `onChange` and matched against `value`."
+					},
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Node text (also used by type-ahead and `filter`)."
+					},
+					{
+						"name": "children",
+						"type": "TreeNode[]",
+						"required": false,
+						"description": "Child nodes; a node with children can expand."
+					},
+					{
+						"name": "icon",
+						"type": "content",
+						"required": false,
+						"description": "Leading icon: an icon name or any content."
+					},
+					{
+						"name": "badge",
+						"type": "content",
+						"required": false,
+						"description": "Trailing content, e.g. a count or status badge."
+					},
+					{
+						"name": "disabled",
+						"type": "boolean",
+						"required": false,
+						"description": "Shown and focusable, but can't be selected."
+					}
+				]
+			},
+			{
+				"name": "IconName",
+				"description": "Material Design Icons path names used by `<Icon />`.",
+				"definition": "| \"check\" | \"x\" | \"plus\" | \"minus\" | \"search\" | \"user\" | \"users\" | \"settings\" | \"menu\" | \"home\" | \"heart\" | \"star\" | \"bell\" | \"mail\" | \"calendar\" | \"clock\" | \"edit\" | \"trash\" | \"copy\" | \"download\" | \"upload\" | \"link\" | \"external\" | \"info\" | \"warning\" | \"error\" | \"success\" | \"chevron-down\" | \"chevron-up\" | \"chevron-left\" | \"chevron-right\" | \"arrow-left\" | \"arrow-right\" | \"eye\" | \"eye-off\" | \"eye-outline\" | \"lock\" | \"unlock\" | \"filter\" | \"more\" | \"close\" | \"spinner\" | \"sun\" | \"moon\" | \"play\" | \"pause\" | \"refresh\" | \"share\" | \"image\" | \"file\" | \"folder\" | \"zap\" | \"phone\" | \"git\" | \"code\""
 			}
 		],
 		"code": "function Example() {\n\tconst selected = signal(\"button.tsx\");\n\tconst query = signal(\"\");\n\tconst files: TreeNode[] = [\n\t\t{\n\t\t\tid: \"apps\",\n\t\t\tlabel: \"apps\",\n\t\t\tbadge: 2,\n\t\t\tchildren: [\n\t\t\t\t{ id: \"web\", label: \"web\", children: [{ id: \"client.tsx\", label: \"client.tsx\" }] },\n\t\t\t\t{ id: \"admin\", label: \"admin\", disabled: true, badge: \"locked\" },\n\t\t\t],\n\t\t},\n\t\t{\n\t\t\tid: \"packages\",\n\t\t\tlabel: \"packages\",\n\t\t\tchildren: [\n\t\t\t\t{\n\t\t\t\t\tid: \"ui\",\n\t\t\t\t\tlabel: \"ui\",\n\t\t\t\t\tchildren: [\n\t\t\t\t\t\t{ id: \"button.tsx\", label: \"button.tsx\" },\n\t\t\t\t\t\t{ id: \"tree.tsx\", label: \"tree.tsx\" },\n\t\t\t\t\t\t{ id: \"styles.css\", label: \"styles.css\", icon: \"code\" },\n\t\t\t\t\t],\n\t\t\t\t},\n\t\t\t],\n\t\t},\n\t\t{ id: \"readme\", label: \"README.md\", icon: \"info\" },\n\t];\n\treturn (\n\t\t<Stack gap=\"0.5rem\" style={{ \"max-width\": \"22rem\" }}>\n\t\t\t<SearchInput\n\t\t\t\taria-label=\"Filter files\"\n\t\t\t\tplaceholder=\"Filter files\"\n\t\t\t\tvalue={query()}\n\t\t\t\tonChange={query.set}\n\t\t\t/>\n\t\t\t<Tree\n\t\t\t\tlabel=\"Workspace\"\n\t\t\t\ticons=\"auto\"\n\t\t\t\tfilter={query()}\n\t\t\t\tdefaultExpanded={[\"apps\", \"packages\", \"ui\"]}\n\t\t\t\tvalue={selected()}\n\t\t\t\tonChange={selected.set}\n\t\t\t\tdata={files}\n\t\t\t/>\n\t\t\t<Text muted>Open: {selected()}</Text>\n\t\t</Stack>\n\t);\n}",
@@ -9433,13 +11084,33 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "SortableItem[]",
 				"required": true,
-				"description": ""
+				"description": "Items in their current order (controlled)."
 			},
 			{
 				"name": "onChange",
 				"type": "(items: SortableItem[]) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the reordered items (drag or the move buttons)."
+			}
+		],
+		"types": [
+			{
+				"name": "SortableItem",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Item id (stable across reorders)."
+					},
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Item text."
+					}
+				]
 			}
 		],
 		"code": "function Example() {\n\tconst steps = signal([\n\t\t{ id: \"install\", label: \"Install\" },\n\t\t{ id: \"test\", label: \"Test\" },\n\t\t{ id: \"deploy\", label: \"Deploy\" },\n\t]);\n\treturn <SortableList items={steps()} onChange={steps.set} />;\n}",
@@ -9460,12 +11131,13 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "The board's `KanbanColumn`s."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Board\"",
 				"description": "Accessible name for the board. Default \"Board\"."
 			},
 			{
@@ -9475,6 +11147,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Called when a card is dropped on a column or moved with Alt+arrow keys. `index` is the position in the target column (without the moved card). Update your data; the board keeps focus on the moved card."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\ttype Card = { id: string; title: string; meta: string; column: string };\n\tconst columns = [\n\t\t{ id: \"todo\", title: \"Todo\" },\n\t\t{ id: \"doing\", title: \"In progress\" },\n\t\t{ id: \"done\", title: \"Done\" },\n\t];\n\tconst cards = signal<Card[]>([\n\t\t{ id: \"c-1\", title: \"Audit form labels\", meta: \"#418\", column: \"todo\" },\n\t\t{ id: \"c-2\", title: \"Toast pause on hover\", meta: \"#421\", column: \"todo\" },\n\t\t{ id: \"c-3\", title: \"Kanban keyboard moves\", meta: \"#402\", column: \"doing\" },\n\t\t{ id: \"c-4\", title: \"Dark theme tokens\", meta: \"#389\", column: \"done\" },\n\t]);\n\tconst move = (cardId: string, toColumn: string, index: number) => {\n\t\tconst card = cards().find((c) => c.id === cardId);\n\t\tif (!card) return;\n\t\tconst rest = cards().filter((c) => c.id !== cardId);\n\t\tconst target = rest.filter((c) => c.column === toColumn);\n\t\tconst before = target[index];\n\t\tconst at = before ? rest.indexOf(before) : rest.length;\n\t\tcards.set([...rest.slice(0, at), { ...card, column: toColumn }, ...rest.slice(at)]);\n\t};\n\treturn (\n\t\t<KanbanBoard label=\"Sprint 14\" onMove={move}>\n\t\t\t<For each={columns}>\n\t\t\t\t{(column) => (\n\t\t\t\t\t<KanbanColumn\n\t\t\t\t\t\ttitle={column.title}\n\t\t\t\t\t\tcolumnId={column.id}\n\t\t\t\t\t\tcount={cards().filter((c) => c.column === column.id).length}\n\t\t\t\t\t>\n\t\t\t\t\t\t<For each={cards().filter((c) => c.column === column.id)}>\n\t\t\t\t\t\t\t{(card) => (\n\t\t\t\t\t\t\t\t<KanbanCard\n\t\t\t\t\t\t\t\t\tcardId={card.id}\n\t\t\t\t\t\t\t\t\ttitle={card.title}\n\t\t\t\t\t\t\t\t\tmeta={card.meta}\n\t\t\t\t\t\t\t\t\tonClick={() => {}}\n\t\t\t\t\t\t\t\t/>\n\t\t\t\t\t\t\t)}\n\t\t\t\t\t\t</For>\n\t\t\t\t\t</KanbanColumn>\n\t\t\t\t)}\n\t\t\t</For>\n\t\t</KanbanBoard>\n\t);\n}",
 		"interactive": false,
 		"logsActions": true
@@ -9497,13 +11170,13 @@ export const catalog: CatalogEntry[] = [
 				"name": "title",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Column heading (also its accessible name)."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "The column's `KanbanCard`s."
 			},
 			{
 				"name": "columnId",
@@ -9515,9 +11188,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "count",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"description": "Number shown next to the title, e.g. the card count."
 			}
 		],
+		"types": [],
 		"code": "<KanbanBoard label=\"Review board\">\n\t<KanbanColumn title=\"In review\" columnId=\"review\" count={1}>\n\t\t<KanbanCard cardId=\"c-7\" title=\"Dark theme for charts\" meta=\"#412 · Ada\" />\n\t</KanbanColumn>\n</KanbanBoard>",
 		"interactive": false,
 		"logsActions": false
@@ -9538,7 +11212,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "title",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Card title."
 			},
 			{
 				"name": "cardId",
@@ -9550,15 +11224,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "meta",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Small line, e.g. issue number or assignee."
 			},
 			{
 				"name": "onClick",
 				"type": "(e: MouseEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Called when the card is clicked (e.g. to open it)."
 			}
 		],
+		"types": [],
 		"code": "<KanbanBoard label=\"Backlog board\">\n\t<KanbanColumn title=\"Backlog\" columnId=\"backlog\">\n\t\t<KanbanCard cardId=\"c-9\" title=\"Audit form labels\" meta=\"#418 · Grace\" />\n\t</KanbanColumn>\n</KanbanBoard>",
 		"interactive": false,
 		"logsActions": false
@@ -9585,19 +11260,19 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "AccordionItem[]",
 				"required": true,
-				"description": ""
+				"description": "The sections, in order."
 			},
 			{
 				"name": "onChange",
 				"type": "((id: string | null) => void) | ((ids: string[]) => void)",
 				"required": true,
-				"description": ""
+				"description": "Called with the id to open, or `null` when the open item is closed."
 			},
 			{
 				"name": "value",
 				"type": "string | string[]",
 				"required": true,
-				"description": ""
+				"description": "Id of the open item, or `null` when all are closed."
 			},
 			{
 				"name": "chevron",
@@ -9609,13 +11284,58 @@ export const catalog: CatalogEntry[] = [
 				"name": "multiple",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Single mode: one item open at a time (`value` is an id or `null`)."
 			},
 			{
 				"name": "variant",
 				"type": "\"default\" | \"separated\" | \"flush\"",
 				"required": false,
+				"defaultValue": "\"default\"",
 				"description": "`separated` renders each item as its own card."
+			}
+		],
+		"types": [
+			{
+				"name": "AccordionItem",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Item id, passed to `onChange` and matched against `value`."
+					},
+					{
+						"name": "title",
+						"type": "content",
+						"required": true,
+						"description": "Header text or content (the toggle button's label)."
+					},
+					{
+						"name": "content",
+						"type": "content",
+						"required": true,
+						"description": "Panel content shown when the item is open."
+					},
+					{
+						"name": "disabled",
+						"type": "boolean",
+						"required": false,
+						"description": "The header can't be toggled."
+					},
+					{
+						"name": "icon",
+						"type": "content",
+						"required": false,
+						"description": "Leading icon / avatar next to the title."
+					},
+					{
+						"name": "subtitle",
+						"type": "content",
+						"required": false,
+						"description": "Secondary line under the title."
+					}
+				]
 			}
 		],
 		"code": "function Example() {\n\tconst openItem = signal<string | null>(\"billing\");\n\treturn (\n\t\t<Accordion\n\t\t\tvalue={openItem() ?? \"\"}\n\t\t\tonChange={(id: string | null) => openItem.set(id)}\n\t\t\titems={[\n\t\t\t\t{\n\t\t\t\t\tid: \"billing\",\n\t\t\t\t\ttitle: \"How does billing work?\",\n\t\t\t\t\tcontent: \"You're billed monthly per seat.\",\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\tid: \"cancel\",\n\t\t\t\t\ttitle: \"Can I cancel anytime?\",\n\t\t\t\t\tcontent: \"Yes — your plan ends at the period's close.\",\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\tid: \"data\",\n\t\t\t\t\ttitle: \"Where is my data stored?\",\n\t\t\t\t\tcontent: \"In the EU (Frankfurt) by default.\",\n\t\t\t\t},\n\t\t\t]}\n\t\t/>\n\t);\n}",
@@ -9634,15 +11354,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "open",
 				"type": "boolean",
 				"required": true,
-				"description": ""
+				"description": "Whether the content is shown; height animates on change."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content to show or hide."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst open = signal(true);\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Button size=\"sm\" variant=\"outline\" aria-expanded={open()} onClick={() => open.set(!open())}>\n\t\t\t\t{open() ? \"Hide details\" : \"Show details\"}\n\t\t\t</Button>\n\t\t\t<Collapse open={open()}>\n\t\t\t\t<Text>Collapsible content animates its height when toggled.</Text>\n\t\t\t</Collapse>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -9663,27 +11384,31 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Long content to clip."
 			},
 			{
 				"name": "hideLabel",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Show less\"",
+				"description": "Button text while expanded."
 			},
 			{
 				"name": "maxHeight",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "80",
+				"description": "Collapsed height in pixels."
 			},
 			{
 				"name": "showLabel",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Show more\"",
+				"description": "Button text while collapsed."
 			}
 		],
+		"types": [],
 		"code": "<Spoiler maxHeight={48} showLabel=\"Show more\" hideLabel=\"Show less\">\n\tArachne renders on the server and hydrates on the client without re-running component\n\tbodies. Signals track exactly which DOM nodes depend on which values, so updates touch only\n\twhat changed. Components share one customization system for classes, styles and slots.\n</Spoiler>",
 		"interactive": false,
 		"logsActions": false
@@ -9704,21 +11429,22 @@ export const catalog: CatalogEntry[] = [
 				"name": "summary",
 				"type": "content",
 				"required": true,
-				"description": ""
+				"description": "Always-visible line that toggles the detail."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Detail content."
 			},
 			{
 				"name": "open",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Start expanded."
 			}
 		],
+		"types": [],
 		"code": "<Details summary=\"Why is my deploy queued?\">\n\tFree plans run one build at a time; later builds wait for the current one.\n</Details>",
 		"interactive": false,
 		"logsActions": false
@@ -9735,9 +11461,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Filter controls: search, selects, chips, buttons."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst query = signal(\"\");\n\tconst deploys = [\"marketing-site #128\", \"docs #127\", \"marketing-site #126\", \"api #125\"];\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<FilterBar>\n\t\t\t\t<SearchInput\n\t\t\t\t\taria-label=\"Search deploys\"\n\t\t\t\t\tplaceholder=\"Search deploys\"\n\t\t\t\t\tvalue={query()}\n\t\t\t\t\tonChange={query.set}\n\t\t\t\t/>\n\t\t\t\t<Button variant=\"outline\" onClick={() => query.set(\"\")}>\n\t\t\t\t\tClear\n\t\t\t\t</Button>\n\t\t\t</FilterBar>\n\t\t\t<For each={deploys.filter((d) => d.includes(query()))}>{(d) => <Text>{d}</Text>}</For>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -9757,15 +11484,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Filter text, e.g. \"Status: failed\"."
 			},
 			{
 				"name": "onRemove",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Shows a remove (×) button; called when it is pressed."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst filters = signal([\"Status: failed\", \"Branch: main\", \"Author: ada\"]);\n\treturn (\n\t\t<Group gap=\"0.5rem\">\n\t\t\t<For each={filters()}>\n\t\t\t\t{(filter) => (\n\t\t\t\t\t<FilterChip\n\t\t\t\t\t\tlabel={filter}\n\t\t\t\t\t\tonRemove={() => filters.set(filters().filter((f) => f !== filter))}\n\t\t\t\t\t/>\n\t\t\t\t)}\n\t\t\t</For>\n\t\t\t<Show when={filters().length < 3}>\n\t\t\t\t<Button\n\t\t\t\t\tsize=\"sm\"\n\t\t\t\t\tvariant=\"ghost\"\n\t\t\t\t\tonClick={() => filters.set([\"Status: failed\", \"Branch: main\", \"Author: ada\"])}\n\t\t\t\t>\n\t\t\t\t\tReset filters\n\t\t\t\t</Button>\n\t\t\t</Show>\n\t\t</Group>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -9782,15 +11510,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "count",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Number of results."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Noun after the count, e.g. \"deploys\"."
 			}
 		],
+		"types": [],
 		"code": "<ResultCount count={1284} label=\"deploys\" />",
 		"interactive": false,
 		"logsActions": false
@@ -9814,21 +11543,22 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "What the number measures."
 			},
 			{
 				"name": "value",
 				"type": "content",
 				"required": true,
-				"description": ""
+				"description": "The number or content to feature."
 			},
 			{
 				"name": "hint",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Small context line, e.g. \"vs. last week\"."
 			}
 		],
+		"types": [],
 		"code": "<Stat label=\"Active users\" value=\"12,480\" hint=\"+8% this week\" />",
 		"interactive": false,
 		"logsActions": false
@@ -9845,9 +11575,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "The `Stat`s to show side by side."
 			}
 		],
+		"types": [],
 		"code": "<StatGroup>\n\t<Stat label=\"Deploys\" value={128} hint=\"this week\" />\n\t<Stat label=\"Success rate\" value=\"99.2%\" />\n\t<Stat label=\"Median build\" value=\"1m 42s\" />\n</StatGroup>",
 		"interactive": false,
 		"logsActions": false
@@ -9870,27 +11601,28 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "content",
 				"required": true,
-				"description": ""
+				"description": "What the number measures."
 			},
 			{
 				"name": "value",
 				"type": "content",
 				"required": true,
-				"description": ""
+				"description": "The featured number or content."
 			},
 			{
 				"name": "hint",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Context line, e.g. \"vs. last month\"."
 			},
 			{
 				"name": "trend",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"description": "Change in percent (arrow and colour by sign)."
 			}
 		],
+		"types": [],
 		"code": "<StatCard label=\"MRR\" value=\"$48.2k\" hint=\"vs. last month\" trend={6.4} />",
 		"interactive": false,
 		"logsActions": false
@@ -9913,21 +11645,22 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "content",
 				"required": true,
-				"description": ""
+				"description": "What the number measures."
 			},
 			{
 				"name": "value",
 				"type": "content",
 				"required": true,
-				"description": ""
+				"description": "The number or content."
 			},
 			{
 				"name": "trend",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"description": "Change in percent (arrow and colour by sign)."
 			}
 		],
+		"types": [],
 		"code": "<Metric label=\"p95 latency\" value=\"182 ms\" trend={-4} />",
 		"interactive": false,
 		"logsActions": false
@@ -9947,15 +11680,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "value",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Change in percent; the sign sets the arrow and colour."
 			},
 			{
 				"name": "label",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Context after the value, e.g. \"vs. last week\"."
 			}
 		],
+		"types": [],
 		"code": "<Trend value={-2.3} label=\"vs. last week\" />",
 		"interactive": false,
 		"logsActions": false
@@ -9972,15 +11706,17 @@ export const catalog: CatalogEntry[] = [
 				"name": "value",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Number to count up to."
 			},
 			{
 				"name": "duration",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "800",
+				"description": "Animation length in milliseconds (`0` shows the value immediately)."
 			}
 		],
+		"types": [],
 		"code": "<CountUp value={12480} duration={0} />",
 		"interactive": false,
 		"logsActions": false
@@ -10000,13 +11736,14 @@ export const catalog: CatalogEntry[] = [
 				"name": "data",
 				"type": "number[]",
 				"required": true,
-				"description": ""
+				"description": "Values to plot, oldest first."
 			},
 			{
 				"name": "height",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "32",
+				"description": "Height in pixels."
 			},
 			{
 				"name": "label",
@@ -10018,9 +11755,11 @@ export const catalog: CatalogEntry[] = [
 				"name": "width",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "120",
+				"description": "Width in pixels."
 			}
 		],
+		"types": [],
 		"code": "<Sparkline label=\"Weekly signups\" data={[12, 18, 15, 22, 28, 24, 35]} />",
 		"interactive": false,
 		"logsActions": false
@@ -10040,15 +11779,17 @@ export const catalog: CatalogEntry[] = [
 				"name": "data",
 				"type": "number[]",
 				"required": true,
-				"description": ""
+				"description": "Values to plot as bars, oldest first."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Bar sparkline\"",
 				"description": "Accessible description (default \"Bar sparkline\")."
 			}
 		],
+		"types": [],
 		"code": "<SparkBar label=\"Requests per hour\" data={[4, 7, 5, 9, 12, 8, 6, 10]} />",
 		"interactive": false,
 		"logsActions": false
@@ -10072,13 +11813,39 @@ export const catalog: CatalogEntry[] = [
 				"name": "data",
 				"type": "BarListItem[]",
 				"required": true,
-				"description": ""
+				"description": "Rows, in display order."
 			},
 			{
 				"name": "format",
 				"type": "(value: number) => unknown",
 				"required": false,
 				"description": "Format the value column (default: the raw number)."
+			}
+		],
+		"types": [
+			{
+				"name": "BarListItem",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Row id."
+					},
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Row label."
+					},
+					{
+						"name": "value",
+						"type": "number",
+						"required": true,
+						"description": "Row value; bar lengths are relative to the largest."
+					}
+				]
 			}
 		],
 		"code": "<BarList\n\tdata={[\n\t\t{ id: \"home\", label: \"/\", value: 4210 },\n\t\t{ id: \"docs\", label: \"/docs\", value: 2380 },\n\t\t{ id: \"pricing\", label: \"/pricing\", value: 912 },\n\t]}\n/>",
@@ -10101,27 +11868,30 @@ export const catalog: CatalogEntry[] = [
 				"name": "value",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Filled share in percent (0–100)."
 			},
 			{
 				"name": "label",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content in the middle."
 			},
 			{
 				"name": "size",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "96",
+				"description": "Diameter in pixels."
 			},
 			{
 				"name": "thickness",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "10",
+				"description": "Ring stroke width in pixels."
 			}
 		],
+		"types": [],
 		"code": "<DonutChart value={68} label=\"Tests passing\" />",
 		"interactive": false,
 		"logsActions": false
@@ -10146,15 +11916,18 @@ export const catalog: CatalogEntry[] = [
 				"name": "columns",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "7",
+				"description": "Cells per row (e.g. 7 for weeks)."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Activity heatmap\"",
 				"description": "Accessible summary (default \"Activity heatmap\")."
 			}
 		],
+		"types": [],
 		"code": "<Heatmap\n\tlabel=\"Commits per day\"\n\tcolumns={14}\n\tvalues={[\n\t\t0, 2, 5, 1, 0, 3, 8, 4, 2, 0, 6, 9, 3, 1, 1, 4, 7, 2, 0, 0, 5, 3, 6, 8, 2, 1, 0, 4,\n\t]}\n/>",
 		"interactive": false,
 		"logsActions": false
@@ -10176,27 +11949,30 @@ export const catalog: CatalogEntry[] = [
 				"name": "value",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Current value, between `min` and `max`."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "What is measured (shown and used as the accessible name)."
 			},
 			{
 				"name": "max",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "100",
+				"description": "Upper bound."
 			},
 			{
 				"name": "min",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "0",
+				"description": "Lower bound."
 			}
 		],
+		"types": [],
 		"code": "<Meter value={62} label=\"Disk usage\" />",
 		"interactive": false,
 		"logsActions": false
@@ -10219,27 +11995,31 @@ export const catalog: CatalogEntry[] = [
 				"name": "value",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Current value, from 0 to `max`."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Gauge\"",
+				"description": "What is measured (shown under the value)."
 			},
 			{
 				"name": "max",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "100",
+				"description": "Value at a full gauge."
 			},
 			{
 				"name": "size",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "96",
+				"description": "Width in pixels."
 			}
 		],
+		"types": [],
 		"code": "<Gauge label=\"CPU\" value={72} />",
 		"interactive": false,
 		"logsActions": false
@@ -10263,27 +12043,28 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "What is metered."
 			},
 			{
 				"name": "limit",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Plan limit; the bar turns warning / danger as usage nears it."
 			},
 			{
 				"name": "used",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Amount used."
 			},
 			{
 				"name": "unit",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Unit after the numbers, e.g. `GB` or `min`."
 			}
 		],
+		"types": [],
 		"code": "<UsageMeter label=\"Build minutes\" used={1840} limit={2000} unit=\"min\" />",
 		"interactive": false,
 		"logsActions": false
@@ -10302,21 +12083,23 @@ export const catalog: CatalogEntry[] = [
 				"name": "totalGb",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Storage available, in GB."
 			},
 			{
 				"name": "usedGb",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Storage used, in GB."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Storage\"",
 				"description": "Label text (default \"Storage\")."
 			}
 		],
+		"types": [],
 		"code": "<StorageBar label=\"Storage\" usedGb={38.2} totalGb={50} />",
 		"interactive": false,
 		"logsActions": false
@@ -10341,9 +12124,11 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Uptime history\"",
 				"description": "Accessible summary (default \"Uptime history\")."
 			}
 		],
+		"types": [],
 		"code": "<UptimeBar\n\tlabel=\"API — last 14 days\"\n\tdays={[1, 1, 1, 0.998, 1, 1, 0.97, 1, 1, 1, 0.9, 1, 1, 1]}\n/>",
 		"interactive": false,
 		"logsActions": false
@@ -10360,25 +12145,27 @@ export const catalog: CatalogEntry[] = [
 				"name": "src",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Image URL."
 			},
 			{
 				"name": "alt",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"\"",
+				"description": "Alternative text; leave empty only for decorative images."
 			},
 			{
 				"name": "decoding",
 				"type": "\"auto\" | \"async\" | \"sync\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"async\"",
+				"description": "Native decoding hint."
 			},
 			{
 				"name": "fit",
 				"type": "\"cover\" | \"contain\"",
 				"required": false,
-				"description": ""
+				"description": "How the image fills its box when both `width` and `height` are set."
 			},
 			{
 				"name": "fullwidth",
@@ -10390,45 +12177,47 @@ export const catalog: CatalogEntry[] = [
 				"name": "height",
 				"type": "string | number",
 				"required": false,
-				"description": ""
+				"description": "Height (pixels or any CSS length); also reserves space before loading."
 			},
 			{
 				"name": "loading",
 				"type": "\"lazy\" | \"eager\"",
 				"required": false,
+				"defaultValue": "\"lazy\"",
 				"description": "Native lazy loading (default `lazy`); use `eager` for above-the-fold media."
 			},
 			{
 				"name": "radius",
 				"type": "string | number",
 				"required": false,
-				"description": ""
+				"description": "Corner radius (pixels or any CSS length)."
 			},
 			{
 				"name": "rounded",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Fully round (for avatars and logos)."
 			},
 			{
 				"name": "sizes",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Display sizes for `srcset` (native `sizes`)."
 			},
 			{
 				"name": "srcset",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Responsive image candidates (native `srcset`)."
 			},
 			{
 				"name": "width",
 				"type": "string | number",
 				"required": false,
-				"description": ""
+				"description": "Width (pixels or any CSS length); also reserves space before loading."
 			}
 		],
+		"types": [],
 		"code": "<Image\n\tsrc=\"/images/photo.jpg\"\n\talt=\"Placeholder photo\"\n\twidth={320}\n\tradius={8}\n/>",
 		"interactive": false,
 		"logsActions": false
@@ -10448,15 +12237,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "caption",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Caption under the content (`<figcaption>`)."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "The image or other figure content."
 			}
 		],
+		"types": [],
 		"code": "<Figure caption=\"Build times dropped 40% after caching dependencies.\">\n\t<img src=\"/images/chart.jpg\" alt=\"Build time chart\" width=\"480\" height=\"240\" />\n</Figure>",
 		"interactive": false,
 		"logsActions": false
@@ -10473,21 +12263,22 @@ export const catalog: CatalogEntry[] = [
 				"name": "src",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Image URL (data URIs work too)."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content drawn over the image."
 			},
 			{
 				"name": "radius",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Round the corners (theme radius)."
 			}
 		],
+		"types": [],
 		"code": "<BackgroundImage src=\"/images/background.jpg\" radius>\n\t<Box style={{ margin: \"2rem\", \"max-width\": \"18rem\" }}>Content over a background image.</Box>\n</BackgroundImage>",
 		"interactive": false,
 		"logsActions": false
@@ -10506,21 +12297,24 @@ export const catalog: CatalogEntry[] = [
 				"name": "src",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Embed URL (YouTube, Vimeo, or any page that can be framed)."
 			},
 			{
 				"name": "ratio",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "16",
+				"description": "Width divided by height, e.g. `16 / 9`."
 			},
 			{
 				"name": "title",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Video\"",
 				"description": "Accessible title of the embedded frame."
 			}
 		],
+		"types": [],
 		"code": "<VideoFrame title=\"Product tour\" src=\"about:blank\" ratio={16 / 9} />",
 		"interactive": false,
 		"logsActions": false
@@ -10544,25 +12338,46 @@ export const catalog: CatalogEntry[] = [
 				"name": "slides",
 				"type": "CarouselSlide[]",
 				"required": true,
-				"description": ""
+				"description": "The slides, in order."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Carousel\"",
 				"description": "Accessible name (default \"Carousel\")."
 			},
 			{
 				"name": "onChange",
 				"type": "(id: string) => void",
 				"required": false,
-				"description": ""
+				"description": "Called with the id of the slide being shown."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Id of the shown slide (controlled); uncontrolled when unset."
+			}
+		],
+		"types": [
+			{
+				"name": "CarouselSlide",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Slide id, passed to `onChange` and matched against `value`."
+					},
+					{
+						"name": "content",
+						"type": "content",
+						"required": true,
+						"description": "Slide content."
+					}
+				]
 			}
 		],
 		"code": "<Carousel\n\tlabel=\"Highlights\"\n\tslides={[\n\t\t{\n\t\t\tid: \"s1\",\n\t\t\tcontent: (\n\t\t\t\t<img src=\"/images/signals.jpg\" alt=\"Signals\" width=\"640\" height=\"280\" />\n\t\t\t),\n\t\t},\n\t\t{\n\t\t\tid: \"s2\",\n\t\t\tcontent: <img src=\"/images/ssr.jpg\" alt=\"SSR\" width=\"640\" height=\"280\" />,\n\t\t},\n\t\t{\n\t\t\tid: \"s3\",\n\t\t\tcontent: (\n\t\t\t\t<img src=\"/images/theming.jpg\" alt=\"Theming\" width=\"640\" height=\"280\" />\n\t\t\t),\n\t\t},\n\t]}\n/>",
@@ -10585,25 +12400,52 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "ThumbnavItem[]",
 				"required": true,
-				"description": ""
+				"description": "The thumbnails, in order."
 			},
 			{
 				"name": "onChange",
 				"type": "(id: string) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the id the user picks."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Id of the selected thumbnail."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Thumbnails\"",
 				"description": "Accessible name (default \"Thumbnails\")."
+			}
+		],
+		"types": [
+			{
+				"name": "ThumbnavItem",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Thumbnail id, passed to `onChange` and matched against `value`."
+					},
+					{
+						"name": "src",
+						"type": "string",
+						"required": true,
+						"description": "Thumbnail image URL."
+					},
+					{
+						"name": "alt",
+						"type": "string",
+						"required": false,
+						"description": "Alternative text (the button's accessible name)."
+					}
+				]
 			}
 		],
 		"code": "function Example() {\n\tconst photos = [\n\t\t{ id: \"lake\", src: \"/images/lake.jpg\", alt: \"Lake at dawn\" },\n\t\t{ id: \"forest\", src: \"/images/forest.jpg\", alt: \"Forest trail\" },\n\t\t{ id: \"desert\", src: \"/images/desert.jpg\", alt: \"Desert dunes\" },\n\t\t{ id: \"city\", src: \"/images/city.jpg\", alt: \"City at night\" },\n\t];\n\tconst photo = signal(\"forest\");\n\tconst current = () => photos.find((ph) => ph.id === photo()) ?? photos[0];\n\treturn (\n\t\t<Stack gap=\"0.75rem\" style={{ \"max-width\": \"24rem\" }}>\n\t\t\t<img\n\t\t\t\tsrc={current()?.src}\n\t\t\t\talt={current()?.alt}\n\t\t\t\twidth=\"640\"\n\t\t\t\theight=\"400\"\n\t\t\t\tstyle={{ width: \"100%\", height: \"auto\", \"border-radius\": \"var(--a-radius)\" }}\n\t\t\t/>\n\t\t\t<Thumbnav label=\"Photos\" items={photos} value={photo()} onChange={photo.set} />\n\t\t</Stack>\n\t);\n}",
@@ -10622,15 +12464,17 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Images or tiles."
 			},
 			{
 				"name": "columns",
 				"type": "2 | 3 | 4",
 				"required": false,
-				"description": ""
+				"defaultValue": "3",
+				"description": "Number of columns."
 			}
 		],
+		"types": [],
 		"code": "<GalleryGrid columns={3}>\n\t<img src=\"/images/a.jpg\" alt=\"Gallery A\" width=\"320\" height=\"240\" />\n\t<img src=\"/images/b.jpg\" alt=\"Gallery B\" width=\"320\" height=\"240\" />\n\t<img src=\"/images/c.jpg\" alt=\"Gallery C\" width=\"320\" height=\"240\" />\n</GalleryGrid>",
 		"interactive": false,
 		"logsActions": false
@@ -10652,39 +12496,44 @@ export const catalog: CatalogEntry[] = [
 				"name": "after",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Image URL for the \"after\" state."
 			},
 			{
 				"name": "before",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Image URL for the \"before\" state."
 			},
 			{
 				"name": "afterAlt",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"After\"",
+				"description": "Alternative text for the \"after\" image."
 			},
 			{
 				"name": "beforeAlt",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Before\"",
+				"description": "Alternative text for the \"before\" image."
 			},
 			{
 				"name": "initial",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "50",
+				"description": "Starting divider position in percent."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Compare\"",
 				"description": "Accessible name for the slider (default \"Compare\")."
 			}
 		],
+		"types": [],
 		"code": "<BeforeAfter\n\tlabel=\"Compare designs\"\n\tbefore=\"/images/before.jpg\"\n\tbeforeAlt=\"Before redesign\"\n\tafter=\"/images/after.jpg\"\n\tafterAlt=\"After redesign\"\n\tinitial={50}\n/>",
 		"interactive": false,
 		"logsActions": false
@@ -10704,9 +12553,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "unknown[]",
 				"required": true,
-				"description": ""
+				"description": "Logos: names or content (images)."
 			}
 		],
+		"types": [],
 		"code": "<LogoCloud items={[\"Acme\", \"Globex\", \"Initech\", \"Umbrella\"]} />",
 		"interactive": false,
 		"logsActions": false
@@ -10727,7 +12577,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content to scroll (rendered twice for a seamless loop)."
 			},
 			{
 				"name": "pauseOnHover",
@@ -10739,15 +12589,18 @@ export const catalog: CatalogEntry[] = [
 				"name": "speed",
 				"type": "\"normal\" | \"slow\" | \"fast\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"normal\"",
+				"description": "Scroll speed."
 			},
 			{
 				"name": "variant",
 				"type": "\"soft\" | \"plain\"",
 				"required": false,
+				"defaultValue": "\"soft\"",
 				"description": "`\"soft\"` (default) sits on a tinted, bordered strip; `\"plain\"` has no background or border."
 			}
 		],
+		"types": [],
 		"code": "<Stack gap=\"0.75rem\">\n\t<Marquee pauseOnHover>\n\t\tArachne 2.4 · dark theme · 330+ components · SSR & hydration · full customization\n\t</Marquee>\n\t<Marquee variant=\"plain\" speed=\"slow\">\n\t\tAcme · Globex · Initech · Umbrella · Hooli · Stark Industries\n\t</Marquee>\n</Stack>",
 		"interactive": false,
 		"logsActions": false
@@ -10769,15 +12622,17 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Page content (a screenshot fills the frame)."
 			},
 			{
 				"name": "url",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"https://example.com\"",
+				"description": "Address shown in the bar."
 			}
 		],
+		"types": [],
 		"code": "<BrowserFrame url=\"https://acme.arachne.app\">\n\t<img src=\"/images/preview.jpg\" alt=\"Site preview\" width=\"640\" height=\"300\" />\n</BrowserFrame>",
 		"interactive": false,
 		"logsActions": false
@@ -10798,9 +12653,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Screen content (a screenshot fills the screen)."
 			}
 		],
+		"types": [],
 		"code": "<PhoneFrame>\n\t<img src=\"/images/app.jpg\" alt=\"App screen\" width=\"300\" height=\"600\" />\n</PhoneFrame>",
 		"interactive": false,
 		"logsActions": false
@@ -10821,27 +12677,30 @@ export const catalog: CatalogEntry[] = [
 				"name": "alt",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Image alt text (default: `name`)."
 			},
 			{
 				"name": "name",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Avatar\"",
+				"description": "Person's name: used for initials and as the accessible name."
 			},
 			{
 				"name": "size",
 				"type": "\"sm\" | \"md\" | \"lg\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"md\"",
+				"description": "Avatar size."
 			},
 			{
 				"name": "src",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Image URL; falls back to initials from `name` when missing or broken."
 			}
 		],
+		"types": [],
 		"code": "<Avatar name=\"Ada Lovelace\" />",
 		"interactive": false,
 		"logsActions": false
@@ -10862,21 +12721,24 @@ export const catalog: CatalogEntry[] = [
 				"name": "names",
 				"type": "string[]",
 				"required": true,
-				"description": ""
+				"description": "People to show (initials come from each name)."
 			},
 			{
 				"name": "max",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"defaultValue": "4",
+				"description": "Avatars shown before collapsing the rest into a `+N` counter."
 			},
 			{
 				"name": "size",
 				"type": "\"sm\" | \"md\" | \"lg\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"md\"",
+				"description": "Avatar size."
 			}
 		],
+		"types": [],
 		"code": "<AvatarGroup\n\tmax={3}\n\tnames={[\"Ada Lovelace\", \"Grace Hopper\", \"Alan Turing\", \"Linus Torvalds\"]}\n/>",
 		"interactive": false,
 		"logsActions": false
@@ -10897,27 +12759,29 @@ export const catalog: CatalogEntry[] = [
 				"name": "name",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Person's name (initials and accessible name)."
 			},
 			{
 				"name": "size",
 				"type": "\"sm\" | \"md\" | \"lg\"",
 				"required": false,
-				"description": ""
+				"description": "Avatar size."
 			},
 			{
 				"name": "src",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Avatar image URL."
 			},
 			{
 				"name": "status",
 				"type": "\"accent\" | \"warning\" | \"success\" | \"danger\" | \"neutral\"",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"success\"",
+				"description": "Colour of the presence dot (e.g. `success` for online)."
 			}
 		],
+		"types": [],
 		"code": "<PresenceAvatar name=\"Ada Lovelace\" status=\"success\" />",
 		"interactive": false,
 		"logsActions": false
@@ -10941,13 +12805,13 @@ export const catalog: CatalogEntry[] = [
 				"name": "name",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "User's name (also used for the avatar initials)."
 			},
 			{
 				"name": "email",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Secondary line under the name."
 			},
 			{
 				"name": "end",
@@ -10959,15 +12823,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "onClick",
 				"type": "(e: MouseEvent) => void",
 				"required": false,
-				"description": ""
+				"description": "Called when the button is pressed, e.g. to open an account menu."
 			},
 			{
 				"name": "src",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Avatar image URL."
 			}
 		],
+		"types": [],
 		"code": "<UserButton name=\"Ada Lovelace\" email=\"ada@example.com\" onClick={() => {}} />",
 		"interactive": false,
 		"logsActions": true
@@ -10991,13 +12856,39 @@ export const catalog: CatalogEntry[] = [
 				"name": "org",
 				"type": "OrgOption",
 				"required": true,
-				"description": ""
+				"description": "The current organisation."
 			},
 			{
 				"name": "onClick",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Called when pressed, e.g. to open an organisation menu."
+			}
+		],
+		"types": [
+			{
+				"name": "OrgOption",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Organisation id."
+					},
+					{
+						"name": "name",
+						"type": "string",
+						"required": true,
+						"description": "Organisation name."
+					},
+					{
+						"name": "plan",
+						"type": "string",
+						"required": false,
+						"description": "Plan shown under the name."
+					}
+				]
 			}
 		],
 		"code": "<OrgSwitcher\n\torg={{ id: \"acme\", name: \"Acme Inc.\", plan: \"Pro\" }}\n\tonClick={() => {}}\n/>",
@@ -11026,39 +12917,40 @@ export const catalog: CatalogEntry[] = [
 				"name": "name",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Display name."
 			},
 			{
 				"name": "actions",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Buttons at the end, e.g. Follow."
 			},
 			{
 				"name": "bio",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Short bio."
 			},
 			{
 				"name": "cover",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Cover image URL (a gradient when unset)."
 			},
 			{
 				"name": "handle",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Username, shown with a leading `@`."
 			},
 			{
 				"name": "src",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Avatar image URL."
 			}
 		],
+		"types": [],
 		"code": "<ProfileHeader\n\tname=\"Ada Lovelace\"\n\thandle=\"ada\"\n\tbio=\"Analyst of engines. Writes the first programs.\"\n\tactions={\n\t\t<Button variant=\"outline\" onClick={() => {}}>\n\t\t\tFollow\n\t\t</Button>\n\t}\n/>",
 		"interactive": false,
 		"logsActions": true
@@ -11082,19 +12974,19 @@ export const catalog: CatalogEntry[] = [
 				"name": "name",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Member name."
 			},
 			{
 				"name": "email",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Email under the name."
 			},
 			{
 				"name": "onRemove",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Shows a remove button; called when it is pressed."
 			},
 			{
 				"name": "role",
@@ -11106,9 +12998,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "src",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Avatar image URL."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst members = signal([\n\t\t{ name: \"Grace Hopper\", email: \"grace@navy.mil\" },\n\t\t{ name: \"Alan Turing\", email: \"alan@bletchley.uk\" },\n\t]);\n\treturn (\n\t\t<Stack gap=\"0.25rem\">\n\t\t\t<For each={members()}>\n\t\t\t\t{(member) => (\n\t\t\t\t\t<MemberRow\n\t\t\t\t\t\tname={member.name}\n\t\t\t\t\t\temail={member.email}\n\t\t\t\t\t\tonRemove={() => members.set(members().filter((m) => m !== member))}\n\t\t\t\t\t/>\n\t\t\t\t)}\n\t\t\t</For>\n\t\t\t<Show when={members().length === 0}>\n\t\t\t\t<Text muted>No members left.</Text>\n\t\t\t</Show>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -11130,31 +13023,33 @@ export const catalog: CatalogEntry[] = [
 				"name": "email",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Invited address."
 			},
 			{
 				"name": "onResend",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Shows a resend button; called when it is pressed."
 			},
 			{
 				"name": "onRevoke",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Shows a revoke button; called when it is pressed."
 			},
 			{
 				"name": "resendLabel",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Resend\"",
+				"description": "Resend button text."
 			},
 			{
 				"name": "revokeLabel",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Revoke\"",
+				"description": "Revoke button text."
 			},
 			{
 				"name": "role",
@@ -11163,6 +13058,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Team role shown as a {@link RoleBadge} (not the ARIA role)."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst status = signal(\"Invitation pending\");\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<InviteCard\n\t\t\t\temail=\"linus@example.com\"\n\t\t\t\tonResend={() => status.set(\"Invitation re-sent just now\")}\n\t\t\t\tonRevoke={() => status.set(\"Invitation revoked\")}\n\t\t\t/>\n\t\t\t<Text muted>{status()}</Text>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -11188,33 +13084,34 @@ export const catalog: CatalogEntry[] = [
 				"name": "author",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Author name."
 			},
 			{
 				"name": "actions",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Buttons under the comment, e.g. Reply."
 			},
 			{
 				"name": "avatar",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Avatar image URL (initials from `author` when unset)."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Comment text or content."
 			},
 			{
 				"name": "meta",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Small line next to the author, e.g. the time."
 			}
 		],
+		"types": [],
 		"code": "<Comment author=\"Ada Lovelace\" meta=\"2h ago\">\n\tLooks great — can we add a reduced-motion variant?\n</Comment>",
 		"interactive": false,
 		"logsActions": false
@@ -11236,27 +13133,28 @@ export const catalog: CatalogEntry[] = [
 				"name": "from",
 				"type": "\"me\" | \"them\"",
 				"required": true,
-				"description": ""
+				"description": "Who sent it: `me` (aligned right, accent) or `them`."
 			},
 			{
 				"name": "author",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Sender name above the bubble."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Message content."
 			},
 			{
 				"name": "meta",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Small line under the bubble, e.g. the time."
 			}
 		],
+		"types": [],
 		"code": "<Stack gap=\"0.5rem\">\n\t<ChatBubble from=\"them\" author=\"Grace\" meta=\"09:41\">\n\t\tIs the deploy done?\n\t</ChatBubble>\n\t<ChatBubble from=\"me\" meta=\"09:42\">\n\t\tYes — live on production.\n\t</ChatBubble>\n</Stack>",
 		"interactive": false,
 		"logsActions": false
@@ -11273,15 +13171,16 @@ export const catalog: CatalogEntry[] = [
 				"name": "name",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Username (shown with a leading `@`)."
 			},
 			{
 				"name": "onClick",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Makes the mention a button, e.g. to open the profile."
 			}
 		],
+		"types": [],
 		"code": "<Text>\n\tThanks <Mention name=\"ada\" onClick={() => {}} />, merging now.\n</Text>",
 		"interactive": false,
 		"logsActions": true
@@ -11301,13 +13200,39 @@ export const catalog: CatalogEntry[] = [
 				"name": "reactions",
 				"type": "Reaction[]",
 				"required": true,
-				"description": ""
+				"description": "Reactions, in order."
 			},
 			{
 				"name": "onToggle",
 				"type": "(emoji: string) => void",
 				"required": false,
-				"description": ""
+				"description": "Called with the emoji the user toggles; update counts yourself."
+			}
+		],
+		"types": [
+			{
+				"name": "Reaction",
+				"description": "",
+				"fields": [
+					{
+						"name": "emoji",
+						"type": "string",
+						"required": true,
+						"description": "The reaction emoji."
+					},
+					{
+						"name": "count",
+						"type": "number",
+						"required": true,
+						"description": "Number of people who reacted."
+					},
+					{
+						"name": "active",
+						"type": "boolean",
+						"required": false,
+						"description": "Whether the current user reacted (pressed state)."
+					}
+				]
 			}
 		],
 		"code": "function Example() {\n\tconst reactions = signal([\n\t\t{ emoji: \"👍\", count: 12, active: true },\n\t\t{ emoji: \"🎉\", count: 4, active: false },\n\t\t{ emoji: \"👀\", count: 2, active: false },\n\t]);\n\tconst toggle = (emoji: string) =>\n\t\treactions.set(\n\t\t\treactions().map((r) =>\n\t\t\t\tr.emoji === emoji ? { ...r, active: !r.active, count: r.count + (r.active ? -1 : 1) } : r,\n\t\t\t),\n\t\t);\n\treturn <ReactionBar reactions={reactions()} onToggle={toggle} />;\n}",
@@ -11333,31 +13258,39 @@ export const catalog: CatalogEntry[] = [
 				"name": "title",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "What happened."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Extra detail below the title."
 			},
 			{
 				"name": "icon",
 				"type": "IconName",
 				"required": false,
+				"defaultValue": "\"bell\"",
 				"description": "Built-in icon name, or pass any node via `iconNode`."
 			},
 			{
 				"name": "iconNode",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Custom leading content instead of `icon`."
 			},
 			{
 				"name": "meta",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Small line, e.g. the time."
+			}
+		],
+		"types": [
+			{
+				"name": "IconName",
+				"description": "Material Design Icons path names used by `<Icon />`.",
+				"definition": "| \"check\" | \"x\" | \"plus\" | \"minus\" | \"search\" | \"user\" | \"users\" | \"settings\" | \"menu\" | \"home\" | \"heart\" | \"star\" | \"bell\" | \"mail\" | \"calendar\" | \"clock\" | \"edit\" | \"trash\" | \"copy\" | \"download\" | \"upload\" | \"link\" | \"external\" | \"info\" | \"warning\" | \"error\" | \"success\" | \"chevron-down\" | \"chevron-up\" | \"chevron-left\" | \"chevron-right\" | \"arrow-left\" | \"arrow-right\" | \"eye\" | \"eye-off\" | \"eye-outline\" | \"lock\" | \"unlock\" | \"filter\" | \"more\" | \"close\" | \"spinner\" | \"sun\" | \"moon\" | \"play\" | \"pause\" | \"refresh\" | \"share\" | \"image\" | \"file\" | \"folder\" | \"zap\" | \"phone\" | \"git\" | \"code\""
 			}
 		],
 		"code": "<ActivityItem icon=\"git\" title=\"Ada pushed 3 commits to main\" meta=\"12 minutes ago\" />",
@@ -11383,37 +13316,45 @@ export const catalog: CatalogEntry[] = [
 				"name": "title",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "What the notification is about."
 			},
 			{
 				"name": "body",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Secondary text."
 			},
 			{
 				"name": "icon",
 				"type": "IconName",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"bell\"",
+				"description": "Leading icon."
 			},
 			{
 				"name": "onClick",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Makes the item a button, e.g. to open it."
 			},
 			{
 				"name": "time",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "When it arrived."
 			},
 			{
 				"name": "unread",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Show the unread dot and bold title."
+			}
+		],
+		"types": [
+			{
+				"name": "IconName",
+				"description": "Material Design Icons path names used by `<Icon />`.",
+				"definition": "| \"check\" | \"x\" | \"plus\" | \"minus\" | \"search\" | \"user\" | \"users\" | \"settings\" | \"menu\" | \"home\" | \"heart\" | \"star\" | \"bell\" | \"mail\" | \"calendar\" | \"clock\" | \"edit\" | \"trash\" | \"copy\" | \"download\" | \"upload\" | \"link\" | \"external\" | \"info\" | \"warning\" | \"error\" | \"success\" | \"chevron-down\" | \"chevron-up\" | \"chevron-left\" | \"chevron-right\" | \"arrow-left\" | \"arrow-right\" | \"eye\" | \"eye-off\" | \"eye-outline\" | \"lock\" | \"unlock\" | \"filter\" | \"more\" | \"close\" | \"spinner\" | \"sun\" | \"moon\" | \"play\" | \"pause\" | \"refresh\" | \"share\" | \"image\" | \"file\" | \"folder\" | \"zap\" | \"phone\" | \"git\" | \"code\""
 			}
 		],
 		"code": "<InboxItem\n\ticon=\"git\"\n\ttitle=\"Grace requested your review\"\n\tbody=\"#421 Toast: pause on hover\"\n\ttime=\"5m\"\n\tunread\n\tonClick={() => {}}\n/>",
@@ -11439,19 +13380,19 @@ export const catalog: CatalogEntry[] = [
 				"name": "author",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Who said it."
 			},
 			{
 				"name": "quote",
 				"type": "content",
 				"required": true,
-				"description": ""
+				"description": "The testimonial text."
 			},
 			{
 				"name": "avatar",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Author avatar URL."
 			},
 			{
 				"name": "role",
@@ -11460,6 +13401,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Author's job title (consumed here; not forwarded as an ARIA role)."
 			}
 		],
+		"types": [],
 		"code": "<Testimonial\n\tquote=\"We replaced three component libraries with one and our bundle got smaller.\"\n\tauthor=\"Grace Hopper\"\n\trole=\"Staff engineer, Navy Labs\"\n/>",
 		"interactive": false,
 		"logsActions": false
@@ -11483,31 +13425,39 @@ export const catalog: CatalogEntry[] = [
 				"name": "rating",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Stars out of 5."
 			},
 			{
 				"name": "author",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Reviewer name."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Review text."
 			},
 			{
 				"name": "order",
 				"type": "HeadingLevel",
 				"required": false,
+				"defaultValue": "4",
 				"description": "Heading level of the title, to fit the page outline. Default 4."
 			},
 			{
 				"name": "title",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Review headline."
+			}
+		],
+		"types": [
+			{
+				"name": "HeadingLevel",
+				"description": "",
+				"definition": "1 | 2 | 3 | 4 | 5 | 6"
 			}
 		],
 		"code": "<ReviewCard order={3} rating={4} title=\"Solid mug\" author=\"Linus T.\">\n\tKeeps coffee warm, survives the dishwasher.\n</ReviewCard>",
@@ -11528,7 +13478,44 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "SocialLink[]",
 				"required": true,
-				"description": ""
+				"description": "Links, in order."
+			}
+		],
+		"types": [
+			{
+				"name": "SocialLink",
+				"description": "",
+				"fields": [
+					{
+						"name": "icon",
+						"type": "IconName",
+						"required": true,
+						"description": "Network icon."
+					},
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Network name (accessible name)."
+					},
+					{
+						"name": "href",
+						"type": "string",
+						"required": false,
+						"description": "Renders a real link (opens in a new tab) when set."
+					},
+					{
+						"name": "onClick",
+						"type": "() => void",
+						"required": false,
+						"description": "Click handler (renders a button when there is no `href`)."
+					}
+				]
+			},
+			{
+				"name": "IconName",
+				"description": "Material Design Icons path names used by `<Icon />`.",
+				"definition": "| \"check\" | \"x\" | \"plus\" | \"minus\" | \"search\" | \"user\" | \"users\" | \"settings\" | \"menu\" | \"home\" | \"heart\" | \"star\" | \"bell\" | \"mail\" | \"calendar\" | \"clock\" | \"edit\" | \"trash\" | \"copy\" | \"download\" | \"upload\" | \"link\" | \"external\" | \"info\" | \"warning\" | \"error\" | \"success\" | \"chevron-down\" | \"chevron-up\" | \"chevron-left\" | \"chevron-right\" | \"arrow-left\" | \"arrow-right\" | \"eye\" | \"eye-off\" | \"eye-outline\" | \"lock\" | \"unlock\" | \"filter\" | \"more\" | \"close\" | \"spinner\" | \"sun\" | \"moon\" | \"play\" | \"pause\" | \"refresh\" | \"share\" | \"image\" | \"file\" | \"folder\" | \"zap\" | \"phone\" | \"git\" | \"code\""
 			}
 		],
 		"code": "<SocialLinks\n\titems={[\n\t\t{ icon: \"git\", label: \"GitHub\", href: \"https://github.com\" },\n\t\t{ icon: \"mail\", label: \"Email\", href: \"mailto:hello@example.com\" },\n\t]}\n/>",
@@ -11547,9 +13534,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Inline code."
 			}
 		],
+		"types": [],
 		"code": "<Text>\n\tRun <Code>bun run ui:docs</Code> after changing an example.\n</Text>",
 		"interactive": false,
 		"logsActions": false
@@ -11573,31 +13561,41 @@ export const catalog: CatalogEntry[] = [
 				"name": "code",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Source code to highlight and copy."
 			},
 			{
 				"name": "copiedLabel",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Copied\"",
+				"description": "Copy button text shown briefly after copying."
 			},
 			{
 				"name": "copyLabel",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Copy\"",
+				"description": "Copy button text."
 			},
 			{
 				"name": "language",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"tsx\"",
+				"description": "Language for highlighting, shown in the header."
 			},
 			{
 				"name": "radius",
-				"type": "RadiusName | (string & {})",
+				"type": "(string & {}) | RadiusName",
 				"required": false,
 				"description": "Corner radius: `\"none\"` | `\"sm\"` | `\"lg\"` or any CSS length (default: the theme radius)."
+			}
+		],
+		"types": [
+			{
+				"name": "RadiusName",
+				"description": "Corner radius scale — `sm` is the kit default.",
+				"definition": "\"none\" | \"sm\" | \"lg\""
 			}
 		],
 		"code": "<CodeBlock\n\tlanguage=\"tsx\"\n\tradius=\"lg\"\n\tcode={\n\t\t'import { Button } from \"@arachne/ui\";\\n\\nexport const Save = () => <Button>Save</Button>;'\n\t}\n/>",
@@ -11620,7 +13618,27 @@ export const catalog: CatalogEntry[] = [
 				"name": "lines",
 				"type": "DiffLine[]",
 				"required": true,
-				"description": ""
+				"description": "Diff lines, in order."
+			}
+		],
+		"types": [
+			{
+				"name": "DiffLine",
+				"description": "",
+				"fields": [
+					{
+						"name": "type",
+						"type": "\"add\" | \"del\" | \"ctx\"",
+						"required": true,
+						"description": "`add`, `del` or `ctx` (unchanged context)."
+					},
+					{
+						"name": "text",
+						"type": "string",
+						"required": true,
+						"description": "The line's text (without the `+` / `-` prefix)."
+					}
+				]
 			}
 		],
 		"code": "<Diff\n\tlines={[\n\t\t{ type: \"ctx\", text: \"<Title\" },\n\t\t{ type: \"del\", text: \"  size={5}\" },\n\t\t{ type: \"add\", text: \"  order={3} size={5}\" },\n\t\t{ type: \"ctx\", text: \">Settings</Title>\" },\n\t]}\n/>",
@@ -11639,9 +13657,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Key or key combination text, e.g. `⌘K`."
 			}
 		],
+		"types": [],
 		"code": "<Text>\n\tPress <Kbd>Esc</Kbd> to close.\n</Text>",
 		"interactive": false,
 		"logsActions": false
@@ -11681,9 +13700,11 @@ export const catalog: CatalogEntry[] = [
 				"name": "separator",
 				"type": "content",
 				"required": false,
+				"defaultValue": "\"+\"",
 				"description": "Separator between keys (default `+`)."
 			}
 		],
+		"types": [],
 		"code": "<Hotkey keys={[\"⌘\", \"K\"]} />",
 		"interactive": false,
 		"logsActions": false
@@ -11705,15 +13726,17 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Terminal text (newlines are kept)."
 			},
 			{
 				"name": "title",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Terminal\"",
+				"description": "Window title in the header bar."
 			}
 		],
+		"types": [],
 		"code": "<Terminal title=\"zsh\">\n\t{\"$ bun add @arachne/ui\\ninstalled @arachne/ui@2.4.0\"}\n</Terminal>",
 		"interactive": false,
 		"logsActions": false
@@ -11736,7 +13759,38 @@ export const catalog: CatalogEntry[] = [
 				"name": "lines",
 				"type": "LogLineData[]",
 				"required": true,
-				"description": ""
+				"description": "Log lines, oldest first."
+			}
+		],
+		"types": [
+			{
+				"name": "LogLineData",
+				"description": "",
+				"fields": [
+					{
+						"name": "time",
+						"type": "string",
+						"required": false,
+						"description": "Timestamp text."
+					},
+					{
+						"name": "level",
+						"type": "LogLevel",
+						"required": true,
+						"description": "Severity; sets the colour."
+					},
+					{
+						"name": "message",
+						"type": "string",
+						"required": true,
+						"description": "Log message."
+					}
+				]
+			},
+			{
+				"name": "LogLevel",
+				"description": "",
+				"definition": "\"debug\" | \"info\" | \"warn\" | \"error\""
 			}
 		],
 		"code": "<LogViewer\n\tlines={[\n\t\t{ time: \"12:04:01\", level: \"info\", message: \"Listening on :3000\" },\n\t\t{ time: \"12:04:07\", level: \"warn\", message: \"Slow query (812 ms): SELECT * FROM runs\" },\n\t\t{ time: \"12:04:09\", level: \"error\", message: \"ECONNRESET redis://cache:6379\" },\n\t]}\n/>",
@@ -11755,9 +13809,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "value",
 				"type": "content",
 				"required": true,
-				"description": ""
+				"description": "Any JSON-serializable value to show, pretty-printed."
 			}
 		],
+		"types": [],
 		"code": "<JsonViewer value={{ id: \"dep_128\", status: \"ready\", regions: [\"fra1\", \"iad1\"] }} />",
 		"interactive": false,
 		"logsActions": false
@@ -11774,7 +13829,14 @@ export const catalog: CatalogEntry[] = [
 				"name": "data",
 				"type": "JsonNode",
 				"required": true,
-				"description": ""
+				"description": "The JSON tree to show; objects and arrays can be collapsed."
+			}
+		],
+		"types": [
+			{
+				"name": "JsonNode",
+				"description": "",
+				"definition": "| { kind: \"primitive\"; value: string | number | boolean | null } | { kind: \"object\"; entries: Array<{ key: string; value: JsonNode }> } | { kind: \"array\"; items: JsonNode[] }"
 			}
 		],
 		"code": "const configJson: JsonNode = {\n\tkind: \"object\",\n\tentries: [\n\t\t{ key: \"name\", value: { kind: \"primitive\", value: \"arachne\" } },\n\t\t{ key: \"private\", value: { kind: \"primitive\", value: true } },\n\t\t{\n\t\t\tkey: \"workspaces\",\n\t\t\tvalue: {\n\t\t\t\tkind: \"array\",\n\t\t\t\titems: [\n\t\t\t\t\t{ kind: \"primitive\", value: \"packages/*\" },\n\t\t\t\t\t{ kind: \"primitive\", value: \"apps/*\" },\n\t\t\t\t],\n\t\t\t},\n\t\t},\n\t],\n};\n\n<JsonTree data={configJson} />",
@@ -11792,25 +13854,58 @@ export const catalog: CatalogEntry[] = [
 				"name": "nodes",
 				"type": "FileTreeNode[]",
 				"required": true,
-				"description": ""
+				"description": "Root files and folders."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Files\"",
 				"description": "Accessible name for the tree."
 			},
 			{
 				"name": "onSelect",
 				"type": "(id: string) => void",
 				"required": false,
-				"description": ""
+				"description": "Called with the id of the file the user picks."
 			},
 			{
 				"name": "selected",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Id of the selected file."
+			}
+		],
+		"types": [
+			{
+				"name": "FileTreeNode",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Node id, passed to `onSelect` and matched against `selected`."
+					},
+					{
+						"name": "name",
+						"type": "string",
+						"required": true,
+						"description": "File or folder name."
+					},
+					{
+						"name": "kind",
+						"type": "\"file\" | \"folder\"",
+						"required": true,
+						"description": "`file` or `folder` (sets the icon; folders expand)."
+					},
+					{
+						"name": "children",
+						"type": "FileTreeNode[]",
+						"required": false,
+						"description": "Contents of a folder."
+					}
+				]
 			}
 		],
 		"code": "const repoTree: FileTreeNode[] = [\n\t{\n\t\tid: \"src\",\n\t\tname: \"src\",\n\t\tkind: \"folder\",\n\t\tchildren: [\n\t\t\t{ id: \"src/index.ts\", name: \"index.ts\", kind: \"file\" },\n\t\t\t{ id: \"src/button.tsx\", name: \"button.tsx\", kind: \"file\" },\n\t\t],\n\t},\n\t{ id: \"package.json\", name: \"package.json\", kind: \"file\" },\n];\n\nfunction Example() {\n\tconst file = signal(\"src/button.tsx\");\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<FileTree label=\"Repository\" nodes={repoTree} selected={file()} onSelect={file.set} />\n\t\t\t<Text muted>Open: {file()}</Text>\n\t\t</Stack>\n\t);\n}",
@@ -11833,25 +13928,32 @@ export const catalog: CatalogEntry[] = [
 				"name": "method",
 				"type": "HttpMethod",
 				"required": true,
-				"description": ""
+				"description": "HTTP method."
 			},
 			{
 				"name": "path",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Endpoint path, e.g. `/v1/projects/{id}`."
 			},
 			{
 				"name": "onClick",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Makes the row a button, e.g. to open the endpoint's docs."
 			},
 			{
 				"name": "summary",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "What the endpoint does."
+			}
+		],
+		"types": [
+			{
+				"name": "HttpMethod",
+				"description": "",
+				"definition": "\"GET\" | \"POST\" | \"PUT\" | \"PATCH\" | \"DELETE\" | \"HEAD\" | \"OPTIONS\""
 			}
 		],
 		"code": "<EndpointRow\n\tmethod=\"POST\"\n\tpath=\"/v1/projects/{id}/deploys\"\n\tsummary=\"Start a deploy\"\n\tonClick={() => {}}\n/>",
@@ -11870,7 +13972,14 @@ export const catalog: CatalogEntry[] = [
 				"name": "method",
 				"type": "HttpMethod",
 				"required": true,
-				"description": ""
+				"description": "HTTP method; sets the colour."
+			}
+		],
+		"types": [
+			{
+				"name": "HttpMethod",
+				"description": "",
+				"definition": "\"GET\" | \"POST\" | \"PUT\" | \"PATCH\" | \"DELETE\" | \"HEAD\" | \"OPTIONS\""
 			}
 		],
 		"code": "<HttpMethodBadge method=\"DELETE\" />",
@@ -11893,7 +14002,38 @@ export const catalog: CatalogEntry[] = [
 				"name": "steps",
 				"type": "PipelineStep[]",
 				"required": true,
-				"description": ""
+				"description": "Pipeline steps, in order."
+			}
+		],
+		"types": [
+			{
+				"name": "PipelineStep",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Step id."
+					},
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Step name."
+					},
+					{
+						"name": "status",
+						"type": "BuildStatusKind",
+						"required": true,
+						"description": "Step state; sets the icon and colour."
+					}
+				]
+			},
+			{
+				"name": "BuildStatusKind",
+				"description": "",
+				"definition": "\"success\" | \"failed\" | \"running\" | \"queued\" | \"cancelled\""
 			}
 		],
 		"code": "<Pipeline\n\tsteps={[\n\t\t{ id: \"install\", label: \"Install\", status: \"success\" },\n\t\t{ id: \"test\", label: \"Test\", status: \"success\" },\n\t\t{ id: \"build\", label: \"Build\", status: \"running\" },\n\t\t{ id: \"deploy\", label: \"Deploy\", status: \"queued\" },\n\t]}\n/>",
@@ -11912,13 +14052,20 @@ export const catalog: CatalogEntry[] = [
 				"name": "status",
 				"type": "BuildStatusKind",
 				"required": true,
-				"description": ""
+				"description": "Build state; sets the icon and colour."
 			},
 			{
 				"name": "label",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Custom text instead of the status name."
+			}
+		],
+		"types": [
+			{
+				"name": "BuildStatusKind",
+				"description": "",
+				"definition": "\"success\" | \"failed\" | \"running\" | \"queued\" | \"cancelled\""
 			}
 		],
 		"code": "<BuildStatus status=\"running\" />",
@@ -11941,21 +14088,22 @@ export const catalog: CatalogEntry[] = [
 				"name": "sha",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Full commit hash (the first 7 characters are shown)."
 			},
 			{
 				"name": "message",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Commit message, shown after the hash."
 			},
 			{
 				"name": "onClick",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Makes the chip a button, e.g. to open the commit."
 			}
 		],
+		"types": [],
 		"code": "<CommitChip\n\tsha=\"3f9c2e7a41d0b8\"\n\tmessage=\"Fix toast focus\"\n\tonClick={() => {}}\n/>",
 		"interactive": false,
 		"logsActions": true
@@ -11972,9 +14120,10 @@ export const catalog: CatalogEntry[] = [
 				"name": "name",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Branch name."
 			}
 		],
+		"types": [],
 		"code": "<BranchBadge name=\"feat/ui-kit\" />",
 		"interactive": false,
 		"logsActions": false
@@ -11995,13 +14144,20 @@ export const catalog: CatalogEntry[] = [
 				"name": "name",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Service name."
 			},
 			{
 				"name": "status",
 				"type": "ServiceStatusKind",
 				"required": true,
-				"description": ""
+				"description": "Current state; sets the dot colour and text."
+			}
+		],
+		"types": [
+			{
+				"name": "ServiceStatusKind",
+				"description": "",
+				"definition": "\"operational\" | \"degraded\" | \"outage\" | \"maintenance\""
 			}
 		],
 		"code": "<ServiceStatus name=\"Build workers\" status=\"degraded\" />",
@@ -12026,27 +14182,28 @@ export const catalog: CatalogEntry[] = [
 				"name": "version",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Release version, e.g. `2.4.0`."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "What changed."
 			},
 			{
 				"name": "date",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Release date text."
 			},
 			{
 				"name": "title",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Release name."
 			}
 		],
+		"types": [],
 		"code": "<ChangelogItem version=\"2.4.0\" date=\"Sep 12, 2026\">\n\tTables gain sticky headers and keyboard row selection.\n</ChangelogItem>",
 		"interactive": false,
 		"logsActions": false
@@ -12071,61 +14228,71 @@ export const catalog: CatalogEntry[] = [
 				"name": "price",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Price as a number."
 			},
 			{
 				"name": "title",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Product name."
 			},
 			{
 				"name": "addLabel",
 				"type": "content",
 				"required": false,
+				"defaultValue": "\"Add\"",
 				"description": "Label for the add button (default \"Add\")."
 			},
 			{
 				"name": "badge",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Badge over the image, e.g. \"Sale\"."
 			},
 			{
 				"name": "currency",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "ISO currency code for formatting."
 			},
 			{
 				"name": "image",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Product image URL."
 			},
 			{
 				"name": "imageAlt",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"\"",
 				"description": "Alt text for the product image (default: decorative)."
 			},
 			{
 				"name": "onAdd",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Shows an add-to-cart button; called when it is pressed."
 			},
 			{
 				"name": "order",
 				"type": "HeadingLevel",
 				"required": false,
+				"defaultValue": "4",
 				"description": "Heading level of the title, to fit the page outline. Default 4."
 			},
 			{
 				"name": "strike",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"description": "Previous price, shown struck through."
+			}
+		],
+		"types": [
+			{
+				"name": "HeadingLevel",
+				"description": "",
+				"definition": "1 | 2 | 3 | 4 | 5 | 6"
 			}
 		],
 		"code": "function Example() {\n\tconst inCart = signal(0);\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<ProductCard\n\t\t\t\ttitle=\"Stoneware mug\"\n\t\t\t\torder={3}\n\t\t\t\tprice={24}\n\t\t\t\tstrike={32}\n\t\t\t\tbadge=\"Sale\"\n\t\t\t\timage=\"/images/mug.jpg\"\n\t\t\t\timageAlt=\"Terracotta stoneware mug\"\n\t\t\t\tonAdd={() => inCart.set(inCart() + 1)}\n\t\t\t/>\n\t\t\t<Text muted>In cart: {inCart()}</Text>\n\t\t</Stack>\n\t);\n}",
@@ -12149,27 +14316,29 @@ export const catalog: CatalogEntry[] = [
 				"name": "amount",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Price as a number."
 			},
 			{
 				"name": "currency",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"USD\"",
+				"description": "ISO currency code for formatting, e.g. `USD`."
 			},
 			{
 				"name": "period",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Billing period after the price, e.g. `month`."
 			},
 			{
 				"name": "strike",
 				"type": "number",
 				"required": false,
-				"description": ""
+				"description": "Previous price, shown struck through."
 			}
 		],
+		"types": [],
 		"code": "<Price amount={24} strike={32} period=\"month\" />",
 		"interactive": false,
 		"logsActions": false
@@ -12193,45 +14362,46 @@ export const catalog: CatalogEntry[] = [
 				"name": "price",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Unit price as a number."
 			},
 			{
 				"name": "quantity",
 				"type": "number",
 				"required": true,
-				"description": ""
+				"description": "Quantity in the cart."
 			},
 			{
 				"name": "title",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Product name."
 			},
 			{
 				"name": "currency",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "ISO currency code for formatting."
 			},
 			{
 				"name": "image",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Product thumbnail URL."
 			},
 			{
 				"name": "onQuantityChange",
 				"type": "(value: number) => void",
 				"required": false,
-				"description": ""
+				"description": "Shows quantity buttons; called with the new quantity."
 			},
 			{
 				"name": "onRemove",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Shows a remove button; called when it is pressed."
 			}
 		],
+		"types": [],
 		"code": "function Example() {\n\tconst quantity = signal(2);\n\tconst removed = signal(false);\n\treturn (\n\t\t<Show\n\t\t\twhen={!removed()}\n\t\t\tfallback={\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => removed.set(false)}>\n\t\t\t\t\tUndo remove\n\t\t\t\t</Button>\n\t\t\t}\n\t\t>\n\t\t\t<CartLine\n\t\t\t\ttitle=\"Stoneware mug\"\n\t\t\t\tprice={24}\n\t\t\t\tquantity={quantity()}\n\t\t\t\timage=\"/images/mug.jpg\"\n\t\t\t\tonQuantityChange={quantity.set}\n\t\t\t\tonRemove={() => removed.set(true)}\n\t\t\t/>\n\t\t</Show>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
@@ -12252,25 +14422,52 @@ export const catalog: CatalogEntry[] = [
 				"name": "lines",
 				"type": "OrderSummaryLine[]",
 				"required": true,
-				"description": ""
+				"description": "Summary lines above the total."
 			},
 			{
 				"name": "total",
 				"type": "content",
 				"required": true,
-				"description": ""
+				"description": "Total amount."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Content below the total, e.g. a checkout button."
 			},
 			{
 				"name": "totalLabel",
 				"type": "content",
 				"required": false,
+				"defaultValue": "\"Total\"",
 				"description": "Label for the total row (default \"Total\")."
+			}
+		],
+		"types": [
+			{
+				"name": "OrderSummaryLine",
+				"description": "",
+				"fields": [
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Line label, e.g. \"Shipping\"."
+					},
+					{
+						"name": "value",
+						"type": "string",
+						"required": true,
+						"description": "Line amount text."
+					},
+					{
+						"name": "muted",
+						"type": "boolean",
+						"required": false,
+						"description": "De-emphasise the line."
+					}
+				]
 			}
 		],
 		"code": "<OrderSummary\n\tlines={[\n\t\t{ label: \"Subtotal\", value: \"$48.00\" },\n\t\t{ label: \"Shipping\", value: \"Free\", muted: true },\n\t\t{ label: \"Tax\", value: \"$4.32\" },\n\t]}\n\ttotal=\"$52.32\"\n/>",
@@ -12297,45 +14494,46 @@ export const catalog: CatalogEntry[] = [
 				"name": "name",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Plan name."
 			},
 			{
 				"name": "price",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Price text, e.g. `$20`."
 			},
 			{
 				"name": "action",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Call to action at the bottom, e.g. a `Button`."
 			},
 			{
 				"name": "description",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Short pitch under the name."
 			},
 			{
 				"name": "features",
 				"type": "string[]",
 				"required": false,
-				"description": ""
+				"description": "Features included in the plan."
 			},
 			{
 				"name": "highlighted",
 				"type": "boolean",
 				"required": false,
-				"description": ""
+				"description": "Emphasise this plan (e.g. the recommended one)."
 			},
 			{
 				"name": "period",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Billing period after the price, e.g. `per month`."
 			}
 		],
+		"types": [],
 		"code": "<PricingCard\n\tname=\"Pro\"\n\tprice=\"$20\"\n\tperiod=\"per seat / month\"\n\tdescription=\"For growing teams.\"\n\tfeatures={[\"Unlimited projects\", \"10,000 build minutes\", \"Email support\"]}\n\thighlighted\n\taction={<Button onClick={() => {}}>Start trial</Button>}\n/>",
 		"interactive": false,
 		"logsActions": true
@@ -12357,13 +14555,21 @@ export const catalog: CatalogEntry[] = [
 				"name": "items",
 				"type": "string[]",
 				"required": true,
-				"description": ""
+				"description": "Features, one per line."
 			},
 			{
 				"name": "icon",
 				"type": "IconName",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"check\"",
+				"description": "Icon before each feature."
+			}
+		],
+		"types": [
+			{
+				"name": "IconName",
+				"description": "Material Design Icons path names used by `<Icon />`.",
+				"definition": "| \"check\" | \"x\" | \"plus\" | \"minus\" | \"search\" | \"user\" | \"users\" | \"settings\" | \"menu\" | \"home\" | \"heart\" | \"star\" | \"bell\" | \"mail\" | \"calendar\" | \"clock\" | \"edit\" | \"trash\" | \"copy\" | \"download\" | \"upload\" | \"link\" | \"external\" | \"info\" | \"warning\" | \"error\" | \"success\" | \"chevron-down\" | \"chevron-up\" | \"chevron-left\" | \"chevron-right\" | \"arrow-left\" | \"arrow-right\" | \"eye\" | \"eye-off\" | \"eye-outline\" | \"lock\" | \"unlock\" | \"filter\" | \"more\" | \"close\" | \"spinner\" | \"sun\" | \"moon\" | \"play\" | \"pause\" | \"refresh\" | \"share\" | \"image\" | \"file\" | \"folder\" | \"zap\" | \"phone\" | \"git\" | \"code\""
 			}
 		],
 		"code": "<FeatureList items={[\"Unlimited projects\", \"Preview deploys\", \"SSO & audit log\"]} />",
@@ -12387,19 +14593,40 @@ export const catalog: CatalogEntry[] = [
 				"name": "plans",
 				"type": "string[]",
 				"required": true,
-				"description": ""
+				"description": "Plan names (the columns)."
 			},
 			{
 				"name": "rows",
 				"type": "FeatureCompareRow[]",
 				"required": true,
-				"description": ""
+				"description": "Features (the rows)."
 			},
 			{
 				"name": "featureLabel",
 				"type": "content",
 				"required": false,
+				"defaultValue": "\"Feature\"",
 				"description": "Header of the first column (default \"Feature\")."
+			}
+		],
+		"types": [
+			{
+				"name": "FeatureCompareRow",
+				"description": "",
+				"fields": [
+					{
+						"name": "feature",
+						"type": "string",
+						"required": true,
+						"description": "Feature name."
+					},
+					{
+						"name": "values",
+						"type": "(string | boolean)[]",
+						"required": true,
+						"description": "One cell per plan: `true` / `false` for a check or cross, or text."
+					}
+				]
 			}
 		],
 		"code": "<FeatureCompare\n\tplans={[\"Free\", \"Pro\", \"Enterprise\"]}\n\trows={[\n\t\t{ feature: \"Projects\", values: [\"3\", \"Unlimited\", \"Unlimited\"] },\n\t\t{ feature: \"Preview deploys\", values: [true, true, true] },\n\t\t{ feature: \"SSO\", values: [false, false, true] },\n\t]}\n/>",
@@ -12424,27 +14651,30 @@ export const catalog: CatalogEntry[] = [
 				"name": "last4",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Last four digits."
 			},
 			{
 				"name": "brand",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Card\"",
+				"description": "Card network, e.g. `Visa`."
 			},
 			{
 				"name": "exp",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"description": "Expiry, e.g. `08/29`."
 			},
 			{
 				"name": "name",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"Cardholder\"",
+				"description": "Cardholder name."
 			}
 		],
+		"types": [],
 		"code": "<CreditCardPreview brand=\"Visa\" last4=\"4242\" exp=\"08/29\" name=\"Ada Lovelace\" />",
 		"interactive": false,
 		"logsActions": false
@@ -12467,13 +14697,13 @@ export const catalog: CatalogEntry[] = [
 				"name": "amount",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Amount text, e.g. `$49.00`."
 			},
 			{
 				"name": "date",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Invoice date text."
 			},
 			{
 				"name": "id",
@@ -12485,13 +14715,20 @@ export const catalog: CatalogEntry[] = [
 				"name": "status",
 				"type": "InvoiceStatus",
 				"required": true,
-				"description": ""
+				"description": "Payment state; sets the badge."
 			},
 			{
 				"name": "onClick",
 				"type": "() => void",
 				"required": false,
-				"description": ""
+				"description": "Makes the row a button, e.g. to open the invoice."
+			}
+		],
+		"types": [
+			{
+				"name": "InvoiceStatus",
+				"description": "",
+				"definition": "\"paid\" | \"open\" | \"void\" | \"past_due\""
 			}
 		],
 		"code": "<InvoiceRow\n\tid=\"INV-2026-014\"\n\tdate=\"Sep 1, 2026\"\n\tamount=\"$49.00\"\n\tstatus=\"paid\"\n\tonClick={() => {}}\n/>",
@@ -12516,13 +14753,13 @@ export const catalog: CatalogEntry[] = [
 				"name": "title",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Page title (`<h1>`)."
 			},
 			{
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "Page body: `DocExample`s and other content."
 			},
 			{
 				"name": "description",
@@ -12531,6 +14768,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Text or inline content (e.g. with `<Code>` spans)."
 			}
 		],
+		"types": [],
 		"code": "<DocPage title=\"Buttons\" description=\"Trigger an action or an event.\">\n\t<Text>Page content goes here.</Text>\n</DocPage>",
 		"interactive": false,
 		"logsActions": false
@@ -12558,7 +14796,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "children",
 				"type": "content",
 				"required": false,
-				"description": ""
+				"description": "The live preview."
 			},
 			{
 				"name": "description",
@@ -12570,7 +14808,8 @@ export const catalog: CatalogEntry[] = [
 				"name": "language",
 				"type": "string",
 				"required": false,
-				"description": ""
+				"defaultValue": "\"tsx\"",
+				"description": "Language for highlighting the code."
 			},
 			{
 				"name": "title",
@@ -12579,6 +14818,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Optional section title above the example (e.g. \"Colors\")."
 			}
 		],
+		"types": [],
 		"code": "<DocExample title=\"Primary button\" code={\"<Button>Save</Button>\"}>\n\t<Button onClick={() => {}}>Save</Button>\n</DocExample>",
 		"interactive": false,
 		"logsActions": true
@@ -12604,19 +14844,19 @@ export const catalog: CatalogEntry[] = [
 				"name": "onChange",
 				"type": "(id: string) => void",
 				"required": true,
-				"description": ""
+				"description": "Called with the page id the user picks."
 			},
 			{
 				"name": "sections",
 				"type": "DocMenuSection[]",
 				"required": true,
-				"description": ""
+				"description": "Menu sections, each a page or a group of pages."
 			},
 			{
 				"name": "value",
 				"type": "string",
 				"required": true,
-				"description": ""
+				"description": "Id of the current page."
 			},
 			{
 				"name": "brand",
@@ -12634,7 +14874,52 @@ export const catalog: CatalogEntry[] = [
 				"name": "label",
 				"type": "string",
 				"required": false,
+				"defaultValue": "\"Documentation\"",
 				"description": "Accessible name (default \"Documentation\")."
+			}
+		],
+		"types": [
+			{
+				"name": "DocMenuSection",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Section id (used by `defaultOpen`; the page id when the section is a leaf)."
+					},
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Section heading."
+					},
+					{
+						"name": "items",
+						"type": "DocMenuItem[]",
+						"required": false,
+						"description": "Nested pages. If omitted, the section itself is a selectable leaf."
+					}
+				]
+			},
+			{
+				"name": "DocMenuItem",
+				"description": "",
+				"fields": [
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"description": "Page id, passed to `onChange` and matched against `value`."
+					},
+					{
+						"name": "label",
+						"type": "string",
+						"required": true,
+						"description": "Menu text."
+					}
+				]
 			}
 		],
 		"code": "const sections = [\n\t{ id: \"overview\", label: \"Overview\" },\n\t{ id: \"deploys\", label: \"Deploys\" },\n\t{ id: \"settings\", label: \"Settings\" },\n];\n\nfunction Example() {\n\tconst page = signal(\"install\");\n\treturn (\n\t\t<DocMenu\n\t\t\tlabel=\"Documentation pages\"\n\t\t\tsections={[\n\t\t\t\t{\n\t\t\t\t\tid: \"start\",\n\t\t\t\t\tlabel: \"Getting started\",\n\t\t\t\t\titems: [\n\t\t\t\t\t\t{ id: \"install\", label: \"Installation\" },\n\t\t\t\t\t\t{ id: \"theming\", label: \"Theming\" },\n\t\t\t\t\t],\n\t\t\t\t},\n\t\t\t\t{ id: \"changelog\", label: \"Changelog\" },\n\t\t\t]}\n\t\t\tdefaultOpen={[\"start\"]}\n\t\t\tvalue={page()}\n\t\t\tonChange={page.set}\n\t\t/>\n\t);\n}",

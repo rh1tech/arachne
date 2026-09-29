@@ -14,17 +14,24 @@ import { createId, type SlotProps, setup } from "./system.ts";
 import { ActionIcon } from "./widgets.tsx";
 
 export type ContextMenuItem = {
+	/** Item id. */
 	id: string;
+	/** Item text. */
 	label: string;
+	/** Destructive action: danger colour. */
 	danger?: boolean | undefined;
+	/** Shown but can't be chosen. */
 	disabled?: boolean | undefined;
+	/** Called when the item is chosen; the menu then closes. */
 	onSelect: () => void;
 };
 
 export type ContextMenuSlot = "root" | "menu" | "item";
 
 export type ContextMenuProps = SlotProps<ContextMenuSlot> & {
+	/** Menu items, in order. */
 	items: ContextMenuItem[];
+	/** The area that opens the menu on right-click, Shift+F10 or the ContextMenu key. */
 	children?: unknown;
 };
 
@@ -175,8 +182,11 @@ export function ContextMenu(input: ContextMenuProps) {
 export type ColorPickerSlot = "root" | "native" | "swatches" | "swatch" | "value";
 
 export type ColorPickerProps = SlotProps<ColorPickerSlot> & {
+	/** Selected colour (controlled), e.g. `#1e87f0`. */
 	value: string;
+	/** Preset colours shown as swatches. */
 	swatches?: string[] | undefined;
+	/** Called with the picked colour. */
 	onChange: (color: string) => void;
 };
 
@@ -244,8 +254,11 @@ export function ColorPicker(input: ColorPickerProps) {
 }
 
 export type LightboxImage = {
+	/** Image URL. */
 	src: string;
+	/** Alternative text (also the viewer's accessible name). */
 	alt?: string | undefined;
+	/** Caption under the image. */
 	caption?: string | undefined;
 };
 
@@ -259,9 +272,13 @@ export type LightboxSlot =
 	| "control";
 
 export type LightboxProps = SlotProps<LightboxSlot> & {
+	/** The images, in order. */
 	images: LightboxImage[];
+	/** Index of the shown image; `null` closes the viewer. */
 	index: number | null;
+	/** Called on Escape, backdrop click or the close button; set `index` to `null`. */
 	onClose: () => void;
+	/** Called with the next index when the user moves with ← / → or the arrows. */
 	onChange?: ((index: number) => void) | undefined;
 };
 
@@ -396,10 +413,15 @@ export function Lightbox(input: LightboxProps) {
 export type TransferListSlot = "root" | "pane" | "title" | "list" | "item" | "actions";
 
 export type TransferListProps = SlotProps<TransferListSlot> & {
+	/** Items in the left list. */
 	left: string[];
+	/** Items in the right list. */
 	right: string[];
+	/** Heading of the left list. */
 	leftTitle?: string | undefined;
+	/** Heading of the right list. */
 	rightTitle?: string | undefined;
+	/** Called with both lists after items are moved. */
 	onChange: (next: { left: string[]; right: string[] }) => void;
 };
 
@@ -500,9 +522,13 @@ export function TransferList(input: TransferListProps) {
 }
 
 export type SpotlightAction = {
+	/** Action id. */
 	id: string;
+	/** Action name; what the search matches. */
 	label: string;
+	/** Secondary line under the label. */
 	description?: string | undefined;
+	/** Called when the action is chosen; the palette then closes. */
 	onSelect: () => void;
 };
 
@@ -518,9 +544,13 @@ export type SpotlightSlot =
 	| "empty";
 
 export type SpotlightProps = SlotProps<SpotlightSlot> & {
+	/** Whether the palette is shown (controlled). */
 	open: boolean;
+	/** Actions to search and run. */
 	actions: SpotlightAction[];
+	/** Called on Escape, backdrop click or after an action runs; set `open` to false. */
 	onClose: () => void;
+	/** Search field hint. */
 	placeholder?: string | undefined;
 };
 
@@ -702,13 +732,21 @@ export function Spotlight(input: SpotlightProps) {
 }
 
 export type ConfirmDialogProps = SlotProps<DialogSlot> & {
+	/** Whether the dialog is shown (controlled). */
 	open: boolean;
+	/** Dialog heading. */
 	title?: string | undefined;
+	/** The question to confirm. */
 	message: string;
+	/** Confirm button text. */
 	confirmLabel?: string | undefined;
+	/** Cancel button text. */
 	cancelLabel?: string | undefined;
+	/** Destructive action: the confirm button uses the danger style. */
 	danger?: boolean | undefined;
+	/** Called when the user confirms. */
 	onConfirm: () => void;
+	/** Called on cancel, Escape or backdrop click. */
 	onCancel: () => void;
 };
 

@@ -4,13 +4,16 @@ import { type SlotProps, setup } from "./system.ts";
 export type AppShellSlot = "root" | "sidebar" | "main" | "header" | "content";
 
 export type AppShellProps = SlotProps<AppShellSlot> & {
+	/** Content of the side column, e.g. a `SidebarNav`. */
 	sidebar?: unknown;
+	/** Content of the top bar. */
 	header?: unknown;
 	/**
 	 * Element for the content area (default `"main"`). Use `"div"` when the shell is
 	 * nested in a page that already has a `<main>` landmark.
 	 */
 	contentAs?: "main" | "div" | undefined;
+	/** Main content. */
 	children?: unknown;
 };
 
@@ -58,17 +61,24 @@ export function AppShell(input: AppShellProps) {
 }
 
 export type SidebarItem = {
+	/** Item id, passed to `onChange` and matched against `value`. */
 	id: string;
+	/** Item text. */
 	label: string;
+	/** Called when this item is chosen (in addition to `onChange`). */
 	onSelect?: (() => void) | undefined;
+	/** Shown but can't be chosen. */
 	disabled?: boolean | undefined;
 };
 
 export type SidebarNavSlot = "root" | "link";
 
 export type SidebarNavProps = SlotProps<SidebarNavSlot> & {
+	/** Navigation items, in order. */
 	items: SidebarItem[];
+	/** Id of the current item (marked `aria-current`). */
 	value?: string | undefined;
+	/** Called with the id of the item the user picks. */
 	onChange?: ((id: string) => void) | undefined;
 	/** Accessible name for the nav (default "Sidebar"). */
 	label?: string | undefined;
@@ -119,10 +129,13 @@ export function SidebarNav(input: SidebarNavProps) {
 export type SegmentedSlot = "root" | "segment";
 
 export type SegmentedProps = SlotProps<SegmentedSlot> & {
+	/** Options: `id`, `label` and optional `disabled`. */
 	items: Array<{ id: string; label: string; disabled?: boolean | undefined }>;
 	/** Accessible name for the group (default "Options"). */
 	label?: string | undefined;
+	/** Id of the selected option. */
 	value: string;
+	/** Called with the id the user picks. */
 	onChange: (id: string) => void;
 };
 

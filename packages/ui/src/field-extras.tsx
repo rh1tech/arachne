@@ -5,11 +5,17 @@ import { type BaseProps, type InputPassThrough, type SlotProps, setup } from "./
 
 export type SliderProps = BaseProps &
 	Omit<InputPassThrough, "min" | "max" | "step"> & {
+		/** Current value (controlled). */
 		value: number;
+		/** Lowest value. */
 		min?: number | undefined;
+		/** Highest value. */
 		max?: number | undefined;
+		/** Increment between values (also for arrow keys). */
 		step?: number | undefined;
+		/** Disables the slider. */
 		disabled?: boolean | undefined;
+		/** Called with the new value while dragging or using the keyboard. */
 		onChange: (value: number) => void;
 	};
 
@@ -48,16 +54,25 @@ export type NumberInputSlot = "root" | "input" | "decrement" | "increment";
 
 export type NumberInputProps = SlotProps<NumberInputSlot> &
 	Omit<InputPassThrough, "min" | "max" | "step"> & {
+		/** Current value (controlled). */
 		value: number;
+		/** Lowest value; typing below it is clamped on blur. */
 		min?: number | undefined;
+		/** Highest value; typing above it is clamped on blur. */
 		max?: number | undefined;
+		/** Amount the − / + buttons and arrow keys change the value by. */
 		step?: number | undefined;
+		/** Disables the field and its buttons. */
 		disabled?: boolean | undefined;
+		/** Marks the value invalid (`aria-invalid` and error styling). */
 		invalid?: boolean | undefined;
+		/** Field name submitted with the form. */
 		name?: string | undefined;
 		/** Accessible labels for the step buttons. */
 		decrementLabel?: string | undefined;
+		/** Accessible name of the + button. */
 		incrementLabel?: string | undefined;
+		/** Called with the new number (never `NaN`). */
 		onChange: (value: number) => void;
 	};
 
@@ -175,13 +190,19 @@ export type SearchInputSlot = "root" | "input" | "icon" | "clear";
 
 export type SearchInputProps = SlotProps<SearchInputSlot> &
 	InputPassThrough & {
+		/** Current query (controlled). */
 		value: string;
+		/** Hint shown while empty. */
 		placeholder?: string | undefined;
+		/** Disables the field. */
 		disabled?: boolean | undefined;
 		/** Leading icon (default: the `search` icon); `null` hides it. */
 		icon?: unknown;
+		/** Accessible name of the clear (×) button. */
 		clearLabel?: string | undefined;
+		/** Called with the new query on every edit (and with `""` when cleared). */
 		onChange: (value: string) => void;
+		/** Called when the user presses Enter. */
 		onSubmit?: (() => void) | undefined;
 	};
 

@@ -11,9 +11,13 @@ import { DynamicHeading, type HeadingLevel } from "./widgets.tsx";
 export type PresenceAvatarSlot = "root" | "avatar" | "dot";
 
 export type PresenceAvatarProps = SlotProps<PresenceAvatarSlot> & {
+	/** Person's name (initials and accessible name). */
 	name: string;
+	/** Avatar image URL. */
 	src?: string | undefined;
+	/** Avatar size. */
 	size?: "sm" | "md" | "lg" | undefined;
+	/** Colour of the presence dot (e.g. `success` for online). */
 	status?: "neutral" | "accent" | "success" | "warning" | "danger" | undefined;
 };
 
@@ -49,7 +53,9 @@ export function PresenceAvatar(input: PresenceAvatarProps) {
 }
 
 export type TruncateProps = BaseProps & {
+	/** Number of lines shown before the ellipsis. */
 	lines?: number | undefined;
+	/** Text to truncate. */
 	children?: unknown;
 };
 
@@ -76,7 +82,9 @@ export function Truncate(input: TruncateProps) {
 export type TerminalSlot = "root" | "bar" | "title" | "body";
 
 export type TerminalProps = SlotProps<TerminalSlot> & {
+	/** Window title in the header bar. */
 	title?: unknown;
+	/** Terminal text (newlines are kept). */
 	children?: unknown;
 };
 
@@ -108,11 +116,17 @@ export function Terminal(input: TerminalProps) {
 	);
 }
 
-export type DiffLine = { type: "add" | "del" | "ctx"; text: string };
+export type DiffLine = {
+	/** `add`, `del` or `ctx` (unchanged context). */
+	type: "add" | "del" | "ctx";
+	/** The line's text (without the `+` / `-` prefix). */
+	text: string;
+};
 
 export type DiffSlot = "root" | "line" | "prefix";
 
 export type DiffProps = SlotProps<DiffSlot> & {
+	/** Diff lines, in order. */
 	lines: DiffLine[];
 };
 
@@ -142,7 +156,9 @@ export function Diff(input: DiffProps) {
 export type TrendSlot = "root" | "arrow";
 
 export type TrendProps = SlotProps<TrendSlot> & {
+	/** Change in percent; the sign sets the arrow and colour. */
 	value: number;
+	/** Context after the value, e.g. "vs. last week". */
 	label?: unknown;
 };
 
@@ -179,9 +195,13 @@ function clampPercent(value: number): number {
 export type DonutChartSlot = "root" | "track" | "bar" | "label";
 
 export type DonutChartProps = SlotProps<DonutChartSlot> & {
+	/** Filled share in percent (0–100). */
 	value: number;
+	/** Diameter in pixels. */
 	size?: number | undefined;
+	/** Ring stroke width in pixels. */
 	thickness?: number | undefined;
+	/** Content in the middle. */
 	label?: unknown;
 };
 
@@ -246,6 +266,7 @@ export function DonutChart(input: DonutChartProps) {
 export type SparkBarSlot = "root" | "bar";
 
 export type SparkBarProps = SlotProps<SparkBarSlot> & {
+	/** Values to plot as bars, oldest first. */
 	data: number[];
 	/** Accessible description (default "Bar sparkline"). */
 	label?: string | undefined;
@@ -285,6 +306,7 @@ export function SparkBar(input: SparkBarProps) {
 export type SkeletonTextSlot = "root" | "line";
 
 export type SkeletonTextProps = SlotProps<SkeletonTextSlot> & {
+	/** Number of placeholder lines. */
 	lines?: number | undefined;
 };
 
@@ -339,12 +361,19 @@ export function SkeletonCard(input: SkeletonCardProps) {
 }
 
 export type LoadingButtonProps = BaseProps & {
+	/** Show a spinner and block clicks (width stays the same). */
 	loading?: boolean | undefined;
+	/** Disables the button. */
 	disabled?: boolean | undefined;
+	/** Button style. */
 	variant?: "solid" | "ghost" | "danger" | undefined;
+	/** Button size. */
 	size?: "sm" | "md" | undefined;
+	/** Native button type. */
 	type?: "button" | "submit" | "reset" | undefined;
+	/** Called when pressed (not while `loading`). */
 	onClick?: ((e: MouseEvent) => void) | undefined;
+	/** Button label. */
 	children?: unknown;
 };
 
@@ -379,10 +408,15 @@ export function LoadingButton(input: LoadingButtonProps) {
 }
 
 export type ConfirmButtonProps = BaseProps & {
+	/** Button label before confirming. */
 	label: unknown;
+	/** Label on the second, confirming click. */
 	confirmLabel?: unknown;
+	/** Button style. */
 	variant?: "solid" | "ghost" | "danger" | undefined;
+	/** Button size. */
 	size?: "sm" | "md" | undefined;
+	/** Called on the second click; the first click only arms the button. */
 	onConfirm: () => void;
 };
 
@@ -433,11 +467,15 @@ export function ConfirmButton(input: ConfirmButtonProps) {
 export type SettingsRowSlot = "root" | "text" | "label" | "description" | "control";
 
 export type SettingsRowProps = SlotProps<SettingsRowSlot> & {
+	/** Setting name. */
 	label: unknown;
+	/** Explanation under the name. */
 	description?: unknown;
+	/** The control at the end of the row (switch, select, button, …). */
 	control?: unknown;
 	/** Ids for the label / description, so the control can reference them. */
 	labelId?: string | undefined;
+	/** Id for the description, to point a control's `aria-describedby` at. */
 	descriptionId?: string | undefined;
 };
 
@@ -480,10 +518,15 @@ export function SettingsRow(input: SettingsRowProps) {
 }
 
 export type ToggleRowProps = BaseProps & {
+	/** Setting name (the switch's accessible name). */
 	label: unknown;
+	/** Explanation under the name (the switch's accessible description). */
 	description?: unknown;
+	/** Whether the setting is on (controlled). */
 	checked: boolean;
+	/** Called with the new state. */
 	onChange: (checked: boolean) => void;
+	/** Disables the switch. */
 	disabled?: boolean | undefined;
 };
 
@@ -524,8 +567,11 @@ export function ToggleRow(input: ToggleRowProps) {
 export type DangerZoneSlot = "root" | "header" | "title" | "description" | "body";
 
 export type DangerZoneProps = SlotProps<DangerZoneSlot> & {
+	/** Section heading. */
 	title?: unknown;
+	/** What the destructive action does. */
 	description?: unknown;
+	/** The destructive control, e.g. a danger `Button`. */
 	children?: unknown;
 };
 
@@ -558,7 +604,9 @@ export function DangerZone(input: DangerZoneProps) {
 }
 
 export type StickyBarProps = BaseProps & {
+	/** Edge the bar sticks to. */
 	position?: "top" | "bottom" | undefined;
+	/** Bar content, e.g. a message and a Save button. */
 	children?: unknown;
 };
 
@@ -581,17 +629,22 @@ export function StickyBar(input: StickyBarProps) {
 }
 
 export type SiteFooterLink = {
+	/** Link text. */
 	label: string;
 	/** Renders a real link when set. */
 	href?: string | undefined;
+	/** Click handler (renders a button when there is no `href`). */
 	onClick?: (() => void) | undefined;
 };
 
 export type SiteFooterSlot = "root" | "grid" | "brand" | "column" | "columnTitle" | "link" | "meta";
 
 export type SiteFooterProps = SlotProps<SiteFooterSlot> & {
+	/** Logo or name. */
 	brand?: unknown;
+	/** Link columns: each a `title` and its `links`. */
 	columns?: Array<{ title: string; links: SiteFooterLink[] }> | undefined;
+	/** Bottom line, e.g. copyright. */
 	meta?: unknown;
 };
 
@@ -657,16 +710,20 @@ export function SiteFooter(input: SiteFooterProps) {
 }
 
 export type SocialLink = {
+	/** Network icon. */
 	icon: IconName;
+	/** Network name (accessible name). */
 	label: string;
 	/** Renders a real link (opens in a new tab) when set. */
 	href?: string | undefined;
+	/** Click handler (renders a button when there is no `href`). */
 	onClick?: (() => void) | undefined;
 };
 
 export type SocialLinksSlot = "root" | "link";
 
 export type SocialLinksProps = SlotProps<SocialLinksSlot> & {
+	/** Links, in order. */
 	items: SocialLink[];
 };
 
@@ -706,7 +763,10 @@ export function SocialLinks(input: SocialLinksProps) {
 	);
 }
 
-export type ReelProps = BaseProps & { children?: unknown };
+export type ReelProps = BaseProps & {
+	/** Items in a horizontally scrolling row. */
+	children?: unknown;
+};
 
 /** Horizontal scroll reel. Slots: `root`. */
 export function Reel(input: ReelProps) {
@@ -720,7 +780,9 @@ export function Reel(input: ReelProps) {
 }
 
 export type GalleryGridProps = BaseProps & {
+	/** Number of columns. */
 	columns?: 2 | 3 | 4 | undefined;
+	/** Images or tiles. */
 	children?: unknown;
 };
 
@@ -742,10 +804,13 @@ export function GalleryGrid(input: GalleryGridProps) {
 export type TestimonialSlot = "root" | "quote" | "author" | "avatar" | "name" | "role";
 
 export type TestimonialProps = SlotProps<TestimonialSlot> & {
+	/** The testimonial text. */
 	quote: unknown;
+	/** Who said it. */
 	author: string;
 	/** Author's job title (consumed here; not forwarded as an ARIA role). */
 	role?: string | undefined;
+	/** Author avatar URL. */
 	avatar?: string | undefined;
 };
 
@@ -781,11 +846,15 @@ export function Testimonial(input: TestimonialProps) {
 export type ReviewCardSlot = "root" | "stars" | "star" | "title" | "body" | "author";
 
 export type ReviewCardProps = SlotProps<ReviewCardSlot> & {
+	/** Stars out of 5. */
 	rating: number;
+	/** Review headline. */
 	title?: unknown;
 	/** Heading level of the title, to fit the page outline. Default 4. */
 	order?: HeadingLevel | undefined;
+	/** Reviewer name. */
 	author?: unknown;
+	/** Review text. */
 	children?: unknown;
 };
 
@@ -845,6 +914,7 @@ export function ReviewCard(input: ReviewCardProps) {
 export type LogoCloudSlot = "root" | "item";
 
 export type LogoCloudProps = SlotProps<LogoCloudSlot> & {
+	/** Logos: names or content (images). */
 	items: unknown[];
 };
 
@@ -867,9 +937,13 @@ export function LogoCloud(input: LogoCloudProps) {
 export type UploadItemSlot = "root" | "row" | "name" | "status" | "cancel" | "track" | "bar";
 
 export type UploadItemProps = SlotProps<UploadItemSlot> & {
+	/** File name. */
 	name: string;
+	/** Upload progress in percent (0–100). */
 	progress: number;
+	/** Error message; shows the failed state. */
 	error?: string | undefined;
+	/** Shows a cancel button; called when it is pressed. */
 	onCancel?: (() => void) | undefined;
 };
 
@@ -933,11 +1007,17 @@ export function UploadItem(input: UploadItemProps) {
 export type WizardNavSlot = "root" | "back" | "next";
 
 export type WizardNavProps = SlotProps<WizardNavSlot> & {
+	/** Enables the Back button. */
 	canBack?: boolean | undefined;
+	/** Enables the Next button. */
 	canNext?: boolean | undefined;
+	/** Next button text (e.g. "Finish" on the last step). */
 	nextLabel?: unknown;
+	/** Back button text. */
 	backLabel?: unknown;
+	/** Called when Back is pressed. */
 	onBack?: (() => void) | undefined;
+	/** Called when Next is pressed. */
 	onNext?: (() => void) | undefined;
 };
 
@@ -975,7 +1055,10 @@ export function WizardNav(input: WizardNavProps) {
 	);
 }
 
-export type FormFooterProps = BaseProps & { children?: unknown };
+export type FormFooterProps = BaseProps & {
+	/** Form buttons, aligned to the end. */
+	children?: unknown;
+};
 
 /** Right-aligned form actions row. Slots: `root`. */
 export function FormFooter(input: FormFooterProps) {
@@ -990,8 +1073,11 @@ export function FormFooter(input: FormFooterProps) {
 export type DetailsSlot = "root" | "summary" | "body";
 
 export type DetailsProps = SlotProps<DetailsSlot> & {
+	/** Always-visible line that toggles the detail. */
 	summary: unknown;
+	/** Start expanded. */
 	open?: boolean | undefined;
+	/** Detail content. */
 	children?: unknown;
 };
 
@@ -1024,8 +1110,11 @@ export function Details(input: DetailsProps) {
 export type MetricSlot = "root" | "label" | "row" | "value" | "trend";
 
 export type MetricProps = SlotProps<MetricSlot> & {
+	/** What the number measures. */
 	label: unknown;
+	/** The number or content. */
 	value: unknown;
+	/** Change in percent (arrow and colour by sign). */
 	trend?: number | undefined;
 };
 

@@ -6,9 +6,13 @@ import { type BaseProps, createId, type SlotProps, setup } from "./system.ts";
 import { DynamicHeading } from "./widgets.tsx";
 
 export type ControlProps = BaseProps & {
+	/** Grow to fill the row. */
 	expanded?: boolean | undefined;
+	/** Reserve space for a leading icon inside the input. */
 	iconsLeft?: boolean | undefined;
+	/** Reserve space for a trailing icon inside the input. */
 	iconsRight?: boolean | undefined;
+	/** The input and its icons. */
 	children?: unknown;
 };
 
@@ -38,7 +42,9 @@ export function Control(input: ControlProps) {
 }
 
 export type HelpProps = BaseProps & {
+	/** Colour: `muted` hint, `success` or `danger`. */
 	tone?: "muted" | "success" | "danger" | undefined;
+	/** Help text. */
 	children?: unknown;
 };
 
@@ -67,10 +73,13 @@ export function Help(input: HelpProps) {
 export type FormRegionSlot = "root" | "header" | "title" | "description" | "body";
 
 export type FormSectionProps = SlotProps<FormRegionSlot> & {
+	/** Section heading. */
 	title?: unknown;
 	/** Heading level of the title, to fit the page outline. Default 3. */
 	order?: 2 | 3 | 4 | 5 | 6 | undefined;
+	/** Text under the heading. */
 	description?: unknown;
+	/** The section's fields. */
 	children?: unknown;
 };
 
@@ -112,12 +121,15 @@ export function FormSection(input: FormSectionProps) {
 }
 
 export type FormAreaProps = SlotProps<FormRegionSlot> & {
+	/** Area heading. */
 	title?: unknown;
 	/** Heading level of the title, to fit the page outline. Default 4. */
 	order?: 2 | 3 | 4 | 5 | 6 | undefined;
+	/** Text under the heading. */
 	description?: unknown;
 	/** Visually emphasize as a bordered panel. Default true. */
 	bordered?: boolean | undefined;
+	/** The area's fields. */
 	children?: unknown;
 };
 
@@ -165,9 +177,13 @@ export function FormArea(input: FormAreaProps) {
 export type FormFieldSlot = "root" | "label" | "body" | "inner" | "help";
 
 export type FormFieldProps = SlotProps<FormFieldSlot> & {
+	/** Label text or content. */
 	label?: unknown;
+	/** Id of the control the label names; also links `help` / `error` via `aria-describedby`. */
 	labelFor?: string | undefined;
+	/** Hint under the control. */
 	help?: string | undefined;
+	/** Error message; replaces `help`, marks the control invalid. */
 	error?: string | undefined;
 	/** Horizontal label + body (Bulma `field is-horizontal`). */
 	horizontal?: boolean | undefined;
@@ -175,9 +191,13 @@ export type FormFieldProps = SlotProps<FormFieldSlot> & {
 	addons?: boolean | undefined;
 	/** Group controls with gap (Bulma `is-grouped`). */
 	grouped?: boolean | undefined;
+	/** With `grouped`: wrap the controls onto several lines. */
 	groupedMultiline?: boolean | undefined;
+	/** Only as wide as its content. */
 	narrow?: boolean | undefined;
+	/** Grow to fill the row. */
 	expanded?: boolean | undefined;
+	/** The control(s), e.g. a `TextInput`. */
 	children?: unknown;
 };
 

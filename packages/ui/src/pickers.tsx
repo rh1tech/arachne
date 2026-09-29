@@ -21,6 +21,7 @@ type PanelSlot = "root" | "header" | "title" | "grid" | "cell";
 export type MonthPickerProps = SlotProps<PanelSlot> & {
 	/** YYYY-MM */
 	value?: string | undefined;
+	/** Called with the picked month as `YYYY-MM`. */
 	onChange?: ((ym: string) => void) | undefined;
 	/** Month labels (default English short names). */
 	monthLabels?: string[] | undefined;
@@ -84,12 +85,19 @@ export function MonthPicker(input: MonthPickerProps) {
 	);
 }
 
-export type DateRange = { start?: string | undefined; end?: string | undefined };
+export type DateRange = {
+	/** First day, `YYYY-MM-DD`. */
+	start?: string | undefined;
+	/** Last day, `YYYY-MM-DD` (unset while the second click is pending). */
+	end?: string | undefined;
+};
 
 export type DateRangePickerSlot = "root" | "trigger" | "summary" | "dropdown" | "cell";
 
 export type DateRangePickerProps = SlotProps<DateRangePickerSlot> & {
+	/** Selected range (controlled). */
 	value: DateRange;
+	/** Called after each pick: first with `start` only, then with both ends. */
 	onChange: (range: DateRange) => void;
 	/** Trigger text when nothing is picked. */
 	placeholder?: string | undefined;
@@ -260,7 +268,9 @@ export type TimePickerSlot = "root" | "header" | "value" | "column" | "cell";
 export type TimePickerProps = SlotProps<TimePickerSlot> & {
 	/** HH:MM */
 	value?: string | undefined;
+	/** Called with the picked time as `HH:MM`. */
 	onChange?: ((time: string) => void) | undefined;
+	/** Minute options' interval. */
 	minutesStep?: number | undefined;
 };
 
@@ -366,9 +376,13 @@ export function TimePicker(input: TimePickerProps) {
 export type SemiCircleProgressSlot = "root" | "track" | "bar" | "label";
 
 export type SemiCircleProgressProps = SlotProps<SemiCircleProgressSlot> & {
+	/** Progress in percent (0–100). */
 	value: number;
+	/** Width in pixels. */
 	size?: number | undefined;
+	/** Arc stroke width in pixels. */
 	thickness?: number | undefined;
+	/** Content in the middle, e.g. `64%`. */
 	label?: unknown;
 };
 
@@ -428,8 +442,11 @@ export function SemiCircleProgress(input: SemiCircleProgressProps) {
 }
 
 export type SparklineProps = SlotProps<"root" | "line"> & {
+	/** Values to plot, oldest first. */
 	data: number[];
+	/** Width in pixels. */
 	width?: number | undefined;
+	/** Height in pixels. */
 	height?: number | undefined;
 	/** Accessible summary; the chart is decorative (`aria-hidden`) without one. */
 	label?: string | undefined;
@@ -487,11 +504,15 @@ export function Sparkline(input: SparklineProps) {
 export type CodeBlockSlot = "root" | "bar" | "language" | "copy" | "pre" | "code";
 
 export type CodeBlockProps = SlotProps<CodeBlockSlot> & {
+	/** Source code to highlight and copy. */
 	code: string;
+	/** Language for highlighting, shown in the header. */
 	language?: string | undefined;
 	/** Corner radius: `"none"` | `"sm"` | `"lg"` or any CSS length (default: the theme radius). */
 	radius?: RadiusName | (string & {}) | undefined;
+	/** Copy button text. */
 	copyLabel?: string | undefined;
+	/** Copy button text shown briefly after copying. */
 	copiedLabel?: string | undefined;
 };
 
@@ -554,7 +575,9 @@ export function CodeBlock(input: CodeBlockProps) {
 export type ToTopProps = SlotProps<"root"> & {
 	/** Scroll distance (px) before the button appears (default 320). */
 	offset?: number | undefined;
+	/** Accessible name of the button. */
 	label?: string | undefined;
+	/** Button content (default: an up arrow). */
 	children?: unknown;
 };
 

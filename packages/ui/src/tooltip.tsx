@@ -9,14 +9,19 @@ import { createId, createSlots, type SlotProps, withDefaults } from "./system.ts
 export type TooltipSlot = "root" | "target" | "tooltip" | "arrow";
 
 export type TooltipProps = SlotProps<TooltipSlot> & {
+	/** Tooltip text or content. */
 	content: unknown;
+	/** Preferred side; flips to stay in view. */
 	placement?: "top" | "bottom" | "left" | "right" | undefined;
 	/** Delay before showing on hover, ms (default 250). Focus shows immediately. */
 	openDelay?: number | undefined;
 	/** Delay before hiding, ms (default 80) — lets the pointer reach the tooltip. */
 	closeDelay?: number | undefined;
+	/** Show an arrow pointing at the target. */
 	arrow?: boolean | undefined;
+	/** Never show the tooltip. */
 	disabled?: boolean | undefined;
+	/** The element the tooltip describes (shown on hover and focus). */
 	children?: unknown;
 };
 

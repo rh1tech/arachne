@@ -1,7 +1,9 @@
 import { type BaseProps, type SlotProps, setup } from "./system.ts";
 
 export type SpinnerProps = BaseProps & {
+	/** Spinner size. */
 	size?: "sm" | "md" | "lg" | undefined;
+	/** Accessible name announced to screen readers. */
 	label?: string | undefined;
 };
 
@@ -31,10 +33,15 @@ export type ProgressSize = "sm" | "md" | "lg" | undefined;
 export type ProgressSlot = "root" | "bar";
 
 export type ProgressProps = SlotProps<ProgressSlot> & {
+	/** Current progress, from 0 to `max`. */
 	value: number;
+	/** Value at 100%. */
 	max?: number | undefined;
+	/** Bar colour. */
 	color?: ProgressColor;
+	/** Bar thickness. */
 	size?: ProgressSize;
+	/** Unknown duration: an animated bar instead of `value`. */
 	indeterminate?: boolean | undefined;
 };
 
@@ -92,6 +99,7 @@ export function Progress(input: ProgressProps) {
 }
 
 export type BoxProps = BaseProps & {
+	/** Box content. */
 	children?: unknown;
 };
 
@@ -106,11 +114,17 @@ export function Box(input: BoxProps) {
 }
 
 export type TableProps = BaseProps & {
+	/** Borders around every cell. */
 	bordered?: boolean | undefined;
+	/** Alternate row shading. */
 	striped?: boolean | undefined;
+	/** Compact cell padding. */
 	narrow?: boolean | undefined;
+	/** Highlight the row under the pointer. */
 	hoverable?: boolean | undefined;
+	/** Stretch to the container's width. */
 	fullwidth?: boolean | undefined;
+	/** Table parts: `Thead`, `Tbody`, `Tfoot` (or native elements). */
 	children?: unknown;
 };
 

@@ -1,7 +1,9 @@
 import { type BaseProps, setup } from "./system.ts";
 
 export type LabelProps = BaseProps & {
+	/** Id of the control this label names. */
 	for?: string | undefined;
+	/** Label text. */
 	children?: unknown;
 };
 
@@ -21,10 +23,13 @@ export function Label(input: LabelProps) {
 }
 
 export type TextProps = BaseProps & {
+	/** Secondary (muted) colour. */
 	muted?: boolean | undefined;
+	/** Danger colour, e.g. for an inline error. */
 	danger?: boolean | undefined;
 	/** Element to render; fixed at mount. */
 	as?: "p" | "span" | "div" | undefined;
+	/** Text content. */
 	children?: unknown;
 };
 
@@ -56,8 +61,11 @@ export function Text(input: TextProps) {
 }
 
 export type StackProps = BaseProps & {
+	/** Stack vertically (`column`) or horizontally (`row`). */
 	direction?: "column" | "row" | undefined;
+	/** Space between children (any CSS length). */
 	gap?: string | undefined;
+	/** Items to stack. */
 	children?: unknown;
 };
 
@@ -81,7 +89,9 @@ export type BadgeTone = "accent" | "success" | "warning" | "danger" | "muted" | 
 export type BadgeProps = BaseProps & {
 	/** Compact count / status pill — prefer Tag for labeled chips. */
 	tone?: BadgeTone;
+	/** Pill shape. */
 	rounded?: boolean | undefined;
+	/** Badge text. */
 	children?: unknown;
 };
 

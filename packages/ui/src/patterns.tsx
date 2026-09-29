@@ -35,10 +35,15 @@ export function BottomSheet(props: BottomSheetProps) {
 export type BannerSlot = "root" | "body" | "title" | "content" | "action" | "close";
 
 export type BannerProps = SlotProps<BannerSlot> & {
+	/** Colour and icon. */
 	tone?: AlertTone | undefined;
+	/** Bold first line. */
 	title?: unknown;
+	/** Shows a close button; called when it is pressed. */
 	onClose?: (() => void) | undefined;
+	/** Banner text. */
 	children?: unknown;
+	/** Call to action at the end, e.g. a `Button`. */
 	action?: unknown;
 };
 
@@ -77,7 +82,9 @@ export function Banner(input: BannerProps) {
 }
 
 export type StatusDotProps = BaseProps & {
+	/** Dot colour. */
 	tone?: "neutral" | "accent" | "success" | "warning" | "danger" | undefined;
+	/** Animate a pulse ring (for live states). */
 	pulse?: boolean | undefined;
 	/** Accessible name; without it the dot is decorative (`aria-hidden`). */
 	label?: string | undefined;
@@ -135,9 +142,13 @@ export type PageHeaderSlot =
 	| "actions";
 
 export type PageHeaderProps = SlotProps<PageHeaderSlot> & {
+	/** Page title (rendered as `<h1>`). */
 	title: unknown;
+	/** Text under the title. */
 	description?: unknown;
+	/** Breadcrumb above the title. */
 	breadcrumb?: unknown;
+	/** Buttons aligned to the end of the header. */
 	actions?: unknown;
 };
 
@@ -180,9 +191,13 @@ export function PageHeader(input: PageHeaderProps) {
 export type UserButtonSlot = "root" | "avatar" | "text" | "name" | "email" | "chevron";
 
 export type UserButtonProps = SlotProps<UserButtonSlot> & {
+	/** User's name (also used for the avatar initials). */
 	name: string;
+	/** Secondary line under the name. */
 	email?: string | undefined;
+	/** Avatar image URL. */
 	src?: string | undefined;
+	/** Called when the button is pressed, e.g. to open an account menu. */
 	onClick?: ((e: MouseEvent) => void) | undefined;
 	/** Trailing content (default chevron); `null` hides it. */
 	end?: unknown;
@@ -225,7 +240,9 @@ export function UserButton(input: UserButtonProps) {
 }
 
 export type ThemeToggleProps = BaseProps & {
+	/** Current theme. */
 	value: "light" | "dark";
+	/** Called with the theme to switch to; apply it yourself (e.g. `data-theme` on `<html>`). */
 	onChange: (theme: "light" | "dark") => void;
 };
 
@@ -255,13 +272,21 @@ export function ThemeToggle(input: ThemeToggleProps) {
 export type ChoiceCardSlot = "root" | "input" | "body" | "label" | "description";
 
 export type ChoiceCardProps = SlotProps<ChoiceCardSlot> & {
+	/** Whether this card is selected (controlled). */
 	checked: boolean;
+	/** Card title. */
 	label: unknown;
+	/** Text under the title. */
 	description?: unknown;
+	/** Disables the card. */
 	disabled?: boolean | undefined;
+	/** Called with the new checked state. */
 	onChange: (checked: boolean) => void;
+	/** `radio` for one-of-many cards (share a `name`), `checkbox` for independent ones. */
 	type?: "radio" | "checkbox" | undefined;
+	/** Input name; cards with the same name form a radio group. */
 	name?: string | undefined;
+	/** Value submitted with the form. */
 	value?: string | undefined;
 };
 
@@ -313,9 +338,13 @@ export function ChoiceCard(input: ChoiceCardProps) {
 export type ChatBubbleSlot = "root" | "meta" | "author" | "body";
 
 export type ChatBubbleProps = SlotProps<ChatBubbleSlot> & {
+	/** Who sent it: `me` (aligned right, accent) or `them`. */
 	from: "me" | "them";
+	/** Sender name above the bubble. */
 	author?: string | undefined;
+	/** Small line under the bubble, e.g. the time. */
 	meta?: string | undefined;
+	/** Message content. */
 	children?: unknown;
 };
 
@@ -386,6 +415,7 @@ export function TypingIndicator(input: TypingIndicatorProps) {
 }
 
 export type JsonViewerProps = BaseProps & {
+	/** Any JSON-serializable value to show, pretty-printed. */
 	value: unknown;
 };
 
@@ -483,7 +513,9 @@ export function RelativeTime(input: RelativeTimeProps) {
 }
 
 export type CountUpProps = BaseProps & {
+	/** Number to count up to. */
 	value: number;
+	/** Animation length in milliseconds (`0` shows the value immediately). */
 	duration?: number | undefined;
 };
 
@@ -517,12 +549,19 @@ export function CountUp(input: CountUpProps) {
 	);
 }
 
-export type ScrollSpyItem = { id: string; label: unknown };
+export type ScrollSpyItem = {
+	/** Id of the section element on the page. */
+	id: string;
+	/** Link text. */
+	label: unknown;
+};
 
 export type ScrollSpySlot = "root" | "item";
 
 export type ScrollSpyProps = SlotProps<ScrollSpySlot> & {
+	/** Sections to track, in page order. */
 	items: ScrollSpyItem[];
+	/** Pixels from the top at which a section counts as current. */
 	offset?: number | undefined;
 	/** Accessible name (default "On this page"). */
 	label?: string | undefined;
@@ -617,10 +656,15 @@ export function ScrollSpy(input: ScrollSpyProps) {
 export type BeforeAfterSlot = "root" | "image" | "overlay" | "range" | "handle";
 
 export type BeforeAfterProps = SlotProps<BeforeAfterSlot> & {
+	/** Image URL for the "before" state. */
 	before: string;
+	/** Image URL for the "after" state. */
 	after: string;
+	/** Alternative text for the "before" image. */
 	beforeAlt?: string | undefined;
+	/** Alternative text for the "after" image. */
 	afterAlt?: string | undefined;
+	/** Starting divider position in percent. */
 	initial?: number | undefined;
 	/** Accessible name for the slider (default "Compare"). */
 	label?: string | undefined;
@@ -678,11 +722,15 @@ export function BeforeAfter(input: BeforeAfterProps) {
 export type LoadMoreSlot = "root" | "button" | "end";
 
 export type LoadMoreProps = SlotProps<LoadMoreSlot> & {
+	/** Show a spinner and disable the button. */
 	loading?: boolean | undefined;
+	/** Whether more items can load; shows `endLabel` when false. */
 	hasMore?: boolean | undefined;
+	/** Called when the user asks for more. */
 	onLoad: () => void;
 	/** Text when everything is loaded (default "You're all caught up"). */
 	endLabel?: unknown;
+	/** Button label. */
 	children?: unknown;
 };
 
@@ -734,9 +782,13 @@ export type ActivityItemSlot = "root" | "icon" | "body" | "title" | "meta" | "co
 export type ActivityItemProps = SlotProps<ActivityItemSlot> & {
 	/** Built-in icon name, or pass any node via `iconNode`. */
 	icon?: IconName | undefined;
+	/** Custom leading content instead of `icon`. */
 	iconNode?: unknown;
+	/** What happened. */
 	title: unknown;
+	/** Small line, e.g. the time. */
 	meta?: unknown;
+	/** Extra detail below the title. */
 	children?: unknown;
 };
 
@@ -775,6 +827,7 @@ export function ActivityItem(input: ActivityItemProps) {
 }
 
 export type FilterBarProps = BaseProps & {
+	/** Filter controls: search, selects, chips, buttons. */
 	children?: unknown;
 };
 
@@ -792,7 +845,9 @@ export function FilterBar(input: FilterBarProps) {
 }
 
 export type MasonryProps = BaseProps & {
+	/** Number of columns. */
 	columns?: 2 | 3 | 4 | undefined;
+	/** Items to pack; each keeps its own height. */
 	children?: unknown;
 };
 

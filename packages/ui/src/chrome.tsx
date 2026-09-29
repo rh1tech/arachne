@@ -6,8 +6,11 @@ export type HeroSize = "sm" | "md" | "lg" | "half" | "full";
 export type HeroTone = "default" | "accent" | "dark" | "light";
 
 export type HeroProps = BaseProps & {
+	/** Height: `sm` / `md` / `lg`, `half` screen or `full` screen. */
 	size?: HeroSize | undefined;
+	/** Background colour scheme. */
 	tone?: HeroTone | undefined;
+	/** `HeroHead`, `HeroBody` and `HeroFoot`, or plain content. */
 	children?: unknown;
 };
 
@@ -33,6 +36,7 @@ export function Hero(input: HeroProps) {
 }
 
 export type HeroPartProps = BaseProps & {
+	/** Content of this part. */
 	children?: unknown;
 };
 
@@ -67,6 +71,7 @@ export function HeroFoot(input: HeroPartProps) {
 }
 
 export type FooterProps = BaseProps & {
+	/** Footer content. */
 	children?: unknown;
 };
 
@@ -84,6 +89,7 @@ export function Footer(input: FooterProps) {
 }
 
 export type MediaProps = BaseProps & {
+	/** `MediaLeft`, `MediaContent` and `MediaRight`. */
 	children?: unknown;
 };
 
@@ -128,6 +134,7 @@ export function MediaRight(input: HeroPartProps) {
 }
 
 export type ArticleProps = BaseProps & {
+	/** `ArticleTitle`, `ArticleMeta` and the article body. */
 	children?: unknown;
 };
 
@@ -177,7 +184,9 @@ export function ArticleMeta(input: HeroPartProps) {
 export type FigureSlot = "root" | "caption";
 
 export type FigureProps = SlotProps<FigureSlot> & {
+	/** Caption under the content (`<figcaption>`). */
 	caption?: unknown;
+	/** The image or other figure content. */
 	children?: unknown;
 };
 
@@ -206,19 +215,29 @@ export function Figure(input: FigureProps) {
 }
 
 export type ImageProps = BaseProps & {
+	/** Image URL. */
 	src: string;
+	/** Alternative text; leave empty only for decorative images. */
 	alt?: string | undefined;
 	/** Full width of the container (default true). */
 	fullwidth?: boolean | undefined;
+	/** Fully round (for avatars and logos). */
 	rounded?: boolean | undefined;
+	/** Corner radius (pixels or any CSS length). */
 	radius?: number | string | undefined;
+	/** How the image fills its box when both `width` and `height` are set. */
 	fit?: "cover" | "contain" | undefined;
+	/** Width (pixels or any CSS length); also reserves space before loading. */
 	width?: string | number | undefined;
+	/** Height (pixels or any CSS length); also reserves space before loading. */
 	height?: string | number | undefined;
 	/** Native lazy loading (default `lazy`); use `eager` for above-the-fold media. */
 	loading?: "lazy" | "eager" | undefined;
+	/** Native decoding hint. */
 	decoding?: "async" | "sync" | "auto" | undefined;
+	/** Responsive image candidates (native `srcset`). */
 	srcset?: string | undefined;
+	/** Display sizes for `srcset` (native `sizes`). */
 	sizes?: string | undefined;
 };
 

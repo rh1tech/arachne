@@ -18,8 +18,11 @@ export type PopoverPlacement =
 
 /** Attributes to spread on a custom trigger so it stays wired for a11y. */
 export type PopoverTriggerApi = {
+	/** Whether the panel is open. */
 	open: boolean;
+	/** Opens or closes the panel. */
 	toggle: () => void;
+	/** ARIA and event attributes to spread onto your trigger element. */
 	attrs: {
 		"aria-expanded": boolean;
 		"aria-controls": string;
@@ -31,17 +34,21 @@ export type PopoverTriggerApi = {
 export type PopoverSlot = "root" | "trigger" | "panel" | "arrow";
 
 export type PopoverProps = SlotProps<PopoverSlot> & {
+	/** Whether the panel is open (controlled). */
 	open: boolean;
+	/** Called with the next open state (trigger click, Escape, outside click). */
 	onOpenChange: (open: boolean) => void;
 	/** Label for the built-in trigger button */
 	label?: unknown;
 	/** Render your own trigger: `trigger={(t) => <MyButton {...t.attrs} />}`. */
 	trigger?: ((api: PopoverTriggerApi) => unknown) | undefined;
+	/** Preferred side and alignment; flips and shifts to stay in view. */
 	placement?: PopoverPlacement | undefined;
 	/** Show a small arrow pointing at the trigger. */
 	arrow?: boolean | undefined;
 	/** Accessible name for the panel (defaults to the trigger label when it's text). */
 	panelLabel?: string | undefined;
+	/** Panel content. */
 	children?: unknown;
 };
 

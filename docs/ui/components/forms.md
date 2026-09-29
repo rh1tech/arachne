@@ -15,19 +15,19 @@ Labelled form control wrapper: label, control, help or error text, with `aria-de
 
 **Slots:** `root` `body` `help` `inner` `label`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `addons` | `boolean` |  | Attach controls edge-to-edge (Bulma `has-addons`). |
-| `children` | `content` |  |  |
-| `error` | `string` |  |  |
-| `expanded` | `boolean` |  |  |
-| `grouped` | `boolean` |  | Group controls with gap (Bulma `is-grouped`). |
-| `groupedMultiline` | `boolean` |  |  |
-| `help` | `string` |  |  |
-| `horizontal` | `boolean` |  | Horizontal label + body (Bulma `field is-horizontal`). |
-| `label` | `content` |  |  |
-| `labelFor` | `string` |  |  |
-| `narrow` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `addons` | `boolean` |  |  | Attach controls edge-to-edge (Bulma `has-addons`). |
+| `children` | `content` |  |  | The control(s), e.g. a `TextInput`. |
+| `error` | `string` |  |  | Error message; replaces `help`, marks the control invalid. |
+| `expanded` | `boolean` |  |  | Grow to fill the row. |
+| `grouped` | `boolean` |  |  | Group controls with gap (Bulma `is-grouped`). |
+| `groupedMultiline` | `boolean` |  |  | With `grouped`: wrap the controls onto several lines. |
+| `help` | `string` |  |  | Hint under the control. |
+| `horizontal` | `boolean` |  |  | Horizontal label + body (Bulma `field is-horizontal`). |
+| `label` | `content` |  |  | Label text or content. |
+| `labelFor` | `string` |  |  | Id of the control the label names; also links `help` / `error` via `aria-describedby`. |
+| `narrow` | `boolean` |  |  | Only as wide as its content. |
 
 ```tsx
 function Example() {
@@ -57,12 +57,12 @@ function Example() {
 
 Single control wrapper (Bulma `control`).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `expanded` | `boolean` |  |  |
-| `iconsLeft` | `boolean` |  |  |
-| `iconsRight` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | The input and its icons. |
+| `expanded` | `boolean` |  |  | Grow to fill the row. |
+| `iconsLeft` | `boolean` |  |  | Reserve space for a leading icon inside the input. |
+| `iconsRight` | `boolean` |  |  | Reserve space for a trailing icon inside the input. |
 
 ```tsx
 function Example() {
@@ -87,10 +87,10 @@ function Example() {
 
 Field help / validation text (Bulma `help`).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `tone` | `"success" \| "danger" \| "muted"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Help text. |
+| `tone` | `"success" \| "danger" \| "muted"` |  | `"muted"` | Colour: `muted` hint, `success` or `danger`. |
 
 ```tsx
 function Example() {
@@ -115,10 +115,10 @@ function Example() {
 
 Form label.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `for` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Label text. |
+| `for` | `string` |  |  | Id of the control this label names. |
 
 ```tsx
 <Label for="project-name">
@@ -138,12 +138,12 @@ Titled form region (grouping of related fields).
 
 **Slots:** `root` `body` `description` `header` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `description` | `content` |  |  |
-| `order` | `2 \| 3 \| 4 \| 5 \| 6` |  | Heading level of the title, to fit the page outline. Default 3. |
-| `title` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | The section's fields. |
+| `description` | `content` |  |  | Text under the heading. |
+| `order` | `2 \| 3 \| 4 \| 5 \| 6` |  | `3` | Heading level of the title, to fit the page outline. Default 3. |
+| `title` | `string` |  |  | Section heading. |
 
 ```tsx
 function Example() {
@@ -168,13 +168,13 @@ Grouped form area / panel (related fields in a boxed region).
 
 **Slots:** `root` `body` `description` `header` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `bordered` | `boolean` |  | Visually emphasize as a bordered panel. Default true. |
-| `children` | `content` |  |  |
-| `description` | `content` |  |  |
-| `order` | `2 \| 3 \| 4 \| 5 \| 6` |  | Heading level of the title, to fit the page outline. Default 4. |
-| `title` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `bordered` | `boolean` |  | `true` | Visually emphasize as a bordered panel. Default true. |
+| `children` | `content` |  |  | The area's fields. |
+| `description` | `content` |  |  | Text under the heading. |
+| `order` | `2 \| 3 \| 4 \| 5 \| 6` |  | `4` | Heading level of the title, to fit the page outline. Default 4. |
+| `title` | `string` |  |  | Area heading. |
 
 ```tsx
 function Example() {
@@ -208,11 +208,11 @@ Native fieldset with optional legend.
 
 **Slots:** `root` `legend`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `disabled` | `boolean` |  |  |
-| `legend` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | The grouped fields. |
+| `disabled` | `boolean` |  |  | Disables every control inside. |
+| `legend` | `content` |  |  | Group caption (`&lt;legend>`). |
 
 ```tsx
 function Example() {
@@ -245,9 +245,9 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Right-aligned form actions row.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Form buttons, aligned to the end. |
 
 ```tsx
 <form
@@ -277,13 +277,13 @@ Label + description + control row.
 
 **Slots:** `root` `control` `description` `label` `text`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `content` | yes |  |
-| `control` | `content` |  |  |
-| `description` | `content` |  |  |
-| `descriptionId` | `string` |  |  |
-| `labelId` | `string` |  | Ids for the label / description, so the control can reference them. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `content` | yes |  | Setting name. |
+| `control` | `content` |  |  | The control at the end of the row (switch, select, button, …). |
+| `description` | `content` |  |  | Explanation under the name. |
+| `descriptionId` | `string` |  |  | Id for the description, to point a control's `aria-describedby` at. |
+| `labelId` | `string` |  |  | Ids for the label / description, so the control can reference them. |
 
 ```tsx
 <SettingsRow
@@ -297,13 +297,13 @@ Label + description + control row.
 
 SettingsRow with a Switch.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `checked` | `boolean` | yes |  |
-| `label` | `content` | yes |  |
-| `onChange` | `(checked: boolean) => void` | yes |  |
-| `description` | `content` |  |  |
-| `disabled` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `checked` | `boolean` | yes |  | Whether the setting is on (controlled). |
+| `label` | `content` | yes |  | Setting name (the switch's accessible name). |
+| `onChange` | `(checked: boolean) => void` | yes |  | Called with the new state. |
+| `description` | `content` |  |  | Explanation under the name (the switch's accessible description). |
+| `disabled` | `boolean` |  |  | Disables the switch. |
 
 ```tsx
 function Example() {
@@ -327,11 +327,11 @@ Destructive-settings section.
 
 **Slots:** `root` `body` `description` `header` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `description` | `content` |  |  |
-| `title` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | The destructive control, e.g. a danger `Button`. |
+| `description` | `content` |  |  | What the destructive action does. |
+| `title` | `string` |  | `"Danger zone"` | Section heading. |
 
 ```tsx
 <DangerZone
@@ -352,14 +352,14 @@ Back / Continue footer for multi-step flows.
 
 **Slots:** `root` `back` `next`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `backLabel` | `content` |  |  |
-| `canBack` | `boolean` |  |  |
-| `canNext` | `boolean` |  |  |
-| `nextLabel` | `content` |  |  |
-| `onBack` | `() => void` |  |  |
-| `onNext` | `() => void` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `backLabel` | `content` |  | `"Back"` | Back button text. |
+| `canBack` | `boolean` |  |  | Enables the Back button. |
+| `canNext` | `boolean` |  |  | Enables the Next button. |
+| `nextLabel` | `content` |  | `"Continue"` | Next button text (e.g. "Finish" on the last step). |
+| `onBack` | `() => void` |  |  | Called when Back is pressed. |
+| `onNext` | `() => void` |  |  | Called when Next is pressed. |
 
 ```tsx
 function Example() {

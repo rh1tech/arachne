@@ -13,20 +13,20 @@ Images, figures and background images.
 
 Responsive image: lazy-loaded by default, with `fit`, radius, `srcset` and `sizes` support.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `src` | `string` | yes |  |
-| `alt` | `string` |  |  |
-| `decoding` | `"auto" \| "async" \| "sync"` |  |  |
-| `fit` | `"cover" \| "contain"` |  |  |
-| `fullwidth` | `boolean` |  | Full width of the container (default true). |
-| `height` | `string \| number` |  |  |
-| `loading` | `"lazy" \| "eager"` |  | Native lazy loading (default `lazy`); use `eager` for above-the-fold media. |
-| `radius` | `string \| number` |  |  |
-| `rounded` | `boolean` |  |  |
-| `sizes` | `string` |  |  |
-| `srcset` | `string` |  |  |
-| `width` | `string \| number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `src` | `string` | yes |  | Image URL. |
+| `alt` | `string` |  | `""` | Alternative text; leave empty only for decorative images. |
+| `decoding` | `"auto" \| "async" \| "sync"` |  | `"async"` | Native decoding hint. |
+| `fit` | `"cover" \| "contain"` |  |  | How the image fills its box when both `width` and `height` are set. |
+| `fullwidth` | `boolean` |  |  | Full width of the container (default true). |
+| `height` | `string \| number` |  |  | Height (pixels or any CSS length); also reserves space before loading. |
+| `loading` | `"lazy" \| "eager"` |  | `"lazy"` | Native lazy loading (default `lazy`); use `eager` for above-the-fold media. |
+| `radius` | `string \| number` |  |  | Corner radius (pixels or any CSS length). |
+| `rounded` | `boolean` |  |  | Fully round (for avatars and logos). |
+| `sizes` | `string` |  |  | Display sizes for `srcset` (native `sizes`). |
+| `srcset` | `string` |  |  | Responsive image candidates (native `srcset`). |
+| `width` | `string \| number` |  |  | Width (pixels or any CSS length); also reserves space before loading. |
 
 ```tsx
 <Image
@@ -43,10 +43,10 @@ Figure with an optional caption.
 
 **Slots:** `root` `caption`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `caption` | `content` |  |  |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `caption` | `content` |  |  | Caption under the content (`&lt;figcaption>`). |
+| `children` | `content` |  |  | The image or other figure content. |
 
 ```tsx
 <Figure caption="Build times dropped 40% after caching dependencies.">
@@ -58,11 +58,11 @@ Figure with an optional caption.
 
 _No description._
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `src` | `string` | yes |  |
-| `children` | `content` |  |  |
-| `radius` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `src` | `string` | yes |  | Image URL (data URIs work too). |
+| `children` | `content` |  |  | Content drawn over the image. |
+| `radius` | `boolean` |  |  | Round the corners (theme radius). |
 
 ```tsx
 <BackgroundImage src="/images/background.jpg" radius>
@@ -78,11 +78,11 @@ Responsive iframe embed.
 
 **Slots:** `root` `frame`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `src` | `string` | yes |  |
-| `ratio` | `number` |  |  |
-| `title` | `string` |  | Accessible title of the embedded frame. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `src` | `string` | yes |  | Embed URL (YouTube, Vimeo, or any page that can be framed). |
+| `ratio` | `number` |  | `16` | Width divided by height, e.g. `16 / 9`. |
+| `title` | `string` |  | `"Video"` | Accessible title of the embedded frame. |
 
 ```tsx
 <VideoFrame title="Product tour" src="about:blank" ratio={16 / 9} />
@@ -100,12 +100,19 @@ Previous/next carousel; controlled when `value` is set. ← → switch slides.
 
 **Slots:** `root` `control` `controls` `slide` `status` `viewport`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `slides` | `CarouselSlide[]` | yes |  | The slides, in order. |
+| `label` | `string` |  | `"Carousel"` | Accessible name (default "Carousel"). |
+| `onChange` | `(id: string) => void` |  |  | Called with the id of the slide being shown. |
+| `value` | `string` |  |  | Id of the shown slide (controlled); uncontrolled when unset. |
+
+**`CarouselSlide`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `slides` | `CarouselSlide[]` | yes |  |
-| `label` | `string` |  | Accessible name (default "Carousel"). |
-| `onChange` | `(id: string) => void` |  |  |
-| `value` | `string` |  |  |
+| `id` | `string` | yes | Slide id, passed to `onChange` and matched against `value`. |
+| `content` | `content` | yes | Slide content. |
 
 ```tsx
 <Carousel
@@ -137,12 +144,20 @@ Thumbnail picker.
 
 **Slots:** `root` `image` `item`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `ThumbnavItem[]` | yes |  | The thumbnails, in order. |
+| `onChange` | `(id: string) => void` | yes |  | Called with the id the user picks. |
+| `value` | `string` | yes |  | Id of the selected thumbnail. |
+| `label` | `string` |  | `"Thumbnails"` | Accessible name (default "Thumbnails"). |
+
+**`ThumbnavItem`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `items` | `ThumbnavItem[]` | yes |  |
-| `onChange` | `(id: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `label` | `string` |  | Accessible name (default "Thumbnails"). |
+| `id` | `string` | yes | Thumbnail id, passed to `onChange` and matched against `value`. |
+| `src` | `string` | yes | Thumbnail image URL. |
+| `alt` | `string` |  | Alternative text (the button's accessible name). |
 
 ```tsx
 function Example() {
@@ -173,10 +188,10 @@ function Example() {
 
 Image grid.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `columns` | `2 \| 3 \| 4` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Images or tiles. |
+| `columns` | `2 \| 3 \| 4` |  | `3` | Number of columns. |
 
 ```tsx
 <GalleryGrid columns={3}>
@@ -194,14 +209,14 @@ Image compare slider.
 
 **Slots:** `root` `handle` `image` `overlay` `range`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `after` | `string` | yes |  |
-| `before` | `string` | yes |  |
-| `afterAlt` | `string` |  |  |
-| `beforeAlt` | `string` |  |  |
-| `initial` | `number` |  |  |
-| `label` | `string` |  | Accessible name for the slider (default "Compare"). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `after` | `string` | yes |  | Image URL for the "after" state. |
+| `before` | `string` | yes |  | Image URL for the "before" state. |
+| `afterAlt` | `string` |  | `"After"` | Alternative text for the "after" image. |
+| `beforeAlt` | `string` |  | `"Before"` | Alternative text for the "before" image. |
+| `initial` | `number` |  | `50` | Starting divider position in percent. |
+| `label` | `string` |  | `"Compare"` | Accessible name for the slider (default "Compare"). |
 
 ```tsx
 <BeforeAfter
@@ -226,9 +241,9 @@ Row of partner logos / names.
 
 **Slots:** `root` `item`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `unknown[]` | yes |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `unknown[]` | yes |  | Logos: names or content (images). |
 
 ```tsx
 <LogoCloud items={["Acme", "Globex", "Initech", "Umbrella"]} />
@@ -240,12 +255,12 @@ Seamless ticker: content is rendered twice so the −50% keyframe loops without 
 
 **Slots:** `root` `group` `track`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `pauseOnHover` | `boolean` |  | Pause scrolling while hovered or focused (default true). |
-| `speed` | `"normal" \| "slow" \| "fast"` |  |  |
-| `variant` | `"soft" \| "plain"` |  | `"soft"` (default) sits on a tinted, bordered strip; `"plain"` has no background or border. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content to scroll (rendered twice for a seamless loop). |
+| `pauseOnHover` | `boolean` |  |  | Pause scrolling while hovered or focused (default true). |
+| `speed` | `"normal" \| "slow" \| "fast"` |  | `"normal"` | Scroll speed. |
+| `variant` | `"soft" \| "plain"` |  | `"soft"` | `"soft"` (default) sits on a tinted, bordered strip; `"plain"` has no background or border. |
 
 ```tsx
 <Stack gap="0.75rem">
@@ -270,10 +285,10 @@ Browser chrome mock-up.
 
 **Slots:** `root` `bar` `body` `url`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `url` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Page content (a screenshot fills the frame). |
+| `url` | `string` |  | `"https://example.com"` | Address shown in the bar. |
 
 ```tsx
 <BrowserFrame url="https://acme.arachne.app">
@@ -287,9 +302,9 @@ Phone mock-up.
 
 **Slots:** `root` `body` `notch`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Screen content (a screenshot fills the screen). |
 
 ```tsx
 <PhoneFrame>

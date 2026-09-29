@@ -9,11 +9,11 @@ Arrange things on the page: stacks, grids, containers and page chrome.
 
 Flex stack; `gap` maps to `--a-stack-gap`.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `direction` | `"column" \| "row"` |  |  |
-| `gap` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Items to stack. |
+| `direction` | `"column" \| "row"` |  | `"column"` | Stack vertically (`column`) or horizontally (`row`). |
+| `gap` | `string` |  |  | Space between children (any CSS length). |
 
 ```tsx
 <Stack gap="0.5rem">
@@ -29,14 +29,14 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Horizontal flex group (Mantine Group / Bootstrap btn-group row).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `align` | `"start" \| "center" \| "end" \| "stretch"` |  |  |
-| `children` | `content` |  |  |
-| `gap` | `string` |  |  |
-| `grow` | `boolean` |  |  |
-| `justify` | `"start" \| "center" \| "end" \| "between" \| "around"` |  |  |
-| `wrap` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `align` | `"start" \| "center" \| "end" \| "stretch"` |  |  | Vertical alignment of the items. |
+| `children` | `content` |  |  | Items in a row. |
+| `gap` | `string` |  |  | Space between items (any CSS length). |
+| `grow` | `boolean` |  |  | Items share the row's width equally. |
+| `justify` | `"start" \| "center" \| "end" \| "between" \| "around"` |  |  | Horizontal distribution of the items. |
+| `wrap` | `boolean` |  |  | Let items wrap onto new lines. |
 
 ```tsx
 <Group gap="0.5rem">
@@ -53,14 +53,14 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Flexbox layout primitive (direction, gap, align, justify, wrap).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `align` | `string` |  |  |
-| `children` | `content` |  |  |
-| `direction` | `"column" \| "row"` |  |  |
-| `gap` | `string` |  |  |
-| `justify` | `string` |  |  |
-| `wrap` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `align` | `string` |  |  | CSS `align-items`. |
+| `children` | `content` |  |  | Flex items. |
+| `direction` | `"column" \| "row"` |  |  | Main axis. |
+| `gap` | `string` |  |  | Space between items (any CSS length). |
+| `justify` | `string` |  |  | CSS `justify-content`. |
+| `wrap` | `boolean` |  |  | Let items wrap. |
 
 ```tsx
 <Flex justify="space-between" align="center">
@@ -77,12 +77,12 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 CSS grid layout (Bulma-style 2D grid).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `cols` | `number` |  | Column count (CSS grid). Default 12. |
-| `gap` | `string` |  |  |
-| `min` | `string` |  | Min track width for auto-fit dense grids, e.g. `12rem`. Overrides `cols` when set. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Grid cells (plain elements or `GridItem`s). |
+| `cols` | `number` |  | `12` | Column count (CSS grid). Default 12. |
+| `gap` | `string` |  |  | Space between cells (any CSS length). |
+| `min` | `string` |  |  | Min track width for auto-fit dense grids, e.g. `12rem`. Overrides `cols` when set. |
 
 ```tsx
 <Grid cols={3} gap="0.75rem">
@@ -103,11 +103,11 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Item of a CSS grid, placed with `span` / `start`.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `span` | `number` |  |  |
-| `start` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Cell content. |
+| `span` | `number` |  |  | Number of columns the cell covers. |
+| `start` | `number` |  |  | Column the cell starts at (1-based). |
 
 ```tsx
 <Grid cols={3} gap="0.75rem">
@@ -122,14 +122,14 @@ Item of a CSS grid, placed with `span` / `start`.
 
 Flexbox columns container (Bulma `columns`).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `centered` | `boolean` |  |  |
-| `children` | `content` |  |  |
-| `gap` | `string` |  |  |
-| `mobile` | `boolean` |  | Keep columns side-by-side on mobile (default stacks under 768px). |
-| `multiline` | `boolean` |  |  |
-| `vcentered` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `centered` | `boolean` |  |  | Centre the columns horizontally. |
+| `children` | `content` |  |  | `Column`s. |
+| `gap` | `string` |  |  | Space between columns (any CSS length). |
+| `mobile` | `boolean` |  |  | Keep columns side-by-side on mobile (default stacks under 768px). |
+| `multiline` | `boolean` |  |  | Wrap columns onto new rows when they don't fit. |
+| `vcentered` | `boolean` |  |  | Centre the columns vertically. |
 
 ```tsx
 <Columns gap="1rem">
@@ -153,12 +153,18 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Single column (Bulma `column`).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `narrow` | `boolean` |  |  |
-| `offset` | `ColumnSize` |  |  |
-| `size` | `ColumnSize` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Column content. |
+| `narrow` | `boolean` |  |  | Only as wide as its content. |
+| `offset` | `ColumnSize` |  |  | Empty space before the column, in the same units as `size`. |
+| `size` | `ColumnSize` |  |  | Width in twelfths (`1`–`12`) or a named fraction (`half`, `one-third`, …); auto when unset. |
+
+**`ColumnSize`**
+
+```ts
+type ColumnSize = | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | "full" | "four-fifths" | "three-quarters" | "two-thirds" | "three-fifths" | "half" | "two-fifths" | "one-third" | "one-quarter" | "one-fifth" | "narrow" | "auto";
+```
 
 ```tsx
 <Columns>
@@ -175,10 +181,10 @@ Single column (Bulma `column`).
 
 Horizontally centred content container with a max width.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `size` | `"full" \| "sm" \| "md" \| "lg"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Centred, width-constrained content. |
+| `size` | `"full" \| "sm" \| "md" \| "lg"` |  |  | Maximum width. |
 
 ```tsx
 <Container size="sm">
@@ -192,10 +198,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Vertical page section with rhythm spacing.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Section content. |
+| `size` | `"sm" \| "md" \| "lg"` |  |  | Vertical padding. |
 
 ```tsx
 <Section size="sm">
@@ -210,10 +216,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Horizontal level bar (Bulma `level`).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `mobile` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | `LevelLeft`, `LevelRight` and/or `LevelItem`s. |
+| `mobile` | `boolean` |  |  | Keep the row horizontal on small screens (it stacks by default). |
 
 ```tsx
 <Level>
@@ -240,9 +246,9 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Left-aligned group of a level bar.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Items on this side of the row. |
 
 ```tsx
 <Level>
@@ -256,9 +262,9 @@ Left-aligned group of a level bar.
 
 Right-aligned group of a level bar.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Items on this side of the row. |
 
 ```tsx
 <Level>
@@ -272,9 +278,9 @@ Right-aligned group of a level bar.
 
 One centred item of a level bar.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Items on this side of the row. |
 
 ```tsx
 <Level>
@@ -291,9 +297,9 @@ One centred item of a level bar.
 
 Media object (Bulma / UIkit comment / Bootstrap media).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | `MediaLeft`, `MediaContent` and `MediaRight`. |
 
 ```tsx
 <Media>
@@ -317,9 +323,9 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Leading figure of a media object (avatar, thumbnail).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content of this part. |
 
 ```tsx
 <Media>
@@ -334,9 +340,9 @@ Leading figure of a media object (avatar, thumbnail).
 
 Main content of a media object.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content of this part. |
 
 ```tsx
 <Media>
@@ -351,9 +357,9 @@ Main content of a media object.
 
 Trailing content of a media object (actions).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content of this part. |
 
 ```tsx
 <Media>
@@ -374,10 +380,10 @@ Centre content or add fixed space.
 
 Centres its content horizontally and vertically.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `inline` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content to centre horizontally and vertically. |
+| `inline` | `boolean` |  |  | Shrink to the content (`inline-flex`) instead of filling the width. |
 
 ```tsx
 <Center style={{ "min-height": "6rem" }}>
@@ -389,10 +395,10 @@ Centres its content horizontally and vertically.
 
 Fixed spacer; `h` / `w` accept numbers (px) or CSS lengths.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `h` | `string \| number` |  |  |
-| `w` | `string \| number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `h` | `string \| number` |  |  | Vertical space (pixels or any CSS length). |
+| `w` | `string \| number` |  |  | Horizontal space (pixels or any CSS length). |
 
 ```tsx
 <div>
@@ -422,10 +428,10 @@ Fixed-ratio box (`--a-aspect`).
 
 **Slots:** `root` `inner`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `ratio` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content that fills the box (images and video are cropped to fit). |
+| `ratio` | `number` |  | `16 / 9` | Width divided by height, e.g. `16 / 9`. |
 
 ```tsx
 <AspectRatio style={{ "max-width": "20rem" }} ratio={16 / 9}>
@@ -439,10 +445,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Scrollable region with a max height.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `maxHeight` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Scrollable content. |
+| `maxHeight` | `string` |  |  | Height after which the content scrolls (any CSS length). |
 
 ```tsx
 <ScrollArea maxHeight="6rem">
@@ -465,14 +471,14 @@ Two resizable panes (pointer + ← → Home End).
 
 **Slots:** `root` `handle` `pane`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `initial` | `number` |  | Left pane ratio 0–1, default 0.4 (read once, at mount). |
-| `label` | `string` |  | Accessible name for the handle (default "Resize panes"). |
-| `left` | `content` |  |  |
-| `max` | `number` |  |  |
-| `min` | `number` |  |  |
-| `right` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `initial` | `number` |  | `0.4` | Left pane ratio 0–1, default 0.4 (read once, at mount). |
+| `label` | `string` |  | `"Resize panes"` | Accessible name for the handle (default "Resize panes"). |
+| `left` | `content` |  |  | First (left) pane content. |
+| `max` | `number` |  | `0.8` | Largest size of the first pane, in percent. |
+| `min` | `number` |  | `0.2` | Smallest size of the first pane, in percent. |
+| `right` | `content` |  |  | Second (right) pane content. |
 
 ```tsx
 <Splitter
@@ -490,10 +496,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Masonry layout of variable-height items in columns.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `columns` | `2 \| 3 \| 4` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Items to pack; each keeps its own height. |
+| `columns` | `2 \| 3 \| 4` |  | `3` | Number of columns. |
 
 ```tsx
 function Example() {
@@ -529,9 +535,9 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Horizontal scroll reel.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Items in a horizontally scrolling row. |
 
 ```tsx
 <Reel>
@@ -548,10 +554,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Negative horizontal margin to break out of padding.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `x` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content to extend. |
+| `x` | `string` |  | `"-1rem"` | How far to extend past the container on each side (any CSS length). |
 
 ```tsx
 <Bleed x="1rem">
@@ -567,12 +573,12 @@ Application chrome: optional sidebar + header around main content.
 
 **Slots:** `root` `content` `header` `main` `sidebar`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `contentAs` | `"main" \| "div"` |  | Element for the content area (default `"main"`). Use `"div"` when the shell is nested in a page that already has a `&lt;main>` landmark. |
-| `header` | `content` |  |  |
-| `sidebar` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Main content. |
+| `contentAs` | `"main" \| "div"` |  |  | Element for the content area (default `"main"`). Use `"div"` when the shell is nested in a page that already has a `&lt;main>` landmark. |
+| `header` | `content` |  |  | Content of the top bar. |
+| `sidebar` | `content` |  |  | Content of the side column, e.g. a `SidebarNav`. |
 
 ```tsx
 const sections = [
@@ -603,12 +609,12 @@ Page title block with breadcrumb, description and actions.
 
 **Slots:** `root` `actions` `crumb` `description` `row` `text` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `title` | `string` | yes |  |
-| `actions` | `content` |  |  |
-| `breadcrumb` | `content` |  |  |
-| `description` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `title` | `string` | yes |  | Page title (rendered as `&lt;h1>`). |
+| `actions` | `content` |  |  | Buttons aligned to the end of the header. |
+| `breadcrumb` | `content` |  |  | Breadcrumb above the title. |
+| `description` | `content` |  |  | Text under the title. |
 
 ```tsx
 <PageHeader
@@ -624,11 +630,23 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Full-bleed page hero (Bulma / Bootstrap jumbotron).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `size` | `HeroSize` |  |  |
-| `tone` | `HeroTone` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | `HeroHead`, `HeroBody` and `HeroFoot`, or plain content. |
+| `size` | `HeroSize` |  |  | Height: `sm` / `md` / `lg`, `half` screen or `full` screen. |
+| `tone` | `HeroTone` |  |  | Background colour scheme. |
+
+**`HeroSize`**
+
+```ts
+type HeroSize = "sm" | "md" | "lg" | "half" | "full";
+```
+
+**`HeroTone`**
+
+```ts
+type HeroTone = "default" | "accent" | "dark" | "light";
+```
 
 ```tsx
 <Hero tone="accent" size="sm">
@@ -649,9 +667,9 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Top area of a hero (e.g. navigation).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content of this part. |
 
 ```tsx
 <Hero tone="dark" size="sm">
@@ -666,9 +684,9 @@ Top area of a hero (e.g. navigation).
 
 Main content area of a hero.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content of this part. |
 
 ```tsx
 <Hero size="sm">
@@ -680,9 +698,9 @@ Main content area of a hero.
 
 Bottom area of a hero (e.g. tabs).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content of this part. |
 
 ```tsx
 <Hero tone="light" size="sm">
@@ -701,9 +719,9 @@ Page and site footers.
 
 Page footer region.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Footer content. |
 
 ```tsx
 <Footer>
@@ -717,11 +735,19 @@ Marketing footer.
 
 **Slots:** `root` `brand` `column` `columnTitle` `grid` `link` `meta`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `brand` | `content` |  |  | Logo or name. |
+| `columns` | `{ title: string; links: SiteFooterLink[]; }[]` |  |  | Link columns: each a `title` and its `links`. |
+| `meta` | `content` |  |  | Bottom line, e.g. copyright. |
+
+**`SiteFooterLink`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `brand` | `content` |  |  |
-| `columns` | `{ title: string; links: SiteFooterLink[]; }[]` |  |  |
-| `meta` | `content` |  |  |
+| `label` | `string` | yes | Link text. |
+| `href` | `string` |  | Renders a real link when set. |
+| `onClick` | `() => void` |  | Click handler (renders a button when there is no `href`). |
 
 ```tsx
 <SiteFooter
@@ -756,11 +782,11 @@ Keep content in view while scrolling.
 
 Sticks its content to an edge of the scroll container.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `offset` | `number` |  |  |
-| `position` | `"top" \| "bottom"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Content to keep in view. |
+| `offset` | `number` |  | `0` | Distance in pixels from the edge it sticks to. |
+| `position` | `"top" \| "bottom"` |  | `"top"` | Edge to stick to while scrolling. |
 
 ```tsx
 <Sticky offset={8}>
@@ -772,10 +798,10 @@ Sticks its content to an edge of the scroll container.
 
 Bar pinned to the top/bottom of its scroll container.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `position` | `"top" \| "bottom"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Bar content, e.g. a message and a Save button. |
+| `position` | `"top" \| "bottom"` |  | `"bottom"` | Edge the bar sticks to. |
 
 ```tsx
 <StickyBar position="bottom">
@@ -790,11 +816,11 @@ Bar pinned to the top/bottom of its scroll container.
 
 Viewport-pinned container.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `offset` | `string` |  |  |
-| `position` | `"top-left" \| "top-right" \| "bottom-left" \| "bottom-right"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Pinned content, e.g. a feedback button. |
+| `offset` | `string` |  |  | Distance from the corner (any CSS length). |
+| `position` | `"top-left" \| "top-right" \| "bottom-left" \| "bottom-right"` |  | `"bottom-right"` | Viewport corner to pin to. |
 
 ```tsx
 <Affix position="bottom-right" offset="1rem">

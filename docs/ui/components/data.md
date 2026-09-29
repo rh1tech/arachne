@@ -13,14 +13,14 @@ Static and sortable data tables.
 
 Styled `<table>`; pass `<thead>` / `<tbody>` as children.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `bordered` | `boolean` |  |  |
-| `children` | `content` |  |  |
-| `fullwidth` | `boolean` |  |  |
-| `hoverable` | `boolean` |  |  |
-| `narrow` | `boolean` |  |  |
-| `striped` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `bordered` | `boolean` |  |  | Borders around every cell. |
+| `children` | `content` |  |  | Table parts: `Thead`, `Tbody`, `Tfoot` (or native elements). |
+| `fullwidth` | `boolean` |  |  | Stretch to the container's width. |
+| `hoverable` | `boolean` |  |  | Highlight the row under the pointer. |
+| `narrow` | `boolean` |  |  | Compact cell padding. |
+| `striped` | `boolean` |  |  | Alternate row shading. |
 
 ```tsx
 <Table striped fullwidth>
@@ -49,9 +49,9 @@ Styled `<table>`; pass `<thead>` / `<tbody>` as children.
 
 Table head section.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Rows or cell content. |
 
 ```tsx
 <Table>
@@ -74,9 +74,9 @@ Table head section.
 
 Table body section.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Rows or cell content. |
 
 ```tsx
 <Table>
@@ -97,9 +97,9 @@ Table body section.
 
 Table footer section.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Rows or cell content. |
 
 ```tsx
 <Table>
@@ -122,10 +122,10 @@ Table footer section.
 
 Table row (clickable when `onClick` is set).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Rows or cell content. |
+| `onClick` | `(e: MouseEvent) => void` |  |  | Makes the row clickable. |
 
 ```tsx
 <Table>
@@ -142,14 +142,14 @@ Table row (clickable when `onClick` is set).
 
 Table header cell.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `abbr` | `string` |  |  |
-| `children` | `content` |  |  |
-| `colspan` | `string \| number` |  |  |
-| `headers` | `string` |  |  |
-| `rowspan` | `string \| number` |  |  |
-| `scope` | `"row" \| "col" \| "rowgroup" \| "colgroup"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `abbr` | `string` |  |  | Short form of the header, read by screen readers. |
+| `children` | `content` |  |  | Rows or cell content. |
+| `colspan` | `string \| number` |  |  | Columns the cell spans. |
+| `headers` | `string` |  |  | Ids of the header cells describing this cell. |
+| `rowspan` | `string \| number` |  |  | Rows the cell spans. |
+| `scope` | `"row" \| "col" \| "rowgroup" \| "colgroup"` |  |  | Which cells a header cell describes. |
 
 ```tsx
 <Table>
@@ -167,14 +167,14 @@ Table header cell.
 
 Table data cell.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `abbr` | `string` |  |  |
-| `children` | `content` |  |  |
-| `colspan` | `string \| number` |  |  |
-| `headers` | `string` |  |  |
-| `rowspan` | `string \| number` |  |  |
-| `scope` | `"row" \| "col" \| "rowgroup" \| "colgroup"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `abbr` | `string` |  |  | Short form of the header, read by screen readers. |
+| `children` | `content` |  |  | Rows or cell content. |
+| `colspan` | `string \| number` |  |  | Columns the cell spans. |
+| `headers` | `string` |  |  | Ids of the header cells describing this cell. |
+| `rowspan` | `string \| number` |  |  | Rows the cell spans. |
+| `scope` | `"row" \| "col" \| "rowgroup" \| "colgroup"` |  |  | Which cells a header cell describes. |
 
 ```tsx
 <Table>
@@ -192,14 +192,30 @@ Sortable data grid with ARIA table semantics (`rowgroup`s, `aria-sort`, header s
 
 **Slots:** `root` `body` `cell` `empty` `head` `header` `row` `sort`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `columns` | `DataTableColumn&lt;T>[]` | yes |  | Column definitions, in order. |
+| `rows` | `T[]` | yes |  | Row data; each row needs a unique `id`. |
+| `defaultSort` | `DataTableSort` |  |  | Initial sort (read once). |
+| `empty` | `content` |  |  | Shown when there are no rows. |
+| `label` | `string` |  |  | Accessible name for the table. |
+| `onSortChange` | `(sort: DataTableSort \| null) => void` |  |  | Notified after a header click changes the sort. |
+
+**`DataTableColumn`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `columns` | `DataTableColumn&lt;T>[]` | yes |  |
-| `rows` | `T[]` | yes |  |
-| `defaultSort` | `DataTableSort` |  | Initial sort (read once). |
-| `empty` | `content` |  | Shown when there are no rows. |
-| `label` | `string` |  | Accessible name for the table. |
-| `onSortChange` | `(sort: DataTableSort \| null) => void` |  | Notified after a header click changes the sort. |
+| `id` | `string` | yes | Column id (used by sorting). |
+| `header` | `string` | yes | Column header text. |
+| `cell` | `(row: T) => unknown` | yes | Renders a row's cell for this column. |
+| `sortValue` | `(row: T) => string \| number` |  | Value to sort by; the column is sortable when set. |
+
+**`DataTableSort`**
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | `string` | yes | Id of the sorted column. |
+| `dir` | `"asc" \| "desc"` | yes | Sort direction. |
 
 ```tsx
 <DataTable
@@ -234,9 +250,16 @@ Label / value pairs (`<dl>`).
 
 **Slots:** `root` `label` `row` `value`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `DescriptionItem[]` | yes |  | Label / value pairs, in order. |
+
+**`DescriptionItem`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `items` | `DescriptionItem[]` | yes |  |
+| `label` | `string` | yes | Term (rendered as `&lt;dt>`). |
+| `value` | `content` | yes | Description text or content (rendered as `&lt;dd>`). |
 
 ```tsx
 <DescriptionList
@@ -254,9 +277,16 @@ Label / value pairs.
 
 **Slots:** `root` `label` `row` `value`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `PropertyItem[]` | yes |  | Properties, in order. |
+
+**`PropertyItem`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `items` | `PropertyItem[]` | yes |  |
+| `label` | `string` | yes | Property name. |
+| `value` | `content` | yes | Property value (text or content). |
 
 ```tsx
 <PropertyList
@@ -278,10 +308,10 @@ Plain and grouped lists.
 
 Styled list (`ordered` for numbers).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `ordered` | `boolean` |  | Render `&lt;ol>` instead of `&lt;ul>`; fixed at mount. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | `ListItem`s. |
+| `ordered` | `boolean` |  |  | Render `&lt;ol>` instead of `&lt;ul>`; fixed at mount. |
 
 ```tsx
 <List>
@@ -299,10 +329,16 @@ List item with an optional icon.
 
 **Slots:** `root` `body` `icon`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `icon` | `IconName` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Item content. |
+| `icon` | `IconName` |  |  | Icon instead of the bullet. |
+
+**`IconName`** — Material Design Icons path names used by `<Icon />`.
+
+```ts
+type IconName = | "check" | "x" | "plus" | "minus" | "search" | "user" | "users" | "settings" | "menu" | "home" | "heart" | "star" | "bell" | "mail" | "calendar" | "clock" | "edit" | "trash" | "copy" | "download" | "upload" | "link" | "external" | "info" | "warning" | "error" | "success" | "chevron-down" | "chevron-up" | "chevron-left" | "chevron-right" | "arrow-left" | "arrow-right" | "eye" | "eye-off" | "eye-outline" | "lock" | "unlock" | "filter" | "more" | "close" | "spinner" | "sun" | "moon" | "play" | "pause" | "refresh" | "share" | "image" | "file" | "folder" | "zap" | "phone" | "git" | "code";
+```
 
 ```tsx
 <List ordered>
@@ -315,10 +351,10 @@ List item with an optional icon.
 
 Bordered group of list rows.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `flush` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | `ListGroupItem`s. |
+| `flush` | `boolean` |  |  | No outer border or radius (for edge-to-edge use in cards). |
 
 ```tsx
 <ListGroup>
@@ -336,12 +372,12 @@ List-group row.
 
 **Slots:** `root` `item`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `active` | `boolean` |  |  |
-| `children` | `content` |  |  |
-| `disabled` | `boolean` |  |  |
-| `onClick` | `(e: MouseEvent) => void` |  | Makes the row a button (fixed at mount); the `&lt;li>` becomes the `item` slot. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `active` | `boolean` |  |  | Marks the current row. |
+| `children` | `content` |  |  | Row content. |
+| `disabled` | `boolean` |  |  | Dims the row and blocks clicks. |
+| `onClick` | `(e: MouseEvent) => void` |  |  | Makes the row a button (fixed at mount); the `&lt;li>` becomes the `item` slot. |
 
 ```tsx
 <ListGroup>
@@ -356,9 +392,9 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Vertical timeline.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | `TimelineItem`s, oldest or newest first. |
 
 ```tsx
 <Timeline>
@@ -384,12 +420,18 @@ Timeline entry with a bullet, title and content.
 
 **Slots:** `root` `body` `bullet` `content` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `active` | `boolean` |  |  |
-| `bullet` | `IconName` |  |  |
-| `children` | `content` |  |  |
-| `title` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `active` | `boolean` |  |  | Highlights this event (e.g. the latest). |
+| `bullet` | `IconName` |  |  | Icon in the bullet. |
+| `children` | `content` |  |  | Event detail under the title. |
+| `title` | `string` |  |  | Event title. |
+
+**`IconName`** — Material Design Icons path names used by `<Icon />`.
+
+```ts
+type IconName = | "check" | "x" | "plus" | "minus" | "search" | "user" | "users" | "settings" | "menu" | "home" | "heart" | "star" | "bell" | "mail" | "calendar" | "clock" | "edit" | "trash" | "copy" | "download" | "upload" | "link" | "external" | "info" | "warning" | "error" | "success" | "chevron-down" | "chevron-up" | "chevron-left" | "chevron-right" | "arrow-left" | "arrow-right" | "eye" | "eye-off" | "eye-outline" | "lock" | "unlock" | "filter" | "more" | "close" | "spinner" | "sun" | "moon" | "play" | "pause" | "refresh" | "share" | "image" | "file" | "folder" | "zap" | "phone" | "git" | "code";
+```
 
 ```tsx
 <Timeline>
@@ -405,18 +447,35 @@ WAI-ARIA tree: one tab stop, ↑ ↓ move, → expands / enters, ← collapses /
 
 **Slots:** `root` `badge` `empty` `group` `icon` `item` `label` `row` `toggle`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `data` | `TreeNode[]` | yes |  | Root nodes. |
+| `defaultExpanded` | `string[]` |  |  | Node ids expanded on mount. |
+| `emptyLabel` | `content` |  | `"No matches"` | Shown when `filter` matches nothing (default "No matches"). |
+| `expandOnClick` | `boolean` |  |  | Clicking a parent row also expands / collapses it (default true). |
+| `filter` | `string` |  | `""` | Show only nodes whose label contains this text (case-insensitive), plus their ancestors, expanded, with the match highlighted. |
+| `icons` | `"auto" \| "none"` |  |  | `"auto"`: folder / file icons for nodes without their own `icon`. |
+| `label` | `string` |  |  | Accessible name for the tree. |
+| `onChange` | `(id: string) => void` |  |  | Called with the id of the node the user selects. |
+| `onToggle` | `(id: string, open: boolean) => void` |  |  | Called when a node is expanded or collapsed by the user. |
+| `value` | `string` |  |  | Id of the selected node. |
+
+**`TreeNode`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `data` | `TreeNode[]` | yes |  |
-| `defaultExpanded` | `string[]` |  | Node ids expanded on mount. |
-| `emptyLabel` | `content` |  | Shown when `filter` matches nothing (default "No matches"). |
-| `expandOnClick` | `boolean` |  | Clicking a parent row also expands / collapses it (default true). |
-| `filter` | `string` |  | Show only nodes whose label contains this text (case-insensitive), plus their ancestors, expanded, with the match highlighted. |
-| `icons` | `"auto" \| "none"` |  | `"auto"`: folder / file icons for nodes without their own `icon`. |
-| `label` | `string` |  | Accessible name for the tree. |
-| `onChange` | `(id: string) => void` |  |  |
-| `onToggle` | `(id: string, open: boolean) => void` |  | Called when a node is expanded or collapsed by the user. |
-| `value` | `string` |  |  |
+| `id` | `string` | yes | Node id, passed to `onChange` and matched against `value`. |
+| `label` | `string` | yes | Node text (also used by type-ahead and `filter`). |
+| `children` | `TreeNode[]` |  | Child nodes; a node with children can expand. |
+| `icon` | `content` |  | Leading icon: an icon name or any content. |
+| `badge` | `content` |  | Trailing content, e.g. a count or status badge. |
+| `disabled` | `boolean` |  | Shown and focusable, but can't be selected. |
+
+**`IconName`** — Material Design Icons path names used by `<Icon />`.
+
+```ts
+type IconName = | "check" | "x" | "plus" | "minus" | "search" | "user" | "users" | "settings" | "menu" | "home" | "heart" | "star" | "bell" | "mail" | "calendar" | "clock" | "edit" | "trash" | "copy" | "download" | "upload" | "link" | "external" | "info" | "warning" | "error" | "success" | "chevron-down" | "chevron-up" | "chevron-left" | "chevron-right" | "arrow-left" | "arrow-right" | "eye" | "eye-off" | "eye-outline" | "lock" | "unlock" | "filter" | "more" | "close" | "spinner" | "sun" | "moon" | "play" | "pause" | "refresh" | "share" | "image" | "file" | "folder" | "zap" | "phone" | "git" | "code";
+```
 
 ```tsx
 function Example() {
@@ -480,10 +539,17 @@ Reorderable list with keyboard-accessible move buttons.
 
 **Slots:** `root` `actions` `item` `label`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `SortableItem[]` | yes |  | Items in their current order (controlled). |
+| `onChange` | `(items: SortableItem[]) => void` | yes |  | Called with the reordered items (drag or the move buttons). |
+
+**`SortableItem`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `items` | `SortableItem[]` | yes |  |
-| `onChange` | `(items: SortableItem[]) => void` | yes |  |
+| `id` | `string` | yes | Item id (stable across reorders). |
+| `label` | `string` | yes | Item text. |
 
 ```tsx
 function Example() {
@@ -502,11 +568,11 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Horizontal board of kanban columns. With `onMove`, cards (`cardId`) can be dragged between columns (`columnId`) or moved with Alt+←/→ (column) and Alt+↑/↓ (position); moves are announced to screen readers.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `label` | `string` |  | Accessible name for the board. Default "Board". |
-| `onMove` | `(cardId: string, toColumnId: string, index: number) => void` |  | Called when a card is dropped on a column or moved with Alt+arrow keys. `index` is the position in the target column (without the moved card). Update your data; the board keeps focus on the moved card. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | The board's `KanbanColumn`s. |
+| `label` | `string` |  | `"Board"` | Accessible name for the board. Default "Board". |
+| `onMove` | `(cardId: string, toColumnId: string, index: number) => void` |  |  | Called when a card is dropped on a column or moved with Alt+arrow keys. `index` is the position in the target column (without the moved card). Update your data; the board keeps focus on the moved card. |
 
 ```tsx
 function Example() {
@@ -568,12 +634,12 @@ Kanban column with title, count and cards.
 
 **Slots:** `root` `body` `count` `header` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `title` | `string` | yes |  |
-| `children` | `content` |  |  |
-| `columnId` | `string` |  | Column id reported to `KanbanBoard` `onMove`; enables dropping cards here. |
-| `count` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `title` | `string` | yes |  | Column heading (also its accessible name). |
+| `children` | `content` |  |  | The column's `KanbanCard`s. |
+| `columnId` | `string` |  |  | Column id reported to `KanbanBoard` `onMove`; enables dropping cards here. |
+| `count` | `number` |  |  | Number shown next to the title, e.g. the card count. |
 
 ```tsx
 <KanbanBoard label="Review board">
@@ -589,12 +655,12 @@ Card in a kanban column.
 
 **Slots:** `root` `meta` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `title` | `string` | yes |  |
-| `cardId` | `string` |  | Card id reported to `KanbanBoard` `onMove`; makes the card draggable. |
-| `meta` | `string` |  |  |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `title` | `string` | yes |  | Card title. |
+| `cardId` | `string` |  |  | Card id reported to `KanbanBoard` `onMove`; makes the card draggable. |
+| `meta` | `string` |  |  | Small line, e.g. issue number or assignee. |
+| `onClick` | `(e: MouseEvent) => void` |  |  | Called when the card is clicked (e.g. to open it). |
 
 ```tsx
 <KanbanBoard label="Backlog board">
@@ -614,14 +680,25 @@ Disclosure list. Panels stay mounted (state and focus survive toggling) and anim
 
 **Slots:** `root` `chevron` `content` `icon` `item` `panel` `subtitle` `title` `trigger`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `AccordionItem[]` | yes |  | The sections, in order. |
+| `onChange` | `((id: string \| null) => void) \| ((ids: string[]) => void)` | yes |  | Called with the id to open, or `null` when the open item is closed. |
+| `value` | `string \| string[]` | yes |  | Id of the open item, or `null` when all are closed. |
+| `chevron` | `content` |  |  | Custom chevron (any node); `null` hides it. |
+| `multiple` | `boolean` |  |  | Single mode: one item open at a time (`value` is an id or `null`). |
+| `variant` | `"default" \| "separated" \| "flush"` |  | `"default"` | `separated` renders each item as its own card. |
+
+**`AccordionItem`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `items` | `AccordionItem[]` | yes |  |
-| `onChange` | `((id: string \| null) => void) \| ((ids: string[]) => void)` | yes |  |
-| `value` | `string \| string[]` | yes |  |
-| `chevron` | `content` |  | Custom chevron (any node); `null` hides it. |
-| `multiple` | `boolean` |  |  |
-| `variant` | `"default" \| "separated" \| "flush"` |  | `separated` renders each item as its own card. |
+| `id` | `string` | yes | Item id, passed to `onChange` and matched against `value`. |
+| `title` | `content` | yes | Header text or content (the toggle button's label). |
+| `content` | `content` | yes | Panel content shown when the item is open. |
+| `disabled` | `boolean` |  | The header can't be toggled. |
+| `icon` | `content` |  | Leading icon / avatar next to the title. |
+| `subtitle` | `content` |  | Secondary line under the title. |
 
 ```tsx
 function Example() {
@@ -656,10 +733,10 @@ function Example() {
 
 Show/hide region.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `open` | `boolean` | yes |  |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `open` | `boolean` | yes |  | Whether the content is shown; height animates on change. |
+| `children` | `content` |  |  | Content to show or hide. |
 
 ```tsx
 function Example() {
@@ -683,12 +760,12 @@ Height-clamped content with a toggle.
 
 **Slots:** `root` `content` `toggle`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `hideLabel` | `string` |  |  |
-| `maxHeight` | `number` |  |  |
-| `showLabel` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Long content to clip. |
+| `hideLabel` | `string` |  | `"Show less"` | Button text while expanded. |
+| `maxHeight` | `number` |  | `80` | Collapsed height in pixels. |
+| `showLabel` | `string` |  | `"Show more"` | Button text while collapsed. |
 
 ```tsx
 <Spoiler maxHeight={48} showLabel="Show more" hideLabel="Show less">
@@ -704,11 +781,11 @@ Native `<details>` disclosure (listen with `onToggle`).
 
 **Slots:** `root` `body` `summary`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `summary` | `content` | yes |  |
-| `children` | `content` |  |  |
-| `open` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `summary` | `content` | yes |  | Always-visible line that toggles the detail. |
+| `children` | `content` |  |  | Detail content. |
+| `open` | `boolean` |  |  | Start expanded. |
 
 ```tsx
 <Details summary="Why is my deploy queued?">
@@ -726,9 +803,9 @@ Filter bars, active-filter chips and result counts.
 
 Horizontal toolbar for filters and chips.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `children` | `content` |  |  | Filter controls: search, selects, chips, buttons. |
 
 ```tsx
 function Example() {
@@ -759,10 +836,10 @@ Active filter with a remove button.
 
 **Slots:** `root` `remove`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `string` | yes |  |
-| `onRemove` | `() => void` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `string` | yes |  | Filter text, e.g. "Status: failed". |
+| `onRemove` | `() => void` |  |  | Shows a remove (×) button; called when it is pressed. |
 
 ```tsx
 function Example() {
@@ -795,10 +872,10 @@ function Example() {
 
 "12 results" line (live region).
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `count` | `number` | yes |  |
-| `label` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `count` | `number` | yes |  | Number of results. |
+| `label` | `string` |  |  | Noun after the count, e.g. "deploys". |
 
 ```tsx
 <ResultCount count={1284} label="deploys" />

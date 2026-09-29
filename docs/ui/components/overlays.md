@@ -11,22 +11,22 @@ Centered dialog with focus trap, Escape, scroll lock and enter/exit motion.
 
 **Slots:** `root` `backdrop` `body` `close` `description` `footer` `header` `panel` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onClose` | `() => void` | yes |  |
-| `open` | `boolean` | yes |  |
-| `children` | `content` |  |  |
-| `closeOnBackdrop` | `boolean` |  | Close when the backdrop is clicked (default true). |
-| `closeOnEscape` | `boolean` |  | Close on Escape (default true). |
-| `description` | `content` |  |  |
-| `footer` | `content` |  |  |
-| `hideClose` | `boolean` |  | Hide the header close button. |
-| `label` | `string` |  | Accessible name when there is no visible `title`. |
-| `mount` | `Element` |  | Portal target (defaults to `document.body`). |
-| `placement` | `"center" \| "top"` |  | Vertical placement (default `center`). |
-| `role` | `"dialog" \| "alertdialog"` |  | `alertdialog` for confirmations that interrupt the user. |
-| `size` | `"full" \| "sm" \| "md" \| "lg" \| "xl"` |  | Width preset; override freely with `--a-modal-width`. |
-| `title` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onClose` | `() => void` | yes |  | Called when the user closes it (close button, Escape, backdrop); set `open` to false. |
+| `open` | `boolean` | yes |  | Whether the dialog is shown (controlled). |
+| `children` | `content` |  |  | Body content. |
+| `closeOnBackdrop` | `boolean` |  |  | Close when the backdrop is clicked (default true). |
+| `closeOnEscape` | `boolean` |  |  | Close on Escape (default true). |
+| `description` | `content` |  |  | Text under the title; also the dialog's accessible description. |
+| `footer` | `content` |  |  | Bottom bar content, usually the action buttons. |
+| `hideClose` | `boolean` |  |  | Hide the header close button. |
+| `label` | `string` |  |  | Accessible name when there is no visible `title`. |
+| `mount` | `Element` |  |  | Portal target (defaults to `document.body`). |
+| `placement` | `"center" \| "top"` |  |  | Vertical placement (default `center`). |
+| `role` | `"dialog" \| "alertdialog"` |  |  | `alertdialog` for confirmations that interrupt the user. |
+| `size` | `"full" \| "sm" \| "md" \| "lg" \| "xl"` |  |  | Width preset; override freely with `--a-modal-width`. |
+| `title` | `string` |  |  | Heading; also the dialog's accessible name. |
 
 ```tsx
 function Example() {
@@ -63,16 +63,16 @@ Confirmation built on the shared dialog surface (focus trap, Escape, scroll lock
 
 **Slots:** `root` `backdrop` `body` `close` `description` `footer` `header` `panel` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `message` | `string` | yes |  |
-| `onCancel` | `() => void` | yes |  |
-| `onConfirm` | `() => void` | yes |  |
-| `open` | `boolean` | yes |  |
-| `cancelLabel` | `string` |  |  |
-| `confirmLabel` | `string` |  |  |
-| `danger` | `boolean` |  |  |
-| `title` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `message` | `string` | yes |  | The question to confirm. |
+| `onCancel` | `() => void` | yes |  | Called on cancel, Escape or backdrop click. |
+| `onConfirm` | `() => void` | yes |  | Called when the user confirms. |
+| `open` | `boolean` | yes |  | Whether the dialog is shown (controlled). |
+| `cancelLabel` | `string` |  | `"Cancel"` | Cancel button text. |
+| `confirmLabel` | `string` |  | `"Confirm"` | Confirm button text. |
+| `danger` | `boolean` |  |  | Destructive action: the confirm button uses the danger style. |
+| `title` | `string` |  |  | Dialog heading. |
 
 ```tsx
 function Example() {
@@ -108,22 +108,22 @@ Edge-anchored dialog. Slots match {@link Modal}.
 
 **Slots:** `root` `backdrop` `body` `close` `description` `footer` `header` `panel` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onClose` | `() => void` | yes |  |
-| `open` | `boolean` | yes |  |
-| `children` | `content` |  |  |
-| `closeOnBackdrop` | `boolean` |  | Close when the backdrop is clicked (default true). |
-| `closeOnEscape` | `boolean` |  | Close on Escape (default true). |
-| `description` | `content` |  |  |
-| `footer` | `content` |  |  |
-| `hideClose` | `boolean` |  | Hide the header close button. |
-| `label` | `string` |  | Accessible name when there is no visible `title`. |
-| `mount` | `Element` |  | Portal target (defaults to `document.body`). |
-| `role` | `"dialog" \| "alertdialog"` |  | `alertdialog` for confirmations that interrupt the user. |
-| `side` | `"top" \| "bottom" \| "left" \| "right"` |  |  |
-| `size` | `"full" \| "sm" \| "md" \| "lg"` |  |  |
-| `title` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onClose` | `() => void` | yes |  | Called when the user closes it (close button, Escape, backdrop); set `open` to false. |
+| `open` | `boolean` | yes |  | Whether the dialog is shown (controlled). |
+| `children` | `content` |  |  | Body content. |
+| `closeOnBackdrop` | `boolean` |  |  | Close when the backdrop is clicked (default true). |
+| `closeOnEscape` | `boolean` |  |  | Close on Escape (default true). |
+| `description` | `content` |  |  | Text under the title; also the dialog's accessible description. |
+| `footer` | `content` |  |  | Bottom bar content, usually the action buttons. |
+| `hideClose` | `boolean` |  |  | Hide the header close button. |
+| `label` | `string` |  |  | Accessible name when there is no visible `title`. |
+| `mount` | `Element` |  |  | Portal target (defaults to `document.body`). |
+| `role` | `"dialog" \| "alertdialog"` |  |  | `alertdialog` for confirmations that interrupt the user. |
+| `side` | `"top" \| "bottom" \| "left" \| "right"` |  | `"right"` | Edge the drawer slides in from. |
+| `size` | `"full" \| "sm" \| "md" \| "lg"` |  |  | Width (or height, for top / bottom). |
+| `title` | `string` |  |  | Heading; also the dialog's accessible name. |
 
 ```tsx
 function Example() {
@@ -145,20 +145,20 @@ Mobile bottom sheet (UIkit / Mantine Drawer bottom). Built on the shared dialog 
 
 **Slots:** `root` `backdrop` `body` `close` `description` `footer` `header` `panel` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onClose` | `() => void` | yes |  |
-| `open` | `boolean` | yes |  |
-| `children` | `content` |  |  |
-| `closeOnBackdrop` | `boolean` |  | Close when the backdrop is clicked (default true). |
-| `closeOnEscape` | `boolean` |  | Close on Escape (default true). |
-| `description` | `content` |  |  |
-| `footer` | `content` |  |  |
-| `hideClose` | `boolean` |  | Hide the header close button. |
-| `label` | `string` |  | Accessible name when there is no visible `title`. |
-| `mount` | `Element` |  | Portal target (defaults to `document.body`). |
-| `role` | `"dialog" \| "alertdialog"` |  | `alertdialog` for confirmations that interrupt the user. |
-| `title` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onClose` | `() => void` | yes |  | Called when the user closes it (close button, Escape, backdrop); set `open` to false. |
+| `open` | `boolean` | yes |  | Whether the dialog is shown (controlled). |
+| `children` | `content` |  |  | Body content. |
+| `closeOnBackdrop` | `boolean` |  |  | Close when the backdrop is clicked (default true). |
+| `closeOnEscape` | `boolean` |  |  | Close on Escape (default true). |
+| `description` | `content` |  |  | Text under the title; also the dialog's accessible description. |
+| `footer` | `content` |  |  | Bottom bar content, usually the action buttons. |
+| `hideClose` | `boolean` |  |  | Hide the header close button. |
+| `label` | `string` |  |  | Accessible name when there is no visible `title`. |
+| `mount` | `Element` |  |  | Portal target (defaults to `document.body`). |
+| `role` | `"dialog" \| "alertdialog"` |  |  | `alertdialog` for confirmations that interrupt the user. |
+| `title` | `string` |  |  | Heading; also the dialog's accessible name. |
 
 ```tsx
 function Example() {
@@ -186,16 +186,30 @@ Click-to-toggle panel anchored to a trigger. Escape / outside click close it and
 
 **Slots:** `root` `arrow` `panel` `trigger`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onOpenChange` | `(open: boolean) => void` | yes |  | Called with the next open state (trigger click, Escape, outside click). |
+| `open` | `boolean` | yes |  | Whether the panel is open (controlled). |
+| `arrow` | `boolean` |  |  | Show a small arrow pointing at the trigger. |
+| `children` | `content` |  |  | Panel content. |
+| `label` | `content` |  | `"Open"` | Label for the built-in trigger button |
+| `panelLabel` | `string` |  |  | Accessible name for the panel (defaults to the trigger label when it's text). |
+| `placement` | `PopoverPlacement` |  | `"bottom-start"` | Preferred side and alignment; flips and shifts to stay in view. |
+| `trigger` | `(api: PopoverTriggerApi) => unknown` |  |  | Render your own trigger: `trigger={(t) => &lt;MyButton {...t.attrs} />}`. |
+
+**`PopoverTriggerApi`** — Attributes to spread on a custom trigger so it stays wired for a11y.
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `onOpenChange` | `(open: boolean) => void` | yes |  |
-| `open` | `boolean` | yes |  |
-| `arrow` | `boolean` |  | Show a small arrow pointing at the trigger. |
-| `children` | `content` |  |  |
-| `label` | `content` |  | Label for the built-in trigger button |
-| `panelLabel` | `string` |  | Accessible name for the panel (defaults to the trigger label when it's text). |
-| `placement` | `PopoverPlacement` |  |  |
-| `trigger` | `(api: PopoverTriggerApi) => unknown` |  | Render your own trigger: `trigger={(t) => &lt;MyButton {...t.attrs} />}`. |
+| `open` | `boolean` | yes | Whether the panel is open. |
+| `toggle` | `() => void` | yes | Opens or closes the panel. |
+| `attrs` | `{ "aria-expanded": boolean; "aria-controls": string; "aria-haspopup": "dialog"; onClick: () => void; }` | yes | ARIA and event attributes to spread onto your trigger element. |
+
+**`PopoverPlacement`**
+
+```ts
+type PopoverPlacement = | "bottom-start" | "bottom-end" | "bottom" | "top-start" | "top-end" | "top";
+```
 
 ```tsx
 function Example() {
@@ -214,12 +228,12 @@ Hover/focus card panel (Mantine HoverCard).
 
 **Slots:** `root` `dropdown` `target`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `dropdown` | `content` | yes | Panel content shown on hover/focus. |
-| `children` | `content` |  |  |
-| `closeDelay` | `number` |  |  |
-| `openDelay` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `dropdown` | `content` | yes |  | Panel content shown on hover/focus. |
+| `children` | `content` |  |  | The trigger (hovering or focusing it opens the card). |
+| `closeDelay` | `number` |  | `160` | Milliseconds after leaving before the card closes (lets the pointer reach it). |
+| `openDelay` | `number` |  | `120` | Milliseconds of hover or focus before the card opens. |
 
 ```tsx
 <HoverCard dropdown={<Text>Ada Lovelace · Analyst of engines</Text>}>
@@ -235,15 +249,15 @@ Hover/focus tooltip linked with `aria-describedby`; Escape dismisses and the too
 
 **Slots:** `root` `arrow` `target` `tooltip`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `content` | `content` | yes |  |
-| `arrow` | `boolean` |  |  |
-| `children` | `content` |  |  |
-| `closeDelay` | `number` |  | Delay before hiding, ms (default 80) — lets the pointer reach the tooltip. |
-| `disabled` | `boolean` |  |  |
-| `openDelay` | `number` |  | Delay before showing on hover, ms (default 250). Focus shows immediately. |
-| `placement` | `"top" \| "bottom" \| "left" \| "right"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `content` | `content` | yes |  | Tooltip text or content. |
+| `arrow` | `boolean` |  | `true` | Show an arrow pointing at the target. |
+| `children` | `content` |  |  | The element the tooltip describes (shown on hover and focus). |
+| `closeDelay` | `number` |  | `80` | Delay before hiding, ms (default 80) — lets the pointer reach the tooltip. |
+| `disabled` | `boolean` |  |  | Never show the tooltip. |
+| `openDelay` | `number` |  | `250` | Delay before showing on hover, ms (default 250). Focus shows immediately. |
+| `placement` | `"top" \| "bottom" \| "left" \| "right"` |  | `"top"` | Preferred side; flips to stay in view. |
 
 ```tsx
 <Tooltip content="Copies the deploy URL">
@@ -265,13 +279,38 @@ Action menu with roving focus (↑ ↓ Home End, type-ahead), Escape, outside cl
 
 **Slots:** `root` `description` `group` `icon` `item` `label` `separator` `shortcut`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `MenuItem[]` | yes |  | Actions, separators (`{ type: "separator" }`) and group labels (`{ type: "label" }`). |
+| `open` | `boolean` | yes |  | Whether the menu is shown (controlled). |
+| `label` | `string` |  |  | Accessible name for the menu. |
+| `onClose` | `() => void` |  |  | Called on outside click / Escape / selection. Prefer with a wrapping `.a-menu-host`. |
+| `placement` | `MenuPlacement` |  | `"bottom-start"` | Preferred position relative to the trigger; flips to stay in view. |
+
+**`MenuItem`**
+
+```ts
+type MenuItem = MenuAction | { type: "separator" } | { type: "label"; label: unknown };
+```
+
+**`MenuAction`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `items` | `MenuItem[]` | yes |  |
-| `open` | `boolean` | yes |  |
-| `label` | `string` |  | Accessible name for the menu. |
-| `onClose` | `() => void` |  | Called on outside click / Escape / selection. Prefer with a wrapping `.a-menu-host`. |
-| `placement` | `MenuPlacement` |  |  |
+| `type` | `"item"` |  | Marks a regular action (the default for items without `type`). |
+| `label` | `content` | yes | Item text or content. |
+| `onSelect` | `() => void` | yes | Called when the item is chosen (click, Enter or Space); the menu then closes. |
+| `danger` | `boolean` |  | Destructive action: danger colour. |
+| `disabled` | `boolean` |  | Shown but can't be chosen; skipped by arrow keys. |
+| `icon` | `content` |  | Leading icon or content. |
+| `shortcut` | `string` |  | Right-aligned hint, e.g. `⌘K`. |
+| `description` | `string` |  | Secondary line under the label. |
+
+**`MenuPlacement`**
+
+```ts
+type MenuPlacement = "bottom-start" | "bottom-end" | "top-start" | "top-end";
+```
 
 ```tsx
 function Example() {
@@ -309,10 +348,20 @@ Right-click (or Shift+F10 / ContextMenu key) menu. Clamped to the viewport, focu
 
 **Slots:** `root` `item` `menu`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `ContextMenuItem[]` | yes |  | Menu items, in order. |
+| `children` | `content` |  |  | The area that opens the menu on right-click, Shift+F10 or the ContextMenu key. |
+
+**`ContextMenuItem`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `items` | `ContextMenuItem[]` | yes |  |
-| `children` | `content` |  |  |
+| `id` | `string` | yes | Item id. |
+| `label` | `string` | yes | Item text. |
+| `danger` | `boolean` |  | Destructive action: danger colour. |
+| `disabled` | `boolean` |  | Shown but can't be chosen. |
+| `onSelect` | `() => void` | yes | Called when the item is chosen; the menu then closes. |
 
 ```tsx
 <ContextMenu
@@ -334,12 +383,21 @@ Command palette: the search input is a combobox driving a listbox — ↑ ↓ mo
 
 **Slots:** `root` `backdrop` `description` `empty` `input` `label` `list` `option` `panel`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `actions` | `SpotlightAction[]` | yes |  | Actions to search and run. |
+| `onClose` | `() => void` | yes |  | Called on Escape, backdrop click or after an action runs; set `open` to false. |
+| `open` | `boolean` | yes |  | Whether the palette is shown (controlled). |
+| `placeholder` | `string` |  | `"Search actions…"` | Search field hint. |
+
+**`SpotlightAction`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `actions` | `SpotlightAction[]` | yes |  |
-| `onClose` | `() => void` | yes |  |
-| `open` | `boolean` | yes |  |
-| `placeholder` | `string` |  |  |
+| `id` | `string` | yes | Action id. |
+| `label` | `string` | yes | Action name; what the search matches. |
+| `description` | `string` |  | Secondary line under the label. |
+| `onSelect` | `() => void` | yes | Called when the action is chosen; the palette then closes. |
 
 ```tsx
 function Example() {
@@ -369,12 +427,20 @@ Fullscreen image viewer: focus trap, Escape, ← → between images.
 
 **Slots:** `root` `backdrop` `caption` `control` `controls` `image` `stage`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `images` | `LightboxImage[]` | yes |  | The images, in order. |
+| `index` | `number` | yes |  | Index of the shown image; `null` closes the viewer. |
+| `onClose` | `() => void` | yes |  | Called on Escape, backdrop click or the close button; set `index` to `null`. |
+| `onChange` | `(index: number) => void` |  |  | Called with the next index when the user moves with ← / → or the arrows. |
+
+**`LightboxImage`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `images` | `LightboxImage[]` | yes |  |
-| `index` | `number` | yes |  |
-| `onClose` | `() => void` | yes |  |
-| `onChange` | `(index: number) => void` |  |  |
+| `src` | `string` | yes | Image URL. |
+| `alt` | `string` |  | Alternative text (also the viewer's accessible name). |
+| `caption` | `string` |  | Caption under the image. |
 
 ```tsx
 function Example() {
@@ -406,11 +472,11 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Dimmed layer over its positioned parent.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `blur` | `boolean` |  |  |
-| `children` | `content` |  |  |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `blur` | `boolean` |  |  | Blur what is underneath. |
+| `children` | `content` |  |  | Content shown centred on the overlay. |
+| `onClick` | `(e: MouseEvent) => void` |  |  | Called when the overlay is clicked. |
 
 ```tsx
 <Box style={{ position: "relative", "min-height": "6rem" }}>

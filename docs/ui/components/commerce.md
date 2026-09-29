@@ -15,18 +15,24 @@ Product tile.
 
 **Slots:** `root` `badge` `body` `footer` `image` `media` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `price` | `number` | yes |  |
-| `title` | `string` | yes |  |
-| `addLabel` | `content` |  | Label for the add button (default "Add"). |
-| `badge` | `content` |  |  |
-| `currency` | `string` |  |  |
-| `image` | `string` |  |  |
-| `imageAlt` | `string` |  | Alt text for the product image (default: decorative). |
-| `onAdd` | `() => void` |  |  |
-| `order` | `HeadingLevel` |  | Heading level of the title, to fit the page outline. Default 4. |
-| `strike` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `price` | `number` | yes |  | Price as a number. |
+| `title` | `string` | yes |  | Product name. |
+| `addLabel` | `content` |  | `"Add"` | Label for the add button (default "Add"). |
+| `badge` | `content` |  |  | Badge over the image, e.g. "Sale". |
+| `currency` | `string` |  |  | ISO currency code for formatting. |
+| `image` | `string` |  |  | Product image URL. |
+| `imageAlt` | `string` |  | `""` | Alt text for the product image (default: decorative). |
+| `onAdd` | `() => void` |  |  | Shows an add-to-cart button; called when it is pressed. |
+| `order` | `HeadingLevel` |  | `4` | Heading level of the title, to fit the page outline. Default 4. |
+| `strike` | `number` |  |  | Previous price, shown struck through. |
+
+**`HeadingLevel`**
+
+```ts
+type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
+```
 
 ```tsx
 function Example() {
@@ -55,12 +61,12 @@ Formatted price with optional strike-through and period.
 
 **Slots:** `root` `amount` `period` `strike`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `amount` | `number` | yes |  |
-| `currency` | `string` |  |  |
-| `period` | `string` |  |  |
-| `strike` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `amount` | `number` | yes |  | Price as a number. |
+| `currency` | `string` |  | `"USD"` | ISO currency code for formatting, e.g. `USD`. |
+| `period` | `string` |  |  | Billing period after the price, e.g. `month`. |
+| `strike` | `number` |  |  | Previous price, shown struck through. |
 
 ```tsx
 <Price amount={24} strike={32} period="month" />
@@ -78,15 +84,15 @@ Cart row.
 
 **Slots:** `root` `body` `image` `quantity` `remove` `title`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `price` | `number` | yes |  |
-| `quantity` | `number` | yes |  |
-| `title` | `string` | yes |  |
-| `currency` | `string` |  |  |
-| `image` | `string` |  |  |
-| `onQuantityChange` | `(value: number) => void` |  |  |
-| `onRemove` | `() => void` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `price` | `number` | yes |  | Unit price as a number. |
+| `quantity` | `number` | yes |  | Quantity in the cart. |
+| `title` | `string` | yes |  | Product name. |
+| `currency` | `string` |  |  | ISO currency code for formatting. |
+| `image` | `string` |  |  | Product thumbnail URL. |
+| `onQuantityChange` | `(value: number) => void` |  |  | Shows quantity buttons; called with the new quantity. |
+| `onRemove` | `() => void` |  |  | Shows a remove button; called when it is pressed. |
 
 ```tsx
 function Example() {
@@ -120,12 +126,20 @@ Subtotal / tax / total block.
 
 **Slots:** `root` `row` `total`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `lines` | `OrderSummaryLine[]` | yes |  | Summary lines above the total. |
+| `total` | `content` | yes |  | Total amount. |
+| `children` | `content` |  |  | Content below the total, e.g. a checkout button. |
+| `totalLabel` | `content` |  | `"Total"` | Label for the total row (default "Total"). |
+
+**`OrderSummaryLine`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `lines` | `OrderSummaryLine[]` | yes |  |
-| `total` | `content` | yes |  |
-| `children` | `content` |  |  |
-| `totalLabel` | `content` |  | Label for the total row (default "Total"). |
+| `label` | `string` | yes | Line label, e.g. "Shipping". |
+| `value` | `string` | yes | Line amount text. |
+| `muted` | `boolean` |  | De-emphasise the line. |
 
 ```tsx
 <OrderSummary
@@ -150,15 +164,15 @@ Pricing plan card with price, features and a call to action.
 
 **Slots:** `root` `action` `description` `features` `name` `period` `price`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `name` | `string` | yes |  |
-| `price` | `string` | yes |  |
-| `action` | `content` |  |  |
-| `description` | `string` |  |  |
-| `features` | `string[]` |  |  |
-| `highlighted` | `boolean` |  |  |
-| `period` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `name` | `string` | yes |  | Plan name. |
+| `price` | `string` | yes |  | Price text, e.g. `$20`. |
+| `action` | `content` |  |  | Call to action at the bottom, e.g. a `Button`. |
+| `description` | `string` |  |  | Short pitch under the name. |
+| `features` | `string[]` |  |  | Features included in the plan. |
+| `highlighted` | `boolean` |  |  | Emphasise this plan (e.g. the recommended one). |
+| `period` | `string` |  |  | Billing period after the price, e.g. `per month`. |
 
 ```tsx
 <PricingCard
@@ -178,10 +192,16 @@ List of features with check icons.
 
 **Slots:** `root` `icon` `item` `label`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `string[]` | yes |  |
-| `icon` | `IconName` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `string[]` | yes |  | Features, one per line. |
+| `icon` | `IconName` |  | `"check"` | Icon before each feature. |
+
+**`IconName`** — Material Design Icons path names used by `<Icon />`.
+
+```ts
+type IconName = | "check" | "x" | "plus" | "minus" | "search" | "user" | "users" | "settings" | "menu" | "home" | "heart" | "star" | "bell" | "mail" | "calendar" | "clock" | "edit" | "trash" | "copy" | "download" | "upload" | "link" | "external" | "info" | "warning" | "error" | "success" | "chevron-down" | "chevron-up" | "chevron-left" | "chevron-right" | "arrow-left" | "arrow-right" | "eye" | "eye-off" | "eye-outline" | "lock" | "unlock" | "filter" | "more" | "close" | "spinner" | "sun" | "moon" | "play" | "pause" | "refresh" | "share" | "image" | "file" | "folder" | "zap" | "phone" | "git" | "code";
+```
 
 ```tsx
 <FeatureList items={["Unlimited projects", "Preview deploys", "SSO & audit log"]} />
@@ -193,11 +213,18 @@ Plan comparison grid (ARIA table over CSS grid rows).
 
 **Slots:** `root` `cell` `head` `row`
 
-| Prop | Type | Required | Description |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `plans` | `string[]` | yes |  | Plan names (the columns). |
+| `rows` | `FeatureCompareRow[]` | yes |  | Features (the rows). |
+| `featureLabel` | `content` |  | `"Feature"` | Header of the first column (default "Feature"). |
+
+**`FeatureCompareRow`**
+
+| Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `plans` | `string[]` | yes |  |
-| `rows` | `FeatureCompareRow[]` | yes |  |
-| `featureLabel` | `content` |  | Header of the first column (default "Feature"). |
+| `feature` | `string` | yes | Feature name. |
+| `values` | `(string \| boolean)[]` | yes | One cell per plan: `true` / `false` for a check or cross, or text. |
 
 ```tsx
 <FeatureCompare
@@ -222,12 +249,12 @@ Masked payment card preview.
 
 **Slots:** `root` `bottom` `brand` `number` `top`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `last4` | `string` | yes |  |
-| `brand` | `string` |  |  |
-| `exp` | `string` |  |  |
-| `name` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `last4` | `string` | yes |  | Last four digits. |
+| `brand` | `string` |  | `"Card"` | Card network, e.g. `Visa`. |
+| `exp` | `string` |  |  | Expiry, e.g. `08/29`. |
+| `name` | `string` |  | `"Cardholder"` | Cardholder name. |
 
 ```tsx
 <CreditCardPreview brand="Visa" last4="4242" exp="08/29" name="Ada Lovelace" />
@@ -239,13 +266,19 @@ Invoice row with number, date, amount and status.
 
 **Slots:** `root` `amount` `date` `number` `status`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `amount` | `string` | yes |  |
-| `date` | `string` | yes |  |
-| `id` | `string` | yes | Invoice number shown in the row. Also forwarded as the element `id`. |
-| `status` | `InvoiceStatus` | yes |  |
-| `onClick` | `() => void` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `amount` | `string` | yes |  | Amount text, e.g. `$49.00`. |
+| `date` | `string` | yes |  | Invoice date text. |
+| `id` | `string` | yes |  | Invoice number shown in the row. Also forwarded as the element `id`. |
+| `status` | `InvoiceStatus` | yes |  | Payment state; sets the badge. |
+| `onClick` | `() => void` |  |  | Makes the row a button, e.g. to open the invoice. |
+
+**`InvoiceStatus`**
+
+```ts
+type InvoiceStatus = "paid" | "open" | "void" | "past_due";
+```
 
 ```tsx
 <InvoiceRow

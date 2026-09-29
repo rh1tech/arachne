@@ -8,14 +8,21 @@ import { createPresence } from "./motion.ts";
 import { createSlots, type SlotProps, withDefaults } from "./system.ts";
 
 export type MenuAction = {
+	/** Marks a regular action (the default for items without `type`). */
 	type?: "item" | undefined;
+	/** Item text or content. */
 	label: unknown;
+	/** Called when the item is chosen (click, Enter or Space); the menu then closes. */
 	onSelect: () => void;
+	/** Destructive action: danger colour. */
 	danger?: boolean | undefined;
+	/** Shown but can't be chosen; skipped by arrow keys. */
 	disabled?: boolean | undefined;
+	/** Leading icon or content. */
 	icon?: unknown;
 	/** Right-aligned hint, e.g. `⌘K`. */
 	shortcut?: string | undefined;
+	/** Secondary line under the label. */
 	description?: string | undefined;
 };
 
@@ -34,10 +41,13 @@ export type MenuSlot =
 export type MenuPlacement = "bottom-start" | "bottom-end" | "top-start" | "top-end";
 
 export type MenuProps = SlotProps<MenuSlot> & {
+	/** Whether the menu is shown (controlled). */
 	open: boolean;
+	/** Actions, separators (`{ type: "separator" }`) and group labels (`{ type: "label" }`). */
 	items: MenuItem[];
 	/** Called on outside click / Escape / selection. Prefer with a wrapping `.a-menu-host`. */
 	onClose?: (() => void) | undefined;
+	/** Preferred position relative to the trigger; flips to stay in view. */
 	placement?: MenuPlacement | undefined;
 	/** Accessible name for the menu. */
 	label?: string | undefined;

@@ -6,10 +6,15 @@ import { type BaseProps, createId, type SlotProps, setup } from "./system.ts";
 export type FileButtonSlot = "root" | "input" | "label";
 
 export type FileButtonProps = SlotProps<FileButtonSlot> & {
+	/** Allowed file types, e.g. `image/*,.pdf`. */
 	accept?: string | undefined;
+	/** Allow choosing several files. */
 	multiple?: boolean | undefined;
+	/** Disables the button. */
 	disabled?: boolean | undefined;
+	/** Called with the chosen files. */
 	onChange: (files: File[]) => void;
+	/** Button label. */
 	children?: unknown;
 };
 
@@ -66,10 +71,15 @@ export function FileButton(input: FileButtonProps) {
 export type DropzoneSlot = "root" | "input" | "label";
 
 export type DropzoneProps = SlotProps<DropzoneSlot> & {
+	/** Allowed file types, e.g. `image/*,.pdf`; other files are ignored. */
 	accept?: string | undefined;
+	/** Accept several files at once. */
 	multiple?: boolean | undefined;
+	/** Ignore drops and clicks. */
 	disabled?: boolean | undefined;
+	/** Called with the dropped or chosen files. */
 	onDrop: (files: File[]) => void;
+	/** Instructions shown in the drop area. */
 	children?: unknown;
 };
 
@@ -182,16 +192,22 @@ export function Dropzone(input: DropzoneProps) {
 }
 
 export type SubnavItem = {
+	/** Item id, passed to `onChange` and matched against `value`. */
 	id: string;
+	/** Item text or content. */
 	label: unknown;
+	/** Shown but can't be chosen. */
 	disabled?: boolean | undefined;
 };
 
 export type SubnavSlot = "root" | "item";
 
 export type SubnavProps = SlotProps<SubnavSlot> & {
+	/** Navigation items, in order. */
 	items: SubnavItem[];
+	/** Id of the current item. */
 	value: string;
+	/** Called with the id the user picks. */
 	onChange: (id: string) => void;
 	/** Accessible name (default "Sub navigation"). */
 	label?: string | undefined;
@@ -241,16 +257,22 @@ export function Subnav(input: SubnavProps) {
 }
 
 export type IconnavItem = {
+	/** Item id, passed to `onChange` and matched against `value`. */
 	id: string;
+	/** Icon shown for the item. */
 	icon: IconName;
+	/** Accessible name and tooltip text. */
 	label: string;
 };
 
 export type IconnavSlot = "root" | "item";
 
 export type IconnavProps = SlotProps<IconnavSlot> & {
+	/** Navigation items, in order. */
 	items: IconnavItem[];
+	/** Id of the current item. */
 	value?: string | undefined;
+	/** Called with the id the user picks. */
 	onChange?: ((id: string) => void) | undefined;
 	/** Accessible name (default "Icon navigation"). */
 	label?: string | undefined;
@@ -298,6 +320,7 @@ export function Iconnav(input: IconnavProps) {
 export type NavigationProgressSlot = "root" | "bar";
 
 export type NavigationProgressProps = SlotProps<NavigationProgressSlot> & {
+	/** Show the bar (hide it when navigation finishes). */
 	visible: boolean;
 	/** 0–100; omit for indeterminate. */
 	value?: number | undefined;
@@ -346,10 +369,15 @@ export function NavigationProgress(input: NavigationProgressProps) {
 }
 
 export type NumberFormatterProps = BaseProps & {
+	/** Number to format. */
 	value: number;
+	/** Text before the number, e.g. `$`. */
 	prefix?: string | undefined;
+	/** Text after the number, e.g. `%`. */
 	suffix?: string | undefined;
+	/** Character between thousands groups. */
 	thousandSeparator?: string | undefined;
+	/** Fixed number of decimals. */
 	decimalScale?: number | undefined;
 };
 

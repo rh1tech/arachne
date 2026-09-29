@@ -17,22 +17,31 @@ export type ButtonVariant =
 export type ButtonSlot = "root" | "label" | "start" | "end" | "spinner";
 
 export type ButtonProps = SlotProps<ButtonSlot> & {
+	/** Visual style: `solid` (primary), `default`, `soft`, `outline`, `ghost`, `link`, or a tone (`danger`, `warning`, `success`). */
 	variant?: ButtonVariant;
+	/** Height and padding. */
 	size?: "xs" | "sm" | "md" | "lg" | undefined;
+	/** Native button type; `submit` submits the enclosing form. */
 	type?: "button" | "submit" | "reset" | undefined;
+	/** Disables the button (also sets `data-disabled`). */
 	disabled?: boolean | undefined;
 	/** Keeps focus and width; blocks clicks and announces `aria-busy`. */
 	loading?: boolean | undefined;
 	/** Render as a link. */
 	href?: string | undefined;
+	/** Link target when `href` is set; `_blank` also adds `rel="noopener noreferrer"`. */
 	target?: string | undefined;
 	/** Leading / trailing content (icons, badges, kbd). */
 	start?: unknown;
+	/** Trailing content after the label (icon, badge, `Kbd`). */
 	end?: unknown;
 	/** Square icon-only button; pass `aria-label`. */
 	iconOnly?: boolean | undefined;
+	/** Stretch to the container's width. */
 	fullWidth?: boolean | undefined;
+	/** Called on click (not while `disabled` or `loading`). */
 	onClick?: ((e: MouseEvent) => void) | undefined;
+	/** Button label. */
 	children?: unknown;
 };
 

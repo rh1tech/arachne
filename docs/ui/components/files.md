@@ -13,15 +13,15 @@ Choose or drop files.
 
 Native file input.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `accept` | `string` |  |  |
-| `disabled` | `boolean` |  |  |
-| `invalid` | `boolean` |  |  |
-| `multiple` | `boolean` |  |  |
-| `name` | `string` |  |  |
-| `onChange` | `(e: Event) => void` |  |  |
-| `required` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `accept` | `string` |  |  | Allowed file types, e.g. `image/*,.pdf`. |
+| `disabled` | `boolean` |  |  | Disables the field. |
+| `invalid` | `boolean` |  |  | Marks the value invalid (`aria-invalid` and error styling). |
+| `multiple` | `boolean` |  |  | Allow choosing several files. |
+| `name` | `string` |  |  | Field name submitted with the form. |
+| `onChange` | `(e: Event) => void` |  |  | Called when the selection changes; read `e.target.files`. |
+| `required` | `boolean` |  |  | A file must be chosen before the form submits. |
 
 ```tsx
 <FileInput aria-label="Attachment" />
@@ -33,13 +33,13 @@ Hidden file input triggered by a button (Mantine FileButton).
 
 **Slots:** `root` `input` `label`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(files: File[]) => void` | yes |  |
-| `accept` | `string` |  |  |
-| `children` | `content` |  |  |
-| `disabled` | `boolean` |  |  |
-| `multiple` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onChange` | `(files: File[]) => void` | yes |  | Called with the chosen files. |
+| `accept` | `string` |  |  | Allowed file types, e.g. `image/*,.pdf`. |
+| `children` | `content` |  | `"Choose file"` | Button label. |
+| `disabled` | `boolean` |  |  | Disables the button. |
+| `multiple` | `boolean` |  |  | Allow choosing several files. |
 
 ```tsx
 function Example() {
@@ -61,13 +61,13 @@ Drag-and-drop file target (also a click-to-browse file input).
 
 **Slots:** `root` `input` `label`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onDrop` | `(files: File[]) => void` | yes |  |
-| `accept` | `string` |  |  |
-| `children` | `content` |  |  |
-| `disabled` | `boolean` |  |  |
-| `multiple` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onDrop` | `(files: File[]) => void` | yes |  | Called with the dropped or chosen files. |
+| `accept` | `string` |  |  | Allowed file types, e.g. `image/*,.pdf`; other files are ignored. |
+| `children` | `content` |  |  | Instructions shown in the drop area. |
+| `disabled` | `boolean` |  |  | Ignore drops and clicks. |
+| `multiple` | `boolean` |  |  | Accept several files at once. |
 
 ```tsx
 function Example() {
@@ -99,12 +99,12 @@ File upload row with progress.
 
 **Slots:** `root` `bar` `cancel` `name` `row` `status` `track`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `name` | `string` | yes |  |
-| `progress` | `number` | yes |  |
-| `error` | `string` |  |  |
-| `onCancel` | `() => void` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `name` | `string` | yes |  | File name. |
+| `progress` | `number` | yes |  | Upload progress in percent (0–100). |
+| `error` | `string` |  |  | Error message; shows the failed state. |
+| `onCancel` | `() => void` |  |  | Shows a cancel button; called when it is pressed. |
 
 ```tsx
 function Example() {
@@ -149,12 +149,18 @@ Attached file with icon, name, metadata and remove action.
 
 **Slots:** `root` `icon` `meta` `name` `remove` `text`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `name` | `string` | yes |  |
-| `icon` | `IconName` |  |  |
-| `meta` | `string` |  |  |
-| `onRemove` | `() => void` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `name` | `string` | yes |  | File name. |
+| `icon` | `IconName` |  | `"file"` | File icon. |
+| `meta` | `string` |  |  | Small line, e.g. size and type. |
+| `onRemove` | `() => void` |  |  | Shows a remove button; called when it is pressed. |
+
+**`IconName`** — Material Design Icons path names used by `<Icon />`.
+
+```ts
+type IconName = | "check" | "x" | "plus" | "minus" | "search" | "user" | "users" | "settings" | "menu" | "home" | "heart" | "star" | "bell" | "mail" | "calendar" | "clock" | "edit" | "trash" | "copy" | "download" | "upload" | "link" | "external" | "info" | "warning" | "error" | "success" | "chevron-down" | "chevron-up" | "chevron-left" | "chevron-right" | "arrow-left" | "arrow-right" | "eye" | "eye-off" | "eye-outline" | "lock" | "unlock" | "filter" | "more" | "close" | "spinner" | "sun" | "moon" | "play" | "pause" | "refresh" | "share" | "image" | "file" | "folder" | "zap" | "phone" | "git" | "code";
+```
 
 ```tsx
 function Example() {

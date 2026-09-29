@@ -2,15 +2,25 @@ import { type BaseProps, type InputPassThrough, setup } from "./system.ts";
 
 export type TextInputProps = BaseProps &
 	InputPassThrough & {
+		/** Current text (controlled; update it from `onInput`). */
 		value?: string | undefined;
+		/** Hint shown while empty. */
 		placeholder?: string | undefined;
+		/** Native input type (`text`, `email`, `url`, `tel`, …). */
 		type?: string | undefined;
+		/** Disables the field. */
 		disabled?: boolean | undefined;
+		/** Marks the value invalid (`aria-invalid` and error styling). */
 		invalid?: boolean | undefined;
+		/** Field name submitted with the form. */
 		name?: string | undefined;
+		/** Called on every edit; read `e.target.value`. */
 		onInput?: ((e: InputEvent) => void) | undefined;
+		/** Called when the field gains focus. */
 		onFocus?: ((e: FocusEvent) => void) | undefined;
+		/** Called on key presses. */
 		onKeyDown?: ((e: KeyboardEvent) => void) | undefined;
+		/** Called when the field loses focus. */
 		onBlur?: ((e: FocusEvent) => void) | undefined;
 	};
 
@@ -53,13 +63,21 @@ export function TextInput(input: TextInputProps) {
 
 export type TextAreaProps = BaseProps &
 	InputPassThrough & {
+		/** Current text (controlled; update it from `onInput`). */
 		value?: string | undefined;
+		/** Hint shown while empty. */
 		placeholder?: string | undefined;
+		/** Disables the field. */
 		disabled?: boolean | undefined;
+		/** Marks the value invalid (`aria-invalid` and error styling). */
 		invalid?: boolean | undefined;
+		/** Field name submitted with the form. */
 		name?: string | undefined;
+		/** Visible text lines. */
 		rows?: number | undefined;
+		/** Called on every edit; read `e.target.value`. */
 		onInput?: ((e: InputEvent) => void) | undefined;
+		/** Called when the field loses focus. */
 		onBlur?: ((e: FocusEvent) => void) | undefined;
 	};
 

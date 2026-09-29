@@ -9,10 +9,10 @@ Show that work is in progress, or load more.
 
 Loading indicator.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `string` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `string` |  | `"Loading"` | Accessible name announced to screen readers. |
+| `size` | `"sm" \| "md" \| "lg"` |  | `"md"` | Spinner size. |
 
 ```tsx
 <Spinner label="Loading deploys" />
@@ -30,13 +30,25 @@ Linear progress bar.
 
 **Slots:** `root` `bar`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `value` | `number` | yes |  |
-| `color` | `"warning" \| "success" \| "info" \| "danger" \| "primary"` |  |  |
-| `indeterminate` | `boolean` |  |  |
-| `max` | `number` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `number` | yes |  | Current progress, from 0 to `max`. |
+| `color` | `"warning" \| "success" \| "info" \| "danger" \| "primary"` |  | `"primary"` | Bar colour. |
+| `indeterminate` | `boolean` |  |  | Unknown duration: an animated bar instead of `value`. |
+| `max` | `number` |  | `100` | Value at 100%. |
+| `size` | `"sm" \| "md" \| "lg"` |  | `"md"` | Bar thickness. |
+
+**`ProgressColor`**
+
+```ts
+type ProgressColor = "primary" | "info" | "success" | "warning" | "danger" | undefined;
+```
+
+**`ProgressSize`**
+
+```ts
+type ProgressSize = "sm" | "md" | "lg" | undefined;
+```
 
 ```tsx
 <Progress value={64} color="success" />
@@ -48,11 +60,11 @@ Progress split into discrete steps.
 
 **Slots:** `root` `segment`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `steps` | `number` | yes |  |
-| `value` | `number` | yes |  |
-| `label` | `string` |  | Accessible name (default "Progress"). |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `steps` | `number` | yes |  | Number of segments. |
+| `value` | `number` | yes |  | Completed segments. |
+| `label` | `string` |  | `"Progress"` | Accessible name (default "Progress"). |
 
 ```tsx
 <SteppedProgress label="Onboarding" steps={4} value={2} />
@@ -64,12 +76,12 @@ Circular progress.
 
 **Slots:** `root` `bar` `label` `track`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `value` | `number` | yes |  |
-| `label` | `content` |  |  |
-| `size` | `number` |  |  |
-| `thickness` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `number` | yes |  | Progress in percent (0–100). |
+| `label` | `content` |  |  | Content in the middle, e.g. `72%`. |
+| `size` | `number` |  | `72` | Diameter in pixels. |
+| `thickness` | `number` |  | `6` | Ring stroke width in pixels. |
 
 ```tsx
 <RingProgress value={72} label="72%" />
@@ -81,12 +93,12 @@ Half-ring gauge.
 
 **Slots:** `root` `bar` `label` `track`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `value` | `number` | yes |  |
-| `label` | `content` |  |  |
-| `size` | `number` |  |  |
-| `thickness` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `number` | yes |  | Progress in percent (0–100). |
+| `label` | `content` |  |  | Content in the middle, e.g. `64%`. |
+| `size` | `number` |  | `120` | Width in pixels. |
+| `thickness` | `number` |  | `10` | Arc stroke width in pixels. |
 
 ```tsx
 <SemiCircleProgress value={64} label="64%" />
@@ -100,11 +112,11 @@ Top loading bar (Mantine NavigationProgress / NProgress).
 
 **Slots:** `root` `bar`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `visible` | `boolean` | yes |  |
-| `label` | `string` |  | Accessible name (default "Loading"). |
-| `value` | `number` |  | 0–100; omit for indeterminate. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `visible` | `boolean` | yes |  | Show the bar (hide it when navigation finishes). |
+| `label` | `string` |  | `"Loading"` | Accessible name (default "Loading"). |
+| `value` | `number` |  | `30` | 0–100; omit for indeterminate. |
 
 ```tsx
 function Example() {
@@ -158,10 +170,10 @@ Covers its positioned parent with a spinner while `visible`.
 
 **Slots:** `root` `spinner`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `visible` | `boolean` | yes |  |
-| `label` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `visible` | `boolean` | yes |  | Show the overlay and spinner. |
+| `label` | `string` |  | `"Loading"` | Accessible name of the spinner. |
 
 ```tsx
 function Example() {
@@ -197,10 +209,10 @@ Placeholders while content loads.
 
 Loading placeholder sized by `width` / `height`.
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `height` | `string` |  |  |
-| `width` | `string` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `height` | `string` |  | `"0.9rem"` | Height (any CSS length). |
+| `width` | `string` |  | `"100%"` | Width (any CSS length). |
 
 ```tsx
 <Skeleton width="16rem" height="1.25rem" />
@@ -212,9 +224,9 @@ Placeholder text lines.
 
 **Slots:** `root` `line`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `lines` | `number` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `lines` | `number` |  | `3` | Number of placeholder lines. |
 
 ```tsx
 <SkeletonText lines={3} />
@@ -242,13 +254,13 @@ Incremental loading of lists.
 
 **Slots:** `root` `button` `end`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onLoad` | `() => void` | yes |  |
-| `children` | `content` |  |  |
-| `endLabel` | `content` |  | Text when everything is loaded (default "You're all caught up"). |
-| `hasMore` | `boolean` |  |  |
-| `loading` | `boolean` |  |  |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onLoad` | `() => void` | yes |  | Called when the user asks for more. |
+| `children` | `content` |  | `"You're all caught up"` | Button label. |
+| `endLabel` | `content` |  |  | Text when everything is loaded (default "You're all caught up"). |
+| `hasMore` | `boolean` |  |  | Whether more items can load; shows `endLabel` when false. |
+| `loading` | `boolean` |  |  | Show a spinner and disable the button. |
 
 ```tsx
 function Example() {
@@ -285,14 +297,14 @@ Content followed by a "Load more" control.
 
 **Slots:** `root` `sentinel`
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onLoadMore` | `() => void` | yes |  |
-| `children` | `content` |  |  |
-| `hasMore` | `boolean` |  |  |
-| `loading` | `boolean` |  |  |
-| `loadMoreLabel` | `content` |  | Button text (default "Load more" / "Loading…"). |
-| `rootMargin` | `string` |  | How far before the end to start loading (IntersectionObserver `rootMargin`). Default `200px`. |
+| Prop | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `onLoadMore` | `() => void` | yes |  | Called when the end of the list scrolls into view (or the button is pressed). |
+| `children` | `content` |  |  | The list rendered so far. |
+| `hasMore` | `boolean` |  |  | Whether more items can load. |
+| `loading` | `boolean` |  |  | Currently loading (prevents duplicate requests, shows a spinner). |
+| `loadMoreLabel` | `content` |  | `"Load more"` | Button text (default "Load more" / "Loading…"). |
+| `rootMargin` | `string` |  | `"200px"` | How far before the end to start loading (IntersectionObserver `rootMargin`). Default `200px`. |
 
 ```tsx
 function Example() {

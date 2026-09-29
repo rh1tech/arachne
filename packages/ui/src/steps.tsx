@@ -2,17 +2,22 @@ import { For, Show } from "@arachne/render";
 import { type SlotProps, setup } from "./system.ts";
 
 export type StepItem = {
+	/** Step id, passed to `onChange` and matched against `value`. */
 	id: string;
+	/** Step name. */
 	label: string;
+	/** Secondary line under the label. */
 	description?: string | undefined;
 };
 
 export type StepsSlot = "root" | "step" | "button" | "index" | "copy" | "label" | "description";
 
 export type StepsProps = SlotProps<StepsSlot> & {
+	/** The steps, in order; those before `value` show as complete. */
 	items: StepItem[];
 	/** Current step id (active). Prior steps are complete. */
 	value: string;
+	/** Makes steps clickable; called with the step id. Without it, steps are plain text. */
 	onChange?: ((id: string) => void) | undefined;
 	/** Accessible name (default "Progress"). */
 	label?: string | undefined;

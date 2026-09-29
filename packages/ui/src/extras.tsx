@@ -23,12 +23,17 @@ export type TagProps = SlotProps<TagSlot> & {
 	color?: TagColor;
 	/** @deprecated use `color` */
 	tone?: "neutral" | "accent" | "danger" | undefined;
+	/** Tag size. */
 	size?: "normal" | "medium" | "large" | undefined;
+	/** Pill shape. */
 	rounded?: boolean | undefined;
+	/** Pale background with coloured text instead of a solid fill. */
 	light?: boolean | undefined;
+	/** Shows a remove (×) button; called when it is pressed. */
 	onRemove?: (() => void) | undefined;
 	/** Accessible label for the remove button (default "Remove"). */
 	removeLabel?: string | undefined;
+	/** Tag text. */
 	children?: unknown;
 };
 
@@ -79,8 +84,11 @@ export function Tag(input: TagProps) {
 }
 
 export type TagsProps = BaseProps & {
+	/** Size for every tag in the group. */
 	size?: "medium" | "large" | undefined;
+	/** Join pairs of tags edge to edge (e.g. a name and a value). */
 	addons?: boolean | undefined;
+	/** The `Tag`s to group. */
 	children?: unknown;
 };
 
@@ -105,7 +113,9 @@ export function Tags(input: TagsProps) {
 }
 
 export type SkeletonProps = BaseProps & {
+	/** Width (any CSS length). */
 	width?: string | undefined;
+	/** Height (any CSS length). */
 	height?: string | undefined;
 };
 
@@ -126,12 +136,19 @@ export function Skeleton(input: SkeletonProps) {
 }
 
 export type FileInputProps = BaseProps & {
+	/** Field name submitted with the form. */
 	name?: string | undefined;
+	/** Disables the field. */
 	disabled?: boolean | undefined;
+	/** Marks the value invalid (`aria-invalid` and error styling). */
 	invalid?: boolean | undefined;
+	/** Allowed file types, e.g. `image/*,.pdf`. */
 	accept?: string | undefined;
+	/** Allow choosing several files. */
 	multiple?: boolean | undefined;
+	/** A file must be chosen before the form submits. */
 	required?: boolean | undefined;
+	/** Called when the selection changes; read `e.target.files`. */
 	onChange?: ((e: Event) => void) | undefined;
 };
 
@@ -164,6 +181,7 @@ export function FileInput(input: FileInputProps) {
 }
 
 export type InputGroupProps = BaseProps & {
+	/** Inputs, buttons and `InputAddon`s to join edge to edge. */
 	children?: unknown;
 };
 
@@ -181,6 +199,7 @@ export function InputGroup(input: InputGroupProps) {
 }
 
 export type InputAddonProps = BaseProps & {
+	/** Addon text or content, e.g. `https://` or a unit. */
 	children?: unknown;
 };
 

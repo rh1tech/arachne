@@ -173,7 +173,9 @@ const PATHS: Record<IconName, string> = {
 };
 
 export type IconProps = BaseProps & {
+	/** Which built-in icon to draw. */
 	name: IconName;
+	/** `sm` / `md` / `lg`, or a size in pixels. */
 	size?: "sm" | "md" | "lg" | number | undefined;
 	/** Accessible name; without it the icon is decorative (`aria-hidden`). */
 	label?: string | undefined;
@@ -208,8 +210,11 @@ export function Icon(input: IconProps) {
 export type IconBadgeSlot = "root" | "icon";
 
 export type IconBadgeProps = SlotProps<IconBadgeSlot> & {
+	/** Which built-in icon to draw. */
 	name: IconName;
+	/** Colour of the icon and its tinted background. */
 	tone?: "accent" | "success" | "warning" | "danger" | "muted" | undefined;
+	/** Badge size. */
 	size?: "sm" | "md" | "lg" | undefined;
 };
 
@@ -246,8 +251,11 @@ export function IconBadge(input: IconBadgeProps) {
 }
 
 export type CloseButtonProps = BaseProps & {
+	/** Accessible name of the button. */
 	label?: string | undefined;
+	/** Button size. */
 	size?: "sm" | "md" | undefined;
+	/** Called when the button is clicked. */
 	onClick?: ((e: MouseEvent) => void) | undefined;
 };
 

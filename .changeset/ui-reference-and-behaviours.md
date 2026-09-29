@@ -83,3 +83,9 @@ The deprecated components still work; each is now a thin alias of its replacemen
 - `Thumbnav`: larger thumbnails with a ring on the active one.
 - `TableOfContents`: straight active bar.
 - `Masonry` images fill their column.
+
+**Complete API docs**
+
+- Every prop and every field of the data types they use has a JSDoc description (1,170 added). They show in editors, and in the reference as a Default column plus a Types section: object types with field tables, unions with their values.
+- `bun run ui:docs --check` (in CI) fails if any prop or data-type field is undocumented.
+- The reference is one taxonomy of 22 categories, with related components documented together as families (e.g. Colour: ColorInput, ColorPicker, ColorSwatch).

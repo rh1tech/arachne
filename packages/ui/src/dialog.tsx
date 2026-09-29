@@ -19,11 +19,17 @@ export type DialogSlot =
 	| "close";
 
 export type DialogBaseProps = SlotProps<DialogSlot> & {
+	/** Whether the dialog is shown (controlled). */
 	open: boolean;
+	/** Called when the user closes it (close button, Escape, backdrop); set `open` to false. */
 	onClose: () => void;
+	/** Heading; also the dialog's accessible name. */
 	title?: unknown;
+	/** Text under the title; also the dialog's accessible description. */
 	description?: unknown;
+	/** Bottom bar content, usually the action buttons. */
 	footer?: unknown;
+	/** Body content. */
 	children?: unknown;
 	/** Close when the backdrop is clicked (default true). */
 	closeOnBackdrop?: boolean | undefined;
@@ -219,7 +225,9 @@ export function Modal(props: ModalProps) {
 }
 
 export type DrawerProps = DialogBaseProps & {
+	/** Edge the drawer slides in from. */
 	side?: "left" | "right" | "top" | "bottom" | undefined;
+	/** Width (or height, for top / bottom). */
 	size?: "sm" | "md" | "lg" | "full" | undefined;
 };
 
