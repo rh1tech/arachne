@@ -162,9 +162,13 @@ export function PinInput(input: PinInputProps) {
 							if (digits) focusCell(digits.length > 1 ? next : index + 1);
 						}}
 						onKeyDown={(e: KeyboardEvent) => {
-							if (e.key === "Backspace" && !chars()[index]) {
+							if (e.key === "Backspace") {
+								// One press deletes one digit: this cell's, or (when empty) the previous one's.
 								e.preventDefault();
-								focusCell(index - 1);
+								const target = chars()[index] ? index : index - 1;
+								if (target < 0) return;
+								writeAt(target, "");
+								focusCell(target);
 							} else if (e.key === "ArrowLeft") focusCell(index - 1);
 							else if (e.key === "ArrowRight") focusCell(index + 1);
 						}}

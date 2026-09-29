@@ -87,6 +87,20 @@ describe("PinInput", () => {
 		expect(document.activeElement).toBe(cells[0] as HTMLInputElement);
 	});
 
+	test("each Backspace deletes exactly one digit", () => {
+		const cells = [...document.querySelectorAll<HTMLInputElement>('[data-test="pin"] input')];
+		typeInto(cells[0] as HTMLInputElement, "1234");
+		cells[3]?.focus();
+		press("Backspace", cells[3] as HTMLInputElement);
+		expect(h.api.pin()).toBe("123");
+		// The focused cell is now empty: the next press clears the previous digit.
+		press("Backspace", cells[3] as HTMLInputElement);
+		expect(h.api.pin()).toBe("12");
+		expect(document.activeElement).toBe(cells[2] as HTMLInputElement);
+		press("Backspace", cells[2] as HTMLInputElement);
+		expect(h.api.pin()).toBe("1");
+	});
+
 	test("paste fills multiple cells", () => {
 		const cells = [...document.querySelectorAll<HTMLInputElement>('[data-test="pin"] input')];
 		typeInto(cells[0] as HTMLInputElement, "1234");

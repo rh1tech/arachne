@@ -7,10 +7,6 @@
 
 Statistic with label, value and hint.
 
-```tsx
-<Stat label="Active users" value="12,480" hint="+8% this week" />
-```
-
 **Slots:** `root` `hint` `label` `value`
 
 | Prop | Type | Required | Description |
@@ -18,6 +14,10 @@ Statistic with label, value and hint.
 | `label` | `string` | yes |  |
 | `value` | `content` | yes |  |
 | `hint` | `string` |  |  |
+
+```tsx
+<Stat label="Active users" value="12,480" hint="+8% this week" />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
@@ -27,6 +27,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Row of statistics.
 
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+
 ```tsx
 <StatGroup>
 	<Stat label="Deploys" value={128} hint="this week" />
@@ -35,17 +39,9 @@ Row of statistics.
 </StatGroup>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ## StatCard
 
 KPI tile with optional trend.
-
-```tsx
-<StatCard label="MRR" value="$48.2k" hint="vs. last month" trend={6.4} />
-```
 
 **Slots:** `root` `hint` `label` `trend` `value`
 
@@ -56,15 +52,15 @@ KPI tile with optional trend.
 | `hint` | `content` |  |  |
 | `trend` | `number` |  |  |
 
+```tsx
+<StatCard label="MRR" value="$48.2k" hint="vs. last month" trend={6.4} />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Metric
 
 Compact KPI with optional Trend.
-
-```tsx
-<Metric label="p95 latency" value="182 ms" trend={-4} />
-```
 
 **Slots:** `root` `label` `row` `trend` `value`
 
@@ -74,15 +70,15 @@ Compact KPI with optional Trend.
 | `value` | `content` | yes |  |
 | `trend` | `number` |  |  |
 
+```tsx
+<Metric label="p95 latency" value="182 ms" trend={-4} />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Trend
 
 ▲/▼ delta.
-
-```tsx
-<Trend value={-2.3} label="vs. last week" />
-```
 
 **Slots:** `root` `arrow`
 
@@ -91,30 +87,30 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 | `value` | `number` | yes |  |
 | `label` | `content` |  |  |
 
+```tsx
+<Trend value={-2.3} label="vs. last week" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## CountUp
 
 Animated number (rAF, eased); jumps straight to the value under reduced motion.
 
-```tsx
-<CountUp value={12480} duration={0} />
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `value` | `number` | yes |  |
 | `duration` | `number` |  |  |
+
+```tsx
+<CountUp value={12480} duration={0} />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Sparkline
 
 Inline trend line (`currentColor`).
-
-```tsx
-<Sparkline label="Weekly signups" data={[12, 18, 15, 22, 28, 24, 35]} />
-```
 
 **Slots:** `root` `line`
 
@@ -125,15 +121,15 @@ Inline trend line (`currentColor`).
 | `label` | `string` |  | Accessible summary; the chart is decorative (`aria-hidden`) without one. |
 | `width` | `number` |  |  |
 
+```tsx
+<Sparkline label="Weekly signups" data={[12, 18, 15, 22, 28, 24, 35]} />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## SparkBar
 
 Tiny bar chart.
-
-```tsx
-<SparkBar label="Requests per hour" data={[4, 7, 5, 9, 12, 8, 6, 10]} />
-```
 
 **Slots:** `root` `bar`
 
@@ -142,11 +138,22 @@ Tiny bar chart.
 | `data` | `number[]` | yes |  |
 | `label` | `string` |  | Accessible description (default "Bar sparkline"). |
 
+```tsx
+<SparkBar label="Requests per hour" data={[4, 7, 5, 9, 12, 8, 6, 10]} />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## BarList
 
 Ranked horizontal bars.
+
+**Slots:** `root` `bar` `item` `label` `row` `track` `value`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `data` | `BarListItem[]` | yes |  |
+| `format` | `(value: number) => unknown` |  | Format the value column (default: the raw number). |
 
 ```tsx
 <BarList
@@ -158,22 +165,11 @@ Ranked horizontal bars.
 />
 ```
 
-**Slots:** `root` `bar` `item` `label` `row` `track` `value`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `data` | `BarListItem[]` | yes |  |
-| `format` | `(value: number) => unknown` |  | Format the value column (default: the raw number). |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## DonutChart
 
 Percentage ring.
-
-```tsx
-<DonutChart value={68} label="Tests passing" />
-```
 
 **Slots:** `root` `bar` `label` `track`
 
@@ -184,11 +180,23 @@ Percentage ring.
 | `size` | `number` |  |  |
 | `thickness` | `number` |  |  |
 
+```tsx
+<DonutChart value={68} label="Tests passing" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Heatmap
 
 Grid heatmap of values (e.g. activity).
+
+**Slots:** `root` `cell`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `values` | `number[]` | yes | Flat values, typically 7 columns (weeks × days). |
+| `columns` | `number` |  |  |
+| `label` | `string` |  | Accessible summary (default "Activity heatmap"). |
 
 ```tsx
 <Heatmap
@@ -200,26 +208,11 @@ Grid heatmap of values (e.g. activity).
 />
 ```
 
-**Slots:** `root` `cell`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `values` | `number[]` | yes | Flat values, typically 7 columns (weeks × days). |
-| `columns` | `number` |  |  |
-| `label` | `string` |  | Accessible summary (default "Activity heatmap"). |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## UptimeBar
 
 Daily uptime history bar.
-
-```tsx
-<UptimeBar
-	label="API — last 14 days"
-	days={[1, 1, 1, 0.998, 1, 1, 0.97, 1, 1, 1, 0.9, 1, 1, 1]}
-/>
-```
 
 **Slots:** `root` `day`
 
@@ -227,5 +220,12 @@ Daily uptime history bar.
 | --- | --- | --- | --- |
 | `days` | `number[]` | yes | 0–1 values, oldest → newest |
 | `label` | `string` |  | Accessible summary (default "Uptime history"). |
+
+```tsx
+<UptimeBar
+	label="API — last 14 days"
+	days={[1, 1, 1, 0.998, 1, 1, 0.97, 1, 1, 1, 0.9, 1, 1, 1]}
+/>
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.

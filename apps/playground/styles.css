@@ -346,9 +346,145 @@ body {
 }
 
 /* ── Component reference (catalog.tsx) ── */
+.catalog-section {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 0.6rem;
+}
+
+/* API block: compact props table, slot chips, shared-props note. */
+.catalog-api {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 0.75rem;
+}
+
+.catalog-props-scroll {
+	overflow-x: auto;
+	border: 1px solid var(--a-line);
+	border-radius: var(--a-radius);
+	background: var(--a-paper);
+}
+
+.catalog-props {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.875rem;
+	line-height: 1.45;
+}
+
+.catalog-props th {
+	padding: 0.5rem 0.85rem;
+	text-align: left;
+	font-size: 0.7rem;
+	font-weight: 700;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	color: var(--a-muted);
+	border-bottom: 1px solid var(--a-line);
+	white-space: nowrap;
+}
+
+.catalog-props td {
+	padding: 0.55rem 0.85rem;
+	vertical-align: top;
+	border-bottom: 1px solid var(--a-hairline);
+}
+
+.catalog-props tr:last-child td {
+	border-bottom: 0;
+}
+
+.catalog-prop-name {
+	white-space: nowrap;
+	width: 1%;
+}
+
+.catalog-prop-name code {
+	font-family: var(--a-font-mono);
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: var(--a-ink);
+}
+
+.catalog-prop-desc {
+	color: var(--a-muted);
+	min-width: 14rem;
+}
+
+.catalog-prop-desc code,
+.catalog-meta code {
+	font-family: var(--a-font-mono);
+	font-size: 0.8em;
+	padding: 0.05em 0.3em;
+	border-radius: 4px;
+	background: var(--a-canvas);
+	color: var(--a-ink);
+}
+
+.catalog-type {
+	font-family: var(--a-font-mono);
+	font-size: 0.8rem;
+	color: color-mix(in oklab, var(--a-accent) 70%, var(--a-ink));
+	word-break: break-word;
+}
+
+.catalog-required,
+.catalog-deprecated {
+	margin-left: 0.4rem;
+	font-size: 0.7rem;
+	font-weight: 600;
+}
+
+.catalog-required {
+	color: color-mix(in oklab, var(--a-danger) 78%, var(--a-ink));
+}
+
+.catalog-deprecated {
+	color: var(--a-muted);
+	text-decoration: line-through;
+}
+
+.catalog-meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 0.35rem;
+	margin: 0;
+	font-size: 0.875rem;
+	color: var(--a-ink);
+}
+
+.catalog-meta-label {
+	margin-right: 0.25rem;
+	font-weight: 700;
+}
+
+.catalog-meta .catalog-chip {
+	padding: 0.1em 0.45em;
+	border: 1px solid var(--a-line);
+	background: var(--a-paper);
+}
+
+.catalog-meta-hint {
+	font-size: 0.8125rem;
+	color: var(--a-muted);
+}
+
+p.catalog-meta-hint {
+	display: block;
+	line-height: 1.7;
+}
+
+span.catalog-meta-hint {
+	margin-left: 0.35rem;
+}
+
 .catalog-preview {
 	/* A containing block for position:fixed demos (FAB, banners, bottom nav). */
 	position: relative;
+	/* Dropdowns inside a preview paint above the code block that follows it. */
+	z-index: 1;
 	transform: translateZ(0);
 	min-height: 4rem;
 }
@@ -379,34 +515,6 @@ body {
 	opacity: 0.7;
 }
 
-.catalog-section {
-	display: grid;
-	grid-template-columns: minmax(0, 1fr);
-	gap: 0.6rem;
-	margin-top: 2rem;
-}
-
-.catalog-props {
-	width: 100%;
-}
-
-/* Narrow screens: the props table scrolls on its own. */
-.catalog-props-scroll {
-	overflow-x: auto;
-}
-
-.catalog-deprecated {
-	color: var(--a-muted);
-	font-size: 0.75rem;
-	font-weight: 600;
-	text-decoration: line-through;
-}
-
-.catalog-shared {
-	margin-top: 0.75rem;
-	font-size: 0.875rem;
-}
-
 /* A sub-component on its parent's page: indented under a rule so the hierarchy reads. */
 .catalog-part {
 	display: grid;
@@ -417,29 +525,24 @@ body {
 	border-left: 2px solid var(--a-line);
 }
 
-.catalog-part .catalog-section {
-	margin-top: 0.75rem;
-}
-
-/* Reference appended below a hand-written showcase page. */
+/* Reference (props, slots, parts) at the top of a hand-written showcase page. */
 .catalog-reference {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr);
 	gap: 0.5rem;
-	margin-top: 3rem;
-	padding-top: 2rem;
-	border-top: 1px solid var(--a-line);
+	padding-bottom: 2rem;
+	border-bottom: 1px solid var(--a-line);
 }
 
-.catalog-type {
-	font-family: var(--a-font-mono);
-	font-size: 0.8rem;
-	color: color-mix(in oklab, var(--a-accent) 70%, var(--a-ink));
-	word-break: break-word;
+/* Inline list of names: plain monospace, so the commas stay attached. */
+p.catalog-meta-hint code {
+	padding: 0;
+	background: none;
+	color: var(--a-ink);
 }
 
-.catalog-required {
-	color: color-mix(in oklab, var(--a-danger) 78%, var(--a-ink));
-	font-size: 0.75rem;
-	font-weight: 600;
+/* Inline code in page descriptions: sized to the text, not a pill. */
+.a-doc-page-desc code {
+	font-size: 0.85em;
+	padding: 0.05em 0.3em;
 }

@@ -11,6 +11,7 @@ import {
 	Navbar,
 	NavbarLink,
 	Paper,
+	SearchInput,
 	Spotlight,
 	Stack,
 	Table,
@@ -23,6 +24,7 @@ import {
 	Tr,
 	TransferList,
 	Tree,
+	type TreeNode,
 } from "../src/index.ts";
 import { action } from "./actions.ts";
 import { swatch } from "./placeholder.ts";
@@ -54,28 +56,54 @@ function NavbarCase(p: Record<string, unknown>) {
 }
 
 function TreeExample(p: ExampleProps) {
-	const selected = signal("web");
+	const selected = signal("button.tsx");
+	const query = signal("");
+	const files: TreeNode[] = [
+		{
+			id: "apps",
+			label: "apps",
+			badge: 2,
+			children: [
+				{ id: "web", label: "web", children: [{ id: "client.tsx", label: "client.tsx" }] },
+				{ id: "admin", label: "admin", disabled: true, badge: "locked" },
+			],
+		},
+		{
+			id: "packages",
+			label: "packages",
+			children: [
+				{
+					id: "ui",
+					label: "ui",
+					children: [
+						{ id: "button.tsx", label: "button.tsx" },
+						{ id: "tree.tsx", label: "tree.tsx" },
+						{ id: "styles.css", label: "styles.css", icon: "code" },
+					],
+				},
+			],
+		},
+		{ id: "readme", label: "README.md", icon: "info" },
+	];
 	return (
-		<Stack gap="0.5rem">
+		<Stack gap="0.5rem" style={{ "max-width": "22rem" }}>
+			<SearchInput
+				aria-label="Filter files"
+				placeholder="Filter files"
+				value={query()}
+				onChange={query.set}
+			/>
 			<Tree
 				{...p}
 				label="Workspace"
-				defaultExpanded={["apps"]}
+				icons="auto"
+				filter={query()}
+				defaultExpanded={["apps", "packages", "ui"]}
 				value={selected()}
 				onChange={selected.set}
-				data={[
-					{
-						id: "apps",
-						label: "apps",
-						children: [
-							{ id: "web", label: "web" },
-							{ id: "admin", label: "admin" },
-						],
-					},
-					{ id: "packages", label: "packages", children: [{ id: "ui", label: "ui" }] },
-				]}
+				data={files}
 			/>
-			<Text muted>Selected: {selected()}</Text>
+			<Text muted>Open: {selected()}</Text>
 		</Stack>
 	);
 }

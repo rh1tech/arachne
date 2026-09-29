@@ -7,6 +7,25 @@
 
 Centered dialog with focus trap, Escape, scroll lock and enter/exit motion.
 
+**Slots:** `root` `backdrop` `body` `close` `description` `footer` `header` `panel` `title`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onClose` | `() => void` | yes |  |
+| `open` | `boolean` | yes |  |
+| `children` | `content` |  |  |
+| `closeOnBackdrop` | `boolean` |  | Close when the backdrop is clicked (default true). |
+| `closeOnEscape` | `boolean` |  | Close on Escape (default true). |
+| `description` | `content` |  |  |
+| `footer` | `content` |  |  |
+| `hideClose` | `boolean` |  | Hide the header close button. |
+| `label` | `string` |  | Accessible name when there is no visible `title`. |
+| `mount` | `Element` |  | Portal target (defaults to `document.body`). |
+| `placement` | `"center" \| "top"` |  | Vertical placement (default `center`). |
+| `role` | `"dialog" \| "alertdialog"` |  | `alertdialog` for confirmations that interrupt the user. |
+| `size` | `"sm" \| "md" \| "lg" \| "xl" \| "full"` |  | Width preset; override freely with `--a-modal-width`. |
+| `title` | `string` |  |  |
+
 ```tsx
 function Example() {
 	const open = signal(false);
@@ -34,44 +53,11 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `backdrop` `body` `close` `description` `footer` `header` `panel` `title`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onClose` | `() => void` | yes |  |
-| `open` | `boolean` | yes |  |
-| `children` | `content` |  |  |
-| `closeOnBackdrop` | `boolean` |  | Close when the backdrop is clicked (default true). |
-| `closeOnEscape` | `boolean` |  | Close on Escape (default true). |
-| `description` | `content` |  |  |
-| `footer` | `content` |  |  |
-| `hideClose` | `boolean` |  | Hide the header close button. |
-| `label` | `string` |  | Accessible name when there is no visible `title`. |
-| `mount` | `Element` |  | Portal target (defaults to `document.body`). |
-| `placement` | `"center" \| "top"` |  | Vertical placement (default `center`). |
-| `role` | `"dialog" \| "alertdialog"` |  | `alertdialog` for confirmations that interrupt the user. |
-| `size` | `"sm" \| "md" \| "lg" \| "xl" \| "full"` |  | Width preset; override freely with `--a-modal-width`. |
-| `title` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Drawer
 
 Edge-anchored dialog. Slots match {@link Modal}.
-
-```tsx
-function Example() {
-	const open = signal(false);
-	return (
-		<>
-			<Button onClick={() => open.set(true)}>Open drawer</Button>
-			<Drawer open={open()} onClose={() => open.set(false)} title="Filters">
-				Drawer content.
-			</Drawer>
-		</>
-	);
-}
-```
 
 **Slots:** `root` `backdrop` `body` `close` `description` `footer` `header` `panel` `title`
 
@@ -92,25 +78,25 @@ function Example() {
 | `size` | `"sm" \| "md" \| "lg" \| "full"` |  |  |
 | `title` | `string` |  |  |
 
-Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
-
-## BottomSheet
-
-Mobile bottom sheet (UIkit / Mantine Drawer bottom). Built on the shared dialog frame: focus trap, Escape (topmost layer), scroll lock, exit motion. Slots match {@link DialogBaseProps} (`panel` is the host); theme key `BottomSheet`.
-
 ```tsx
 function Example() {
 	const open = signal(false);
 	return (
 		<>
-			<Button onClick={() => open.set(true)}>Open sheet</Button>
-			<BottomSheet open={open()} onClose={() => open.set(false)} title="Share">
-				Sheet content.
-			</BottomSheet>
+			<Button onClick={() => open.set(true)}>Open drawer</Button>
+			<Drawer open={open()} onClose={() => open.set(false)} title="Filters">
+				Drawer content.
+			</Drawer>
 		</>
 	);
 }
 ```
+
+Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
+
+## BottomSheet
+
+Mobile bottom sheet (UIkit / Mantine Drawer bottom). Built on the shared dialog frame: focus trap, Escape (topmost layer), scroll lock, exit motion. Slots match {@link DialogBaseProps} (`panel` is the host); theme key `BottomSheet`.
 
 **Slots:** `root` `backdrop` `body` `close` `description` `footer` `header` `panel` `title`
 
@@ -129,11 +115,38 @@ function Example() {
 | `role` | `"dialog" \| "alertdialog"` |  | `alertdialog` for confirmations that interrupt the user. |
 | `title` | `string` |  |  |
 
+```tsx
+function Example() {
+	const open = signal(false);
+	return (
+		<>
+			<Button onClick={() => open.set(true)}>Open sheet</Button>
+			<BottomSheet open={open()} onClose={() => open.set(false)} title="Share">
+				Sheet content.
+			</BottomSheet>
+		</>
+	);
+}
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ConfirmDialog
 
 Confirmation built on the shared dialog surface (focus trap, Escape, scroll lock, motion). Initial focus goes to Cancel — the safe choice. Slots match Modal (`root` `backdrop` `panel` …); attributes land on the panel.
+
+**Slots:** `root` `backdrop` `body` `close` `description` `footer` `header` `panel` `title`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `message` | `string` | yes |  |
+| `onCancel` | `() => void` | yes |  |
+| `onConfirm` | `() => void` | yes |  |
+| `open` | `boolean` | yes |  |
+| `cancelLabel` | `string` |  |  |
+| `confirmLabel` | `string` |  |  |
+| `danger` | `boolean` |  |  |
+| `title` | `string` |  |  |
 
 ```tsx
 function Example() {
@@ -157,35 +170,11 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `backdrop` `body` `close` `description` `footer` `header` `panel` `title`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `message` | `string` | yes |  |
-| `onCancel` | `() => void` | yes |  |
-| `onConfirm` | `() => void` | yes |  |
-| `open` | `boolean` | yes |  |
-| `cancelLabel` | `string` |  |  |
-| `confirmLabel` | `string` |  |  |
-| `danger` | `boolean` |  |  |
-| `title` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Popover
 
 Click-to-toggle panel anchored to a trigger. Escape / outside click close it and return focus to the trigger.
-
-```tsx
-function Example() {
-	const open = signal(false);
-	return (
-		<Popover open={open()} onOpenChange={open.set} label="Share" panelLabel="Share project">
-			Anyone with the link can view this project.
-		</Popover>
-	);
-}
-```
 
 **Slots:** `root` `arrow` `panel` `trigger`
 
@@ -200,17 +189,22 @@ function Example() {
 | `placement` | `PopoverPlacement` |  |  |
 | `trigger` | `(api: PopoverTriggerApi) => unknown` |  | Render your own trigger: `trigger={(t) => &lt;MyButton {...t.attrs} />}`. |
 
+```tsx
+function Example() {
+	const open = signal(false);
+	return (
+		<Popover open={open()} onOpenChange={open.set} label="Share" panelLabel="Share project">
+			Anyone with the link can view this project.
+		</Popover>
+	);
+}
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## HoverCard
 
 Hover/focus card panel (Mantine HoverCard).
-
-```tsx
-<HoverCard dropdown={<Text>Ada Lovelace · Analyst of engines</Text>}>
-	<Anchor href="#ada">@ada</Anchor>
-</HoverCard>
-```
 
 **Slots:** `root` `dropdown` `target`
 
@@ -221,19 +215,17 @@ Hover/focus card panel (Mantine HoverCard).
 | `closeDelay` | `number` |  |  |
 | `openDelay` | `number` |  |  |
 
+```tsx
+<HoverCard dropdown={<Text>Ada Lovelace · Analyst of engines</Text>}>
+	<Anchor href="#ada">@ada</Anchor>
+</HoverCard>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Tooltip
 
 Hover/focus tooltip linked with `aria-describedby`; Escape dismisses and the tooltip itself is hoverable (WCAG 1.4.13).
-
-```tsx
-<Tooltip content="Copies the deploy URL">
-	<Button variant="outline" onClick={() => {}}>
-		Copy link
-	</Button>
-</Tooltip>
-```
 
 **Slots:** `root` `arrow` `target` `tooltip`
 
@@ -247,11 +239,29 @@ Hover/focus tooltip linked with `aria-describedby`; Escape dismisses and the too
 | `openDelay` | `number` |  | Delay before showing on hover, ms (default 250). Focus shows immediately. |
 | `placement` | `"top" \| "left" \| "right" \| "bottom"` |  |  |
 
+```tsx
+<Tooltip content="Copies the deploy URL">
+	<Button variant="outline" onClick={() => {}}>
+		Copy link
+	</Button>
+</Tooltip>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Menu
 
 Action menu with roving focus (↑ ↓ Home End, type-ahead), Escape, outside click, focus restore and enter/exit motion.
+
+**Slots:** `root` `description` `group` `icon` `item` `label` `separator` `shortcut`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `MenuItem[]` | yes |  |
+| `open` | `boolean` | yes |  |
+| `label` | `string` |  | Accessible name for the menu. |
+| `onClose` | `() => void` |  | Called on outside click / Escape / selection. Prefer with a wrapping `.a-menu-host`. |
+| `placement` | `MenuPlacement` |  |  |
 
 ```tsx
 function Example() {
@@ -283,21 +293,18 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `description` `group` `icon` `item` `label` `separator` `shortcut`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `MenuItem[]` | yes |  |
-| `open` | `boolean` | yes |  |
-| `label` | `string` |  | Accessible name for the menu. |
-| `onClose` | `() => void` |  | Called on outside click / Escape / selection. Prefer with a wrapping `.a-menu-host`. |
-| `placement` | `MenuPlacement` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ContextMenu
 
 Right-click (or Shift+F10 / ContextMenu key) menu. Clamped to the viewport, focuses the first item, ↑ ↓ Home End navigate, Escape restores focus.
+
+**Slots:** `root` `item` `menu`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `ContextMenuItem[]` | yes |  |
+| `children` | `content` |  |  |
 
 ```tsx
 <ContextMenu
@@ -311,18 +318,20 @@ Right-click (or Shift+F10 / ContextMenu key) menu. Clamped to the viewport, focu
 </ContextMenu>
 ```
 
-**Slots:** `root` `item` `menu`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `ContextMenuItem[]` | yes |  |
-| `children` | `content` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Spotlight
 
 Command palette: the search input is a combobox driving a listbox — ↑ ↓ move the active option, Enter runs it, Escape closes.
+
+**Slots:** `root` `backdrop` `description` `empty` `input` `label` `list` `option` `panel`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `actions` | `SpotlightAction[]` | yes |  |
+| `onClose` | `() => void` | yes |  |
+| `open` | `boolean` | yes |  |
+| `placeholder` | `string` |  |  |
 
 ```tsx
 function Example() {
@@ -344,20 +353,20 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `backdrop` `description` `empty` `input` `label` `list` `option` `panel`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `actions` | `SpotlightAction[]` | yes |  |
-| `onClose` | `() => void` | yes |  |
-| `open` | `boolean` | yes |  |
-| `placeholder` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Lightbox
 
 Fullscreen image viewer: focus trap, Escape, ← → between images.
+
+**Slots:** `root` `backdrop` `caption` `control` `controls` `image` `stage`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `images` | `LightboxImage[]` | yes |  |
+| `index` | `number` | yes |  |
+| `onClose` | `() => void` | yes |  |
+| `onChange` | `(index: number) => void` |  |  |
 
 ```tsx
 function Example() {
@@ -383,20 +392,17 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `backdrop` `caption` `control` `controls` `image` `stage`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `images` | `LightboxImage[]` | yes |  |
-| `index` | `number` | yes |  |
-| `onClose` | `() => void` | yes |  |
-| `onChange` | `(index: number) => void` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Overlay
 
 Dimmed layer over its positioned parent.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `blur` | `boolean` |  |  |
+| `children` | `content` |  |  |
+| `onClick` | `(e: MouseEvent) => void` |  |  |
 
 ```tsx
 <Box style={{ position: "relative", "min-height": "6rem" }}>
@@ -405,17 +411,18 @@ Dimmed layer over its positioned parent.
 </Box>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `blur` | `boolean` |  |  |
-| `children` | `content` |  |  |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## LoadingOverlay
 
 Covers its positioned parent with a spinner while `visible`.
+
+**Slots:** `root` `spinner`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `visible` | `boolean` | yes |  |
+| `label` | `string` |  |  |
 
 ```tsx
 function Example() {
@@ -440,12 +447,5 @@ function Example() {
 	);
 }
 ```
-
-**Slots:** `root` `spinner`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `visible` | `boolean` | yes |  |
-| `label` | `string` |  |  |
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.

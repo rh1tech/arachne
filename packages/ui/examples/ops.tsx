@@ -401,7 +401,7 @@ export const examples: Example[] = [
 			<ProfileHeader
 				{...p}
 				name="Ada Lovelace"
-				handle="@ada"
+				handle="ada"
 				bio="Analyst of engines. Writes the first programs."
 				actions={
 					<Button variant="outline" onClick={action("Follow")}>

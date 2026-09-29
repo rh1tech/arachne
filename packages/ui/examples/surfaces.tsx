@@ -1,5 +1,5 @@
 import { For, Show } from "@arachne/render";
-import { signal } from "@arachne/signals";
+import { effect, signal } from "@arachne/signals";
 import {
 	ActivityItem,
 	Anchor,
@@ -431,6 +431,98 @@ function PanelTabsExample(p: ExampleProps) {
 				</PanelTab>
 			</PanelTabs>
 		</Panel>
+	);
+}
+
+function ColorSwatchExample(p: ExampleProps) {
+	const brand = signal("#fca311");
+	const colors = ["#fca311", "#14213d", "#e11d48", "#047857", "#7c3aed", "#0ea5e9"];
+	return (
+		<Stack gap="0.5rem">
+			<Group gap="0.5rem">
+				<For each={colors}>
+					{(color) => (
+						<ColorSwatch
+							{...p}
+							color={color}
+							selected={brand() === color}
+							onClick={() => brand.set(color)}
+						/>
+					)}
+				</For>
+			</Group>
+			<Text muted>
+				Brand colour: <code>{brand()}</code>
+			</Text>
+		</Stack>
+	);
+}
+
+function NavigationProgressExample(p: ExampleProps) {
+	const progress = signal(40);
+	const running = signal(true);
+	// Trickle towards 90% while "navigating" (effects run only in the browser).
+	effect(() => {
+		if (!running()) return;
+		const timer = setInterval(
+			() => progress.set(Math.min(90, progress() + (90 - progress()) * 0.2)),
+			300,
+		);
+		return () => clearInterval(timer);
+	});
+	return (
+		<Stack gap="0.75rem" style={{ "padding-top": "0.75rem" }}>
+			{/* Pinned to the top of the page (here: of the preview). */}
+			<NavigationProgress {...p} visible={progress() < 100} value={progress()} />
+			<Group gap="0.5rem">
+				<Button
+					size="sm"
+					onClick={() => {
+						progress.set(5);
+						running.set(true);
+					}}
+				>
+					Start navigation
+				</Button>
+				<Button
+					size="sm"
+					variant="outline"
+					onClick={() => {
+						running.set(false);
+						progress.set(100);
+					}}
+				>
+					Finish
+				</Button>
+				<Text muted>{progress() >= 100 ? "Done" : `${Math.round(progress())}%`}</Text>
+			</Group>
+		</Stack>
+	);
+}
+
+function MasonryExample(p: ExampleProps) {
+	const notes = [
+		{ title: "Release 2.4", body: "Dark theme, a component reference and interactive examples." },
+		{ title: "Standup", body: "Ship the tree search." },
+		{
+			title: "Design review",
+			body: "Tighten the button group borders, fix the burger icon, make quote backgrounds optional and give the tree folder icons.",
+		},
+		{ title: "Bug", body: "PIN input needed two Backspaces." },
+		{ title: "Idea", body: "Masonry packs cards of different heights into columns without gaps." },
+		{ title: "Reading", body: "WAI-ARIA tree pattern." },
+	];
+	return (
+		<Masonry {...p} columns={3}>
+			<For each={notes}>
+				{(note) => (
+					<Paper withBorder padding="md">
+						<strong>{note.title}</strong>
+						<Text muted>{note.body}</Text>
+					</Paper>
+				)}
+			</For>
+		</Masonry>
 	);
 }
 
@@ -929,17 +1021,7 @@ export const examples: Example[] = [
 		),
 	},
 	{ name: "FilterBar", render: (p) => <FilterBarExample {...p} /> },
-	{
-		name: "Masonry",
-		render: (p) => (
-			<Masonry {...p} columns={3}>
-				<img src={swatch(200, "1", 240, 320)} alt="Tall" width="240" height="320" />
-				<img src={swatch(150, "2", 240, 160)} alt="Short" width="240" height="160" />
-				<img src={swatch(30, "3", 240, 240)} alt="Square" width="240" height="240" />
-				<img src={swatch(300, "4", 240, 180)} alt="Wide" width="240" height="180" />
-			</Masonry>
-		),
-	},
+	{ name: "Masonry", render: (p) => <MasonryExample {...p} /> },
 	// overlays-extra.tsx
 	{
 		name: "HoverCard",
@@ -950,7 +1032,7 @@ export const examples: Example[] = [
 		),
 	},
 	{ name: "Burger", render: (p) => <BurgerExample {...p} /> },
-	{ name: "ColorSwatch", render: (p) => <ColorSwatch {...p} color="#fca311" /> },
+	{ name: "ColorSwatch", render: (p) => <ColorSwatchExample {...p} /> },
 	{
 		name: "VisuallyHidden",
 		render: (p) => (
@@ -986,7 +1068,7 @@ export const examples: Example[] = [
 	{ name: "Dropzone", render: (p) => <DropzoneExample {...p} /> },
 	{ name: "Subnav", render: (p) => <SubnavExample {...p} /> },
 	{ name: "Iconnav", render: (p) => <IconnavExample {...p} /> },
-	{ name: "NavigationProgress", render: (p) => <NavigationProgress {...p} visible value={40} /> },
+	{ name: "NavigationProgress", render: (p) => <NavigationProgressExample {...p} /> },
 	{
 		name: "NumberFormatter",
 		render: (p) => <NumberFormatter {...p} value={1234567.891} decimalScale={2} />,

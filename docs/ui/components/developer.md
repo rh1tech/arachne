@@ -7,12 +7,6 @@
 
 One release entry in a changelog.
 
-```tsx
-<ChangelogItem version="2.4.0" date="Sep 12, 2026">
-	Tables gain sticky headers and keyboard row selection.
-</ChangelogItem>
-```
-
 **Slots:** `root` `body` `date` `header` `title`
 
 | Prop | Type | Required | Description |
@@ -22,19 +16,25 @@ One release entry in a changelog.
 | `date` | `string` |  |  |
 | `title` | `string` |  |  |
 
+```tsx
+<ChangelogItem version="2.4.0" date="Sep 12, 2026">
+	Tables gain sticky headers and keyboard row selection.
+</ChangelogItem>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## VersionTag
 
 Version label (e.g. `v1.2.0`).
 
-```tsx
-<VersionTag version="2.4.0" />
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `version` | `string` | yes |  |
+
+```tsx
+<VersionTag version="2.4.0" />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
@@ -42,13 +42,13 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Environment pill (production = danger, staging = warning).
 
-```tsx
-<EnvBadge env="staging" />
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `env` | `string` | yes |  |
+
+```tsx
+<EnvBadge env="staging" />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
@@ -56,28 +56,19 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Coloured HTTP method label (GET, POST, …).
 
-```tsx
-<HttpMethodBadge method="DELETE" />
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `method` | `HttpMethod` | yes |  |
+
+```tsx
+<HttpMethodBadge method="DELETE" />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## EndpointRow
 
 API endpoint row: method, path and summary.
-
-```tsx
-<EndpointRow
-	method="POST"
-	path="/v1/projects/{id}/deploys"
-	summary="Start a deploy"
-	onClick={() => {}}
-/>
-```
 
 **Slots:** `root` `path` `summary`
 
@@ -88,15 +79,20 @@ API endpoint row: method, path and summary.
 | `onClick` | `() => void` |  |  |
 | `summary` | `string` |  |  |
 
+```tsx
+<EndpointRow
+	method="POST"
+	path="/v1/projects/{id}/deploys"
+	summary="Start a deploy"
+	onClick={() => {}}
+/>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ServiceStatus
 
 Service name with its operational status.
-
-```tsx
-<ServiceStatus name="Build workers" status="degraded" />
-```
 
 **Slots:** `root` `name` `status`
 
@@ -105,26 +101,36 @@ Service name with its operational status.
 | `name` | `string` | yes |  |
 | `status` | `ServiceStatusKind` | yes |  |
 
+```tsx
+<ServiceStatus name="Build workers" status="degraded" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## BuildStatus
 
 CI build status (running, success, failed …).
 
-```tsx
-<BuildStatus status="running" />
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `status` | `BuildStatusKind` | yes |  |
 | `label` | `string` |  |  |
+
+```tsx
+<BuildStatus status="running" />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Pipeline
 
 CI pipeline of steps with their statuses.
+
+**Slots:** `root` `line` `step`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `steps` | `PipelineStep[]` | yes |  |
 
 ```tsx
 <Pipeline
@@ -137,25 +143,11 @@ CI pipeline of steps with their statuses.
 />
 ```
 
-**Slots:** `root` `line` `step`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `steps` | `PipelineStep[]` | yes |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## CommitChip
 
 Commit SHA and message chip.
-
-```tsx
-<CommitChip
-	sha="3f9c2e7a41d0b8"
-	message="Fix toast focus"
-	onClick={() => {}}
-/>
-```
 
 **Slots:** `root` `message` `sha`
 
@@ -165,38 +157,33 @@ Commit SHA and message chip.
 | `message` | `string` |  |  |
 | `onClick` | `() => void` |  |  |
 
+```tsx
+<CommitChip
+	sha="3f9c2e7a41d0b8"
+	message="Fix toast focus"
+	onClick={() => {}}
+/>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## BranchBadge
 
 Git branch name label.
 
-```tsx
-<BranchBadge name="feat/ui-kit" />
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `name` | `string` | yes |  |
+
+```tsx
+<BranchBadge name="feat/ui-kit" />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ProfileHeader
 
 Profile header with cover, avatar, name, handle, bio and actions.
-
-```tsx
-<ProfileHeader
-	name="Ada Lovelace"
-	handle="@ada"
-	bio="Analyst of engines. Writes the first programs."
-	actions={
-		<Button variant="outline" onClick={() => {}}>
-			Follow
-		</Button>
-	}
-/>
-```
 
 **Slots:** `root` `actions` `avatar` `bio` `cover` `handle` `main` `meta` `name`
 
@@ -209,11 +196,34 @@ Profile header with cover, avatar, name, handle, bio and actions.
 | `handle` | `string` |  |  |
 | `src` | `string` |  |  |
 
+```tsx
+<ProfileHeader
+	name="Ada Lovelace"
+	handle="ada"
+	bio="Analyst of engines. Writes the first programs."
+	actions={
+		<Button variant="outline" onClick={() => {}}>
+			Follow
+		</Button>
+	}
+/>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## MemberRow
 
 Team member row with avatar, email and remove action.
+
+**Slots:** `root` `avatar` `email` `meta` `name` `remove`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | `string` | yes |  |
+| `email` | `string` |  |  |
+| `onRemove` | `() => void` |  |  |
+| `role` | `string` |  | Team role shown as a {@link RoleBadge} (not the ARIA role). |
+| `src` | `string` |  |  |
 
 ```tsx
 function Example() {
@@ -240,35 +250,36 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `avatar` `email` `meta` `name` `remove`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `name` | `string` | yes |  |
-| `email` | `string` |  |  |
-| `onRemove` | `() => void` |  |  |
-| `role` | `string` |  | Team role shown as a {@link RoleBadge} (not the ARIA role). |
-| `src` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## RoleBadge
 
 Member role label (admin, member, …).
 
-```tsx
-<RoleBadge role="Admin" />
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `role` | `string` | yes | Team role label (not the ARIA role). |
+
+```tsx
+<RoleBadge role="Admin" />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## InviteCard
 
 Pending invitation with resend and revoke actions.
+
+**Slots:** `root` `actions` `email` `meta`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `email` | `string` | yes |  |
+| `onResend` | `() => void` |  |  |
+| `onRevoke` | `() => void` |  |  |
+| `resendLabel` | `string` |  |  |
+| `revokeLabel` | `string` |  |  |
+| `role` | `string` |  | Team role shown as a {@link RoleBadge} (not the ARIA role). |
 
 ```tsx
 function Example() {
@@ -286,30 +297,19 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `actions` `email` `meta`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `email` | `string` | yes |  |
-| `onResend` | `() => void` |  |  |
-| `onRevoke` | `() => void` |  |  |
-| `resendLabel` | `string` |  |  |
-| `revokeLabel` | `string` |  |  |
-| `role` | `string` |  | Team role shown as a {@link RoleBadge} (not the ARIA role). |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## PriorityBadge
 
 Issue priority label.
 
-```tsx
-<PriorityBadge priority="urgent" />
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `priority` | `Priority` | yes |  |
+
+```tsx
+<PriorityBadge priority="urgent" />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
@@ -317,19 +317,28 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Incident severity label.
 
-```tsx
-<SeverityBadge severity="critical" />
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `severity` | `Severity` | yes |  |
+
+```tsx
+<SeverityBadge severity="critical" />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## FileCard
 
 Attached file with icon, name, metadata and remove action.
+
+**Slots:** `root` `icon` `meta` `name` `remove` `text`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | `string` | yes |  |
+| `icon` | `IconName` |  |  |
+| `meta` | `string` |  |  |
+| `onRemove` | `() => void` |  |  |
 
 ```tsx
 function Example() {
@@ -352,14 +361,5 @@ function Example() {
 	);
 }
 ```
-
-**Slots:** `root` `icon` `meta` `name` `remove` `text`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `name` | `string` | yes |  |
-| `icon` | `IconName` |  |  |
-| `meta` | `string` |  |  |
-| `onRemove` | `() => void` |  |  |
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.

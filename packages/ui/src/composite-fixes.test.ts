@@ -83,7 +83,7 @@ describe("props stay reactive after mount", () => {
 	test("Subtitle is a paragraph unless given an order", () => {
 		expect($('[data-test="sub"]').tagName).toBe("P");
 		expect($('[data-test="sub-heading"]').tagName).toBe("H3");
-		expect($('[data-test="sub-heading"]').classList.contains("a-subtitle-5")).toBe(true);
+		expect($('[data-test="sub-heading"]').classList.contains("a-subtitle-3")).toBe(true);
 	});
 
 	test("RingProgress, Meter, PasswordStrength, StatCard follow their values", () => {

@@ -7,6 +7,21 @@
 
 Product tile.
 
+**Slots:** `root` `badge` `body` `footer` `image` `media` `title`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `price` | `number` | yes |  |
+| `title` | `string` | yes |  |
+| `addLabel` | `content` |  | Label for the add button (default "Add"). |
+| `badge` | `content` |  |  |
+| `currency` | `string` |  |  |
+| `image` | `string` |  |  |
+| `imageAlt` | `string` |  | Alt text for the product image (default: decorative). |
+| `onAdd` | `() => void` |  |  |
+| `order` | `HeadingLevel` |  | Heading level of the title, to fit the page outline. Default 4. |
+| `strike` | `number` |  |  |
+
 ```tsx
 function Example() {
 	const inCart = signal(0);
@@ -28,26 +43,23 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `badge` `body` `footer` `image` `media` `title`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `price` | `number` | yes |  |
-| `title` | `string` | yes |  |
-| `addLabel` | `content` |  | Label for the add button (default "Add"). |
-| `badge` | `content` |  |  |
-| `currency` | `string` |  |  |
-| `image` | `string` |  |  |
-| `imageAlt` | `string` |  | Alt text for the product image (default: decorative). |
-| `onAdd` | `() => void` |  |  |
-| `order` | `HeadingLevel` |  | Heading level of the title, to fit the page outline. Default 4. |
-| `strike` | `number` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## CartLine
 
 Cart row.
+
+**Slots:** `root` `body` `image` `quantity` `remove` `title`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `price` | `number` | yes |  |
+| `quantity` | `number` | yes |  |
+| `title` | `string` | yes |  |
+| `currency` | `string` |  |  |
+| `image` | `string` |  |  |
+| `onQuantityChange` | `(value: number) => void` |  |  |
+| `onRemove` | `() => void` |  |  |
 
 ```tsx
 function Example() {
@@ -75,23 +87,20 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `body` `image` `quantity` `remove` `title`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `price` | `number` | yes |  |
-| `quantity` | `number` | yes |  |
-| `title` | `string` | yes |  |
-| `currency` | `string` |  |  |
-| `image` | `string` |  |  |
-| `onQuantityChange` | `(value: number) => void` |  |  |
-| `onRemove` | `() => void` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## OrderSummary
 
 Subtotal / tax / total block.
+
+**Slots:** `root` `row` `total`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `lines` | `OrderSummaryLine[]` | yes |  |
+| `total` | `content` | yes |  |
+| `children` | `content` |  |  |
+| `totalLabel` | `content` |  | Label for the total row (default "Total"). |
 
 ```tsx
 <OrderSummary
@@ -104,32 +113,11 @@ Subtotal / tax / total block.
 />
 ```
 
-**Slots:** `root` `row` `total`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `lines` | `OrderSummaryLine[]` | yes |  |
-| `total` | `content` | yes |  |
-| `children` | `content` |  |  |
-| `totalLabel` | `content` |  | Label for the total row (default "Total"). |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## PricingCard
 
 Pricing plan card with price, features and a call to action.
-
-```tsx
-<PricingCard
-	name="Pro"
-	price="$20"
-	period="per seat / month"
-	description="For growing teams."
-	features={["Unlimited projects", "10,000 build minutes", "Email support"]}
-	highlighted
-	action={<Button onClick={() => {}}>Start trial</Button>}
-/>
-```
 
 **Slots:** `root` `action` `description` `features` `name` `period` `price`
 
@@ -143,15 +131,23 @@ Pricing plan card with price, features and a call to action.
 | `highlighted` | `boolean` |  |  |
 | `period` | `string` |  |  |
 
+```tsx
+<PricingCard
+	name="Pro"
+	price="$20"
+	period="per seat / month"
+	description="For growing teams."
+	features={["Unlimited projects", "10,000 build minutes", "Email support"]}
+	highlighted
+	action={<Button onClick={() => {}}>Start trial</Button>}
+/>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## FeatureList
 
 List of features with check icons.
-
-```tsx
-<FeatureList items={["Unlimited projects", "Preview deploys", "SSO & audit log"]} />
-```
 
 **Slots:** `root` `icon` `item` `label`
 
@@ -160,11 +156,23 @@ List of features with check icons.
 | `items` | `string[]` | yes |  |
 | `icon` | `IconName` |  |  |
 
+```tsx
+<FeatureList items={["Unlimited projects", "Preview deploys", "SSO & audit log"]} />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## FeatureCompare
 
 Plan comparison grid (ARIA table over CSS grid rows).
+
+**Slots:** `root` `cell` `head` `row`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `plans` | `string[]` | yes |  |
+| `rows` | `FeatureCompareRow[]` | yes |  |
+| `featureLabel` | `content` |  | Header of the first column (default "Feature"). |
 
 ```tsx
 <FeatureCompare
@@ -177,23 +185,11 @@ Plan comparison grid (ARIA table over CSS grid rows).
 />
 ```
 
-**Slots:** `root` `cell` `head` `row`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `plans` | `string[]` | yes |  |
-| `rows` | `FeatureCompareRow[]` | yes |  |
-| `featureLabel` | `content` |  | Header of the first column (default "Feature"). |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## CreditCardPreview
 
 Masked payment card preview.
-
-```tsx
-<CreditCardPreview brand="Visa" last4="4242" exp="08/29" name="Ada Lovelace" />
-```
 
 **Slots:** `root` `bottom` `brand` `number` `top`
 
@@ -204,21 +200,15 @@ Masked payment card preview.
 | `exp` | `string` |  |  |
 | `name` | `string` |  |  |
 
+```tsx
+<CreditCardPreview brand="Visa" last4="4242" exp="08/29" name="Ada Lovelace" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## InvoiceRow
 
 Invoice row with number, date, amount and status.
-
-```tsx
-<InvoiceRow
-	id="INV-2026-014"
-	date="Sep 1, 2026"
-	amount="$49.00"
-	status="paid"
-	onClick={() => {}}
-/>
-```
 
 **Slots:** `root` `amount` `date` `number` `status`
 
@@ -229,5 +219,15 @@ Invoice row with number, date, amount and status.
 | `id` | `string` | yes | Invoice number shown in the row. Also forwarded as the element `id`. |
 | `status` | `InvoiceStatus` | yes |  |
 | `onClick` | `() => void` |  |  |
+
+```tsx
+<InvoiceRow
+	id="INV-2026-014"
+	date="Sep 1, 2026"
+	amount="$49.00"
+	status="paid"
+	onClick={() => {}}
+/>
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.

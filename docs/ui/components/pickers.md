@@ -7,13 +7,6 @@
 
 Native date field; forwarded attributes land on the `<input>`.
 
-```tsx
-function Example() {
-	const date = signal("2026-10-01");
-	return <DateInput aria-label="Start date" value={date()} onChange={date.set} />;
-}
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `onChange` | `(value: string) => void` | yes |  |
@@ -22,11 +15,26 @@ function Example() {
 | `invalid` | `boolean` |  |  |
 | `name` | `string` |  |  |
 
+```tsx
+function Example() {
+	const date = signal("2026-10-01");
+	return <DateInput aria-label="Start date" value={date()} onChange={date.set} />;
+}
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## TimeInput
 
 Native time field; forwarded attributes land on the `<input>`.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onChange` | `(value: string) => void` | yes |  |
+| `value` | `string` | yes |  |
+| `disabled` | `boolean` |  |  |
+| `invalid` | `boolean` |  |  |
+| `name` | `string` |  |  |
 
 ```tsx
 function Example() {
@@ -35,31 +43,11 @@ function Example() {
 }
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `invalid` | `boolean` |  |  |
-| `name` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Calendar
 
 Month grid (WAI-ARIA date grid): one tab stop, ← → ↑ ↓ by day/week, PageUp/PageDown by month (Shift = year), Home/End week edges, full-date labels, `aria-selected` / `aria-current="date"`, `min` / `max` / `isDateDisabled`.
-
-```tsx
-function Example() {
-	const date = signal("2026-09-29");
-	return (
-		<Stack gap="0.5rem">
-			<Calendar value={date()} onChange={date.set} />
-			<Text muted>Selected: {date()}</Text>
-		</Stack>
-	);
-}
-```
 
 **Slots:** `root` `cell` `day` `grid` `header` `label` `nav` `row` `table` `weekday` `weekdays`
 
@@ -74,18 +62,23 @@ function Example() {
 | `value` | `string` |  | YYYY-MM-DD |
 | `weekStartsOn` | `Weekday` |  | First column: 0 = Sunday (default) … 6 = Saturday. |
 
+```tsx
+function Example() {
+	const date = signal("2026-09-29");
+	return (
+		<Stack gap="0.5rem">
+			<Calendar value={date()} onChange={date.set} />
+			<Text muted>Selected: {date()}</Text>
+		</Stack>
+	);
+}
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## DatePicker
 
 Trigger + calendar dropdown. Opening focuses the active day; picking a day or Escape closes and returns focus to the trigger.
-
-```tsx
-function Example() {
-	const due = signal("2026-09-29");
-	return <DatePicker value={due()} onChange={due.set} label="Due date" />;
-}
-```
 
 **Slots:** `root` `calendar` `dropdown` `label` `trigger` `value`
 
@@ -101,18 +94,18 @@ function Example() {
 | `value` | `string` |  |  |
 | `weekStartsOn` | `Weekday` |  | First column: 0 = Sunday (default) … 6 = Saturday. |
 
+```tsx
+function Example() {
+	const due = signal("2026-09-29");
+	return <DatePicker value={due()} onChange={due.set} label="Due date" />;
+}
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## DateRangePicker
 
 Two-step date range picker (start → end).
-
-```tsx
-function Example() {
-	const range = signal<DateRange>({ start: "2026-10-05", end: "2026-10-09" });
-	return <DateRangePicker placeholder="Select dates" value={range()} onChange={range.set} />;
-}
-```
 
 **Slots:** `root` `cell` `dropdown` `summary` `trigger`
 
@@ -122,11 +115,26 @@ function Example() {
 | `value` | `DateRange` | yes |  |
 | `placeholder` | `string` |  | Trigger text when nothing is picked. |
 
+```tsx
+function Example() {
+	const range = signal<DateRange>({ start: "2026-10-05", end: "2026-10-09" });
+	return <DateRangePicker placeholder="Select dates" value={range()} onChange={range.set} />;
+}
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## MonthPicker
 
 Month/year picker.
+
+**Slots:** `root` `cell` `grid` `header` `title`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `monthLabels` | `string[]` |  | Month labels (default English short names). |
+| `onChange` | `(ym: string) => void` |  |  |
+| `value` | `string` |  | YYYY-MM |
 
 ```tsx
 function Example() {
@@ -140,19 +148,18 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `cell` `grid` `header` `title`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `monthLabels` | `string[]` |  | Month labels (default English short names). |
-| `onChange` | `(ym: string) => void` |  |  |
-| `value` | `string` |  | YYYY-MM |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## YearPicker
 
 Twelve-year grid with paging.
+
+**Slots:** `root` `cell` `grid` `header` `title`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onChange` | `(year: number) => void` |  |  |
+| `value` | `number` |  |  |
 
 ```tsx
 function Example() {
@@ -166,18 +173,19 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `cell` `grid` `header` `title`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(year: number) => void` |  |  |
-| `value` | `number` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## TimePicker
 
 Hours/minutes picker.
+
+**Slots:** `root` `cell` `column` `header` `value`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `minutesStep` | `number` |  |  |
+| `onChange` | `(time: string) => void` |  |  |
+| `value` | `string` |  | HH:MM |
 
 ```tsx
 function Example() {
@@ -191,26 +199,11 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `cell` `column` `header` `value`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `minutesStep` | `number` |  |  |
-| `onChange` | `(time: string) => void` |  |  |
-| `value` | `string` |  | HH:MM |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ColorInput
 
 Color swatch + hex text field. The text `<input>` is the host; `classes.root` styles the wrapper.
-
-```tsx
-function Example() {
-	const color = signal("#4f46e5");
-	return <ColorInput aria-label="Brand colour" value={color()} onChange={color.set} />;
-}
-```
 
 **Slots:** `root` `input` `swatch`
 
@@ -223,11 +216,26 @@ function Example() {
 | `name` | `string` |  |  |
 | `swatchLabel` | `string` |  | Accessible name for the swatch picker (default "Color"). |
 
+```tsx
+function Example() {
+	const color = signal("#4f46e5");
+	return <ColorInput aria-label="Brand colour" value={color()} onChange={color.set} />;
+}
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ColorPicker
 
 Native color input + swatches.
+
+**Slots:** `root` `native` `swatch` `swatches` `value`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onChange` | `(color: string) => void` | yes |  |
+| `value` | `string` | yes |  |
+| `swatches` | `string[]` |  |  |
 
 ```tsx
 function Example() {
@@ -243,23 +251,11 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `native` `swatch` `swatches` `value`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(color: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `swatches` | `string[]` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ColorSwatch
 
-Color chip; renders a `<button>` when `onClick` is set.
-
-```tsx
-<ColorSwatch color="#fca311" />
-```
+Color chip; renders a `<button>` when `onClick` is set (use `selected` for a picker).
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -267,7 +263,33 @@ Color chip; renders a `<button>` when `onClick` is set.
 | `children` | `content` |  |  |
 | `label` | `string` |  | Accessible name (default `Color &lt;color>`). |
 | `onClick` | `(e: MouseEvent) => void` |  |  |
+| `selected` | `boolean` |  | Marks the chosen swatch (ring + check; `aria-pressed` when clickable). |
 | `size` | `number` |  |  |
 | `withShadow` | `boolean` |  |  |
+
+```tsx
+function Example() {
+	const brand = signal("#fca311");
+	const colors = ["#fca311", "#14213d", "#e11d48", "#047857", "#7c3aed", "#0ea5e9"];
+	return (
+		<Stack gap="0.5rem">
+			<Group gap="0.5rem">
+				<For each={colors}>
+					{(color) => (
+						<ColorSwatch
+							color={color}
+							selected={brand() === color}
+							onClick={() => brand.set(color)}
+						/>
+					)}
+				</For>
+			</Group>
+			<Text muted>
+				Brand colour: <code>{brand()}</code>
+			</Text>
+		</Stack>
+	);
+}
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.

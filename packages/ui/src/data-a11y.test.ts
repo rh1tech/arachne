@@ -13,6 +13,9 @@ type Api = {
 	picked: Signal<string>;
 	left: Signal<string[]>;
 	right: Signal<string[]>;
+	query: Signal<string>;
+	rich: Signal<string | undefined>;
+	toggles: string[];
 	addMonths: (iso: string, months: number) => string;
 	calendarKeyTarget: (
 		key: string,
@@ -115,6 +118,44 @@ describe("Tree", () => {
 		$('[data-tree-id="app"] .a-tree-label').click();
 		expect(h.api.tree()).toBe("app");
 		expect(focusedId()).toBe("app");
+	});
+});
+
+describe("Tree extras", () => {
+	const rich = (id: string) => $(`[data-test="rich"] [data-tree-id="${id}"]`);
+	const visibleIds = () =>
+		[...document.querySelectorAll<HTMLElement>('[data-test="rich"] [role="treeitem"]')].map(
+			(el) => el.dataset["treeId"],
+		);
+
+	test("clicking a parent row selects and expands it; onToggle reports it", () => {
+		$('[data-test="rich"] [data-tree-id="pkgs"] .a-tree-label').click();
+		expect(h.api.rich()).toBe("pkgs");
+		expect(rich("pkgs").getAttribute("aria-expanded")).toBe("true");
+		expect(h.api.toggles).toEqual(["pkgs:true"]);
+	});
+
+	test("auto icons, own icons and badges render; disabled nodes can't be selected", () => {
+		$('[data-test="rich"] [data-tree-id="pkgs"] [data-tree-toggle]').click();
+		expect($('[data-tree-id="pkgs"] > .a-tree-row .a-tree-icon')).toBeTruthy();
+		expect($('[data-tree-id="pkgs"] > .a-tree-row .a-tree-badge').textContent).toBe("2");
+		expect(rich("forms").getAttribute("aria-disabled")).toBe("true");
+		$('[data-tree-id="forms"] .a-tree-label').click();
+		expect(h.api.rich()).toBeUndefined();
+	});
+
+	test("filter shows matches with their ancestors, expanded and highlighted", async () => {
+		h.api.query.set("guide");
+		await flush();
+		expect(visibleIds()).toEqual(["docs", "guide"]);
+		expect(rich("docs").getAttribute("aria-expanded")).toBe("true");
+		expect($('[data-tree-id="guide"] mark').textContent).toBe("guide");
+		h.api.query.set("nothing-matches");
+		await flush();
+		expect($('[data-test="rich"] .a-tree-empty').textContent).toBe("No matches");
+		h.api.query.set("");
+		await flush();
+		expect(visibleIds()).toEqual(["pkgs", "docs"]);
 	});
 });
 

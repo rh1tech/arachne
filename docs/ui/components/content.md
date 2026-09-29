@@ -7,12 +7,6 @@
 
 Body text.
 
-```tsx
-<Text muted>
-	Last deployed 4 minutes ago by Ada.
-</Text>
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `as` | `"div" \| "p" \| "span"` |  | Element to render; fixed at mount. |
@@ -20,17 +14,17 @@ Body text.
 | `danger` | `boolean` |  |  |
 | `muted` | `boolean` |  |  |
 
+```tsx
+<Text muted>
+	Last deployed 4 minutes ago by Ada.
+</Text>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Title
 
 Section title. `order` picks the semantic level and `size` only the look, so a small title never breaks the heading outline.
-
-```tsx
-<Title order={3}>
-	Project settings
-</Title>
-```
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -39,15 +33,17 @@ Section title. `order` picks the semantic level and `size` only the look, so a s
 | `size` | `HeadingOrder` |  | Visual size 1–6 (1 is largest), independent of the level. Default: `order`, else 3. |
 | `spaced` | `boolean` |  |  |
 
+```tsx
+<Title order={3}>
+	Project settings
+</Title>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Subtitle
 
 Secondary line under a title.
-
-```tsx
-<Subtitle>Manage domains, builds and access.</Subtitle>
-```
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -55,11 +51,20 @@ Secondary line under a title.
 | `order` | `HeadingOrder` |  | Render as a heading at this level; by default a subtitle is a `&lt;p>`. |
 | `size` | `HeadingOrder` |  | Visual size 1–6. Default 5. |
 
+```tsx
+<Subtitle>Manage domains, builds and access.</Subtitle>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Heading
 
 Section heading whose level can change after mount.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `level` | `2 \| 1 \| 3` |  |  |
 
 ```tsx
 <Heading level={3}>
@@ -67,16 +72,16 @@ Section heading whose level can change after mount.
 </Heading>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `level` | `2 \| 1 \| 3` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Prose
 
 Typographic container for rich text (headings, paragraphs, lists, links), e.g. rendered Markdown.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `measure` | `boolean` |  | Cap the line length for readability (default true). |
 
 ```tsx
 <Prose>
@@ -92,22 +97,11 @@ Typographic container for rich text (headings, paragraphs, lists, links), e.g. r
 </Prose>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `measure` | `boolean` |  | Cap the line length for readability (default true). |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Quote
 
 Block quote with an optional citation.
-
-```tsx
-<Quote cite="Grace Hopper">
-	The most dangerous phrase in the language is “we've always done it this way.”
-</Quote>
-```
 
 **Slots:** `root` `body` `cite`
 
@@ -115,12 +109,28 @@ Block quote with an optional citation.
 | --- | --- | --- | --- |
 | `children` | `content` |  |  |
 | `cite` | `string` |  |  |
+| `variant` | `"soft" \| "plain"` |  | `"soft"` (default) adds a tinted background; `"plain"` keeps only the accent rule. |
+
+```tsx
+<Stack gap="1rem">
+	<Quote cite="Grace Hopper">
+		The most dangerous phrase in the language is “we've always done it this way.”
+	</Quote>
+	<Quote variant="plain" cite="Alan Kay">
+		The best way to predict the future is to invent it.
+	</Quote>
+</Stack>
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Article
 
 Article container with readable text styles.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Article>
@@ -130,10 +140,6 @@ Article container with readable text styles.
 </Article>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 **Parts**
@@ -141,6 +147,11 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 ### ArticleTitle
 
 Article heading.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `order` | `HeadingLevel` |  | Heading level, to fit the page outline. Default 1. |
 
 ```tsx
 <Article>
@@ -150,14 +161,13 @@ Article heading.
 </Article>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `order` | `HeadingLevel` |  | Heading level, to fit the page outline. Default 1. |
-
 ### ArticleMeta
 
 Article byline / metadata line.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Article>
@@ -166,21 +176,9 @@ Article byline / metadata line.
 </Article>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ## PageHeader
 
 Page title block with breadcrumb, description and actions.
-
-```tsx
-<PageHeader
-	title="Deploys"
-	description="Every push to a branch creates a deploy."
-	actions={<Button onClick={() => {}}>New deploy</Button>}
-/>
-```
 
 **Slots:** `root` `actions` `crumb` `description` `row` `text` `title`
 
@@ -191,17 +189,19 @@ Page title block with breadcrumb, description and actions.
 | `breadcrumb` | `content` |  |  |
 | `description` | `content` |  |  |
 
+```tsx
+<PageHeader
+	title="Deploys"
+	description="Every push to a branch creates a deploy."
+	actions={<Button onClick={() => {}}>New deploy</Button>}
+/>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Figure
 
 Figure with an optional caption.
-
-```tsx
-<Figure caption="Build times dropped 40% after caching dependencies.">
-	<img src="/images/chart.jpg" alt="Build time chart" width="480" height="240" />
-</Figure>
-```
 
 **Slots:** `root` `caption`
 
@@ -210,20 +210,17 @@ Figure with an optional caption.
 | `caption` | `content` |  |  |
 | `children` | `content` |  |  |
 
+```tsx
+<Figure caption="Build times dropped 40% after caching dependencies.">
+	<img src="/images/chart.jpg" alt="Build time chart" width="480" height="240" />
+</Figure>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Image
 
 Responsive image: lazy-loaded by default, with `fit`, radius, `srcset` and `sizes` support.
-
-```tsx
-<Image
-	src="/images/photo.jpg"
-	alt="Placeholder photo"
-	width={320}
-	radius={8}
-/>
-```
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -240,17 +237,20 @@ Responsive image: lazy-loaded by default, with `fit`, radius, `srcset` and `size
 | `srcset` | `string` |  |  |
 | `width` | `string \| number` |  |  |
 
+```tsx
+<Image
+	src="/images/photo.jpg"
+	alt="Placeholder photo"
+	width={320}
+	radius={8}
+/>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## BackgroundImage
 
-Box with a background image behind its content.
-
-```tsx
-<BackgroundImage src="/images/background.jpg" radius>
-	<Box style={{ margin: "2rem", "max-width": "18rem" }}>Content over a background image.</Box>
-</BackgroundImage>
-```
+_No description._
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -258,15 +258,17 @@ Box with a background image behind its content.
 | `children` | `content` |  |  |
 | `radius` | `boolean` |  |  |
 
+```tsx
+<BackgroundImage src="/images/background.jpg" radius>
+	<Box style={{ margin: "2rem", "max-width": "18rem" }}>Content over a background image.</Box>
+</BackgroundImage>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## VideoFrame
 
 Responsive iframe embed.
-
-```tsx
-<VideoFrame title="Product tour" src="about:blank" ratio={16 / 9} />
-```
 
 **Slots:** `root` `frame`
 
@@ -276,22 +278,15 @@ Responsive iframe embed.
 | `ratio` | `number` |  |  |
 | `title` | `string` |  | Accessible title of the embedded frame. |
 
+```tsx
+<VideoFrame title="Product tour" src="about:blank" ratio={16 / 9} />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## BeforeAfter
 
 Image compare slider.
-
-```tsx
-<BeforeAfter
-	label="Compare designs"
-	before="/images/before.jpg"
-	beforeAlt="Before redesign"
-	after="/images/after.jpg"
-	afterAlt="After redesign"
-	initial={50}
-/>
-```
 
 **Slots:** `root` `handle` `image` `overlay` `range`
 
@@ -304,17 +299,22 @@ Image compare slider.
 | `initial` | `number` |  |  |
 | `label` | `string` |  | Accessible name for the slider (default "Compare"). |
 
+```tsx
+<BeforeAfter
+	label="Compare designs"
+	before="/images/before.jpg"
+	beforeAlt="Before redesign"
+	after="/images/after.jpg"
+	afterAlt="After redesign"
+	initial={50}
+/>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Marquee
 
 Seamless ticker: content is rendered twice so the −50% keyframe loops without a gap; the copy is hidden from assistive tech.
-
-```tsx
-<Marquee pauseOnHover>
-	Arachne 2.4 · dark theme · 330+ components · SSR & hydration · full customization
-</Marquee>
-```
 
 **Slots:** `root` `group` `track`
 
@@ -323,6 +323,18 @@ Seamless ticker: content is rendered twice so the −50% keyframe loops without 
 | `children` | `content` |  |  |
 | `pauseOnHover` | `boolean` |  | Pause scrolling while hovered or focused (default true). |
 | `speed` | `"normal" \| "slow" \| "fast"` |  |  |
+| `variant` | `"soft" \| "plain"` |  | `"soft"` (default) sits on a tinted, bordered strip; `"plain"` has no background or border. |
+
+```tsx
+<Stack gap="0.75rem">
+	<Marquee pauseOnHover>
+		Arachne 2.4 · dark theme · 330+ components · SSR & hydration · full customization
+	</Marquee>
+	<Marquee variant="plain" speed="slow">
+		Acme · Globex · Initech · Umbrella · Hooli · Stark Industries
+	</Marquee>
+</Stack>
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
@@ -330,25 +342,21 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Built-in SVG icon.
 
-```tsx
-<Icon name="bell" />
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `name` | `IconName` | yes |  |
 | `label` | `string` |  | Accessible name; without it the icon is decorative (`aria-hidden`). |
 | `size` | `number \| "sm" \| "md" \| "lg"` |  |  |
 
+```tsx
+<Icon name="bell" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## IconBadge
 
 Colored circular/square icon badge.
-
-```tsx
-<IconBadge name="zap" tone="accent" />
-```
 
 **Slots:** `root` `icon`
 
@@ -358,11 +366,19 @@ Colored circular/square icon badge.
 | `size` | `"sm" \| "md" \| "lg"` |  |  |
 | `tone` | `"danger" \| "warning" \| "success" \| "muted" \| "accent"` |  |  |
 
+```tsx
+<IconBadge name="zap" tone="accent" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## VisuallyHidden
 
 Screen-reader-only text.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Button variant="ghost" onClick={() => {}}>
@@ -370,15 +386,16 @@ Screen-reader-only text.
 </Button>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Mention
 
 Inline
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | `string` | yes |  |
+| `onClick` | `() => void` |  |  |
 
 ```tsx
 <Text>
@@ -386,22 +403,11 @@ Inline
 </Text>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `name` | `string` | yes |  |
-| `onClick` | `() => void` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Comment
 
 Discussion entry.
-
-```tsx
-<Comment author="Ada Lovelace" meta="2h ago">
-	Looks great — can we add a reduced-motion variant?
-</Comment>
-```
 
 **Slots:** `root` `actions` `author` `avatar` `body` `content` `head` `meta`
 
@@ -413,11 +419,26 @@ Discussion entry.
 | `children` | `content` |  |  |
 | `meta` | `string` |  |  |
 
+```tsx
+<Comment author="Ada Lovelace" meta="2h ago">
+	Looks great — can we add a reduced-motion variant?
+</Comment>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ChatBubble
 
 Chat message bubble, aligned by sender.
+
+**Slots:** `root` `author` `body` `meta`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `from` | `"me" \| "them"` | yes |  |
+| `author` | `string` |  |  |
+| `children` | `content` |  |  |
+| `meta` | `string` |  |  |
 
 ```tsx
 <Stack gap="0.5rem">
@@ -430,24 +451,11 @@ Chat message bubble, aligned by sender.
 </Stack>
 ```
 
-**Slots:** `root` `author` `body` `meta`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `from` | `"me" \| "them"` | yes |  |
-| `author` | `string` |  |  |
-| `children` | `content` |  |  |
-| `meta` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ActivityItem
 
 Activity feed entry with icon, title, meta and content.
-
-```tsx
-<ActivityItem icon="git" title="Ada pushed 3 commits to main" meta="12 minutes ago" />
-```
 
 **Slots:** `root` `body` `content` `icon` `meta` `title`
 
@@ -459,22 +467,15 @@ Activity feed entry with icon, title, meta and content.
 | `iconNode` | `content` |  |  |
 | `meta` | `content` |  |  |
 
+```tsx
+<ActivityItem icon="git" title="Ada pushed 3 commits to main" meta="12 minutes ago" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## InboxItem
 
 Notification row.
-
-```tsx
-<InboxItem
-	icon="git"
-	title="Grace requested your review"
-	body="#421 Toast: pause on hover"
-	time="5m"
-	unread
-	onClick={() => {}}
-/>
-```
 
 **Slots:** `root` `body` `icon` `text` `time` `title`
 
@@ -487,11 +488,29 @@ Notification row.
 | `time` | `content` |  |  |
 | `unread` | `boolean` |  |  |
 
+```tsx
+<InboxItem
+	icon="git"
+	title="Grace requested your review"
+	body="#421 Toast: pause on hover"
+	time="5m"
+	unread
+	onClick={() => {}}
+/>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ReactionBar
 
 Emoji reaction toggles.
+
+**Slots:** `root` `reaction`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `reactions` | `Reaction[]` | yes |  |
+| `onToggle` | `(emoji: string) => void` |  |  |
 
 ```tsx
 function Example() {
@@ -510,26 +529,11 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `reaction`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `reactions` | `Reaction[]` | yes |  |
-| `onToggle` | `(emoji: string) => void` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Testimonial
 
 Customer quote.
-
-```tsx
-<Testimonial
-	quote="We replaced three component libraries with one and our bundle got smaller."
-	author="Grace Hopper"
-	role="Staff engineer, Navy Labs"
-/>
-```
 
 **Slots:** `root` `author` `avatar` `name` `quote` `role`
 
@@ -540,17 +544,19 @@ Customer quote.
 | `avatar` | `string` |  |  |
 | `role` | `string` |  | Author's job title (consumed here; not forwarded as an ARIA role). |
 
+```tsx
+<Testimonial
+	quote="We replaced three component libraries with one and our bundle got smaller."
+	author="Grace Hopper"
+	role="Staff engineer, Navy Labs"
+/>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ReviewCard
 
 Star-rated review.
-
-```tsx
-<ReviewCard order={3} rating={4} title="Solid mug" author="Linus T.">
-	Keeps coffee warm, survives the dishwasher.
-</ReviewCard>
-```
 
 **Slots:** `root` `author` `body` `star` `stars` `title`
 
@@ -562,15 +568,17 @@ Star-rated review.
 | `order` | `HeadingLevel` |  | Heading level of the title, to fit the page outline. Default 4. |
 | `title` | `string` |  |  |
 
+```tsx
+<ReviewCard order={3} rating={4} title="Solid mug" author="Linus T.">
+	Keeps coffee warm, survives the dishwasher.
+</ReviewCard>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## LogoCloud
 
 Row of partner logos / names.
-
-```tsx
-<LogoCloud items={["Acme", "Globex", "Initech", "Umbrella"]} />
-```
 
 **Slots:** `root` `item`
 
@@ -578,17 +586,15 @@ Row of partner logos / names.
 | --- | --- | --- | --- |
 | `items` | `unknown[]` | yes |  |
 
+```tsx
+<LogoCloud items={["Acme", "Globex", "Initech", "Umbrella"]} />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## BrowserFrame
 
 Browser chrome mock-up.
-
-```tsx
-<BrowserFrame url="https://acme.arachne.app">
-	<img src="/images/preview.jpg" alt="Site preview" width="640" height="300" />
-</BrowserFrame>
-```
 
 **Slots:** `root` `bar` `body` `url`
 
@@ -597,17 +603,17 @@ Browser chrome mock-up.
 | `children` | `content` |  |  |
 | `url` | `string` |  |  |
 
+```tsx
+<BrowserFrame url="https://acme.arachne.app">
+	<img src="/images/preview.jpg" alt="Site preview" width="640" height="300" />
+</BrowserFrame>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## PhoneFrame
 
 Phone mock-up.
-
-```tsx
-<PhoneFrame>
-	<img src="/images/app.jpg" alt="App screen" width="300" height="600" />
-</PhoneFrame>
-```
 
 **Slots:** `root` `body` `notch`
 
@@ -615,11 +621,23 @@ Phone mock-up.
 | --- | --- | --- | --- |
 | `children` | `content` |  |  |
 
+```tsx
+<PhoneFrame>
+	<img src="/images/app.jpg" alt="App screen" width="300" height="600" />
+</PhoneFrame>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## SocialLinks
 
 Row of icon links.
+
+**Slots:** `root` `link`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `SocialLink[]` | yes |  |
 
 ```tsx
 <SocialLinks
@@ -629,11 +647,5 @@ Row of icon links.
 	]}
 />
 ```
-
-**Slots:** `root` `link`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `SocialLink[]` | yes |  |
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.

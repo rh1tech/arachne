@@ -271,23 +271,6 @@ function SortableListExample(p: ExampleProps) {
 	return <SortableList {...p} items={steps()} onChange={steps.set} />;
 }
 
-function ThumbnavExample(p: ExampleProps) {
-	const photo = signal("2");
-	return (
-		<Thumbnav
-			{...p}
-			label="Photos"
-			items={[
-				{ id: "1", src: swatch(200, "1", 120, 80), alt: "Photo 1" },
-				{ id: "2", src: swatch(150, "2", 120, 80), alt: "Photo 2" },
-				{ id: "3", src: swatch(30, "3", 120, 80), alt: "Photo 3" },
-			]}
-			value={photo()}
-			onChange={photo.set}
-		/>
-	);
-}
-
 function YearPickerExample(p: ExampleProps) {
 	const year = signal(2026);
 	return (
@@ -295,6 +278,53 @@ function YearPickerExample(p: ExampleProps) {
 			<YearPicker {...p} value={year()} onChange={year.set} />
 			<Text muted>Selected: {year()}</Text>
 		</>
+	);
+}
+
+/** The link is invisible until focused: Tab into the box, or use the button. */
+function SkipLinkPreview(p: ExampleProps) {
+	let link: HTMLAnchorElement | undefined;
+	return (
+		<Box style={{ position: "relative", "padding-top": "3rem" }}>
+			<SkipLink
+				{...p}
+				href="#main"
+				ref={(el: HTMLElement) => {
+					link = el as HTMLAnchorElement;
+				}}
+			>
+				Skip to content
+			</SkipLink>
+			<Group gap="0.75rem">
+				<Button size="sm" variant="outline" onClick={() => link?.focus()}>
+					Reveal the skip link
+				</Button>
+				<Text muted>It appears only while focused — keyboard users meet it first on Tab.</Text>
+			</Group>
+		</Box>
+	);
+}
+
+function ThumbnavExample(p: ExampleProps) {
+	const photos = [
+		{ id: "lake", src: swatch(200, "Lake", 640, 400), alt: "Lake at dawn" },
+		{ id: "forest", src: swatch(140, "Forest", 640, 400), alt: "Forest trail" },
+		{ id: "desert", src: swatch(30, "Desert", 640, 400), alt: "Desert dunes" },
+		{ id: "city", src: swatch(260, "City", 640, 400), alt: "City at night" },
+	];
+	const photo = signal("forest");
+	const current = () => photos.find((ph) => ph.id === photo()) ?? photos[0];
+	return (
+		<Stack gap="0.75rem" style={{ "max-width": "24rem" }}>
+			<img
+				src={current()?.src}
+				alt={current()?.alt}
+				width="640"
+				height="400"
+				style={{ width: "100%", height: "auto", "border-radius": "var(--a-radius)" }}
+			/>
+			<Thumbnav {...p} label="Photos" items={photos} value={photo()} onChange={photo.set} />
+		</Stack>
 	);
 }
 
@@ -568,9 +598,14 @@ export const examples: Example[] = [
 	{
 		name: "Quote",
 		render: (p) => (
-			<Quote {...p} cite="Grace Hopper">
-				The most dangerous phrase in the language is “we've always done it this way.”
-			</Quote>
+			<Stack gap="1rem">
+				<Quote {...p} cite="Grace Hopper">
+					The most dangerous phrase in the language is “we've always done it this way.”
+				</Quote>
+				<Quote variant="plain" cite="Alan Kay">
+					The best way to predict the future is to invent it.
+				</Quote>
+			</Stack>
 		),
 	},
 	{
@@ -672,20 +707,21 @@ export const examples: Example[] = [
 	},
 	{
 		name: "SkipLink",
-		render: (p) => (
-			<SkipLink {...p} href="#main">
-				Skip to content (focus me)
-			</SkipLink>
-		),
+		render: (p) => <SkipLinkPreview {...p} />,
 	},
 	{ name: "Thumbnav", render: (p) => <ThumbnavExample {...p} /> },
 	{ name: "Leader", render: (p) => <Leader {...p} label="Espresso" value="$3.50" /> },
 	{
 		name: "Marquee",
 		render: (p) => (
-			<Marquee {...p} pauseOnHover>
-				Arachne 2.4 · dark theme · 330+ components · SSR & hydration · full customization
-			</Marquee>
+			<Stack gap="0.75rem">
+				<Marquee {...p} pauseOnHover>
+					Arachne 2.4 · dark theme · 330+ components · SSR & hydration · full customization
+				</Marquee>
+				<Marquee variant="plain" speed="slow">
+					Acme · Globex · Initech · Umbrella · Hooli · Stark Industries
+				</Marquee>
+			</Stack>
 		),
 	},
 	{

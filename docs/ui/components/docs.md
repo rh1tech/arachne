@@ -7,12 +7,6 @@
 
 Component docs page: title, short description, then example blocks.
 
-```tsx
-<DocPage title="Buttons" description="Trigger an action or an event.">
-	<Text>Page content goes here.</Text>
-</DocPage>
-```
-
 **Slots:** `root` `body` `description` `head` `title`
 
 | Prop | Type | Required | Description |
@@ -21,17 +15,17 @@ Component docs page: title, short description, then example blocks.
 | `children` | `content` |  |  |
 | `description` | `content` |  | Text or inline content (e.g. with `&lt;Code>` spans). |
 
+```tsx
+<DocPage title="Buttons" description="Trigger an action or an event.">
+	<Text>Page content goes here.</Text>
+</DocPage>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## DocExample
 
 Live preview + code snippet — the Bulma docs pattern.
-
-```tsx
-<DocExample title="Primary button" code={"<Button>Save</Button>"}>
-	<Button onClick={() => {}}>Save</Button>
-</DocExample>
-```
 
 **Slots:** `root` `description` `preview` `title`
 
@@ -43,11 +37,28 @@ Live preview + code snippet — the Bulma docs pattern.
 | `language` | `string` |  |  |
 | `title` | `string` |  | Optional section title above the example (e.g. "Colors"). |
 
+```tsx
+<DocExample title="Primary button" code={"<Button>Save</Button>"}>
+	<Button onClick={() => {}}>Save</Button>
+</DocExample>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## DocMenu
 
 Sidebar catalog with collapsible sections.
+
+**Slots:** `root` `brand` `chevron` `items` `label` `link` `list` `section`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onChange` | `(id: string) => void` | yes |  |
+| `sections` | `DocMenuSection[]` | yes |  |
+| `value` | `string` | yes |  |
+| `brand` | `content` |  | Brand row above the menu (icon + title). |
+| `defaultOpen` | `string[]` |  | Section ids forced open; others containing `value` open by default. |
+| `label` | `string` |  | Accessible name (default "Documentation"). |
 
 ```tsx
 const sections = [
@@ -79,16 +90,5 @@ function Example() {
 	);
 }
 ```
-
-**Slots:** `root` `brand` `chevron` `items` `label` `link` `list` `section`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(id: string) => void` | yes |  |
-| `sections` | `DocMenuSection[]` | yes |  |
-| `value` | `string` | yes |  |
-| `brand` | `content` |  | Brand row above the menu (icon + title). |
-| `defaultOpen` | `string[]` |  | Section ids forced open; others containing `value` open by default. |
-| `label` | `string` |  | Accessible name (default "Documentation"). |
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.

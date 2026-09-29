@@ -7,6 +7,22 @@
 
 Labelled form control wrapper: label, control, help or error text, with `aria-describedby` / `aria-invalid` wired to the control.
 
+**Slots:** `root` `body` `help` `inner` `label`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `addons` | `boolean` |  | Attach controls edge-to-edge (Bulma `has-addons`). |
+| `children` | `content` |  |  |
+| `error` | `string` |  |  |
+| `expanded` | `boolean` |  |  |
+| `grouped` | `boolean` |  | Group controls with gap (Bulma `is-grouped`). |
+| `groupedMultiline` | `boolean` |  |  |
+| `help` | `string` |  |  |
+| `horizontal` | `boolean` |  | Horizontal label + body (Bulma `field is-horizontal`). |
+| `label` | `content` |  |  |
+| `labelFor` | `string` |  |  |
+| `narrow` | `boolean` |  |  |
+
 ```tsx
 function Example() {
 	const project = signal("marketing-site");
@@ -29,22 +45,6 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `body` `help` `inner` `label`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `addons` | `boolean` |  | Attach controls edge-to-edge (Bulma `has-addons`). |
-| `children` | `content` |  |  |
-| `error` | `string` |  |  |
-| `expanded` | `boolean` |  |  |
-| `grouped` | `boolean` |  | Group controls with gap (Bulma `is-grouped`). |
-| `groupedMultiline` | `boolean` |  |  |
-| `help` | `string` |  |  |
-| `horizontal` | `boolean` |  | Horizontal label + body (Bulma `field is-horizontal`). |
-| `label` | `content` |  |  |
-| `labelFor` | `string` |  |  |
-| `narrow` | `boolean` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 **Parts**
@@ -52,6 +52,13 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 ### Control
 
 Single control wrapper (Bulma `control`).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `expanded` | `boolean` |  |  |
+| `iconsLeft` | `boolean` |  |  |
+| `iconsRight` | `boolean` |  |  |
 
 ```tsx
 function Example() {
@@ -72,16 +79,14 @@ function Example() {
 }
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `expanded` | `boolean` |  |  |
-| `iconsLeft` | `boolean` |  |  |
-| `iconsRight` | `boolean` |  |  |
-
 ### Help
 
 Field help / validation text (Bulma `help`).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `tone` | `"danger" \| "success" \| "muted"` |  |  |
 
 ```tsx
 function Example() {
@@ -102,14 +107,14 @@ function Example() {
 }
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `tone` | `"danger" \| "success" \| "muted"` |  |  |
-
 ## Label
 
 Form label.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `for` | `string` |  |  |
 
 ```tsx
 <Label for="project-name">
@@ -117,16 +122,19 @@ Form label.
 </Label>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `for` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Fieldset
 
 Native fieldset with optional legend.
+
+**Slots:** `root` `legend`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `disabled` | `boolean` |  |  |
+| `legend` | `content` |  |  |
 
 ```tsx
 function Example() {
@@ -153,19 +161,20 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `legend`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `disabled` | `boolean` |  |  |
-| `legend` | `content` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## FormSection
 
 Titled form region (grouping of related fields).
+
+**Slots:** `root` `body` `description` `header` `title`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `description` | `content` |  |  |
+| `order` | `5 \| 2 \| 3 \| 4 \| 6` |  | Heading level of the title, to fit the page outline. Default 3. |
+| `title` | `string` |  |  |
 
 ```tsx
 function Example() {
@@ -184,20 +193,21 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `body` `description` `header` `title`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `description` | `content` |  |  |
-| `order` | `5 \| 2 \| 3 \| 4 \| 6` |  | Heading level of the title, to fit the page outline. Default 3. |
-| `title` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## FormArea
 
 Grouped form area / panel (related fields in a boxed region).
+
+**Slots:** `root` `body` `description` `header` `title`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `bordered` | `boolean` |  | Visually emphasize as a bordered panel. Default true. |
+| `children` | `content` |  |  |
+| `description` | `content` |  |  |
+| `order` | `5 \| 2 \| 3 \| 4 \| 6` |  | Heading level of the title, to fit the page outline. Default 4. |
+| `title` | `string` |  |  |
 
 ```tsx
 function Example() {
@@ -225,21 +235,15 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `body` `description` `header` `title`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `bordered` | `boolean` |  | Visually emphasize as a bordered panel. Default true. |
-| `children` | `content` |  |  |
-| `description` | `content` |  |  |
-| `order` | `5 \| 2 \| 3 \| 4 \| 6` |  | Heading level of the title, to fit the page outline. Default 4. |
-| `title` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## FormFooter
 
 Right-aligned form actions row.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <form
@@ -257,23 +261,11 @@ Right-aligned form actions row.
 </form>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## SettingsRow
 
 Label + description + control row.
-
-```tsx
-<SettingsRow
-	label="Default branch"
-	description="Pushes to this branch deploy to production."
-	control={<Code>main</Code>}
-/>
-```
 
 **Slots:** `root` `control` `description` `label` `text`
 
@@ -285,11 +277,27 @@ Label + description + control row.
 | `descriptionId` | `string` |  |  |
 | `labelId` | `string` |  | Ids for the label / description, so the control can reference them. |
 
+```tsx
+<SettingsRow
+	label="Default branch"
+	description="Pushes to this branch deploy to production."
+	control={<Code>main</Code>}
+/>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ToggleRow
 
 SettingsRow with a Switch.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `checked` | `boolean` | yes |  |
+| `label` | `content` | yes |  |
+| `onChange` | `(checked: boolean) => void` | yes |  |
+| `description` | `content` |  |  |
+| `disabled` | `boolean` |  |  |
 
 ```tsx
 function Example() {
@@ -305,30 +313,11 @@ function Example() {
 }
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `checked` | `boolean` | yes |  |
-| `label` | `content` | yes |  |
-| `onChange` | `(checked: boolean) => void` | yes |  |
-| `description` | `content` |  |  |
-| `disabled` | `boolean` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## DangerZone
 
 Destructive-settings section.
-
-```tsx
-<DangerZone
-	title="Delete project"
-	description="This permanently removes all deploys and domains."
->
-	<Button variant="outline" onClick={() => {}}>
-		Delete marketing-site
-	</Button>
-</DangerZone>
-```
 
 **Slots:** `root` `body` `description` `header` `title`
 
@@ -338,11 +327,33 @@ Destructive-settings section.
 | `description` | `content` |  |  |
 | `title` | `string` |  |  |
 
+```tsx
+<DangerZone
+	title="Delete project"
+	description="This permanently removes all deploys and domains."
+>
+	<Button variant="danger" onClick={() => {}}>
+		Delete marketing-site
+	</Button>
+</DangerZone>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## WizardNav
 
 Back / Continue footer for multi-step flows.
+
+**Slots:** `root` `back` `next`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `backLabel` | `content` |  |  |
+| `canBack` | `boolean` |  |  |
+| `canNext` | `boolean` |  |  |
+| `nextLabel` | `content` |  |  |
+| `onBack` | `() => void` |  |  |
+| `onNext` | `() => void` |  |  |
 
 ```tsx
 function Example() {
@@ -364,16 +375,5 @@ function Example() {
 	);
 }
 ```
-
-**Slots:** `root` `back` `next`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `backLabel` | `content` |  |  |
-| `canBack` | `boolean` |  |  |
-| `canNext` | `boolean` |  |  |
-| `nextLabel` | `content` |  |  |
-| `onBack` | `() => void` |  |  |
-| `onNext` | `() => void` |  |  |
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.

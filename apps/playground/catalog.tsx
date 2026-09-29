@@ -71,25 +71,25 @@ function RichText(props: { text: string }) {
 	return props.text.split(/`([^`]+)`/).map((part, i) => (i % 2 ? <Code>{part}</Code> : part));
 }
 
-/** Breathing room beyond a fixed descendant's own inset (banners, FABs). */
+/** Breathing room kept around fixed-position descendants once they fit. */
 const FIXED_GAP_PX = 16;
 
-/** Grow `box` to fit its fixed-position descendants; returns a disposer. */
+/**
+ * Grow `box` until its fixed-position descendants (banners, FABs, progress bars)
+ * fit inside it; returns a disposer. It only grows by the overflow, so it settles.
+ */
 function fitFixedChildren(box: HTMLElement): () => void {
 	const fit = () => {
-		let needed = 0;
 		const outer = box.getBoundingClientRect();
+		let overflow = 0;
 		for (const el of box.querySelectorAll<HTMLElement>("*")) {
-			const style = getComputedStyle(el);
-			if (style.position !== "fixed") continue;
-			// Stretched to both edges (`inset: 0`): it follows the box, so growing would never settle.
+			if (getComputedStyle(el).position !== "fixed") continue;
 			const r = el.getBoundingClientRect();
-			if (Math.abs(r.top - outer.top) < 1 && Math.abs(r.bottom - outer.bottom) < 1) continue;
-			// Anchored to one edge: that inset plus the element must fit in the box.
-			const inset = Math.max(parseFloat(style.bottom) || 0, parseFloat(style.top) || 0, 0);
-			needed = Math.max(needed, el.offsetHeight + inset + FIXED_GAP_PX);
+			if (r.height === 0) continue;
+			overflow = Math.max(overflow, outer.top - r.top, r.bottom - outer.bottom);
 		}
-		box.style.minHeight = needed ? `${needed}px` : "";
+		if (overflow > 0.5)
+			box.style.minHeight = `${Math.ceil(outer.height + overflow + FIXED_GAP_PX)}px`;
 	};
 	const frame = requestAnimationFrame(fit);
 	const observer = new ResizeObserver(fit);
@@ -126,86 +126,72 @@ function Preview(props: { name: string }) {
 
 function PropsTable(props: { entry: CatalogEntry }) {
 	return (
-		<Table class="catalog-props" striped>
-			<Thead>
-				<Tr>
-					<Th scope="col">Prop</Th>
-					<Th scope="col">Type</Th>
-					<Th scope="col">Description</Th>
-				</Tr>
-			</Thead>
-			<Tbody>
+		<table class="catalog-props">
+			<thead>
+				<tr>
+					<th scope="col">Prop</th>
+					<th scope="col">Type</th>
+					<th scope="col">Description</th>
+				</tr>
+			</thead>
+			<tbody>
 				<For each={props.entry.props}>
 					{(prop) => (
-						<Tr>
-							<Td>
-								<Code>{prop.name}</Code>
-								{prop.required ? <span class="catalog-required"> required</span> : null}
-								{prop.deprecated ? <span class="catalog-deprecated"> deprecated</span> : null}
-							</Td>
-							<Td>
+						<tr>
+							<td class="catalog-prop-name">
+								<code>{prop.name}</code>
+								{prop.required ? <span class="catalog-required">required</span> : null}
+								{prop.deprecated ? <span class="catalog-deprecated">deprecated</span> : null}
+							</td>
+							<td>
 								<code class="catalog-type">{prop.type}</code>
-							</Td>
-							<Td>
+							</td>
+							<td class="catalog-prop-desc">
 								{prop.deprecated ? (
 									<>
 										<RichText text={prop.deprecated} />{" "}
 									</>
 								) : null}
 								<RichText text={prop.description} />
-							</Td>
-						</Tr>
+							</td>
+						</tr>
 					)}
 				</For>
-			</Tbody>
-		</Table>
+			</tbody>
+		</table>
 	);
 }
 
-function Slots(props: { entry: CatalogEntry; order: 2 | 3 | 4 }) {
+/** Props table, slot names and the shared-props note as one compact block. */
+function ApiReference(props: { entry: CatalogEntry; order: 2 | 3 | 4; title?: string }) {
 	return (
-		<Show when={props.entry.slots.length > 0}>
-			<section class="catalog-section">
-				<Title order={props.order} size={(props.order + 2) as 4 | 5 | 6}>
-					Slots
-				</Title>
-				<Text muted>
-					Target inner parts with <Code>classes</Code> / <Code>styles</Code>, e.g.{" "}
-					<Code>{`classes={{ ${props.entry.slots[0] ?? "root"}: "my-class" }}`}</Code>.
-				</Text>
-				<Group gap="0.35rem" wrap>
-					<For each={props.entry.slots}>{(name) => <Code>{name}</Code>}</For>
-				</Group>
-			</section>
-		</Show>
-	);
-}
-
-function Props(props: { entry: CatalogEntry; order: 2 | 3 | 4 }) {
-	return (
-		<section class="catalog-section">
+		<section class="catalog-api" aria-label={`${props.entry.name} API`}>
 			<Title order={props.order} size={(props.order + 2) as 4 | 5 | 6}>
-				Props
+				{props.title ?? "API"}
 			</Title>
 			<Show
 				when={props.entry.props.length > 0}
-				fallback={<Text muted>No component-specific props.</Text>}
+				fallback={<p class="catalog-meta">No component-specific props.</p>}
 			>
 				<ScrollArea class="catalog-props-scroll" aria-label={`${props.entry.name} props`}>
 					<PropsTable entry={props.entry} />
 				</ScrollArea>
 			</Show>
+			<Show when={props.entry.slots.length > 0}>
+				<p class="catalog-meta">
+					<span class="catalog-meta-label">Slots</span>
+					<For each={props.entry.slots}>{(name) => <code class="catalog-chip">{name}</code>}</For>
+					<span class="catalog-meta-hint">
+						style them with <code>classes</code> / <code>styles</code>
+					</span>
+				</p>
+			</Show>
+			<p class="catalog-meta catalog-meta-hint">
+				Plus the shared props: <code>id</code>, <code>data-*</code>, <code>aria-*</code>,{" "}
+				<code>on*</code>, <code>class</code>, <code>style</code>, <code>classes</code>,{" "}
+				<code>styles</code>, <code>unstyled</code>.
+			</p>
 		</section>
-	);
-}
-
-function SharedPropsNote() {
-	return (
-		<Text muted class="catalog-shared">
-			Every component also accepts the shared props: pass-through attributes (<Code>id</Code>,{" "}
-			<Code>data-*</Code>, <Code>aria-*</Code>, <Code>on*</Code>), <Code>class</Code>,{" "}
-			<Code>style</Code>, <Code>classes</Code>, <Code>styles</Code> and <Code>unstyled</Code>.
-		</Text>
 	);
 }
 
@@ -219,11 +205,10 @@ function Part(props: { entry: CatalogEntry }) {
 			<Text muted>
 				<RichText text={props.entry.summary} />
 			</Text>
+			<ApiReference entry={props.entry} order={4} title="API" />
 			<DocExample code={props.entry.code}>
 				<Preview name={props.entry.name} />
 			</DocExample>
-			<Slots entry={props.entry} order={4} />
-			<Props entry={props.entry} order={4} />
 		</section>
 	);
 }
@@ -252,19 +237,19 @@ export function CatalogPage(props: { name: string }) {
 	if (!entry) return <Text muted>Unknown component “{props.name}”.</Text>;
 	return (
 		<DocPage title={entry.name} description={<RichText text={entry.summary} />}>
-			<DocExample
-				title="Example"
-				description={entry.interactive ? "Interactive demo — opens on demand." : undefined}
-				code={entry.code}
-			>
-				<Preview name={entry.name} />
-				<Show when={entry.logsActions}>
-					<ActionLog />
-				</Show>
-			</DocExample>
-			<Slots entry={entry} order={2} />
-			<Props entry={entry} order={2} />
-			<SharedPropsNote />
+			<ApiReference entry={entry} order={2} />
+			<section class="catalog-section">
+				<DocExample
+					title="Example"
+					description={entry.interactive ? "Interactive demo — opens on demand." : undefined}
+					code={entry.code}
+				>
+					<Preview name={entry.name} />
+					<Show when={entry.logsActions}>
+						<ActionLog />
+					</Show>
+				</DocExample>
+			</section>
 			<Parts entry={entry} />
 		</DocPage>
 	);
@@ -279,9 +264,7 @@ export function ComponentReference(props: { pageId: string }) {
 			<Title order={2} size={3}>
 				{entry.name} reference
 			</Title>
-			<Slots entry={entry} order={3} />
-			<Props entry={entry} order={3} />
-			<SharedPropsNote />
+			<ApiReference entry={entry} order={3} title="API" />
 			<Parts entry={entry} />
 		</section>
 	);

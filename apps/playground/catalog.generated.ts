@@ -1241,7 +1241,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "icon",
 				"type": "content",
 				"required": false,
-				"description": "Leading icon (default ⌕); `null` hides it."
+				"description": "Leading icon (default: the `search` icon); `null` hides it."
 			},
 			{
 				"name": "onSubmit",
@@ -2186,6 +2186,7 @@ export const catalog: CatalogEntry[] = [
 		"slots": [
 			"root",
 			"arm",
+			"hub",
 			"knob",
 			"label",
 			"svg",
@@ -3069,7 +3070,7 @@ export const catalog: CatalogEntry[] = [
 		"category": "pickers",
 		"name": "ColorSwatch",
 		"parts": [],
-		"summary": "Color chip; renders a `<button>` when `onClick` is set.",
+		"summary": "Color chip; renders a `<button>` when `onClick` is set (use `selected` for a picker).",
 		"slots": [],
 		"props": [
 			{
@@ -3097,6 +3098,12 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			},
 			{
+				"name": "selected",
+				"type": "boolean",
+				"required": false,
+				"description": "Marks the chosen swatch (ring + check; `aria-pressed` when clickable)."
+			},
+			{
 				"name": "size",
 				"type": "number",
 				"required": false,
@@ -3109,7 +3116,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<ColorSwatch color=\"#fca311\" />",
+		"code": "function Example() {\n\tconst brand = signal(\"#fca311\");\n\tconst colors = [\"#fca311\", \"#14213d\", \"#e11d48\", \"#047857\", \"#7c3aed\", \"#0ea5e9\"];\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Group gap=\"0.5rem\">\n\t\t\t\t<For each={colors}>\n\t\t\t\t\t{(color) => (\n\t\t\t\t\t\t<ColorSwatch\n\t\t\t\t\t\t\tcolor={color}\n\t\t\t\t\t\t\tselected={brand() === color}\n\t\t\t\t\t\t\tonClick={() => brand.set(color)}\n\t\t\t\t\t\t/>\n\t\t\t\t\t)}\n\t\t\t\t</For>\n\t\t\t</Group>\n\t\t\t<Text muted>\n\t\t\t\tBrand colour: <code>{brand()}</code>\n\t\t\t</Text>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
 	},
@@ -3549,7 +3556,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<DangerZone\n\ttitle=\"Delete project\"\n\tdescription=\"This permanently removes all deploys and domains.\"\n>\n\t<Button variant=\"outline\" onClick={() => {}}>\n\t\tDelete marketing-site\n\t</Button>\n</DangerZone>",
+		"code": "<DangerZone\n\ttitle=\"Delete project\"\n\tdescription=\"This permanently removes all deploys and domains.\"\n>\n\t<Button variant=\"danger\" onClick={() => {}}>\n\t\tDelete marketing-site\n\t</Button>\n</DangerZone>",
 		"interactive": false,
 		"logsActions": true
 	},
@@ -5152,7 +5159,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<SkipLink href=\"#main\">\n\tSkip to content (focus me)\n</SkipLink>",
+		"code": "function Example() {\n\tlet link: HTMLAnchorElement | undefined;\n\treturn (\n\t\t<Box style={{ position: \"relative\", \"padding-top\": \"3rem\" }}>\n\t\t\t<SkipLink\n\t\t\t\thref=\"#main\"\n\t\t\t\tref={(el: HTMLElement) => {\n\t\t\t\t\tlink = el as HTMLAnchorElement;\n\t\t\t\t}}\n\t\t\t>\n\t\t\t\tSkip to content\n\t\t\t</SkipLink>\n\t\t\t<Group gap=\"0.75rem\">\n\t\t\t\t<Button size=\"sm\" variant=\"outline\" onClick={() => link?.focus()}>\n\t\t\t\t\tReveal the skip link\n\t\t\t\t</Button>\n\t\t\t\t<Text muted>It appears only while focused — keyboard users meet it first on Tab.</Text>\n\t\t\t</Group>\n\t\t</Box>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
 	},
@@ -5233,7 +5240,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "Accessible name (default \"Thumbnails\")."
 			}
 		],
-		"code": "function Example() {\n\tconst photo = signal(\"2\");\n\treturn (\n\t\t<Thumbnav\n\t\t\tlabel=\"Photos\"\n\t\t\titems={[\n\t\t\t\t{ id: \"1\", src: \"/images/1.jpg\", alt: \"Photo 1\" },\n\t\t\t\t{ id: \"2\", src: \"/images/2.jpg\", alt: \"Photo 2\" },\n\t\t\t\t{ id: \"3\", src: \"/images/3.jpg\", alt: \"Photo 3\" },\n\t\t\t]}\n\t\t\tvalue={photo()}\n\t\t\tonChange={photo.set}\n\t\t/>\n\t);\n}",
+		"code": "function Example() {\n\tconst photos = [\n\t\t{ id: \"lake\", src: \"/images/lake.jpg\", alt: \"Lake at dawn\" },\n\t\t{ id: \"forest\", src: \"/images/forest.jpg\", alt: \"Forest trail\" },\n\t\t{ id: \"desert\", src: \"/images/desert.jpg\", alt: \"Desert dunes\" },\n\t\t{ id: \"city\", src: \"/images/city.jpg\", alt: \"City at night\" },\n\t];\n\tconst photo = signal(\"forest\");\n\tconst current = () => photos.find((ph) => ph.id === photo()) ?? photos[0];\n\treturn (\n\t\t<Stack gap=\"0.75rem\" style={{ \"max-width\": \"24rem\" }}>\n\t\t\t<img\n\t\t\t\tsrc={current()?.src}\n\t\t\t\talt={current()?.alt}\n\t\t\t\twidth=\"640\"\n\t\t\t\theight=\"400\"\n\t\t\t\tstyle={{ width: \"100%\", height: \"auto\", \"border-radius\": \"var(--a-radius)\" }}\n\t\t\t/>\n\t\t\t<Thumbnav label=\"Photos\" items={photos} value={photo()} onChange={photo.set} />\n\t\t</Stack>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
 	},
@@ -6050,7 +6057,7 @@ export const catalog: CatalogEntry[] = [
 				"description": "0–100; omit for indeterminate."
 			}
 		],
-		"code": "<NavigationProgress visible value={40} />",
+		"code": "function Example() {\n\tconst progress = signal(40);\n\tconst running = signal(true);\n\t// Trickle towards 90% while \"navigating\" (effects run only in the browser).\n\teffect(() => {\n\t\tif (!running()) return;\n\t\tconst timer = setInterval(\n\t\t\t() => progress.set(Math.min(90, progress() + (90 - progress()) * 0.2)),\n\t\t\t300,\n\t\t);\n\t\treturn () => clearInterval(timer);\n\t});\n\treturn (\n\t\t<Stack gap=\"0.75rem\" style={{ \"padding-top\": \"0.75rem\" }}>\n\t\t\t{/* Pinned to the top of the page (here: of the preview). */}\n\t\t\t<NavigationProgress visible={progress() < 100} value={progress()} />\n\t\t\t<Group gap=\"0.5rem\">\n\t\t\t\t<Button\n\t\t\t\t\tsize=\"sm\"\n\t\t\t\t\tonClick={() => {\n\t\t\t\t\t\tprogress.set(5);\n\t\t\t\t\t\trunning.set(true);\n\t\t\t\t\t}}\n\t\t\t\t>\n\t\t\t\t\tStart navigation\n\t\t\t\t</Button>\n\t\t\t\t<Button\n\t\t\t\t\tsize=\"sm\"\n\t\t\t\t\tvariant=\"outline\"\n\t\t\t\t\tonClick={() => {\n\t\t\t\t\t\trunning.set(false);\n\t\t\t\t\t\tprogress.set(100);\n\t\t\t\t\t}}\n\t\t\t\t>\n\t\t\t\t\tFinish\n\t\t\t\t</Button>\n\t\t\t\t<Text muted>{progress() >= 100 ? \"Done\" : `${Math.round(progress())}%`}</Text>\n\t\t\t</Group>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
 	},
@@ -7386,10 +7393,13 @@ export const catalog: CatalogEntry[] = [
 		"category": "data",
 		"name": "Tree",
 		"parts": [],
-		"summary": "WAI-ARIA tree: one tab stop, ↑ ↓ move, → expands / enters, ← collapses / goes to parent, Home End, Enter/Space select.",
+		"summary": "WAI-ARIA tree: one tab stop, ↑ ↓ move, → expands / enters, ← collapses / goes to parent, Home End, Enter/Space select, type-ahead. Node icons and badges, `filter` for search, `icons=\"auto\"` for folder/file icons.",
 		"slots": [
 			"root",
+			"badge",
+			"empty",
 			"group",
+			"icon",
 			"item",
 			"label",
 			"row",
@@ -7409,6 +7419,30 @@ export const catalog: CatalogEntry[] = [
 				"description": "Node ids expanded on mount."
 			},
 			{
+				"name": "emptyLabel",
+				"type": "content",
+				"required": false,
+				"description": "Shown when `filter` matches nothing (default \"No matches\")."
+			},
+			{
+				"name": "expandOnClick",
+				"type": "boolean",
+				"required": false,
+				"description": "Clicking a parent row also expands / collapses it (default true)."
+			},
+			{
+				"name": "filter",
+				"type": "string",
+				"required": false,
+				"description": "Show only nodes whose label contains this text (case-insensitive), plus their ancestors, expanded, with the match highlighted."
+			},
+			{
+				"name": "icons",
+				"type": "\"auto\" | \"none\"",
+				"required": false,
+				"description": "`\"auto\"`: folder / file icons for nodes without their own `icon`."
+			},
+			{
 				"name": "label",
 				"type": "string",
 				"required": false,
@@ -7421,13 +7455,19 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			},
 			{
+				"name": "onToggle",
+				"type": "(id: string, open: boolean) => void",
+				"required": false,
+				"description": "Called when a node is expanded or collapsed by the user."
+			},
+			{
 				"name": "value",
 				"type": "string",
 				"required": false,
 				"description": ""
 			}
 		],
-		"code": "function Example() {\n\tconst selected = signal(\"web\");\n\treturn (\n\t\t<Stack gap=\"0.5rem\">\n\t\t\t<Tree\n\t\t\t\tlabel=\"Workspace\"\n\t\t\t\tdefaultExpanded={[\"apps\"]}\n\t\t\t\tvalue={selected()}\n\t\t\t\tonChange={selected.set}\n\t\t\t\tdata={[\n\t\t\t\t\t{\n\t\t\t\t\t\tid: \"apps\",\n\t\t\t\t\t\tlabel: \"apps\",\n\t\t\t\t\t\tchildren: [\n\t\t\t\t\t\t\t{ id: \"web\", label: \"web\" },\n\t\t\t\t\t\t\t{ id: \"admin\", label: \"admin\" },\n\t\t\t\t\t\t],\n\t\t\t\t\t},\n\t\t\t\t\t{ id: \"packages\", label: \"packages\", children: [{ id: \"ui\", label: \"ui\" }] },\n\t\t\t\t]}\n\t\t\t/>\n\t\t\t<Text muted>Selected: {selected()}</Text>\n\t\t</Stack>\n\t);\n}",
+		"code": "function Example() {\n\tconst selected = signal(\"button.tsx\");\n\tconst query = signal(\"\");\n\tconst files: TreeNode[] = [\n\t\t{\n\t\t\tid: \"apps\",\n\t\t\tlabel: \"apps\",\n\t\t\tbadge: 2,\n\t\t\tchildren: [\n\t\t\t\t{ id: \"web\", label: \"web\", children: [{ id: \"client.tsx\", label: \"client.tsx\" }] },\n\t\t\t\t{ id: \"admin\", label: \"admin\", disabled: true, badge: \"locked\" },\n\t\t\t],\n\t\t},\n\t\t{\n\t\t\tid: \"packages\",\n\t\t\tlabel: \"packages\",\n\t\t\tchildren: [\n\t\t\t\t{\n\t\t\t\t\tid: \"ui\",\n\t\t\t\t\tlabel: \"ui\",\n\t\t\t\t\tchildren: [\n\t\t\t\t\t\t{ id: \"button.tsx\", label: \"button.tsx\" },\n\t\t\t\t\t\t{ id: \"tree.tsx\", label: \"tree.tsx\" },\n\t\t\t\t\t\t{ id: \"styles.css\", label: \"styles.css\", icon: \"code\" },\n\t\t\t\t\t],\n\t\t\t\t},\n\t\t\t],\n\t\t},\n\t\t{ id: \"readme\", label: \"README.md\", icon: \"info\" },\n\t];\n\treturn (\n\t\t<Stack gap=\"0.5rem\" style={{ \"max-width\": \"22rem\" }}>\n\t\t\t<SearchInput\n\t\t\t\taria-label=\"Filter files\"\n\t\t\t\tplaceholder=\"Filter files\"\n\t\t\t\tvalue={query()}\n\t\t\t\tonChange={query.set}\n\t\t\t/>\n\t\t\t<Tree\n\t\t\t\tlabel=\"Workspace\"\n\t\t\t\ticons=\"auto\"\n\t\t\t\tfilter={query()}\n\t\t\t\tdefaultExpanded={[\"apps\", \"packages\", \"ui\"]}\n\t\t\t\tvalue={selected()}\n\t\t\t\tonChange={selected.set}\n\t\t\t\tdata={files}\n\t\t\t/>\n\t\t\t<Text muted>Open: {selected()}</Text>\n\t\t</Stack>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
 	},
@@ -8124,11 +8164,17 @@ export const catalog: CatalogEntry[] = [
 				"type": "string",
 				"required": false,
 				"description": ""
+			},
+			{
+				"name": "radius",
+				"type": "RadiusName | (string & {})",
+				"required": false,
+				"description": "Corner radius: `\"none\"` | `\"sm\"` | `\"lg\"` or any CSS length (default: the theme radius)."
 			}
 		],
-		"code": "<CodeBlock\n\tlanguage=\"tsx\"\n\tcode={\n\t\t'import { Button } from \"@arachne/ui\";\\n\\nexport const Save = () => <Button onClick={() => {}}>Save</Button>;'\n\t}\n/>",
+		"code": "<CodeBlock\n\tlanguage=\"tsx\"\n\tradius=\"lg\"\n\tcode={\n\t\t'import { Button } from \"@arachne/ui\";\\n\\nexport const Save = () => <Button>Save</Button>;'\n\t}\n/>",
 		"interactive": false,
-		"logsActions": true
+		"logsActions": false
 	},
 	{
 		"category": "data",
@@ -8209,7 +8255,7 @@ export const catalog: CatalogEntry[] = [
 		"category": "data",
 		"name": "Mark",
 		"parts": [],
-		"summary": "Highlighted text.",
+		"summary": "Highlight text you choose (`<mark>`, highlighter-yellow by default). To mark every match of a query inside a string, use `Highlight`.",
 		"slots": [],
 		"props": [
 			{
@@ -8233,7 +8279,7 @@ export const catalog: CatalogEntry[] = [
 		"category": "data",
 		"name": "Highlight",
 		"parts": [],
-		"summary": "Highlight matching substrings in text (Mantine Highlight).",
+		"summary": "Mark every case-insensitive match of `highlight` inside `text`, e.g. search results. To mark a span you choose, use `Mark`.",
 		"slots": [
 			"root",
 			"mark"
@@ -8250,6 +8296,12 @@ export const catalog: CatalogEntry[] = [
 				"type": "string",
 				"required": true,
 				"description": ""
+			},
+			{
+				"name": "tone",
+				"type": "\"warning\" | \"success\" | \"accent\"",
+				"required": false,
+				"description": "Mark colour (default `\"warning\"`, highlighter yellow), as on `Mark`."
 			}
 		],
 		"code": "<Highlight text=\"Deploy marketing-site to production\" highlight=\"deploy\" />",
@@ -8276,7 +8328,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Truncate lines={2}>\n\tThe customization system covers every component: attributes are forwarded to the host\n\telement, classes and styles target named slots, unstyled drops the built-in look, and\n\tconfigureUI sets app-wide defaults.\n</Truncate>",
+		"code": "<Truncate style={{ \"max-width\": \"22rem\" }} lines={2}>\n\tThe customization system covers every component: attributes are forwarded to the host\n\telement, classes and styles target named slots, unstyled drops the built-in look, and\n\tconfigureUI sets app-wide defaults. Text past the second line is cut with an ellipsis.\n</Truncate>",
 		"interactive": false,
 		"logsActions": false
 	},
@@ -10174,7 +10226,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<Masonry columns={3}>\n\t<img src=\"/images/1.jpg\" alt=\"Tall\" width=\"240\" height=\"320\" />\n\t<img src=\"/images/2.jpg\" alt=\"Short\" width=\"240\" height=\"160\" />\n\t<img src=\"/images/3.jpg\" alt=\"Square\" width=\"240\" height=\"240\" />\n\t<img src=\"/images/4.jpg\" alt=\"Wide\" width=\"240\" height=\"180\" />\n</Masonry>",
+		"code": "function Example() {\n\tconst notes = [\n\t\t{ title: \"Release 2.4\", body: \"Dark theme, a component reference and interactive examples.\" },\n\t\t{ title: \"Standup\", body: \"Ship the tree search.\" },\n\t\t{\n\t\t\ttitle: \"Design review\",\n\t\t\tbody: \"Tighten the button group borders, fix the burger icon, make quote backgrounds optional and give the tree folder icons.\",\n\t\t},\n\t\t{ title: \"Bug\", body: \"PIN input needed two Backspaces.\" },\n\t\t{ title: \"Idea\", body: \"Masonry packs cards of different heights into columns without gaps.\" },\n\t\t{ title: \"Reading\", body: \"WAI-ARIA tree pattern.\" },\n\t];\n\treturn (\n\t\t<Masonry columns={3}>\n\t\t\t<For each={notes}>\n\t\t\t\t{(note) => (\n\t\t\t\t\t<Paper withBorder padding=\"md\">\n\t\t\t\t\t\t<strong>{note.title}</strong>\n\t\t\t\t\t\t<Text muted>{note.body}</Text>\n\t\t\t\t\t</Paper>\n\t\t\t\t)}\n\t\t\t</For>\n\t\t</Masonry>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
 	},
@@ -10410,9 +10462,15 @@ export const catalog: CatalogEntry[] = [
 				"type": "string",
 				"required": false,
 				"description": ""
+			},
+			{
+				"name": "variant",
+				"type": "\"soft\" | \"plain\"",
+				"required": false,
+				"description": "`\"soft\"` (default) adds a tinted background; `\"plain\"` keeps only the accent rule."
 			}
 		],
-		"code": "<Quote cite=\"Grace Hopper\">\n\tThe most dangerous phrase in the language is “we've always done it this way.”\n</Quote>",
+		"code": "<Stack gap=\"1rem\">\n\t<Quote cite=\"Grace Hopper\">\n\t\tThe most dangerous phrase in the language is “we've always done it this way.”\n\t</Quote>\n\t<Quote variant=\"plain\" cite=\"Alan Kay\">\n\t\tThe best way to predict the future is to invent it.\n\t</Quote>\n</Stack>",
 		"interactive": false,
 		"logsActions": false
 	},
@@ -10640,7 +10698,7 @@ export const catalog: CatalogEntry[] = [
 		"category": "content",
 		"name": "BackgroundImage",
 		"parts": [],
-		"summary": "Box with a background image behind its content.",
+		"summary": "",
 		"slots": [],
 		"props": [
 			{
@@ -10781,9 +10839,15 @@ export const catalog: CatalogEntry[] = [
 				"type": "\"normal\" | \"slow\" | \"fast\"",
 				"required": false,
 				"description": ""
+			},
+			{
+				"name": "variant",
+				"type": "\"soft\" | \"plain\"",
+				"required": false,
+				"description": "`\"soft\"` (default) sits on a tinted, bordered strip; `\"plain\"` has no background or border."
 			}
 		],
-		"code": "<Marquee pauseOnHover>\n\tArachne 2.4 · dark theme · 330+ components · SSR & hydration · full customization\n</Marquee>",
+		"code": "<Stack gap=\"0.75rem\">\n\t<Marquee pauseOnHover>\n\t\tArachne 2.4 · dark theme · 330+ components · SSR & hydration · full customization\n\t</Marquee>\n\t<Marquee variant=\"plain\" speed=\"slow\">\n\t\tAcme · Globex · Initech · Umbrella · Hooli · Stark Industries\n\t</Marquee>\n</Stack>",
 		"interactive": false,
 		"logsActions": false
 	},
@@ -12013,7 +12077,7 @@ export const catalog: CatalogEntry[] = [
 				"description": ""
 			}
 		],
-		"code": "<ProfileHeader\n\tname=\"Ada Lovelace\"\n\thandle=\"@ada\"\n\tbio=\"Analyst of engines. Writes the first programs.\"\n\tactions={\n\t\t<Button variant=\"outline\" onClick={() => {}}>\n\t\t\tFollow\n\t\t</Button>\n\t}\n/>",
+		"code": "<ProfileHeader\n\tname=\"Ada Lovelace\"\n\thandle=\"ada\"\n\tbio=\"Analyst of engines. Writes the first programs.\"\n\tactions={\n\t\t<Button variant=\"outline\" onClick={() => {}}>\n\t\t\tFollow\n\t\t</Button>\n\t}\n/>",
 		"interactive": false,
 		"logsActions": true
 	},

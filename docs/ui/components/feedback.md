@@ -7,12 +7,6 @@
 
 Inline status message; danger/warning are assertive alerts.
 
-```tsx
-<Alert tone="success" title="Deploy finished">
-	marketing-site is live on production.
-</Alert>
-```
-
 **Slots:** `root` `body` `title`
 
 | Prop | Type | Required | Description |
@@ -21,17 +15,17 @@ Inline status message; danger/warning are assertive alerts.
 | `title` | `string` |  |  |
 | `tone` | `AlertTone` |  |  |
 
+```tsx
+<Alert tone="success" title="Deploy finished">
+	marketing-site is live on production.
+</Alert>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Callout
 
 Highlighted note block with icon and tone (info, success, warning, danger).
-
-```tsx
-<Callout tone="warning" title="Breaking change">
-	<code>size</code> no longer sets the heading level — use <code>order</code>.
-</Callout>
-```
 
 **Slots:** `root` `body` `content` `icon` `title`
 
@@ -42,11 +36,22 @@ Highlighted note block with icon and tone (info, success, warning, danger).
 | `title` | `string` |  |  |
 | `tone` | `CalloutTone` |  |  |
 
+```tsx
+<Callout tone="warning" title="Breaking change">
+	<code>size</code> no longer sets the heading level — use <code>order</code>.
+</Callout>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Message
 
 Colored message block for longer contextual notes.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `tone` | `MessageTone` |  |  |
 
 ```tsx
 function Example() {
@@ -71,11 +76,6 @@ function Example() {
 }
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `tone` | `MessageTone` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 **Parts**
@@ -83,6 +83,14 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 ### MessageHeader
 
 Message title bar, with an optional close button.
+
+**Slots:** `root` `close` `text`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `closeLabel` | `string` |  | Accessible label for the close button (default "Close"). |
+| `onClose` | `() => void` |  |  |
 
 ```tsx
 function Example() {
@@ -107,17 +115,13 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `close` `text`
+### MessageBody
+
+Body text of a message.
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `children` | `content` |  |  |
-| `closeLabel` | `string` |  | Accessible label for the close button (default "Close"). |
-| `onClose` | `() => void` |  |  |
-
-### MessageBody
-
-Body text of a message.
 
 ```tsx
 <Message tone="success">
@@ -125,13 +129,18 @@ Body text of a message.
 </Message>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ## Notification
 
 Inline notification (distinct from toast host). Danger / warning announce assertively.
+
+**Slots:** `root` `body` `close` `content` `title`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `onClose` | `() => void` |  |  |
+| `title` | `string` |  |  |
+| `tone` | `AlertTone` |  |  |
 
 ```tsx
 function Example() {
@@ -153,20 +162,19 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `body` `close` `content` `title`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `onClose` | `() => void` |  |  |
-| `title` | `string` |  |  |
-| `tone` | `AlertTone` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ToastHost
 
 Live region for toasts. Existing toasts keep their DOM when others come and go; timers pause on hover/focus.
+
+**Slots:** `root` `action` `copy` `dismiss` `icon` `message` `title` `toast`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `toaster` | `Toaster` | yes |  |
+| `position` | `ToastPosition` |  |  |
+| `render` | `(toast: ToastItem, dismiss: () => void) => unknown` |  | Custom toast body; receives the item and a dismiss callback. |
 
 ```tsx
 function Example() {
@@ -202,19 +210,21 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `action` `copy` `dismiss` `icon` `message` `title` `toast`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `toaster` | `Toaster` | yes |  |
-| `position` | `ToastPosition` |  |  |
-| `render` | `(toast: ToastItem, dismiss: () => void) => unknown` |  | Custom toast body; receives the item and a dismiss callback. |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Banner
 
 Full-width page banner.
+
+**Slots:** `root` `action` `body` `close` `content` `title`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `action` | `content` |  |  |
+| `children` | `content` |  |  |
+| `onClose` | `() => void` |  |  |
+| `title` | `string` |  |  |
+| `tone` | `AlertTone` |  |  |
 
 ```tsx
 function Example() {
@@ -245,21 +255,20 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `action` `body` `close` `content` `title`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `action` | `content` |  |  |
-| `children` | `content` |  |  |
-| `onClose` | `() => void` |  |  |
-| `title` | `string` |  |  |
-| `tone` | `AlertTone` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## AnnouncementBar
 
 Site-wide notice strip.
+
+**Slots:** `root` `body` `close`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `dismissible` | `boolean` |  |  |
+| `onDismiss` | `() => void` |  |  |
+| `tone` | `"danger" \| "warning" \| "info" \| "accent"` |  |  |
 
 ```tsx
 function Example() {
@@ -281,20 +290,19 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `body` `close`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `dismissible` | `boolean` |  |  |
-| `onDismiss` | `() => void` |  |  |
-| `tone` | `"danger" \| "warning" \| "info" \| "accent"` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## UpgradeBanner
 
 Upsell banner with a call to action.
+
+**Slots:** `root` `action` `body` `content` `title`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `action` | `content` |  |  |
+| `children` | `content` |  |  |
+| `title` | `string` |  |  |
 
 ```tsx
 <UpgradeBanner
@@ -305,19 +313,23 @@ Upsell banner with a call to action.
 </UpgradeBanner>
 ```
 
-**Slots:** `root` `action` `body` `content` `title`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `action` | `content` |  |  |
-| `children` | `content` |  |  |
-| `title` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## CookieConsent
 
 Cookie consent banner with accept / decline.
+
+**Slots:** `root` `actions` `body` `message` `title`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onAccept` | `() => void` | yes |  |
+| `open` | `boolean` | yes |  |
+| `acceptLabel` | `string` |  |  |
+| `declineLabel` | `string` |  |  |
+| `message` | `string` |  |  |
+| `onDecline` | `() => void` |  |  |
+| `title` | `string` |  |  |
 
 ```tsx
 function Example() {
@@ -343,32 +355,20 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `actions` `body` `message` `title`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onAccept` | `() => void` | yes |  |
-| `open` | `boolean` | yes |  |
-| `acceptLabel` | `string` |  |  |
-| `declineLabel` | `string` |  |  |
-| `message` | `string` |  |  |
-| `onDecline` | `() => void` |  |  |
-| `title` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## OfflineNotice
 
 Banner shown while the browser is offline.
 
-```tsx
-<OfflineNotice offline />
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `children` | `content` |  |  |
 | `offline` | `boolean` |  | Force visibility (otherwise listens to navigator.onLine). |
+
+```tsx
+<OfflineNotice offline />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
@@ -376,24 +376,20 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Loading indicator.
 
-```tsx
-<Spinner label="Loading deploys" />
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `label` | `string` |  |  |
 | `size` | `"sm" \| "md" \| "lg"` |  |  |
+
+```tsx
+<Spinner label="Loading deploys" />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Progress
 
 Linear progress bar.
-
-```tsx
-<Progress value={64} color="success" />
-```
 
 **Slots:** `root` `bar`
 
@@ -405,15 +401,15 @@ Linear progress bar.
 | `max` | `number` |  |  |
 | `size` | `"sm" \| "md" \| "lg"` |  |  |
 
+```tsx
+<Progress value={64} color="success" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## SteppedProgress
 
 Progress split into discrete steps.
-
-```tsx
-<SteppedProgress label="Onboarding" steps={4} value={2} />
-```
 
 **Slots:** `root` `segment`
 
@@ -423,15 +419,15 @@ Progress split into discrete steps.
 | `value` | `number` | yes |  |
 | `label` | `string` |  | Accessible name (default "Progress"). |
 
+```tsx
+<SteppedProgress label="Onboarding" steps={4} value={2} />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## NavigationProgress
 
 Top loading bar (Mantine NavigationProgress / NProgress).
-
-```tsx
-<NavigationProgress visible value={40} />
-```
 
 **Slots:** `root` `bar`
 
@@ -441,15 +437,55 @@ Top loading bar (Mantine NavigationProgress / NProgress).
 | `label` | `string` |  | Accessible name (default "Loading"). |
 | `value` | `number` |  | 0–100; omit for indeterminate. |
 
+```tsx
+function Example() {
+	const progress = signal(40);
+	const running = signal(true);
+	// Trickle towards 90% while "navigating" (effects run only in the browser).
+	effect(() => {
+		if (!running()) return;
+		const timer = setInterval(
+			() => progress.set(Math.min(90, progress() + (90 - progress()) * 0.2)),
+			300,
+		);
+		return () => clearInterval(timer);
+	});
+	return (
+		<Stack gap="0.75rem" style={{ "padding-top": "0.75rem" }}>
+			{/* Pinned to the top of the page (here: of the preview). */}
+			<NavigationProgress visible={progress() < 100} value={progress()} />
+			<Group gap="0.5rem">
+				<Button
+					size="sm"
+					onClick={() => {
+						progress.set(5);
+						running.set(true);
+					}}
+				>
+					Start navigation
+				</Button>
+				<Button
+					size="sm"
+					variant="outline"
+					onClick={() => {
+						running.set(false);
+						progress.set(100);
+					}}
+				>
+					Finish
+				</Button>
+				<Text muted>{progress() >= 100 ? "Done" : `${Math.round(progress())}%`}</Text>
+			</Group>
+		</Stack>
+	);
+}
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## RingProgress
 
 Circular progress.
-
-```tsx
-<RingProgress value={72} label="72%" />
-```
 
 **Slots:** `root` `bar` `label` `track`
 
@@ -459,6 +495,10 @@ Circular progress.
 | `label` | `content` |  |  |
 | `size` | `number` |  |  |
 | `thickness` | `number` |  |  |
+
+```tsx
+<RingProgress value={72} label="72%" />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
@@ -466,10 +506,6 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Half-ring gauge.
 
-```tsx
-<SemiCircleProgress value={64} label="64%" />
-```
-
 **Slots:** `root` `bar` `label` `track`
 
 | Prop | Type | Required | Description |
@@ -479,15 +515,15 @@ Half-ring gauge.
 | `size` | `number` |  |  |
 | `thickness` | `number` |  |  |
 
+```tsx
+<SemiCircleProgress value={64} label="64%" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Meter
 
 Scalar gauge in a known range.
-
-```tsx
-<Meter value={62} label="Disk usage" />
-```
 
 **Slots:** `root` `bar` `label` `track`
 
@@ -498,15 +534,15 @@ Scalar gauge in a known range.
 | `max` | `number` |  |  |
 | `min` | `number` |  |  |
 
+```tsx
+<Meter value={62} label="Disk usage" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Gauge
 
 Semicircle gauge for a value within a range.
-
-```tsx
-<Gauge label="CPU" value={72} />
-```
 
 **Slots:** `root` `bar` `label` `svg` `track`
 
@@ -517,15 +553,15 @@ Semicircle gauge for a value within a range.
 | `max` | `number` |  |  |
 | `size` | `number` |  |  |
 
+```tsx
+<Gauge label="CPU" value={72} />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## UsageMeter
 
 Usage of a quota (used / limit) with a meter.
-
-```tsx
-<UsageMeter label="Build minutes" used={1840} limit={2000} unit="min" />
-```
 
 **Slots:** `root` `fill` `header` `label` `meta` `track`
 
@@ -536,15 +572,15 @@ Usage of a quota (used / limit) with a meter.
 | `used` | `number` | yes |  |
 | `unit` | `string` |  |  |
 
+```tsx
+<UsageMeter label="Build minutes" used={1840} limit={2000} unit="min" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## StorageBar
 
 {@link UsageMeter} preset in GB.
-
-```tsx
-<StorageBar label="Storage" usedGb={38.2} totalGb={50} />
-```
 
 **Slots:** `root`
 
@@ -554,20 +590,24 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 | `usedGb` | `number` | yes |  |
 | `label` | `string` |  | Label text (default "Storage"). |
 
+```tsx
+<StorageBar label="Storage" usedGb={38.2} totalGb={50} />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Skeleton
 
 Loading placeholder sized by `width` / `height`.
 
-```tsx
-<Skeleton width="16rem" height="1.25rem" />
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `height` | `string` |  |  |
 | `width` | `string` |  |  |
+
+```tsx
+<Skeleton width="16rem" height="1.25rem" />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
@@ -575,15 +615,15 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Placeholder text lines.
 
-```tsx
-<SkeletonText lines={3} />
-```
-
 **Slots:** `root` `line`
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `lines` | `number` |  |  |
+
+```tsx
+<SkeletonText lines={3} />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
@@ -591,25 +631,17 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Placeholder card.
 
+**Slots:** `root` `block` `text`
+
 ```tsx
 <SkeletonCard />
 ```
-
-**Slots:** `root` `block` `text`
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## EmptyState
 
 Placeholder for empty lists.
-
-```tsx
-<EmptyState
-	title="No projects yet"
-	description="Create a project to start deploying."
-	action={<Button onClick={() => {}}>New project</Button>}
-/>
-```
 
 **Slots:** `root` `action` `description` `title`
 
@@ -620,17 +652,19 @@ Placeholder for empty lists.
 | `children` | `content` |  |  |
 | `description` | `content` |  |  |
 
+```tsx
+<EmptyState
+	title="No projects yet"
+	description="Create a project to start deploying."
+	action={<Button onClick={() => {}}>New project</Button>}
+/>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## NoResults
 
 Empty search results state.
-
-```tsx
-<NoResults query="kubernetes">
-	Try a shorter query or clear the filters.
-</NoResults>
-```
 
 **Slots:** `root` `icon` `title`
 
@@ -640,11 +674,25 @@ Empty search results state.
 | `query` | `string` |  |  |
 | `title` | `string` |  | Override the title text. |
 
+```tsx
+<NoResults query="kubernetes">
+	Try a shorter query or clear the filters.
+</NoResults>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ErrorState
 
 Error state with description and a recovery action.
+
+**Slots:** `root` `action` `description` `icon` `title`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `action` | `content` |  |  |
+| `description` | `string` |  |  |
+| `title` | `string` |  |  |
 
 ```tsx
 <ErrorState
@@ -657,23 +705,11 @@ Error state with description and a recovery action.
 />
 ```
 
-**Slots:** `root` `action` `description` `icon` `title`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `action` | `content` |  |  |
-| `description` | `string` |  |  |
-| `title` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## StatusDot
 
 Small status indicator (online, busy, …), optionally pulsing.
-
-```tsx
-<StatusDot label="Online" tone="success" />
-```
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -681,19 +717,15 @@ Small status indicator (online, busy, …), optionally pulsing.
 | `pulse` | `boolean` |  |  |
 | `tone` | `"danger" \| "warning" \| "success" \| "accent" \| "neutral"` |  |  |
 
+```tsx
+<StatusDot label="Online" tone="success" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Indicator
 
 Corner badge / dot over its children.
-
-```tsx
-<Indicator label={3}>
-	<Button variant="outline" onClick={() => {}}>
-		Inbox
-	</Button>
-</Indicator>
-```
 
 **Slots:** `root` `badge`
 
@@ -705,15 +737,19 @@ Corner badge / dot over its children.
 | `position` | `"bottom-start" \| "bottom-end" \| "top-start" \| "top-end"` |  |  |
 | `processing` | `boolean` |  |  |
 
+```tsx
+<Indicator label={3}>
+	<Button variant="outline" onClick={() => {}}>
+		Inbox
+	</Button>
+</Indicator>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## LiveBadge
 
 Pulsing "Live" pill.
-
-```tsx
-<LiveBadge />
-```
 
 **Slots:** `root` `dot`
 
@@ -721,11 +757,20 @@ Pulsing "Live" pill.
 | --- | --- | --- | --- |
 | `label` | `content` |  |  |
 
+```tsx
+<LiveBadge />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## UnreadBadge
 
 Count bubble; hidden at 0, capped at `max` (`99+`).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `count` | `number` | yes |  |
+| `max` | `number` |  |  |
 
 ```tsx
 <Text>
@@ -733,24 +778,19 @@ Count bubble; hidden at 0, capped at `max` (`99+`).
 </Text>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `count` | `number` | yes |  |
-| `max` | `number` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## TypingIndicator
 
 Animated "someone is typing" indicator.
 
-```tsx
-<TypingIndicator label="Grace is typing" />
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `label` | `string` |  | Accessible name (default "Typing"). |
+
+```tsx
+<TypingIndicator label="Grace is typing" />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
@@ -758,14 +798,14 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Sync state indicator (synced, syncing, offline, error).
 
-```tsx
-<SyncStatus state="syncing" />
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `state` | `SyncState` | yes |  |
 | `label` | `string` |  |  |
+
+```tsx
+<SyncStatus state="syncing" />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
@@ -773,14 +813,14 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Autosave state (saving, saved, error).
 
-```tsx
-<AutosaveIndicator state="saved" />
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `state` | `AutosaveState` | yes |  |
 | `labels` | `Partial&lt;Record&lt;AutosaveState, string>>` |  | Override the text per state. |
+
+```tsx
+<AutosaveIndicator state="saved" />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
@@ -788,14 +828,14 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 "Last saved" timestamp.
 
-```tsx
-<LastSaved at="2 minutes ago" />
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `at` | `string` | yes |  |
 | `label` | `string` |  | Prefix text (default "Last saved"). |
+
+```tsx
+<LastSaved at="2 minutes ago" />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
@@ -803,15 +843,15 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Live countdown.
 
-```tsx
-<Countdown to={Date.now() + 3 * 86_400_000} />
-```
-
 **Slots:** `root` `suffix` `unit` `value`
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `to` | `number` | yes | Absolute target timestamp (ms). |
 | `units` | `{ d: string; h: string; m: string; s: string; }` |  | Unit suffixes (default d/h/m/s). |
+
+```tsx
+<Countdown to={Date.now() + 3 * 86_400_000} />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.

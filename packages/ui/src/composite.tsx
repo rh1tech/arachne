@@ -713,6 +713,8 @@ export function Leader(input: LeaderProps) {
 export type MarqueeSlot = "root" | "track" | "group";
 
 export type MarqueeProps = SlotProps<MarqueeSlot> & {
+	/** `"soft"` (default) sits on a tinted, bordered strip; `"plain"` has no background or border. */
+	variant?: "soft" | "plain" | undefined;
 	speed?: "slow" | "normal" | "fast" | undefined;
 	/** Pause scrolling while hovered or focused (default true). */
 	pauseOnHover?: boolean | undefined;
@@ -728,16 +730,22 @@ export function Marquee(input: MarqueeProps) {
 	const [props, rest, slot] = setup(
 		"Marquee",
 		input,
-		{ speed: "normal" },
-		["speed", "pauseOnHover", "children"],
+		{ speed: "normal", variant: "soft" },
+		["speed", "variant", "pauseOnHover", "children"],
 		"root" as MarqueeSlot,
 	);
 	return (
 		<div
 			{...rest}
-			class={slot.class("root", "a-marquee", `a-marquee-${props.speed}`)}
+			class={slot.class(
+				"root",
+				"a-marquee",
+				`a-marquee-${props.speed}`,
+				props.variant === "plain" && "a-marquee-plain",
+			)}
 			style={slot.style("root")}
 			data-speed={props.speed}
+			data-variant={props.variant}
 			data-pause-on-hover={props.pauseOnHover === false ? undefined : ""}
 		>
 			<div class={slot.class("track", "a-marquee-track")} style={slot.style("track")}>

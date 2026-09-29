@@ -512,8 +512,9 @@ export const examples: Example[] = [
 			<CodeBlock
 				{...p}
 				language="tsx"
+				radius="lg"
 				code={
-					'import { Button } from "@arachne/ui";\n\nexport const Save = () => <Button onClick={action("Save")}>Save</Button>;'
+					'import { Button } from "@arachne/ui";\n\nexport const Save = () => <Button>Save</Button>;'
 				}
 			/>
 		),

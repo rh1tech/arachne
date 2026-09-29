@@ -436,6 +436,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			title="Button"
 			description="The classic button, in different colors, sizes, and states."
 		>
+			<ComponentReference pageId="button" />
 			<DocExample
 				title="Colors"
 				code={`<Button>Primary</Button>
@@ -491,6 +492,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			title="Box"
 			description="A bordered white box for grouping content. Paper is a softer surface without a hard edge."
 		>
+			<ComponentReference pageId="box" />
 			<DocExample
 				code={`<Box>
   <Title size={5}>Box</Title>
@@ -518,6 +520,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			title="Tag"
 			description="Small colored labels for categories and filters. Prefer Badge for compact counts."
 		>
+			<ComponentReference pageId="tag" />
 			<DocExample
 				title="Colors"
 				code={`<Tags>
@@ -593,6 +596,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			title="Badge"
 			description="Compact count or status pills. Use Tag when you need a labeled chip."
 		>
+			<ComponentReference pageId="badge" />
 			<DocExample
 				code={`<Badge>3</Badge>
 <Badge tone="success">New</Badge>
@@ -616,6 +620,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			title="Progress"
 			description="Linear progress bars for uploads, wizards, and async work. Use Button loading for action spinners."
 		>
+			<ComponentReference pageId="progress" />
 			<DocExample
 				title="Colors"
 				code={`<Progress value={15} color="primary" />
@@ -669,6 +674,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 	),
 	notification: () => (
 		<DocPage title="Notification" description="Soft alert blocks for important messages.">
+			<ComponentReference pageId="notification" />
 			<DocExample
 				code={`<Alert tone="info">Something you should know.</Alert>
 <Alert tone="success">Saved successfully.</Alert>
@@ -687,6 +693,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			title="Icon"
 			description="Material Design Icons via path data. Pair with IconBadge for emphasis."
 		>
+			<ComponentReference pageId="icon" />
 			<DocExample
 				code={`<Icon name="check" />
 <Icon name="heart" />
@@ -713,6 +720,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			title="Title"
 			description="Headings sized 1–6. Pair with Subtitle for a quiet supporting line."
 		>
+			<ComponentReference pageId="title" />
 			<DocExample
 				code={`<Title size={1}>Title 1</Title>
 <Title size={2}>Title 2</Title>
@@ -742,6 +750,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			title="Table"
 			description="Plain HTML tables for markup, plus DataTable when you need sortable columns."
 		>
+			<ComponentReference pageId="table" />
 			<DocExample
 				title="Basic"
 				code={`<Table bordered striped hoverable fullwidth>
@@ -830,6 +839,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 	),
 	image: () => (
 		<DocPage title="Image" description="Full-width responsive images with optional radius.">
+			<ComponentReference pageId="image" />
 			<DocExample
 				code={`<Image
   src="https://picsum.photos/seed/arachne/960/420"
@@ -846,6 +856,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			title="Breadcrumb"
 			description="A simple breadcrumb trail for hierarchy and back-navigation."
 		>
+			<ComponentReference pageId="breadcrumb" />
 			<DocExample
 				code={`<Breadcrumb
   items={[
@@ -874,6 +885,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 	),
 	card: () => (
 		<DocPage title="Card" description="A flexible content container with header, body, and footer.">
+			<ComponentReference pageId="card" />
 			<DocExample
 				code={`<Card>
   <CardHeader>
@@ -910,6 +922,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			title="Drawer"
 			description="A side panel that slides over the page. Close with the ×, backdrop, or Escape."
 		>
+			<ComponentReference pageId="dropdown" />
 			<DocExample
 				code={`<Button onClick={() => open.set(true)}>Open drawer</Button>
 <Drawer open={open()} title="Account" onClose={() => open.set(false)}>
@@ -933,6 +946,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			title="Menu"
 			description="Dropdown menus for actions. For a persistent side list, use Panel instead."
 		>
+			<ComponentReference pageId="menu" />
 			<DocExample
 				title="Dropdown menu"
 				code={`<div class="a-menu-host">
@@ -968,6 +982,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			title="Message"
 			description="Soft tinted callouts for longer notes, with an optional dismissible header."
 		>
+			<ComponentReference pageId="message" />
 			<DocExample
 				code={`<Message tone="info">
   <MessageHeader onClose={() => {}}>Info</MessageHeader>
@@ -1011,6 +1026,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			title="Modal"
 			description="A classic modal overlay. Close with the ×, backdrop click, or footer actions."
 		>
+			<ComponentReference pageId="modal" />
 			<DocExample
 				code={`<Button onClick={() => open.set(true)}>Launch modal</Button>
 <Modal
@@ -1046,6 +1062,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			title="Navbar"
 			description="Responsive horizontal navbar with nested menus, overflow scroll, and optional top placement."
 		>
+			<ComponentReference pageId="navbar" />
 			<DocExample
 				title="Basic"
 				code={`<Navbar
@@ -1110,6 +1127,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			title="Pagination"
 			description='Numbered pagination with previous/next. Use variant="simple" for a compact status.'
 		>
+			<ComponentReference pageId="pagination" />
 			<DocExample
 				code={`<Pagination
   page={page()}
@@ -1140,6 +1158,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			title="Panel"
 			description="A composable side-list surface with a heading and block rows. Different from Menu, which is a dropdown."
 		>
+			<ComponentReference pageId="panel" />
 			<DocExample
 				code={`<Panel label="Repositories">
   <PanelHeading>Repositories</PanelHeading>
@@ -1162,6 +1181,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			title="Tabs"
 			description="Horizontal tabs for switching views. Use the chevrons when many tabs exceed the width."
 		>
+			<ComponentReference pageId="tabs" />
 			<DocExample
 				code={`<Tabs
   value={tab()}
@@ -1446,6 +1466,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 	),
 	input: () => (
 		<DocPage title="Input" description="Text inputs with labels, invalid, and disabled states.">
+			<ComponentReference pageId="input" />
 			<DocExample
 				code={`<FormField label="Name" labelFor="name">
   <TextInput id="name" placeholder="Jane Doe" />
@@ -1478,6 +1499,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 	),
 	textarea: () => (
 		<DocPage title="Textarea" description="Multi-line text input for longer content.">
+			<ComponentReference pageId="textarea" />
 			<DocExample
 				code={`<FormField label="Notes" labelFor="notes">
   <TextArea id="notes" placeholder="Write a note…" rows={4} />
@@ -1491,6 +1513,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 	),
 	select: () => (
 		<DocPage title="Select" description="Native-styled select for a single choice.">
+			<ComponentReference pageId="select" />
 			<DocExample
 				code={`<FormField label="Role" labelFor="role">
   <Select
@@ -1521,6 +1544,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 	),
 	checkbox: () => (
 		<DocPage title="Checkbox" description="Single checkboxes and checkbox groups.">
+			<ComponentReference pageId="checkbox" />
 			<DocExample
 				title="Single"
 				code={`<Checkbox
@@ -1561,6 +1585,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 	),
 	radio: () => (
 		<DocPage title="Radio" description="A mutually exclusive set of options.">
+			<ComponentReference pageId="radio" />
 			<DocExample
 				code={`<RadioGroup
   name="contact"
@@ -1588,6 +1613,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 	),
 	switch: () => (
 		<DocPage title="Switch" description="On/off toggle for settings and preferences.">
+			<ComponentReference pageId="switch" />
 			<DocExample
 				code={`<Switch
   checked={on()}
@@ -1605,6 +1631,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 	),
 	columns: () => (
 		<DocPage title="Columns" description="A simple responsive grid. Sizes are fractions or 1–12.">
+			<ComponentReference pageId="columns" />
 			<DocExample
 				title="Basics"
 				code={`<Columns>
@@ -1658,6 +1685,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			title="Container"
 			description="A simple container to center your content horizontally."
 		>
+			<ComponentReference pageId="container" />
 			<DocExample
 				code={`<Container>
   <Text>This content is constrained.</Text>
@@ -1673,6 +1701,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 	),
 	hero: () => (
 		<DocPage title="Hero" description="An imposing banner for page intros and landing sections.">
+			<ComponentReference pageId="hero" />
 			<DocExample
 				code={`<Hero size="sm" tone="light">
   <HeroBody>
@@ -1695,6 +1724,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			title="Level"
 			description="A multi-purpose horizontal level for aligning items left and right."
 		>
+			<ComponentReference pageId="level" />
 			<DocExample
 				code={`<Level>
   <LevelLeft>
@@ -1751,6 +1781,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 			title="Section"
 			description="A simple container with vertical spacing — use to structure page regions."
 		>
+			<ComponentReference pageId="section" />
 			<DocExample
 				code={`<Section>
   <Title size={3}>Section</Title>
@@ -1769,13 +1800,7 @@ applyPalette({ accent: "#0ea5e9", canvas: "#f8fafc", radius: "lg" });
 function renderShowcasePage(id: string) {
 	if (id.startsWith(CATALOG_PREFIX)) return <CatalogPage name={id.slice(CATALOG_PREFIX.length)} />;
 	const page = SHOWCASE_PAGES[id];
-	if (page)
-		return (
-			<>
-				{page()}
-				<ComponentReference pageId={id} />
-			</>
-		);
+	if (page) return page();
 	return (
 		<DocPage title="Not found" description={`No docs page for “${id}”.`}>
 			<Text muted>Pick another item from the sidebar.</Text>

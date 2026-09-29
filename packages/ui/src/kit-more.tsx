@@ -851,7 +851,7 @@ export function Heatmap(input: HeatmapProps) {
 	);
 }
 
-export type AngleSliderSlot = "root" | "svg" | "track" | "arm" | "knob" | "label";
+export type AngleSliderSlot = "root" | "svg" | "track" | "hub" | "arm" | "knob" | "label";
 
 export type AngleSliderProps = SlotProps<AngleSliderSlot> & {
 	value: number;
@@ -884,6 +884,10 @@ export function AngleSlider(input: AngleSliderProps) {
 	const rad = () => (((Number.isFinite(props.value) ? props.value : 0) - 90) * Math.PI) / 180;
 	const x = () => center() + r() * Math.cos(rad());
 	const y = () => center() + r() * Math.sin(rad());
+	/** The arm starts at the hub's edge so it never crosses the value label. */
+	const hub = () => Math.min(r() * 0.42, 26);
+	const hubX = () => center() + hub() * Math.cos(rad());
+	const hubY = () => center() + hub() * Math.sin(rad());
 	const step = () => props.step ?? 5;
 
 	const setFromEvent = (e: PointerEvent) => {
@@ -945,13 +949,8 @@ export function AngleSlider(input: AngleSliderProps) {
 					r={r()}
 					fill="none"
 				/>
-				<line
-					class={slot.class("arm", "a-angle-arm")}
-					x1={center()}
-					y1={center()}
-					x2={x()}
-					y2={y()}
-				/>
+				<circle class={slot.class("hub", "a-angle-hub")} cx={center()} cy={center()} r={hub()} />
+				<line class={slot.class("arm", "a-angle-arm")} x1={hubX()} y1={hubY()} x2={x()} y2={y()} />
 				<circle class={slot.class("knob", "a-angle-knob")} cx={x()} cy={y()} r={KNOB_RADIUS} />
 			</svg>
 			<span class={slot.class("label", "a-angle-label")}>{props.value}°</span>

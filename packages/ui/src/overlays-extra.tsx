@@ -1,5 +1,6 @@
 import { For, Show } from "@arachne/render";
 import { effect, signal } from "@arachne/signals";
+import { Icon } from "./icons.tsx";
 import { type BaseProps, createId, type SlotProps, setup } from "./system.ts";
 
 export type HoverCardSlot = "root" | "target" | "dropdown";
@@ -118,17 +119,23 @@ export type ColorSwatchProps = BaseProps & {
 	withShadow?: boolean | undefined;
 	/** Accessible name (default `Color <color>`). */
 	label?: string | undefined;
+	/** Marks the chosen swatch (ring + check; `aria-pressed` when clickable). */
+	selected?: boolean | undefined;
 	onClick?: ((e: MouseEvent) => void) | undefined;
 	children?: unknown;
 };
 
-/** Color chip; renders a `<button>` when `onClick` is set. Slots: `root`. */
+/**
+ * Color chip; renders a `<button>` when `onClick` is set (use `selected` for a
+ * picker). Slots: `root`. State: `data-state`.
+ */
 export function ColorSwatch(input: ColorSwatchProps) {
 	const [props, rest, slot] = setup("ColorSwatch", input, {}, [
 		"color",
 		"size",
 		"withShadow",
 		"label",
+		"selected",
 		"onClick",
 		"children",
 	]);
@@ -136,14 +143,23 @@ export function ColorSwatch(input: ColorSwatchProps) {
 		const size = `${props.size ?? 28}px`;
 		return slot.style("root", { width: size, height: size, background: props.color });
 	};
-	const className = () => slot.class("root", "a-swatch", props.withShadow && "a-swatch-shadow");
+	const className = () =>
+		slot.class(
+			"root",
+			"a-swatch",
+			props.withShadow && "a-swatch-shadow",
+			props.selected && "a-swatch-active",
+		);
+	const content = () =>
+		props.children ??
+		(props.selected ? <Icon name="check" size={14} class="a-swatch-check" /> : null);
 	const label = () => props.label ?? `Color ${props.color}`;
 	return (
 		<Show
 			when={props.onClick}
 			fallback={
 				<div aria-label={label()} {...rest} class={className()} style={style()} role="img">
-					{props.children}
+					{content()}
 				</div>
 			}
 		>
@@ -153,9 +169,11 @@ export function ColorSwatch(input: ColorSwatchProps) {
 				type="button"
 				class={className()}
 				style={style()}
+				aria-pressed={props.selected === undefined ? undefined : props.selected}
+				data-state={props.selected ? "active" : undefined}
 				onClick={(e: MouseEvent) => props.onClick?.(e)}
 			>
-				{props.children}
+				{content()}
 			</button>
 		</Show>
 	);
@@ -180,15 +198,20 @@ export type HighlightSlot = "root" | "mark";
 export type HighlightProps = SlotProps<HighlightSlot> & {
 	text: string;
 	highlight: string | string[];
+	/** Mark colour (default `"warning"`, highlighter yellow), as on `Mark`. */
+	tone?: "accent" | "warning" | "success" | undefined;
 };
 
-/** Highlight matching substrings in text (Mantine Highlight). Slots: `root` `mark`. */
+/**
+ * Mark every case-insensitive match of `highlight` inside `text`, e.g. search
+ * results. To mark a span you choose, use `Mark`. Slots: `root` `mark`.
+ */
 export function Highlight(input: HighlightProps) {
 	const [props, rest, slot] = setup(
 		"Highlight",
 		input,
-		{},
-		["text", "highlight"],
+		{ tone: "warning" },
+		["text", "highlight", "tone"],
 		"root" as HighlightSlot,
 	);
 	const terms = () =>
@@ -208,7 +231,10 @@ export function Highlight(input: HighlightProps) {
 			<For each={parts()}>
 				{(part) =>
 					isMatch(part) ? (
-						<mark class={slot.class("mark", "a-mark", "a-mark-accent")} style={slot.style("mark")}>
+						<mark
+							class={slot.class("mark", "a-mark", `a-mark-${props.tone ?? "warning"}`)}
+							style={slot.style("mark")}
+						>
 							{part}
 						</mark>
 					) : (
@@ -230,6 +256,14 @@ export type BackgroundImageProps = BaseProps & {
  * Box with a background image behind its content.
  * Slots: `root`.
  */
+/**
+ * `url("…")` for any URL, data URIs included: escape only what could end the
+ * string. (encodeURI would double-encode the `%xx` escapes a URL already has.)
+ */
+function cssUrl(src: string): string {
+	return `url("${src.replace(/["\\\n\r]/g, (c) => encodeURIComponent(c))}")`;
+}
+
 export function BackgroundImage(input: BackgroundImageProps) {
 	const [props, rest, slot] = setup("BackgroundImage", input, {}, ["src", "radius", "children"]);
 	return (
@@ -237,7 +271,7 @@ export function BackgroundImage(input: BackgroundImageProps) {
 			{...rest}
 			class={slot.class("root", "a-bg-image", props.radius && "a-bg-image-radius")}
 			style={slot.style("root", {
-				"background-image": `url("${encodeURI(props.src).replace(/"/g, "%22")}")`,
+				"background-image": cssUrl(props.src),
 			})}
 		>
 			{props.children}

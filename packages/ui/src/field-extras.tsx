@@ -1,4 +1,5 @@
 import { Button } from "./button.tsx";
+import { Icon } from "./icons.tsx";
 import { TextInput } from "./input.tsx";
 import { type BaseProps, type InputPassThrough, type SlotProps, setup } from "./system.ts";
 
@@ -177,7 +178,7 @@ export type SearchInputProps = SlotProps<SearchInputSlot> &
 		value: string;
 		placeholder?: string | undefined;
 		disabled?: boolean | undefined;
-		/** Leading icon (default ⌕); `null` hides it. */
+		/** Leading icon (default: the `search` icon); `null` hides it. */
 		icon?: unknown;
 		clearLabel?: string | undefined;
 		onChange: (value: string) => void;
@@ -200,7 +201,7 @@ export function SearchInput(input: SearchInputProps) {
 		<div class={slot.class("root", "a-search")} style={slot.style("root")}>
 			{props.icon === null ? null : (
 				<span class={slot.class("icon", "a-search-icon")} aria-hidden="true">
-					{props.icon ?? "⌕"}
+					{props.icon ?? <Icon name="search" size="sm" />}
 				</span>
 			)}
 			<TextInput

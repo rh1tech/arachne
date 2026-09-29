@@ -679,9 +679,12 @@ export type MarkProps = BaseProps & {
 	children?: unknown;
 };
 
-/** Highlighted text. State: `data-tone`. */
+/**
+ * Highlight text you choose (`<mark>`, highlighter-yellow by default). To mark
+ * every match of a query inside a string, use `Highlight`. State: `data-tone`.
+ */
 export function Mark(input: MarkProps) {
-	const [props, rest, slot] = setup("Mark", input, { tone: "accent" }, ["tone", "children"]);
+	const [props, rest, slot] = setup("Mark", input, { tone: "warning" }, ["tone", "children"]);
 	return (
 		<mark
 			{...rest}
@@ -698,6 +701,8 @@ export type QuoteSlot = "root" | "body" | "cite";
 
 export type QuoteProps = SlotProps<QuoteSlot> & {
 	cite?: string | undefined;
+	/** `"soft"` (default) adds a tinted background; `"plain"` keeps only the accent rule. */
+	variant?: "soft" | "plain" | undefined;
 	children?: unknown;
 };
 
@@ -706,9 +711,20 @@ export type QuoteProps = SlotProps<QuoteSlot> & {
  * Slots: `root` `body` `cite`.
  */
 export function Quote(input: QuoteProps) {
-	const [props, rest, slot] = setup("Quote", input, {}, ["cite", "children"], "root" as QuoteSlot);
+	const [props, rest, slot] = setup(
+		"Quote",
+		input,
+		{ variant: "soft" },
+		["cite", "variant", "children"],
+		"root" as QuoteSlot,
+	);
 	return (
-		<blockquote {...rest} class={slot.class("root", "a-quote")} style={slot.style("root")}>
+		<blockquote
+			{...rest}
+			class={slot.class("root", "a-quote", props.variant === "plain" && "a-quote-plain")}
+			style={slot.style("root")}
+			data-variant={props.variant}
+		>
 			<div class={slot.class("body", "a-quote-body")} style={slot.style("body")}>
 				{props.children}
 			</div>
@@ -870,8 +886,9 @@ export type SubtitleProps = BaseProps & {
 
 /** Secondary line under a title. Slots: `root`. */
 export function Subtitle(input: SubtitleProps) {
-	const [props, rest, slot] = setup("Subtitle", input, { size: 5 }, ["size", "order", "children"]);
-	const className = () => slot.class("root", "a-subtitle", `a-subtitle-${props.size ?? 5}`);
+	// Default size 3 (1.125rem): a lead line, a step above body text.
+	const [props, rest, slot] = setup("Subtitle", input, { size: 3 }, ["size", "order", "children"]);
+	const className = () => slot.class("root", "a-subtitle", `a-subtitle-${props.size ?? 3}`);
 	return (
 		<Show
 			when={props.order}

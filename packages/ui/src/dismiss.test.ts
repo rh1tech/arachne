@@ -49,6 +49,8 @@ function installDomGlobals(win: Window): void {
 	g["customElements"] = win.customElements;
 	g["requestAnimationFrame"] = win.requestAnimationFrame.bind(win);
 	g["cancelAnimationFrame"] = win.cancelAnimationFrame.bind(win);
+	// Floating dropdowns (autoPosition) measure computed styles.
+	g["getComputedStyle"] = win.getComputedStyle.bind(win);
 	g["PointerEvent"] =
 		(win as unknown as { PointerEvent: typeof PointerEvent }).PointerEvent ?? win.Event;
 }

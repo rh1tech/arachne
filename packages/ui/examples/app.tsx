@@ -558,10 +558,10 @@ export const examples: Example[] = [
 	{
 		name: "Truncate",
 		render: (p) => (
-			<Truncate {...p} lines={2}>
+			<Truncate style={{ "max-width": "22rem" }} {...p} lines={2}>
 				The customization system covers every component: attributes are forwarded to the host
 				element, classes and styles target named slots, unstyled drops the built-in look, and
-				configureUI sets app-wide defaults.
+				configureUI sets app-wide defaults. Text past the second line is cut with an ellipsis.
 			</Truncate>
 		),
 	},
@@ -627,7 +627,7 @@ export const examples: Example[] = [
 				title="Delete project"
 				description="This permanently removes all deploys and domains."
 			>
-				<Button variant="outline" onClick={action("Delete marketing-site")}>
+				<Button variant="danger" onClick={action("delete project")}>
 					Delete marketing-site
 				</Button>
 			</DangerZone>

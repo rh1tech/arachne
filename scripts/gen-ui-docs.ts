@@ -391,7 +391,7 @@ const escapeCell = (text: string) => text.replace(/\|/g, "\\|").replace(/</g, "&
 function componentMarkdown(e: Entry, level = 2): string {
 	const hashes = "#".repeat(level);
 	const lines = [`${hashes} ${e.name}`, "", e.summary || "_No description._", ""];
-	lines.push("```tsx", e.code, "```", "");
+	// Reference first (props, slots), then the example.
 	if (e.slots.length) lines.push(`**Slots:** ${e.slots.map((s) => `\`${s}\``).join(" ")}`, "");
 	if (e.props.length) {
 		lines.push("| Prop | Type | Required | Description |", "| --- | --- | --- | --- |");
@@ -402,6 +402,7 @@ function componentMarkdown(e: Entry, level = 2): string {
 		}
 		lines.push("");
 	}
+	lines.push("```tsx", e.code, "```", "");
 	if (level === 2) {
 		lines.push(
 			"Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.",

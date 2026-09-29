@@ -7,6 +7,19 @@
 
 Text field. Every other attribute (`id`, `name`, `autocomplete`, `aria-*`, …) lands on the `<input>`.
 
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `disabled` | `boolean` |  |  |
+| `invalid` | `boolean` |  |  |
+| `name` | `string` |  |  |
+| `onBlur` | `(e: FocusEvent) => void` |  |  |
+| `onFocus` | `(e: FocusEvent) => void` |  |  |
+| `onInput` | `(e: InputEvent) => void` |  |  |
+| `onKeyDown` | `(e: KeyboardEvent) => void` |  |  |
+| `placeholder` | `string` |  |  |
+| `type` | `string` |  |  |
+| `value` | `string` |  |  |
+
 ```tsx
 function Example() {
 	const name = signal("");
@@ -21,24 +34,22 @@ function Example() {
 }
 ```
 
+Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
+
+## TextArea
+
+Multi-line text field.
+
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `disabled` | `boolean` |  |  |
 | `invalid` | `boolean` |  |  |
 | `name` | `string` |  |  |
 | `onBlur` | `(e: FocusEvent) => void` |  |  |
-| `onFocus` | `(e: FocusEvent) => void` |  |  |
 | `onInput` | `(e: InputEvent) => void` |  |  |
-| `onKeyDown` | `(e: KeyboardEvent) => void` |  |  |
 | `placeholder` | `string` |  |  |
-| `type` | `string` |  |  |
+| `rows` | `number` |  |  |
 | `value` | `string` |  |  |
-
-Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
-
-## TextArea
-
-Multi-line text field.
 
 ```tsx
 function Example() {
@@ -55,31 +66,11 @@ function Example() {
 }
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `disabled` | `boolean` |  |  |
-| `invalid` | `boolean` |  |  |
-| `name` | `string` |  |  |
-| `onBlur` | `(e: FocusEvent) => void` |  |  |
-| `onInput` | `(e: InputEvent) => void` |  |  |
-| `placeholder` | `string` |  |  |
-| `rows` | `number` |  |  |
-| `value` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## NumberInput
 
 Numeric field. Typing keeps a free-form draft (so `15` can be typed with `min=10`); values commit when in range and clamp on blur / Enter / step. Results are rounded to the precision of `step` (no `0.30000000000000004`). The `<input>` is the host (`class`, `style`, `id`, `aria-*` land on it); `classes.root` styles the wrapper.
-
-```tsx
-function Example() {
-	const seats = signal(5);
-	return (
-		<NumberInput aria-label="Seats" min={1} max={50} value={seats()} onChange={seats.set} />
-	);
-}
-```
 
 **Slots:** `root` `decrement` `increment` `input`
 
@@ -96,18 +87,20 @@ function Example() {
 | `name` | `string` |  |  |
 | `step` | `number` |  |  |
 
+```tsx
+function Example() {
+	const seats = signal(5);
+	return (
+		<NumberInput aria-label="Seats" min={1} max={50} value={seats()} onChange={seats.set} />
+	);
+}
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## PasswordInput
 
 Password field with visibility toggle. The `<input>` is the host (`class`, `id`, `autocomplete`, `aria-*` land on it); `classes.root` styles the wrapper.
-
-```tsx
-function Example() {
-	const password = signal("");
-	return <PasswordInput aria-label="Password" value={password()} onChange={password.set} />;
-}
-```
 
 **Slots:** `root` `input` `toggle`
 
@@ -122,15 +115,18 @@ function Example() {
 | `placeholder` | `string` |  |  |
 | `showLabel` | `string` |  |  |
 
+```tsx
+function Example() {
+	const password = signal("");
+	return <PasswordInput aria-label="Password" value={password()} onChange={password.set} />;
+}
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## PasswordStrength
 
 Four-bar strength meter.
-
-```tsx
-<PasswordStrength password="correct horse" />
-```
 
 **Slots:** `root` `bar` `bars` `label`
 
@@ -139,11 +135,27 @@ Four-bar strength meter.
 | `password` | `string` | yes |  |
 | `labels` | `[string, string, string, string, string]` |  | Override the five labels (score 0–4). |
 
+```tsx
+<PasswordStrength password="correct horse" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## SearchInput
 
 Search field with clear button. The `<input>` is the host; `classes.root` styles the wrapper.
+
+**Slots:** `root` `clear` `icon` `input`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onChange` | `(value: string) => void` | yes |  |
+| `value` | `string` | yes |  |
+| `clearLabel` | `string` |  |  |
+| `disabled` | `boolean` |  |  |
+| `icon` | `content` |  | Leading icon (default: the `search` icon); `null` hides it. |
+| `onSubmit` | `() => void` |  |  |
+| `placeholder` | `string` |  |  |
 
 ```tsx
 function Example() {
@@ -159,23 +171,21 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `clear` `icon` `input`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `clearLabel` | `string` |  |  |
-| `disabled` | `boolean` |  |  |
-| `icon` | `content` |  | Leading icon (default ⌕); `null` hides it. |
-| `onSubmit` | `() => void` |  |  |
-| `placeholder` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## PinInput
 
 One-time-code input: one cell per digit, paste fills all cells. Forwarded attributes land on the group.
+
+**Slots:** `root` `cell`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onChange` | `(value: string) => void` | yes |  |
+| `value` | `string` | yes |  |
+| `disabled` | `boolean` |  |  |
+| `length` | `number` |  |  |
+| `mask` | `boolean` |  | Mask digits like a password. |
 
 ```tsx
 function Example() {
@@ -194,21 +204,15 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `cell`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `length` | `number` |  |  |
-| `mask` | `boolean` |  | Mask digits like a password. |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## InputGroup
 
 Joins inputs and addons into one control.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <InputGroup>
@@ -218,10 +222,6 @@ Joins inputs and addons into one control.
 </InputGroup>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 **Parts**
@@ -230,6 +230,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Static addon (text, icon) attached to an input.
 
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+
 ```tsx
 <InputGroup>
 	<InputAddon>$</InputAddon>
@@ -237,13 +241,21 @@ Static addon (text, icon) attached to an input.
 </InputGroup>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ## Checkbox
 
 Checkbox. The native `<input>` is the host: `class`, `style` and forwarded attributes (`id`, `name`, `required`, `aria-*`) land on it; `classes.root` styles the label row.
+
+**Slots:** `root` `input` `label`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `checked` | `boolean` |  |  |
+| `disabled` | `boolean` |  |  |
+| `invalid` | `boolean` |  |  |
+| `label` | `content` |  |  |
+| `name` | `string` |  |  |
+| `onChange` | `(e: Event) => void` |  |  |
+| `value` | `string` |  | Native `value` submitted with the form. |
 
 ```tsx
 function Example() {
@@ -258,23 +270,21 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `input` `label`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `checked` | `boolean` |  |  |
-| `disabled` | `boolean` |  |  |
-| `invalid` | `boolean` |  |  |
-| `label` | `content` |  |  |
-| `name` | `string` |  |  |
-| `onChange` | `(e: Event) => void` |  |  |
-| `value` | `string` |  | Native `value` submitted with the form. |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## CheckboxGroup
 
 Multiple-choice checkboxes in a fieldset.
+
+**Slots:** `root` `legend` `option`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onChange` | `(value: string[]) => void` | yes |  |
+| `options` | `{ value: string; label: unknown; disabled?: boolean; }[]` | yes |  |
+| `value` | `string[]` | yes |  |
+| `disabled` | `boolean` |  |  |
+| `legend` | `content` |  | Visible group label rendered as `&lt;legend>`. |
 
 ```tsx
 const regions = [
@@ -296,21 +306,18 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `legend` `option`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string[]) => void` | yes |  |
-| `options` | `{ value: string; label: unknown; disabled?: boolean; }[]` | yes |  |
-| `value` | `string[]` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `legend` | `content` |  | Visible group label rendered as `&lt;legend>`. |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Checklist
 
 Checklist of items with checkboxes.
+
+**Slots:** `root` `checkbox` `item` `label`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `ChecklistItemData[]` | yes |  |
+| `onChange` | `(items: ChecklistItemData[]) => void` | yes |  |
 
 ```tsx
 function Example() {
@@ -331,18 +338,21 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `checkbox` `item` `label`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `ChecklistItemData[]` | yes |  |
-| `onChange` | `(items: ChecklistItemData[]) => void` | yes |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Switch
 
 Toggle switch (`role="switch"`). Like {@link Checkbox}, the `<input>` (the visible track) is the host; `classes.root` styles the label row.
+
+**Slots:** `root` `input` `label`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `checked` | `boolean` |  |  |
+| `disabled` | `boolean` |  |  |
+| `label` | `content` |  |  |
+| `name` | `string` |  |  |
+| `onChange` | `(e: Event) => void` |  |  |
 
 ```tsx
 function Example() {
@@ -357,21 +367,23 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `input` `label`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `checked` | `boolean` |  |  |
-| `disabled` | `boolean` |  |  |
-| `label` | `content` |  |  |
-| `name` | `string` |  |  |
-| `onChange` | `(e: Event) => void` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## RadioGroup
 
 Radio group (`role="radiogroup"`). Forwarded attributes land on the group.
+
+**Slots:** `root` `input` `label` `option`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | `string` | yes |  |
+| `options` | `RadioOption[]` | yes |  |
+| `disabled` | `boolean` |  |  |
+| `inline` | `boolean` |  | Lay options out in a row. |
+| `label` | `string` |  | Accessible name for the group. |
+| `onChange` | `(e: Event) => void` |  |  |
+| `value` | `string` |  |  |
 
 ```tsx
 const plans = [
@@ -394,23 +406,24 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `input` `label` `option`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `name` | `string` | yes |  |
-| `options` | `RadioOption[]` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `inline` | `boolean` |  | Lay options out in a row. |
-| `label` | `string` |  | Accessible name for the group. |
-| `onChange` | `(e: Event) => void` |  |  |
-| `value` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ChoiceCard
 
 Selectable card wrapping a native radio/checkbox.
+
+**Slots:** `root` `body` `description` `input` `label`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `checked` | `boolean` | yes |  |
+| `label` | `content` | yes |  |
+| `onChange` | `(checked: boolean) => void` | yes |  |
+| `description` | `content` |  |  |
+| `disabled` | `boolean` |  |  |
+| `name` | `string` |  |  |
+| `type` | `"checkbox" \| "radio"` |  |  |
+| `value` | `string` |  |  |
 
 ```tsx
 function Example() {
@@ -440,24 +453,21 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `body` `description` `input` `label`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `checked` | `boolean` | yes |  |
-| `label` | `content` | yes |  |
-| `onChange` | `(checked: boolean) => void` | yes |  |
-| `description` | `content` |  |  |
-| `disabled` | `boolean` |  |  |
-| `name` | `string` |  |  |
-| `type` | `"checkbox" \| "radio"` |  |  |
-| `value` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Select
 
 Native select; forwarded attributes land on `<select>`.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `options` | `SelectOption[]` | yes |  |
+| `disabled` | `boolean` |  |  |
+| `invalid` | `boolean` |  |  |
+| `name` | `string` |  |  |
+| `onChange` | `(e: Event) => void` |  |  |
+| `placeholder` | `string` |  |  |
+| `value` | `string` |  |  |
 
 ```tsx
 const plans = [
@@ -479,21 +489,21 @@ function Example() {
 }
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `options` | `SelectOption[]` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `invalid` | `boolean` |  |  |
-| `name` | `string` |  |  |
-| `onChange` | `(e: Event) => void` |  |  |
-| `placeholder` | `string` |  |  |
-| `value` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## NativeSelect
 
 Native `<select>` with a value callback.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onChange` | `(value: string) => void` | yes |  |
+| `options` | `{ value: string; label: string; disabled?: boolean; }[]` | yes |  |
+| `disabled` | `boolean` |  |  |
+| `invalid` | `boolean` |  |  |
+| `name` | `string` |  |  |
+| `placeholder` | `string` |  |  |
+| `value` | `string` |  |  |
 
 ```tsx
 const regions = [
@@ -515,21 +525,21 @@ function Example() {
 }
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string) => void` | yes |  |
-| `options` | `{ value: string; label: string; disabled?: boolean; }[]` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `invalid` | `boolean` |  |  |
-| `name` | `string` |  |  |
-| `placeholder` | `string` |  |  |
-| `value` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## MultiSelect
 
 Multi-choice listbox dropdown.
+
+**Slots:** `root` `control` `menu` `option`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onChange` | `(value: string[]) => void` | yes |  |
+| `options` | `{ value: string; label: string; disabled?: boolean; }[]` | yes |  |
+| `value` | `string[]` | yes |  |
+| `disabled` | `boolean` |  |  |
+| `placeholder` | `string` |  |  |
 
 ```tsx
 const regions = [
@@ -551,21 +561,25 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `control` `menu` `option`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string[]) => void` | yes |  |
-| `options` | `{ value: string; label: string; disabled?: boolean; }[]` | yes |  |
-| `value` | `string[]` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `placeholder` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Autocomplete
 
 Combobox with suggestion list (↑ ↓ Enter Escape, `aria-activedescendant`). The `<input>` is the host; `classes.root` styles the wrapper.
+
+**Slots:** `root` `input` `menu` `option`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onChange` | `(value: string) => void` | yes |  |
+| `options` | `string[]` | yes |  |
+| `value` | `string` | yes |  |
+| `disabled` | `boolean` |  |  |
+| `invalid` | `boolean` |  |  |
+| `limit` | `number` |  | Max suggestions shown (default 8). |
+| `name` | `string` |  |  |
+| `placeholder` | `string` |  |  |
+| `renderOption` | `(option: string) => unknown` |  | Render an option (default: the text). |
 
 ```tsx
 function Example() {
@@ -582,25 +596,21 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `input` `menu` `option`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string) => void` | yes |  |
-| `options` | `string[]` | yes |  |
-| `value` | `string` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `invalid` | `boolean` |  |  |
-| `limit` | `number` |  | Max suggestions shown (default 8). |
-| `name` | `string` |  |  |
-| `placeholder` | `string` |  |  |
-| `renderOption` | `(option: string) => unknown` |  | Render an option (default: the text). |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## TagsInput
 
 Free-form tag entry (Enter / comma / paste lists, case-insensitive dedupe).
+
+**Slots:** `root` `input` `remove` `tag`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onChange` | `(value: string[]) => void` | yes |  |
+| `value` | `string[]` | yes |  |
+| `disabled` | `boolean` |  |  |
+| `placeholder` | `string` |  |  |
+| `renderTag` | `(tag: string) => unknown` |  | Render a tag's content (default: the text). |
 
 ```tsx
 function Example() {
@@ -616,21 +626,22 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `input` `remove` `tag`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string[]) => void` | yes |  |
-| `value` | `string[]` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `placeholder` | `string` |  |  |
-| `renderTag` | `(tag: string) => unknown` |  | Render a tag's content (default: the text). |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ChipGroup
 
 Single or multiple choice chips.
+
+**Slots:** `root` `chip` `legend`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onChange` | `(value: string[]) => void` | yes |  |
+| `options` | `{ value: string; label: unknown; disabled?: boolean; }[]` | yes |  |
+| `value` | `string[]` | yes |  |
+| `disabled` | `boolean` |  |  |
+| `legend` | `content` |  |  |
+| `multiple` | `boolean` |  |  |
 
 ```tsx
 function Example() {
@@ -651,22 +662,19 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `chip` `legend`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string[]) => void` | yes |  |
-| `options` | `{ value: string; label: unknown; disabled?: boolean; }[]` | yes |  |
-| `value` | `string[]` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `legend` | `content` |  |  |
-| `multiple` | `boolean` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Chip
 
 Toggleable pill (`aria-pressed`).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `checked` | `boolean` |  |  |
+| `children` | `content` |  |  |
+| `disabled` | `boolean` |  |  |
+| `icon` | `content` |  | Leading icon. |
+| `onChange` | `(checked: boolean) => void` |  |  |
 
 ```tsx
 function Example() {
@@ -679,26 +687,11 @@ function Example() {
 }
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `checked` | `boolean` |  |  |
-| `children` | `content` |  |  |
-| `disabled` | `boolean` |  |  |
-| `icon` | `content` |  | Leading icon. |
-| `onChange` | `(checked: boolean) => void` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Rating
 
 Star rating (radio pattern with roving tabindex, arrow keys).
-
-```tsx
-function Example() {
-	const stars = signal(4);
-	return <Rating aria-label="Rating" value={stars()} onChange={stars.set} />;
-}
-```
 
 **Slots:** `root` `star`
 
@@ -711,11 +704,27 @@ function Example() {
 | `starLabel` | `(n: number) => string` |  | Accessible label per star, e.g. `(n) => \`${n} of 5\``. |
 | `symbol` | `content` |  | Star glyph (default ★). |
 
+```tsx
+function Example() {
+	const stars = signal(4);
+	return <Rating aria-label="Rating" value={stars()} onChange={stars.set} />;
+}
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Slider
 
 Range input; forwarded attributes land on `<input type="range">`.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onChange` | `(value: number) => void` | yes |  |
+| `value` | `number` | yes |  |
+| `disabled` | `boolean` |  |  |
+| `max` | `number` |  |  |
+| `min` | `number` |  |  |
+| `step` | `number` |  |  |
 
 ```tsx
 function Example() {
@@ -729,20 +738,24 @@ function Example() {
 }
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: number) => void` | yes |  |
-| `value` | `number` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `max` | `number` |  |  |
-| `min` | `number` |  |  |
-| `step` | `number` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## RangeSlider
 
 Two-thumb range.
+
+**Slots:** `root` `end` `start`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onChange` | `(value: [number, number]) => void` | yes |  |
+| `value` | `[number, number]` | yes |  |
+| `disabled` | `boolean` |  |  |
+| `endLabel` | `string` |  |  |
+| `max` | `number` |  |  |
+| `min` | `number` |  |  |
+| `startLabel` | `string` |  |  |
+| `step` | `number` |  |  |
 
 ```tsx
 function Example() {
@@ -764,24 +777,21 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `end` `start`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: [number, number]) => void` | yes |  |
-| `value` | `[number, number]` | yes |  |
-| `disabled` | `boolean` |  |  |
-| `endLabel` | `string` |  |  |
-| `max` | `number` |  |  |
-| `min` | `number` |  |  |
-| `startLabel` | `string` |  |  |
-| `step` | `number` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## AngleSlider
 
 Circular slider for an angle.
+
+**Slots:** `root` `arm` `hub` `knob` `label` `svg` `track`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onChange` | `(deg: number) => void` | yes |  |
+| `value` | `number` | yes |  |
+| `label` | `string` |  | Accessible name (default "Angle"). |
+| `size` | `number` |  |  |
+| `step` | `number` |  | Degrees per arrow key press (default 5). |
 
 ```tsx
 function Example() {
@@ -795,28 +805,11 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `arm` `knob` `label` `svg` `track`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(deg: number) => void` | yes |  |
-| `value` | `number` | yes |  |
-| `label` | `string` |  | Accessible name (default "Angle"). |
-| `size` | `number` |  |  |
-| `step` | `number` |  | Degrees per arrow key press (default 5). |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## QuantityInput
 
 − value + stepper.
-
-```tsx
-function Example() {
-	const quantity = signal(2);
-	return <QuantityInput min={1} max={10} value={quantity()} onChange={quantity.set} />;
-}
-```
 
 **Slots:** `root` `button` `value`
 
@@ -829,18 +822,18 @@ function Example() {
 | `max` | `number` |  |  |
 | `min` | `number` |  |  |
 
+```tsx
+function Example() {
+	const quantity = signal(2);
+	return <QuantityInput min={1} max={10} value={quantity()} onChange={quantity.set} />;
+}
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## InlineEdit
 
 Click-to-edit text.
-
-```tsx
-function Example() {
-	const name = signal("Marketing site");
-	return <InlineEdit label="Project name" value={name()} onChange={name.set} />;
-}
-```
 
 **Slots:** `root` `display` `icon` `input`
 
@@ -851,15 +844,18 @@ function Example() {
 | `label` | `string` |  | Accessible label for the edit button / input. |
 | `placeholder` | `string` |  |  |
 
+```tsx
+function Example() {
+	const name = signal("Marketing site");
+	return <InlineEdit label="Project name" value={name()} onChange={name.set} />;
+}
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## SecretField
 
 Masked secret with reveal / copy.
-
-```tsx
-<SecretField label="Webhook secret" value="whsec_9f2kQ83m1x" />
-```
 
 **Slots:** `root` `actions` `label` `value`
 
@@ -868,15 +864,15 @@ Masked secret with reveal / copy.
 | `value` | `string` | yes |  |
 | `label` | `content` |  |  |
 
+```tsx
+<SecretField label="Webhook secret" value="whsec_9f2kQ83m1x" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## CopyField
 
 Read-only value with a copy button.
-
-```tsx
-<CopyField label="API key" value="sk_live_51Hx…9fQ2" />
-```
 
 **Slots:** `root` `action` `label` `value`
 
@@ -885,18 +881,15 @@ Read-only value with a copy button.
 | `value` | `string` | yes |  |
 | `label` | `string` |  |  |
 
+```tsx
+<CopyField label="API key" value="sk_live_51Hx…9fQ2" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## JsonInput
 
 JSON text area that flags invalid JSON (`aria-invalid`, `data-invalid`).
-
-```tsx
-function Example() {
-	const config = signal('{\n  "region": "fra1",\n  "replicas": 2\n}');
-	return <JsonInput aria-label="Config JSON" value={config()} onChange={config.set} />;
-}
-```
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -906,15 +899,18 @@ function Example() {
 | `name` | `string` |  |  |
 | `rows` | `number` |  |  |
 
+```tsx
+function Example() {
+	const config = signal('{\n  "region": "fra1",\n  "replicas": 2\n}');
+	return <JsonInput aria-label="Config JSON" value={config()} onChange={config.set} />;
+}
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## FileInput
 
 Native file input.
-
-```tsx
-<FileInput aria-label="Attachment" />
-```
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -926,11 +922,25 @@ Native file input.
 | `onChange` | `(e: Event) => void` |  |  |
 | `required` | `boolean` |  |  |
 
+```tsx
+<FileInput aria-label="Attachment" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## FileButton
 
 Hidden file input triggered by a button (Mantine FileButton).
+
+**Slots:** `root` `input` `label`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onChange` | `(files: File[]) => void` | yes |  |
+| `accept` | `string` |  |  |
+| `children` | `content` |  |  |
+| `disabled` | `boolean` |  |  |
+| `multiple` | `boolean` |  |  |
 
 ```tsx
 function Example() {
@@ -946,21 +956,21 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `input` `label`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(files: File[]) => void` | yes |  |
-| `accept` | `string` |  |  |
-| `children` | `content` |  |  |
-| `disabled` | `boolean` |  |  |
-| `multiple` | `boolean` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Dropzone
 
 Drag-and-drop file target (also a click-to-browse file input).
+
+**Slots:** `root` `input` `label`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onDrop` | `(files: File[]) => void` | yes |  |
+| `accept` | `string` |  |  |
+| `children` | `content` |  |  |
+| `disabled` | `boolean` |  |  |
+| `multiple` | `boolean` |  |  |
 
 ```tsx
 function Example() {
@@ -980,21 +990,20 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `input` `label`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onDrop` | `(files: File[]) => void` | yes |  |
-| `accept` | `string` |  |  |
-| `children` | `content` |  |  |
-| `disabled` | `boolean` |  |  |
-| `multiple` | `boolean` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## UploadItem
 
 File upload row with progress.
+
+**Slots:** `root` `bar` `cancel` `name` `row` `status` `track`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | `string` | yes |  |
+| `progress` | `number` | yes |  |
+| `error` | `string` |  |  |
+| `onCancel` | `() => void` |  |  |
 
 ```tsx
 function Example() {
@@ -1032,14 +1041,5 @@ function Example() {
 	);
 }
 ```
-
-**Slots:** `root` `bar` `cancel` `name` `row` `status` `track`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `name` | `string` | yes |  |
-| `progress` | `number` | yes |  |
-| `error` | `string` |  |  |
-| `onCancel` | `() => void` |  |  |
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.

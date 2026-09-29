@@ -60,3 +60,26 @@ The deprecated components still work; each is now a thin alias of its replacemen
 - Generated snippets are self-contained: they include the helper component, the module-level data it uses, and plain `() => {}` handlers.
 - `ScrollSpy` follows sections inside a scroll container (not just the window), activates the last section at the end of the scroll, and highlights a clicked item immediately.
 - `Lightbox` demo: arrow keys now change the image (the demo passed `onIndexChange` instead of `onChange`).
+
+**Review fixes**
+
+- `Tree`: node `icon`, `badge` and `disabled`; `filter` for search (shows matches with their ancestors, expanded and highlighted); `icons="auto"` for folder/file icons; `expandOnClick` (default true); `onToggle`.
+- `DatePicker` / `DateRangePicker` dropdowns use `autoPosition`, so overflow and later siblings no longer hide them.
+- `PinInput`: each Backspace deletes one digit.
+- `SearchInput`: uses the search icon, and hides the browser's native clear button (it showed two).
+- `ButtonGroup` (attached): 1px shared borders instead of 2px.
+- `Burger`: the X lines cross at the centre.
+- `AngleSlider`: the arm starts at a hub around the value, so it no longer covers the text.
+- `LoadingOverlay` keeps its parent's rounded corners.
+- `Mark` and `Highlight`: highlighter yellow by default (`--a-highlight`), with the difference documented. `Highlight` gets `tone`.
+- New `variant="plain"` on `Quote` and `Marquee` (no background).
+- `CodeBlock`: new `radius` prop.
+- `ColorSwatch`: new `selected` prop.
+- `Subtitle` defaults to size 3 (1.125rem, above body text).
+- `BackgroundImage` no longer double-encodes URLs (data URIs rendered blank).
+- `CreditCardPreview` uses card proportions.
+- `ProfileHeader`: no `@@` handle, and the avatar overlaps the cover.
+- `PhoneFrame`, `BrowserFrame` and `AspectRatio` media fills the frame.
+- `Thumbnav`: larger thumbnails with a ring on the active one.
+- `TableOfContents`: straight active bar.
+- `Masonry` images fill their column.

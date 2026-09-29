@@ -7,6 +7,15 @@
 
 Styled `<table>`; pass `<thead>` / `<tbody>` as children.
 
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `bordered` | `boolean` |  |  |
+| `children` | `content` |  |  |
+| `fullwidth` | `boolean` |  |  |
+| `hoverable` | `boolean` |  |  |
+| `narrow` | `boolean` |  |  |
+| `striped` | `boolean` |  |  |
+
 ```tsx
 <Table striped fullwidth>
 	<thead>
@@ -28,15 +37,6 @@ Styled `<table>`; pass `<thead>` / `<tbody>` as children.
 </Table>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `bordered` | `boolean` |  |  |
-| `children` | `content` |  |  |
-| `fullwidth` | `boolean` |  |  |
-| `hoverable` | `boolean` |  |  |
-| `narrow` | `boolean` |  |  |
-| `striped` | `boolean` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 **Parts**
@@ -44,6 +44,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 ### Thead
 
 Table head section.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Table>
@@ -62,13 +66,13 @@ Table head section.
 </Table>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ### Tbody
 
 Table body section.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Table>
@@ -85,13 +89,13 @@ Table body section.
 </Table>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ### Tfoot
 
 Table footer section.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Table>
@@ -110,13 +114,14 @@ Table footer section.
 </Table>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ### Tr
 
 Table row (clickable when `onClick` is set).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `onClick` | `(e: MouseEvent) => void` |  |  |
 
 ```tsx
 <Table>
@@ -129,14 +134,18 @@ Table row (clickable when `onClick` is set).
 </Table>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
-
 ### Th
 
 Table header cell.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `abbr` | `string` |  |  |
+| `children` | `content` |  |  |
+| `colspan` | `string \| number` |  |  |
+| `headers` | `string` |  |  |
+| `rowspan` | `string \| number` |  |  |
+| `scope` | `"row" \| "col" \| "rowgroup" \| "colgroup"` |  |  |
 
 ```tsx
 <Table>
@@ -150,6 +159,10 @@ Table header cell.
 </Table>
 ```
 
+### Td
+
+Table data cell.
+
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `abbr` | `string` |  |  |
@@ -158,10 +171,6 @@ Table header cell.
 | `headers` | `string` |  |  |
 | `rowspan` | `string \| number` |  |  |
 | `scope` | `"row" \| "col" \| "rowgroup" \| "colgroup"` |  |  |
-
-### Td
-
-Table data cell.
 
 ```tsx
 <Table>
@@ -173,18 +182,20 @@ Table data cell.
 </Table>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `abbr` | `string` |  |  |
-| `children` | `content` |  |  |
-| `colspan` | `string \| number` |  |  |
-| `headers` | `string` |  |  |
-| `rowspan` | `string \| number` |  |  |
-| `scope` | `"row" \| "col" \| "rowgroup" \| "colgroup"` |  |  |
-
 ## DataTable
 
 Sortable data grid with ARIA table semantics (`rowgroup`s, `aria-sort`, header sort buttons). Sorting is stable; clicking cycles asc → desc → none.
+
+**Slots:** `root` `body` `cell` `empty` `head` `header` `row` `sort`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `columns` | `DataTableColumn&lt;T>[]` | yes |  |
+| `rows` | `T[]` | yes |  |
+| `defaultSort` | `DataTableSort` |  | Initial sort (read once). |
+| `empty` | `content` |  | Shown when there are no rows. |
+| `label` | `string` |  | Accessible name for the table. |
+| `onSortChange` | `(sort: DataTableSort \| null) => void` |  | Notified after a header click changes the sort. |
 
 ```tsx
 <DataTable
@@ -207,22 +218,17 @@ Sortable data grid with ARIA table semantics (`rowgroup`s, `aria-sort`, header s
 />
 ```
 
-**Slots:** `root` `body` `cell` `empty` `head` `header` `row` `sort`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `columns` | `DataTableColumn&lt;T>[]` | yes |  |
-| `rows` | `T[]` | yes |  |
-| `defaultSort` | `DataTableSort` |  | Initial sort (read once). |
-| `empty` | `content` |  | Shown when there are no rows. |
-| `label` | `string` |  | Accessible name for the table. |
-| `onSortChange` | `(sort: DataTableSort \| null) => void` |  | Notified after a header click changes the sort. |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## DescriptionList
 
 Label / value pairs (`<dl>`).
+
+**Slots:** `root` `label` `row` `value`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `DescriptionItem[]` | yes |  |
 
 ```tsx
 <DescriptionList
@@ -234,17 +240,17 @@ Label / value pairs (`<dl>`).
 />
 ```
 
-**Slots:** `root` `label` `row` `value`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `DescriptionItem[]` | yes |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## PropertyList
 
 Label / value pairs.
+
+**Slots:** `root` `label` `row` `value`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `PropertyItem[]` | yes |  |
 
 ```tsx
 <PropertyList
@@ -256,17 +262,16 @@ Label / value pairs.
 />
 ```
 
-**Slots:** `root` `label` `row` `value`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `PropertyItem[]` | yes |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## List
 
 Styled list (`ordered` for numbers).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `ordered` | `boolean` |  | Render `&lt;ol>` instead of `&lt;ul>`; fixed at mount. |
 
 ```tsx
 <List>
@@ -276,11 +281,6 @@ Styled list (`ordered` for numbers).
 </List>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `ordered` | `boolean` |  | Render `&lt;ol>` instead of `&lt;ul>`; fixed at mount. |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 **Parts**
@@ -289,13 +289,6 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 List item with an optional icon.
 
-```tsx
-<List ordered>
-	<ListItem>Install the package</ListItem>
-	<ListItem>Import the stylesheet</ListItem>
-</List>
-```
-
 **Slots:** `root` `body` `icon`
 
 | Prop | Type | Required | Description |
@@ -303,9 +296,21 @@ List item with an optional icon.
 | `children` | `content` |  |  |
 | `icon` | `IconName` |  |  |
 
+```tsx
+<List ordered>
+	<ListItem>Install the package</ListItem>
+	<ListItem>Import the stylesheet</ListItem>
+</List>
+```
+
 ## ListGroup
 
 Bordered group of list rows.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `flush` | `boolean` |  |  |
 
 ```tsx
 <ListGroup>
@@ -315,11 +320,6 @@ Bordered group of list rows.
 </ListGroup>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `flush` | `boolean` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 **Parts**
@@ -327,13 +327,6 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 ### ListGroupItem
 
 List-group row.
-
-```tsx
-<ListGroup>
-	<ListGroupItem>Profile</ListGroupItem>
-	<ListGroupItem>Security</ListGroupItem>
-</ListGroup>
-```
 
 **Slots:** `root` `item`
 
@@ -344,9 +337,20 @@ List-group row.
 | `disabled` | `boolean` |  |  |
 | `onClick` | `(e: MouseEvent) => void` |  | Makes the row a button (fixed at mount); the `&lt;li>` becomes the `item` slot. |
 
+```tsx
+<ListGroup>
+	<ListGroupItem>Profile</ListGroupItem>
+	<ListGroupItem>Security</ListGroupItem>
+</ListGroup>
+```
+
 ## Timeline
 
 Vertical timeline.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Timeline>
@@ -362,10 +366,6 @@ Vertical timeline.
 </Timeline>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 **Parts**
@@ -373,14 +373,6 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 ### TimelineItem
 
 Timeline entry with a bullet, title and content.
-
-```tsx
-<Timeline>
-	<TimelineItem title="Deployed to production" bullet="zap" active>
-		09:44 by Ada
-	</TimelineItem>
-</Timeline>
-```
 
 **Slots:** `root` `body` `bullet` `content` `title`
 
@@ -391,9 +383,28 @@ Timeline entry with a bullet, title and content.
 | `children` | `content` |  |  |
 | `title` | `string` |  |  |
 
+```tsx
+<Timeline>
+	<TimelineItem title="Deployed to production" bullet="zap" active>
+		09:44 by Ada
+	</TimelineItem>
+</Timeline>
+```
+
 ## Accordion
 
 Disclosure list. Panels stay mounted (state and focus survive toggling) and animate height via `grid-template-rows`.
+
+**Slots:** `root` `chevron` `content` `icon` `item` `panel` `subtitle` `title` `trigger`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `AccordionItem[]` | yes |  |
+| `onChange` | `((id: string \| null) => void) \| ((ids: string[]) => void)` | yes |  |
+| `value` | `string \| string[]` | yes |  |
+| `chevron` | `content` |  | Custom chevron (any node); `null` hides it. |
+| `multiple` | `boolean` |  |  |
+| `variant` | `"default" \| "separated" \| "flush"` |  | `separated` renders each item as its own card. |
 
 ```tsx
 function Example() {
@@ -424,22 +435,16 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `chevron` `content` `icon` `item` `panel` `subtitle` `title` `trigger`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `AccordionItem[]` | yes |  |
-| `onChange` | `((id: string \| null) => void) \| ((ids: string[]) => void)` | yes |  |
-| `value` | `string \| string[]` | yes |  |
-| `chevron` | `content` |  | Custom chevron (any node); `null` hides it. |
-| `multiple` | `boolean` |  |  |
-| `variant` | `"default" \| "separated" \| "flush"` |  | `separated` renders each item as its own card. |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Collapse
 
 Show/hide region.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `open` | `boolean` | yes |  |
+| `children` | `content` |  |  |
 
 ```tsx
 function Example() {
@@ -457,24 +462,11 @@ function Example() {
 }
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `open` | `boolean` | yes |  |
-| `children` | `content` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Spoiler
 
 Height-clamped content with a toggle.
-
-```tsx
-<Spoiler maxHeight={48} showLabel="Show more" hideLabel="Show less">
-	Arachne renders on the server and hydrates on the client without re-running component
-	bodies. Signals track exactly which DOM nodes depend on which values, so updates touch only
-	what changed. Components share one customization system for classes, styles and slots.
-</Spoiler>
-```
 
 **Slots:** `root` `content` `toggle`
 
@@ -485,17 +477,19 @@ Height-clamped content with a toggle.
 | `maxHeight` | `number` |  |  |
 | `showLabel` | `string` |  |  |
 
+```tsx
+<Spoiler maxHeight={48} showLabel="Show more" hideLabel="Show less">
+	Arachne renders on the server and hydrates on the client without re-running component
+	bodies. Signals track exactly which DOM nodes depend on which values, so updates touch only
+	what changed. Components share one customization system for classes, styles and slots.
+</Spoiler>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Details
 
 Native `<details>` disclosure (listen with `onToggle`).
-
-```tsx
-<Details summary="Why is my deploy queued?">
-	Free plans run one build at a time; later builds wait for the current one.
-</Details>
-```
 
 **Slots:** `root` `body` `summary`
 
@@ -505,55 +499,99 @@ Native `<details>` disclosure (listen with `onToggle`).
 | `children` | `content` |  |  |
 | `open` | `boolean` |  |  |
 
+```tsx
+<Details summary="Why is my deploy queued?">
+	Free plans run one build at a time; later builds wait for the current one.
+</Details>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Tree
 
-WAI-ARIA tree: one tab stop, ↑ ↓ move, → expands / enters, ← collapses / goes to parent, Home End, Enter/Space select.
+WAI-ARIA tree: one tab stop, ↑ ↓ move, → expands / enters, ← collapses / goes to parent, Home End, Enter/Space select, type-ahead. Node icons and badges, `filter` for search, `icons="auto"` for folder/file icons.
 
-```tsx
-function Example() {
-	const selected = signal("web");
-	return (
-		<Stack gap="0.5rem">
-			<Tree
-				label="Workspace"
-				defaultExpanded={["apps"]}
-				value={selected()}
-				onChange={selected.set}
-				data={[
-					{
-						id: "apps",
-						label: "apps",
-						children: [
-							{ id: "web", label: "web" },
-							{ id: "admin", label: "admin" },
-						],
-					},
-					{ id: "packages", label: "packages", children: [{ id: "ui", label: "ui" }] },
-				]}
-			/>
-			<Text muted>Selected: {selected()}</Text>
-		</Stack>
-	);
-}
-```
-
-**Slots:** `root` `group` `item` `label` `row` `toggle`
+**Slots:** `root` `badge` `empty` `group` `icon` `item` `label` `row` `toggle`
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `data` | `TreeNode[]` | yes |  |
 | `defaultExpanded` | `string[]` |  | Node ids expanded on mount. |
+| `emptyLabel` | `content` |  | Shown when `filter` matches nothing (default "No matches"). |
+| `expandOnClick` | `boolean` |  | Clicking a parent row also expands / collapses it (default true). |
+| `filter` | `string` |  | Show only nodes whose label contains this text (case-insensitive), plus their ancestors, expanded, with the match highlighted. |
+| `icons` | `"auto" \| "none"` |  | `"auto"`: folder / file icons for nodes without their own `icon`. |
 | `label` | `string` |  | Accessible name for the tree. |
 | `onChange` | `(id: string) => void` |  |  |
+| `onToggle` | `(id: string, open: boolean) => void` |  | Called when a node is expanded or collapsed by the user. |
 | `value` | `string` |  |  |
+
+```tsx
+function Example() {
+	const selected = signal("button.tsx");
+	const query = signal("");
+	const files: TreeNode[] = [
+		{
+			id: "apps",
+			label: "apps",
+			badge: 2,
+			children: [
+				{ id: "web", label: "web", children: [{ id: "client.tsx", label: "client.tsx" }] },
+				{ id: "admin", label: "admin", disabled: true, badge: "locked" },
+			],
+		},
+		{
+			id: "packages",
+			label: "packages",
+			children: [
+				{
+					id: "ui",
+					label: "ui",
+					children: [
+						{ id: "button.tsx", label: "button.tsx" },
+						{ id: "tree.tsx", label: "tree.tsx" },
+						{ id: "styles.css", label: "styles.css", icon: "code" },
+					],
+				},
+			],
+		},
+		{ id: "readme", label: "README.md", icon: "info" },
+	];
+	return (
+		<Stack gap="0.5rem" style={{ "max-width": "22rem" }}>
+			<SearchInput
+				aria-label="Filter files"
+				placeholder="Filter files"
+				value={query()}
+				onChange={query.set}
+			/>
+			<Tree
+				label="Workspace"
+				icons="auto"
+				filter={query()}
+				defaultExpanded={["apps", "packages", "ui"]}
+				value={selected()}
+				onChange={selected.set}
+				data={files}
+			/>
+			<Text muted>Open: {selected()}</Text>
+		</Stack>
+	);
+}
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## FileTree
 
 File / folder tree. Rows expose `data-kind`.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `nodes` | `FileTreeNode[]` | yes |  |
+| `label` | `string` |  | Accessible name for the tree. |
+| `onSelect` | `(id: string) => void` |  |  |
+| `selected` | `string` |  |  |
 
 ```tsx
 const repoTree: FileTreeNode[] = [
@@ -580,18 +618,15 @@ function Example() {
 }
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `nodes` | `FileTreeNode[]` | yes |  |
-| `label` | `string` |  | Accessible name for the tree. |
-| `onSelect` | `(id: string) => void` |  |  |
-| `selected` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## JsonTree
 
 Collapsible JSON tree.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `data` | `JsonNode` | yes |  |
 
 ```tsx
 const configJson: JsonNode = {
@@ -615,29 +650,35 @@ const configJson: JsonNode = {
 <JsonTree data={configJson} />
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `data` | `JsonNode` | yes |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## JsonViewer
 
 Pretty-printed JSON (handles undefined, circular references and BigInt).
 
-```tsx
-<JsonViewer value={{ id: "dep_128", status: "ready", regions: ["fra1", "iad1"] }} />
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `value` | `content` | yes |  |
+
+```tsx
+<JsonViewer value={{ id: "dep_128", status: "ready", regions: ["fra1", "iad1"] }} />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## TransferList
 
 Dual-list mover (Mantine TransferList). Rows keep their DOM between moves.
+
+**Slots:** `root` `actions` `item` `list` `pane` `title`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `left` | `string[]` | yes |  |
+| `onChange` | `(next: { left: string[]; right: string[]; }) => void` | yes |  |
+| `right` | `string[]` | yes |  |
+| `leftTitle` | `string` |  |  |
+| `rightTitle` | `string` |  |  |
 
 ```tsx
 function Example() {
@@ -654,21 +695,18 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `actions` `item` `list` `pane` `title`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `left` | `string[]` | yes |  |
-| `onChange` | `(next: { left: string[]; right: string[]; }) => void` | yes |  |
-| `right` | `string[]` | yes |  |
-| `leftTitle` | `string` |  |  |
-| `rightTitle` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## SortableList
 
 Reorderable list with keyboard-accessible move buttons.
+
+**Slots:** `root` `actions` `item` `label`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `SortableItem[]` | yes |  |
+| `onChange` | `(items: SortableItem[]) => void` | yes |  |
 
 ```tsx
 function Example() {
@@ -681,18 +719,17 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `actions` `item` `label`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `SortableItem[]` | yes |  |
-| `onChange` | `(items: SortableItem[]) => void` | yes |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## KanbanBoard
 
 Horizontal board of kanban columns. With `onMove`, cards (`cardId`) can be dragged between columns (`columnId`) or moved with Alt+←/→ (column) and Alt+↑/↓ (position); moves are announced to screen readers.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `label` | `string` |  | Accessible name for the board. Default "Board". |
+| `onMove` | `(cardId: string, toColumnId: string, index: number) => void` |  | Called when a card is dropped on a column or moved with Alt+arrow keys. `index` is the position in the target column (without the moved card). Update your data; the board keeps focus on the moved card. |
 
 ```tsx
 function Example() {
@@ -744,12 +781,6 @@ function Example() {
 }
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `label` | `string` |  | Accessible name for the board. Default "Board". |
-| `onMove` | `(cardId: string, toColumnId: string, index: number) => void` |  | Called when a card is dropped on a column or moved with Alt+arrow keys. `index` is the position in the target column (without the moved card). Update your data; the board keeps focus on the moved card. |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 **Parts**
@@ -757,14 +788,6 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 ### KanbanColumn
 
 Kanban column with title, count and cards.
-
-```tsx
-<KanbanBoard label="Review board">
-	<KanbanColumn title="In review" columnId="review" count={1}>
-		<KanbanCard cardId="c-7" title="Dark theme for charts" meta="#412 · Ada" />
-	</KanbanColumn>
-</KanbanBoard>
-```
 
 **Slots:** `root` `body` `count` `header` `title`
 
@@ -775,17 +798,17 @@ Kanban column with title, count and cards.
 | `columnId` | `string` |  | Column id reported to `KanbanBoard` `onMove`; enables dropping cards here. |
 | `count` | `number` |  |  |
 
-### KanbanCard
-
-Card in a kanban column.
-
 ```tsx
-<KanbanBoard label="Backlog board">
-	<KanbanColumn title="Backlog" columnId="backlog">
-		<KanbanCard cardId="c-9" title="Audit form labels" meta="#418 · Grace" />
+<KanbanBoard label="Review board">
+	<KanbanColumn title="In review" columnId="review" count={1}>
+		<KanbanCard cardId="c-7" title="Dark theme for charts" meta="#412 · Ada" />
 	</KanbanColumn>
 </KanbanBoard>
 ```
+
+### KanbanCard
+
+Card in a kanban column.
 
 **Slots:** `root` `meta` `title`
 
@@ -796,9 +819,26 @@ Card in a kanban column.
 | `meta` | `string` |  |  |
 | `onClick` | `(e: MouseEvent) => void` |  |  |
 
+```tsx
+<KanbanBoard label="Backlog board">
+	<KanbanColumn title="Backlog" columnId="backlog">
+		<KanbanCard cardId="c-9" title="Audit form labels" meta="#418 · Grace" />
+	</KanbanColumn>
+</KanbanBoard>
+```
+
 ## Carousel
 
 Previous/next carousel; controlled when `value` is set. ← → switch slides.
+
+**Slots:** `root` `control` `controls` `slide` `status` `viewport`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `slides` | `CarouselSlide[]` | yes |  |
+| `label` | `string` |  | Accessible name (default "Carousel"). |
+| `onChange` | `(id: string) => void` |  |  |
+| `value` | `string` |  |  |
 
 ```tsx
 <Carousel
@@ -824,26 +864,11 @@ Previous/next carousel; controlled when `value` is set. ← → switch slides.
 />
 ```
 
-**Slots:** `root` `control` `controls` `slide` `status` `viewport`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `slides` | `CarouselSlide[]` | yes |  |
-| `label` | `string` |  | Accessible name (default "Carousel"). |
-| `onChange` | `(id: string) => void` |  |  |
-| `value` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Badge
 
 Count / status pill.
-
-```tsx
-<Badge tone="success">
-	Active
-</Badge>
-```
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -851,17 +876,17 @@ Count / status pill.
 | `rounded` | `boolean` |  |  |
 | `tone` | `"danger" \| "warning" \| "success" \| "muted" \| "accent"` |  | Compact count / status pill — prefer Tag for labeled chips. |
 
+```tsx
+<Badge tone="success">
+	Active
+</Badge>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Tag
 
 Small label for categories and filters, optionally removable.
-
-```tsx
-<Tag color="success">
-	Deployed
-</Tag>
-```
 
 **Slots:** `root` `label` `remove`
 
@@ -876,6 +901,12 @@ Small label for categories and filters, optionally removable.
 | `size` | `"normal" \| "medium" \| "large"` |  |  |
 | `tone` | `"danger" \| "accent" \| "neutral"` |  | **Deprecated:** use `color` |
 
+```tsx
+<Tag color="success">
+	Deployed
+</Tag>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 **Parts**
@@ -883,6 +914,12 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 ### Tags
 
 Group of tags — wraps evenly and supports addon pairs.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `addons` | `boolean` |  |  |
+| `children` | `content` |  |  |
+| `size` | `"medium" \| "large"` |  |  |
 
 ```tsx
 <Tags>
@@ -892,15 +929,16 @@ Group of tags — wraps evenly and supports addon pairs.
 </Tags>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `addons` | `boolean` |  |  |
-| `children` | `content` |  |  |
-| `size` | `"medium" \| "large"` |  |  |
-
 ## FilterChip
 
 Active filter with a remove button.
+
+**Slots:** `root` `remove`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `label` | `string` | yes |  |
+| `onRemove` | `() => void` |  |  |
 
 ```tsx
 function Example() {
@@ -929,22 +967,11 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `remove`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `string` | yes |  |
-| `onRemove` | `() => void` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Avatar
 
 Picture or initials.
-
-```tsx
-<Avatar name="Ada Lovelace" />
-```
 
 **Slots:** `root` `fallback` `image`
 
@@ -955,18 +982,15 @@ Picture or initials.
 | `size` | `"sm" \| "md" \| "lg"` |  |  |
 | `src` | `string` |  |  |
 
+```tsx
+<Avatar name="Ada Lovelace" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## AvatarGroup
 
 Overlapping avatars with a "+N" overflow chip.
-
-```tsx
-<AvatarGroup
-	max={3}
-	names={["Ada Lovelace", "Grace Hopper", "Alan Turing", "Linus Torvalds"]}
-/>
-```
 
 **Slots:** `root` `avatar` `more`
 
@@ -976,15 +1000,18 @@ Overlapping avatars with a "+N" overflow chip.
 | `max` | `number` |  |  |
 | `size` | `"sm" \| "md" \| "lg"` |  |  |
 
+```tsx
+<AvatarGroup
+	max={3}
+	names={["Ada Lovelace", "Grace Hopper", "Alan Turing", "Linus Torvalds"]}
+/>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## PresenceAvatar
 
 Avatar with a presence dot.
-
-```tsx
-<PresenceAvatar name="Ada Lovelace" status="success" />
-```
 
 **Slots:** `root` `avatar` `dot`
 
@@ -995,11 +1022,19 @@ Avatar with a presence dot.
 | `src` | `string` |  |  |
 | `status` | `"danger" \| "warning" \| "success" \| "accent" \| "neutral"` |  |  |
 
+```tsx
+<PresenceAvatar name="Ada Lovelace" status="success" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Kbd
 
 Keyboard key.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Text>
@@ -1007,19 +1042,11 @@ Keyboard key.
 </Text>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Hotkey
 
 Display a key combo (⌘K, Ctrl+S).
-
-```tsx
-<Hotkey keys={["⌘", "K"]} />
-```
 
 **Slots:** `root` `key` `part` `separator`
 
@@ -1030,11 +1057,19 @@ Display a key combo (⌘K, Ctrl+S).
 | `onTrigger` | `(e: KeyboardEvent) => void` |  | Bind the combination on `document`; called when it is pressed (default prevented). |
 | `separator` | `content` |  | Separator between keys (default `+`). |
 
+```tsx
+<Hotkey keys={["⌘", "K"]} />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Code
 
 Inline code.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Text>
@@ -1042,24 +1077,11 @@ Inline code.
 </Text>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## CodeBlock
 
 Highlighted code with copy button.
-
-```tsx
-<CodeBlock
-	language="tsx"
-	code={
-		'import { Button } from "@arachne/ui";\n\nexport const Save = () => <Button onClick={() => {}}>Save</Button>;'
-	}
-/>
-```
 
 **Slots:** `root` `bar` `code` `copy` `language` `pre`
 
@@ -1069,12 +1091,29 @@ Highlighted code with copy button.
 | `copiedLabel` | `string` |  |  |
 | `copyLabel` | `string` |  |  |
 | `language` | `string` |  |  |
+| `radius` | `RadiusName \| (string & {})` |  | Corner radius: `"none"` \| `"sm"` \| `"lg"` or any CSS length (default: the theme radius). |
+
+```tsx
+<CodeBlock
+	language="tsx"
+	radius="lg"
+	code={
+		'import { Button } from "@arachne/ui";\n\nexport const Save = () => <Button>Save</Button>;'
+	}
+/>
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Diff
 
 Unified diff lines.
+
+**Slots:** `root` `line` `prefix`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `lines` | `DiffLine[]` | yes |  |
 
 ```tsx
 <Diff
@@ -1087,23 +1126,11 @@ Unified diff lines.
 />
 ```
 
-**Slots:** `root` `line` `prefix`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `lines` | `DiffLine[]` | yes |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Terminal
 
 Terminal window mock-up.
-
-```tsx
-<Terminal title="zsh">
-	{"$ bun add @arachne/ui\ninstalled @arachne/ui@2.4.0"}
-</Terminal>
-```
 
 **Slots:** `root` `bar` `body` `title`
 
@@ -1112,11 +1139,23 @@ Terminal window mock-up.
 | `children` | `content` |  |  |
 | `title` | `string` |  |  |
 
+```tsx
+<Terminal title="zsh">
+	{"$ bun add @arachne/ui\ninstalled @arachne/ui@2.4.0"}
+</Terminal>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## LogViewer
 
 Monospace log output with levels and timestamps.
+
+**Slots:** `root` `level` `line` `message` `time`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `lines` | `LogLineData[]` | yes |  |
 
 ```tsx
 <LogViewer
@@ -1128,17 +1167,16 @@ Monospace log output with levels and timestamps.
 />
 ```
 
-**Slots:** `root` `level` `line` `message` `time`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `lines` | `LogLineData[]` | yes |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Mark
 
-Highlighted text.
+Highlight text you choose (`<mark>`, highlighter-yellow by default). To mark every match of a query inside a string, use `Highlight`.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `tone` | `"warning" \| "success" \| "accent"` |  |  |
 
 ```tsx
 <Text>
@@ -1146,20 +1184,11 @@ Highlighted text.
 </Text>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `tone` | `"warning" \| "success" \| "accent"` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Highlight
 
-Highlight matching substrings in text (Mantine Highlight).
-
-```tsx
-<Highlight text="Deploy marketing-site to production" highlight="deploy" />
-```
+Mark every case-insensitive match of `highlight` inside `text`, e.g. search results. To mark a span you choose, use `Mark`.
 
 **Slots:** `root` `mark`
 
@@ -1167,6 +1196,11 @@ Highlight matching substrings in text (Mantine Highlight).
 | --- | --- | --- | --- |
 | `highlight` | `string \| string[]` | yes |  |
 | `text` | `string` | yes |  |
+| `tone` | `"warning" \| "success" \| "accent"` |  | Mark colour (default `"warning"`, highlighter yellow), as on `Mark`. |
+
+```tsx
+<Highlight text="Deploy marketing-site to production" highlight="deploy" />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
@@ -1174,28 +1208,24 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Ellipsis after `lines` lines.
 
-```tsx
-<Truncate lines={2}>
-	The customization system covers every component: attributes are forwarded to the host
-	element, classes and styles target named slots, unstyled drops the built-in look, and
-	configureUI sets app-wide defaults.
-</Truncate>
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `children` | `content` |  |  |
 | `lines` | `number` |  |  |
+
+```tsx
+<Truncate style={{ "max-width": "22rem" }} lines={2}>
+	The customization system covers every component: attributes are forwarded to the host
+	element, classes and styles target named slots, unstyled drops the built-in look, and
+	configureUI sets app-wide defaults. Text past the second line is cut with an ellipsis.
+</Truncate>
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Leader
 
 UIkit-style dotted leader row.
-
-```tsx
-<Leader label="Espresso" value="$3.50" />
-```
 
 **Slots:** `root` `dots` `label` `value`
 
@@ -1204,15 +1234,15 @@ UIkit-style dotted leader row.
 | `label` | `content` | yes |  |
 | `value` | `content` | yes |  |
 
+```tsx
+<Leader label="Espresso" value="$3.50" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## NumberFormatter
 
 Formats a number with separators, decimals, prefix and suffix.
-
-```tsx
-<NumberFormatter value={1234567.891} decimalScale={2} />
-```
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -1222,29 +1252,29 @@ Formats a number with separators, decimals, prefix and suffix.
 | `suffix` | `string` |  |  |
 | `thousandSeparator` | `string` |  |  |
 
+```tsx
+<NumberFormatter value={1234567.891} decimalScale={2} />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## RelativeTime
 
 Relative time such as "5 minutes ago", with the full date in `title`.
 
-```tsx
-<RelativeTime value={Date.now() - 5 * 60_000} />
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `value` | `number` | yes | Absolute timestamp (ms). |
+
+```tsx
+<RelativeTime value={Date.now() - 5 * 60_000} />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Price
 
 Formatted price with optional strike-through and period.
-
-```tsx
-<Price amount={24} strike={32} period="month" />
-```
 
 **Slots:** `root` `amount` `period` `strike`
 
@@ -1255,26 +1285,40 @@ Formatted price with optional strike-through and period.
 | `period` | `string` |  |  |
 | `strike` | `number` |  |  |
 
+```tsx
+<Price amount={24} strike={32} period="month" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ResultCount
 
 "12 results" line (live region).
 
-```tsx
-<ResultCount count={1284} label="deploys" />
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `count` | `number` | yes |  |
 | `label` | `string` |  |  |
+
+```tsx
+<ResultCount count={1284} label="deploys" />
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## LoadMore
 
 "Load more" button that shows loading and end-of-list states.
+
+**Slots:** `root` `button` `end`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onLoad` | `() => void` | yes |  |
+| `children` | `content` |  |  |
+| `endLabel` | `content` |  | Text when everything is loaded (default "You're all caught up"). |
+| `hasMore` | `boolean` |  |  |
+| `loading` | `boolean` |  |  |
 
 ```tsx
 function Example() {
@@ -1305,21 +1349,22 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `button` `end`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onLoad` | `() => void` | yes |  |
-| `children` | `content` |  |  |
-| `endLabel` | `content` |  | Text when everything is loaded (default "You're all caught up"). |
-| `hasMore` | `boolean` |  |  |
-| `loading` | `boolean` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## InfiniteScroll
 
 Content followed by a "Load more" control.
+
+**Slots:** `root` `sentinel`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onLoadMore` | `() => void` | yes |  |
+| `children` | `content` |  |  |
+| `hasMore` | `boolean` |  |  |
+| `loading` | `boolean` |  |  |
+| `loadMoreLabel` | `content` |  | Button text (default "Load more" / "Loading…"). |
+| `rootMargin` | `string` |  | How far before the end to start loading (IntersectionObserver `rootMargin`). Default `200px`. |
 
 ```tsx
 function Example() {
@@ -1346,16 +1391,5 @@ function Example() {
 	);
 }
 ```
-
-**Slots:** `root` `sentinel`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onLoadMore` | `() => void` | yes |  |
-| `children` | `content` |  |  |
-| `hasMore` | `boolean` |  |  |
-| `loading` | `boolean` |  |  |
-| `loadMoreLabel` | `content` |  | Button text (default "Load more" / "Loading…"). |
-| `rootMargin` | `string` |  | How far before the end to start loading (IntersectionObserver `rootMargin`). Default `200px`. |
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.

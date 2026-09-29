@@ -1,9 +1,12 @@
 import { For, Show } from "@arachne/render";
 import { effect, signal } from "@arachne/signals";
 import { watchClickOutside } from "./click-outside.ts";
+import { autoPosition } from "./floating.ts";
+import { whenConnected } from "./focus.ts";
 import { highlightCode } from "./highlight.ts";
 import { Icon } from "./icons.tsx";
 import { prefersReducedMotion } from "./motion.ts";
+import { type RadiusName, resolveRadius } from "./palette.ts";
 import { type SlotProps, setup } from "./system.ts";
 import { ActionIcon } from "./widgets.tsx";
 
@@ -106,6 +109,17 @@ export function DateRangePicker(input: DateRangePickerProps) {
 	);
 	const open = signal(false);
 	let root: HTMLElement | undefined;
+	let trigger: HTMLElement | undefined;
+	let dropdown: HTMLElement | undefined;
+	// Fixed, collision-aware placement: escapes overflow clipping and stacking of later siblings.
+	effect(() => {
+		if (!open()) return;
+		return whenConnected(
+			() => dropdown,
+			(el) =>
+				trigger ? autoPosition(trigger, el, () => "bottom-start", { offset: 6 }) : undefined,
+		);
+	});
 	const startDate = () => {
 		const start = props.value.start;
 		const [y, m] = (start ?? "").split("-").map(Number);
@@ -173,6 +187,9 @@ export function DateRangePicker(input: DateRangePickerProps) {
 			data-state={open() ? "open" : "closed"}
 		>
 			<button
+				ref={(el: HTMLElement) => {
+					trigger = el;
+				}}
 				type="button"
 				class={slot.class("trigger", "a-daterange-trigger")}
 				aria-expanded={open()}
@@ -186,6 +203,9 @@ export function DateRangePicker(input: DateRangePickerProps) {
 			</button>
 			<Show when={open()} fallback={null}>
 				<div
+					ref={(el: HTMLElement) => {
+						dropdown = el;
+					}}
 					class={slot.class("dropdown", "a-datepicker-dropdown a-calendar")}
 					style={slot.style("dropdown")}
 				>
@@ -469,6 +489,8 @@ export type CodeBlockSlot = "root" | "bar" | "language" | "copy" | "pre" | "code
 export type CodeBlockProps = SlotProps<CodeBlockSlot> & {
 	code: string;
 	language?: string | undefined;
+	/** Corner radius: `"none"` | `"sm"` | `"lg"` or any CSS length (default: the theme radius). */
+	radius?: RadiusName | (string & {}) | undefined;
 	copyLabel?: string | undefined;
 	copiedLabel?: string | undefined;
 };
@@ -481,14 +503,23 @@ export function CodeBlock(input: CodeBlockProps) {
 		"CodeBlock",
 		input,
 		{ language: "tsx" },
-		["code", "language", "copyLabel", "copiedLabel"],
+		["code", "language", "radius", "copyLabel", "copiedLabel"],
 		"root" as CodeBlockSlot,
 	);
+	const radiusStyle = () =>
+		props.radius === undefined
+			? undefined
+			: { "--a-codeblock-radius": resolveRadius(props.radius) };
 	const copied = signal(false);
 	let timer: ReturnType<typeof setTimeout> | undefined;
 	effect(() => () => clearTimeout(timer));
 	return (
-		<div {...rest} class={slot.class("root", "a-codeblock")} style={slot.style("root")}>
+		<div
+			{...rest}
+			class={slot.class("root", "a-codeblock")}
+			style={slot.style("root", radiusStyle())}
+			data-radius={props.radius}
+		>
 			<div class={slot.class("bar", "a-codeblock-bar")}>
 				<span class={slot.class("language", "a-codeblock-lang")}>{props.language}</span>
 				<button

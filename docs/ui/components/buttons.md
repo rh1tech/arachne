@@ -7,12 +7,6 @@
 
 Button (or link when `href` is set).
 
-```tsx
-<Button onClick={() => {}}>
-	Save changes
-</Button>
-```
-
 **Slots:** `root` `end` `label` `spinner` `start`
 
 | Prop | Type | Required | Description |
@@ -31,17 +25,17 @@ Button (or link when `href` is set).
 | `type` | `"button" \| "submit" \| "reset"` |  |  |
 | `variant` | `"solid" \| "default" \| "soft" \| "outline" \| "ghost" \| "link" \| "danger" \| "warning" \| "success"` |  |  |
 
+```tsx
+<Button onClick={() => {}}>
+	Save changes
+</Button>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## UnstyledButton
 
 Button with browser chrome reset — bring your own look.
-
-```tsx
-<UnstyledButton onClick={() => {}}>
-	Plain clickable text
-</UnstyledButton>
-```
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -50,11 +44,23 @@ Button with browser chrome reset — bring your own look.
 | `onClick` | `(e: MouseEvent) => void` |  |  |
 | `type` | `"button" \| "submit" \| "reset"` |  |  |
 
+```tsx
+<UnstyledButton onClick={() => {}}>
+	Plain clickable text
+</UnstyledButton>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ButtonGroup
 
 Bootstrap-style button group.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `attached` | `boolean` |  |  |
+| `children` | `content` |  |  |
+| `label` | `string` |  | Accessible name for the group. |
 
 ```tsx
 <ButtonGroup label="Text alignment">
@@ -70,17 +76,23 @@ Bootstrap-style button group.
 </ButtonGroup>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `attached` | `boolean` |  |  |
-| `children` | `content` |  |  |
-| `label` | `string` |  | Accessible name for the group. |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## SplitButton
 
 Primary action + caret menu.
+
+**Slots:** `root` `caret` `main` `menu`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `label` | `content` | yes |  |
+| `menu` | `{ label: string; onSelect: () => void; danger?: boolean; }[]` | yes |  |
+| `caretLabel` | `string` |  | Accessible name for the caret (default "More actions"). |
+| `disabled` | `boolean` |  |  |
+| `onClick` | `() => void` |  |  |
+| `size` | `"sm" \| "md"` |  |  |
+| `variant` | `"solid" \| "ghost" \| "danger"` |  |  |
 
 ```tsx
 function Example() {
@@ -104,23 +116,21 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `caret` `main` `menu`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `content` | yes |  |
-| `menu` | `{ label: string; onSelect: () => void; danger?: boolean; }[]` | yes |  |
-| `caretLabel` | `string` |  | Accessible name for the caret (default "More actions"). |
-| `disabled` | `boolean` |  |  |
-| `onClick` | `() => void` |  |  |
-| `size` | `"sm" \| "md"` |  |  |
-| `variant` | `"solid" \| "ghost" \| "danger"` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ToggleGroup
 
 Pressed-toggle group.
+
+**Slots:** `root` `item`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `ToggleItem[]` | yes |  |
+| `onChange` | `(value: string \| string[] \| null) => void` | yes |  |
+| `value` | `string \| string[]` | yes |  |
+| `label` | `string` |  | Accessible name for the group. |
+| `multiple` | `boolean` |  |  |
 
 ```tsx
 function Example() {
@@ -141,21 +151,20 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `item`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `ToggleItem[]` | yes |  |
-| `onChange` | `(value: string \| string[] \| null) => void` | yes |  |
-| `value` | `string \| string[]` | yes |  |
-| `label` | `string` |  | Accessible name for the group. |
-| `multiple` | `boolean` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Segmented
 
 Pressed-button group.
+
+**Slots:** `root` `segment`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `{ id: string; label: string; disabled?: boolean; }[]` | yes |  |
+| `onChange` | `(id: string) => void` | yes |  |
+| `value` | `string` | yes |  |
+| `label` | `string` |  | Accessible name for the group (default "Options"). |
 
 ```tsx
 function Example() {
@@ -175,26 +184,11 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `segment`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `{ id: string; label: string; disabled?: boolean; }[]` | yes |  |
-| `onChange` | `(id: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `label` | `string` |  | Accessible name for the group (default "Options"). |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ActionIcon
 
 Icon-only button (`label` is its accessible name).
-
-```tsx
-<ActionIcon label="Edit project" variant="subtle" onClick={() => {}}>
-	<Icon name="edit" />
-</ActionIcon>
-```
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -205,15 +199,17 @@ Icon-only button (`label` is its accessible name).
 | `size` | `"sm" \| "md" \| "lg"` |  |  |
 | `variant` | `"outline" \| "subtle" \| "filled"` |  |  |
 
+```tsx
+<ActionIcon label="Edit project" variant="subtle" onClick={() => {}}>
+	<Icon name="edit" />
+</ActionIcon>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## CloseButton
 
 Dismiss control (×).
-
-```tsx
-<CloseButton onClick={() => {}} />
-```
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -221,11 +217,22 @@ Dismiss control (×).
 | `onClick` | `(e: MouseEvent) => void` |  |  |
 | `size` | `"sm" \| "md"` |  |  |
 
+```tsx
+<CloseButton onClick={() => {}} />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Burger
 
 Standalone hamburger control (Mantine Burger).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `label` | `string` |  |  |
+| `onClick` | `(e: MouseEvent) => void` |  |  |
+| `opened` | `boolean` |  |  |
+| `size` | `"sm" \| "md"` |  |  |
 
 ```tsx
 function Example() {
@@ -243,26 +250,11 @@ function Example() {
 }
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `label` | `string` |  |  |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
-| `opened` | `boolean` |  |  |
-| `size` | `"sm" \| "md"` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## FloatingActionButton
 
 Pinned primary action. `children` replaces the icon.
-
-```tsx
-<FloatingActionButton
-	label="New project"
-	icon="plus"
-	onClick={() => {}}
-/>
-```
 
 **Slots:** `root` `icon`
 
@@ -274,17 +266,19 @@ Pinned primary action. `children` replaces the icon.
 | `onClick` | `(e: MouseEvent) => void` |  |  |
 | `position` | `"bottom-right" \| "bottom-left"` |  |  |
 
+```tsx
+<FloatingActionButton
+	label="New project"
+	icon="plus"
+	onClick={() => {}}
+/>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## LoadingButton
 
 Button that shows a spinner next to its label while busy.
-
-```tsx
-<LoadingButton loading>
-	Saving…
-</LoadingButton>
-```
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -296,15 +290,17 @@ Button that shows a spinner next to its label while busy.
 | `type` | `"button" \| "submit" \| "reset"` |  |  |
 | `variant` | `"solid" \| "ghost" \| "danger"` |  |  |
 
+```tsx
+<LoadingButton loading>
+	Saving…
+</LoadingButton>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ConfirmButton
 
 Two-step confirm control (click → confirm).
-
-```tsx
-<ConfirmButton label="Delete project" onConfirm={() => {}} />
-```
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -314,18 +310,15 @@ Two-step confirm control (click → confirm).
 | `size` | `"sm" \| "md"` |  |  |
 | `variant` | `"solid" \| "ghost" \| "danger"` |  |  |
 
+```tsx
+<ConfirmButton label="Delete project" onConfirm={() => {}} />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## CopyButton
 
 Copies `value` to the clipboard. Renders a {@link Button}; `data-copied` while confirming.
-
-```tsx
-<Group gap="0.5rem">
-	<code>bun add @arachne/ui</code>
-	<CopyButton value="bun add @arachne/ui" />
-</Group>
-```
 
 **Slots:** `root`
 
@@ -337,15 +330,18 @@ Copies `value` to the clipboard. Renders a {@link Button}; `data-copied` while c
 | `size` | `"xs" \| "sm" \| "md" \| "lg"` |  |  |
 | `variant` | `"solid" \| "default" \| "soft" \| "outline" \| "ghost"` |  |  |
 
+```tsx
+<Group gap="0.5rem">
+	<code>bun add @arachne/ui</code>
+	<CopyButton value="bun add @arachne/ui" />
+</Group>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## CopyId
 
 Monospace id with a copy button.
-
-```tsx
-<CopyId value="prj_8f3k29dz" />
-```
 
 **Slots:** `root` `button` `label` `value`
 
@@ -354,15 +350,15 @@ Monospace id with a copy button.
 | `value` | `string` | yes |  |
 | `label` | `content` |  |  |
 
+```tsx
+<CopyId value="prj_8f3k29dz" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ShareButton
 
 _No description._
-
-```tsx
-<ShareButton url="https://arachne.dev/ui" title="Arachne UI" />
-```
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -375,11 +371,22 @@ _No description._
 | `title` | `string` |  |  |
 | `url` | `string` |  | Link to share (default: the current page URL). |
 
+```tsx
+<ShareButton url="https://arachne.dev/ui" title="Arachne UI" />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ViewToggle
 
 List / grid toggle.
+
+**Slots:** `root` `option`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onChange` | `(value: "list" \| "grid") => void` | yes |  |
+| `value` | `"list" \| "grid"` | yes |  |
 
 ```tsx
 function Example() {
@@ -393,18 +400,19 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `option`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: "list" \| "grid") => void` | yes |  |
-| `value` | `"list" \| "grid"` | yes |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## DensityToggle
 
 Compact / comfortable density switch.
+
+**Slots:** `root` `option`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onChange` | `(value: Density) => void` | yes |  |
+| `value` | `Density` | yes |  |
+| `label` | `string` |  | Accessible name (default "Density"). |
 
 ```tsx
 function Example() {
@@ -418,19 +426,16 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `option`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: Density) => void` | yes |  |
-| `value` | `Density` | yes |  |
-| `label` | `string` |  | Accessible name (default "Density"). |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ThemeToggle
 
 Toggle between light and dark themes.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onChange` | `(theme: "light" \| "dark") => void` | yes |  |
+| `value` | `"light" \| "dark"` | yes |  |
 
 ```tsx
 function Example() {
@@ -446,16 +451,17 @@ function Example() {
 }
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(theme: "light" \| "dark") => void` | yes |  |
-| `value` | `"light" \| "dark"` | yes |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## CommandBar
 
 WAI-ARIA toolbar for page-level actions: one Tab stop, arrow keys (and Home / End) move focus between its controls.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `label` | `string` |  | Accessible name for the toolbar. |
+| `orientation` | `"horizontal" \| "vertical"` |  |  |
 
 ```tsx
 <CommandBar label="Selection actions">
@@ -471,17 +477,16 @@ WAI-ARIA toolbar for page-level actions: one Tab stop, arrow keys (and Home / En
 </CommandBar>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `label` | `string` |  | Accessible name for the toolbar. |
-| `orientation` | `"horizontal" \| "vertical"` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## FloatingToolbar
 
 Floating toolbar for contextual actions (e.g. over a selection): a WAI-ARIA toolbar with one Tab stop and arrow-key focus.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `label` | `string` |  | Accessible name for the toolbar. |
 
 ```tsx
 <FloatingToolbar label="Text formatting">
@@ -497,16 +502,20 @@ Floating toolbar for contextual actions (e.g. over a selection): a WAI-ARIA tool
 </FloatingToolbar>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `label` | `string` |  | Accessible name for the toolbar. |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## BulkBar
 
 Selection action bar.
+
+**Slots:** `root` `actions` `clear` `count`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `count` | `number` | yes |  |
+| `children` | `content` |  |  |
+| `countLabel` | `(count: number) => unknown` |  | Custom count text (default `N selected`). |
+| `onClear` | `() => void` |  |  |
 
 ```tsx
 function Example() {
@@ -529,14 +538,5 @@ function Example() {
 	);
 }
 ```
-
-**Slots:** `root` `actions` `clear` `count`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `count` | `number` | yes |  |
-| `children` | `content` |  |  |
-| `countLabel` | `(count: number) => unknown` |  | Custom count text (default `N selected`). |
-| `onClear` | `() => void` |  |  |
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.

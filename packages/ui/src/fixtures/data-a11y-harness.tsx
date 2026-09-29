@@ -10,6 +10,9 @@ export function run(root: HTMLElement) {
 	const picked = signal("2026-09-29");
 	const left = signal(["alpha", "beta", "gamma"]);
 	const right = signal<string[]>([]);
+	const query = signal("");
+	const rich = signal<string | undefined>(undefined);
+	const toggles: string[] = [];
 
 	const dispose = render(
 		() => (
@@ -29,6 +32,31 @@ export function run(root: HTMLElement) {
 							],
 						},
 						{ id: "readme", label: "README.md" },
+					]}
+				/>
+				<Tree
+					data-test="rich"
+					label="Rich"
+					icons="auto"
+					filter={query()}
+					value={rich()}
+					onChange={(id) => rich.set(id)}
+					onToggle={(id, open) => toggles.push(`${id}:${open}`)}
+					data={[
+						{
+							id: "pkgs",
+							label: "packages",
+							badge: 2,
+							children: [
+								{ id: "ui", label: "ui.tsx" },
+								{ id: "forms", label: "forms.tsx", disabled: true },
+							],
+						},
+						{
+							id: "docs",
+							label: "docs",
+							children: [{ id: "guide", label: "guide.md", icon: "info" }],
+						},
 					]}
 				/>
 				<Calendar data-test="cal" locale="en-GB" value={day()} onChange={(iso) => day.set(iso)} />
@@ -58,5 +86,18 @@ export function run(root: HTMLElement) {
 		root,
 	);
 
-	return { dispose, tree, day, guarded, picked, left, right, addMonths, calendarKeyTarget };
+	return {
+		query,
+		rich,
+		toggles,
+		dispose,
+		tree,
+		day,
+		guarded,
+		picked,
+		left,
+		right,
+		addMonths,
+		calendarKeyTarget,
+	};
 }

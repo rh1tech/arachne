@@ -7,6 +7,12 @@
 
 Flex stack; `gap` maps to `--a-stack-gap`.
 
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `direction` | `"row" \| "column"` |  |  |
+| `gap` | `string` |  |  |
+
 ```tsx
 <Stack gap="0.5rem">
 	<Text>First</Text>
@@ -15,26 +21,11 @@ Flex stack; `gap` maps to `--a-stack-gap`.
 </Stack>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `direction` | `"row" \| "column"` |  |  |
-| `gap` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Group
 
 Horizontal flex group (Mantine Group / Bootstrap btn-group row).
-
-```tsx
-<Group gap="0.5rem">
-	<Button variant="ghost" onClick={() => {}}>
-		Cancel
-	</Button>
-	<Button onClick={() => {}}>Save</Button>
-</Group>
-```
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -45,20 +36,20 @@ Horizontal flex group (Mantine Group / Bootstrap btn-group row).
 | `justify` | `"start" \| "end" \| "center" \| "between" \| "around"` |  |  |
 | `wrap` | `boolean` |  |  |
 
+```tsx
+<Group gap="0.5rem">
+	<Button variant="ghost" onClick={() => {}}>
+		Cancel
+	</Button>
+	<Button onClick={() => {}}>Save</Button>
+</Group>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Flex
 
 Flexbox layout primitive (direction, gap, align, justify, wrap).
-
-```tsx
-<Flex justify="space-between" align="center">
-	<Text>Invoices</Text>
-	<Button size="sm" onClick={() => {}}>
-		Export
-	</Button>
-</Flex>
-```
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -69,11 +60,25 @@ Flexbox layout primitive (direction, gap, align, justify, wrap).
 | `justify` | `string` |  |  |
 | `wrap` | `boolean` |  |  |
 
+```tsx
+<Flex justify="space-between" align="center">
+	<Text>Invoices</Text>
+	<Button size="sm" onClick={() => {}}>
+		Export
+	</Button>
+</Flex>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Center
 
 Centres its content horizontally and vertically.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `inline` | `boolean` |  |  |
 
 ```tsx
 <Center style={{ "min-height": "6rem" }}>
@@ -81,16 +86,16 @@ Centres its content horizontally and vertically.
 </Center>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `inline` | `boolean` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Space
 
 Fixed spacer; `h` / `w` accept numbers (px) or CSS lengths.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `h` | `string \| number` |  |  |
+| `w` | `string \| number` |  |  |
 
 ```tsx
 <div>
@@ -100,36 +105,25 @@ Fixed spacer; `h` / `w` accept numbers (px) or CSS lengths.
 </div>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `h` | `string \| number` |  |  |
-| `w` | `string \| number` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Box
 
 Bordered surface for grouping content.
 
-```tsx
-<Box>Boxes group related content on a raised surface.</Box>
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `children` | `content` |  |  |
+
+```tsx
+<Box>Boxes group related content on a raised surface.</Box>
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Paper
 
 Surface paper (Mantine).
-
-```tsx
-<Paper padding="lg" shadow withBorder>
-	Paper is the plainest surface: padding, radius, optional border and shadow.
-</Paper>
-```
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -138,11 +132,21 @@ Surface paper (Mantine).
 | `shadow` | `boolean` |  |  |
 | `withBorder` | `boolean` |  |  |
 
+```tsx
+<Paper padding="lg" shadow withBorder>
+	Paper is the plainest surface: padding, radius, optional border and shadow.
+</Paper>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Block
 
 Vertical spacing block (Bulma).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <div>
@@ -151,15 +155,20 @@ Vertical spacing block (Bulma).
 </div>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Tile
 
 Nestable tile grid (Bulma).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `ancestor` | `boolean` |  |  |
+| `child` | `boolean` |  |  |
+| `children` | `content` |  |  |
+| `parent` | `boolean` |  |  |
+| `size` | `5 \| 2 \| 1 \| 3 \| 4 \| 6 \| 7 \| 8 \| 9 \| 10 \| 11 \| 12` |  |  |
+| `vertical` | `boolean` |  |  |
 
 ```tsx
 <Tile ancestor>
@@ -176,20 +185,15 @@ Nestable tile grid (Bulma).
 </Tile>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `ancestor` | `boolean` |  |  |
-| `child` | `boolean` |  |  |
-| `children` | `content` |  |  |
-| `parent` | `boolean` |  |  |
-| `size` | `5 \| 2 \| 1 \| 3 \| 4 \| 6 \| 7 \| 8 \| 9 \| 10 \| 11 \| 12` |  |  |
-| `vertical` | `boolean` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Card
 
 Content card (Bulma/Mantine/Bootstrap).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 const cardImage = "/images/cover.jpg";
@@ -209,10 +213,6 @@ const cardImage = "/images/cover.jpg";
 </Card>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 **Parts**
@@ -220,6 +220,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 ### CardHeader
 
 Card header row.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Card>
@@ -230,13 +234,13 @@ Card header row.
 </Card>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ### CardHeaderTitle
 
 Title text inside a card header.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Card>
@@ -246,13 +250,13 @@ Title text inside a card header.
 </Card>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ### CardImage
 
 Full-bleed media at the top of a card.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 const cardImage = "/images/cover.jpg";
@@ -264,13 +268,13 @@ const cardImage = "/images/cover.jpg";
 </Card>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ### CardContent
 
 Padded body of a card.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Card>
@@ -278,13 +282,13 @@ Padded body of a card.
 </Card>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ### CardFooter
 
 Card footer row of actions.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Card>
@@ -296,13 +300,14 @@ Card footer row of actions.
 </Card>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ### CardFooterItem
 
 One action cell in a card footer (a button when `onClick` is set).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `onClick` | `(e: MouseEvent) => void` |  |  |
 
 ```tsx
 <Card>
@@ -315,14 +320,14 @@ One action cell in a card footer (a button when `onClick` is set).
 </Card>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
-
 ## Panel
 
 Side panel / filter panel (Bulma).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `label` | `string` |  | Accessible name of the panel's `&lt;nav>` landmark; set it when a page has several panels. |
 
 ```tsx
 function Example() {
@@ -358,11 +363,6 @@ function Example() {
 }
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `label` | `string` |  | Accessible name of the panel's `&lt;nav>` landmark; set it when a page has several panels. |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 **Parts**
@@ -371,6 +371,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Heading row of a panel.
 
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+
 ```tsx
 <Panel label="Projects">
 	<PanelHeading>Repositories</PanelHeading>
@@ -378,13 +382,13 @@ Heading row of a panel.
 </Panel>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ### PanelTabs
 
 Tab row inside a panel.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 function Example() {
@@ -404,13 +408,15 @@ function Example() {
 }
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ### PanelTab
 
 One tab in a panel's tab row.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `active` | `boolean` |  |  |
+| `children` | `content` |  |  |
+| `onClick` | `(e: MouseEvent) => void` |  |  |
 
 ```tsx
 function Example() {
@@ -430,15 +436,15 @@ function Example() {
 }
 ```
 
+### PanelBlock
+
+Panel row; renders a `<button>` when `onClick` is set.
+
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `active` | `boolean` |  |  |
 | `children` | `content` |  |  |
 | `onClick` | `(e: MouseEvent) => void` |  |  |
-
-### PanelBlock
-
-Panel row; renders a `<button>` when `onClick` is set.
 
 ```tsx
 function Example() {
@@ -459,15 +465,13 @@ function Example() {
 }
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `active` | `boolean` |  |  |
-| `children` | `content` |  |  |
-| `onClick` | `(e: MouseEvent) => void` |  |  |
-
 ## Inset
 
 Recessed panel (canvas background, border) for secondary content inside a surface.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Inset>
@@ -475,15 +479,16 @@ Recessed panel (canvas background, border) for secondary content inside a surfac
 </Inset>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Bleed
 
 Negative horizontal margin to break out of padding.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `x` | `string` |  |  |
 
 ```tsx
 <Bleed x="1rem">
@@ -491,16 +496,20 @@ Negative horizontal margin to break out of padding.
 </Bleed>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `x` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Columns
 
 Flexbox columns container (Bulma `columns`).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `centered` | `boolean` |  |  |
+| `children` | `content` |  |  |
+| `gap` | `string` |  |  |
+| `mobile` | `boolean` |  | Keep columns side-by-side on mobile (default stacks under 768px). |
+| `multiline` | `boolean` |  |  |
+| `vcentered` | `boolean` |  |  |
 
 ```tsx
 <Columns gap="1rem">
@@ -516,15 +525,6 @@ Flexbox columns container (Bulma `columns`).
 </Columns>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `centered` | `boolean` |  |  |
-| `children` | `content` |  |  |
-| `gap` | `string` |  |  |
-| `mobile` | `boolean` |  | Keep columns side-by-side on mobile (default stacks under 768px). |
-| `multiline` | `boolean` |  |  |
-| `vcentered` | `boolean` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 **Parts**
@@ -532,6 +532,13 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 ### Column
 
 Single column (Bulma `column`).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `narrow` | `boolean` |  |  |
+| `offset` | `ColumnSize` |  |  |
+| `size` | `ColumnSize` |  |  |
 
 ```tsx
 <Columns>
@@ -544,16 +551,16 @@ Single column (Bulma `column`).
 </Columns>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `narrow` | `boolean` |  |  |
-| `offset` | `ColumnSize` |  |  |
-| `size` | `ColumnSize` |  |  |
-
 ## Grid
 
 CSS grid layout (Bulma-style 2D grid).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `cols` | `number` |  | Column count (CSS grid). Default 12. |
+| `gap` | `string` |  |  |
+| `min` | `string` |  | Min track width for auto-fit dense grids, e.g. `12rem`. Overrides `cols` when set. |
 
 ```tsx
 <Grid cols={3} gap="0.75rem">
@@ -566,13 +573,6 @@ CSS grid layout (Bulma-style 2D grid).
 </Grid>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `cols` | `number` |  | Column count (CSS grid). Default 12. |
-| `gap` | `string` |  |  |
-| `min` | `string` |  | Min track width for auto-fit dense grids, e.g. `12rem`. Overrides `cols` when set. |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 **Parts**
@@ -580,6 +580,12 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 ### GridItem
 
 Item of a CSS grid, placed with `span` / `start`.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `span` | `number` |  |  |
+| `start` | `number` |  |  |
 
 ```tsx
 <Grid cols={3} gap="0.75rem">
@@ -590,15 +596,14 @@ Item of a CSS grid, placed with `span` / `start`.
 </Grid>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `span` | `number` |  |  |
-| `start` | `number` |  |  |
-
 ## Container
 
 Horizontally centred content container with a max width.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `size` | `"sm" \| "md" \| "lg" \| "full"` |  |  |
 
 ```tsx
 <Container size="sm">
@@ -606,16 +611,16 @@ Horizontally centred content container with a max width.
 </Container>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `size` | `"sm" \| "md" \| "lg" \| "full"` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Section
 
 Vertical page section with rhythm spacing.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `size` | `"sm" \| "md" \| "lg"` |  |  |
 
 ```tsx
 <Section size="sm">
@@ -624,16 +629,16 @@ Vertical page section with rhythm spacing.
 </Section>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Level
 
 Horizontal level bar (Bulma `level`).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `mobile` | `boolean` |  |  |
 
 ```tsx
 <Level>
@@ -652,11 +657,6 @@ Horizontal level bar (Bulma `level`).
 </Level>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `mobile` | `boolean` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 **Parts**
@@ -664,6 +664,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 ### LevelLeft
 
 Left-aligned group of a level bar.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Level>
@@ -673,13 +677,13 @@ Left-aligned group of a level bar.
 </Level>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ### LevelRight
 
 Right-aligned group of a level bar.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Level>
@@ -689,13 +693,13 @@ Right-aligned group of a level bar.
 </Level>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ### LevelItem
 
 One centred item of a level bar.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Level>
@@ -708,13 +712,15 @@ One centred item of a level bar.
 </Level>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ## Hero
 
 Full-bleed page hero (Bulma / Bootstrap jumbotron).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `size` | `HeroSize` |  |  |
+| `tone` | `HeroTone` |  |  |
 
 ```tsx
 <Hero tone="accent" size="sm">
@@ -727,12 +733,6 @@ Full-bleed page hero (Bulma / Bootstrap jumbotron).
 </Hero>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `size` | `HeroSize` |  |  |
-| `tone` | `HeroTone` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 **Parts**
@@ -740,6 +740,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 ### HeroHead
 
 Top area of a hero (e.g. navigation).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Hero tone="dark" size="sm">
@@ -750,13 +754,13 @@ Top area of a hero (e.g. navigation).
 </Hero>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ### HeroBody
 
 Main content area of a hero.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Hero size="sm">
@@ -764,13 +768,13 @@ Main content area of a hero.
 </Hero>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ### HeroFoot
 
 Bottom area of a hero (e.g. tabs).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Hero tone="light" size="sm">
@@ -781,13 +785,13 @@ Bottom area of a hero (e.g. tabs).
 </Hero>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ## Media
 
 Media object (Bulma / UIkit comment / Bootstrap media).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Media>
@@ -803,10 +807,6 @@ Media object (Bulma / UIkit comment / Bootstrap media).
 </Media>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 **Parts**
@@ -814,6 +814,10 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 ### MediaLeft
 
 Leading figure of a media object (avatar, thumbnail).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Media>
@@ -824,13 +828,13 @@ Leading figure of a media object (avatar, thumbnail).
 </Media>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ### MediaContent
 
 Main content of a media object.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Media>
@@ -841,13 +845,13 @@ Main content of a media object.
 </Media>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ### MediaRight
 
 Trailing content of a media object (actions).
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Media>
@@ -860,13 +864,13 @@ Trailing content of a media object (actions).
 </Media>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 ## Footer
 
 Page footer region.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Footer>
@@ -874,15 +878,19 @@ Page footer region.
 </Footer>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## SiteFooter
 
 Marketing footer.
+
+**Slots:** `root` `brand` `column` `columnTitle` `grid` `link` `meta`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `brand` | `content` |  |  |
+| `columns` | `{ title: string; links: SiteFooterLink[]; }[]` |  |  |
+| `meta` | `content` |  |  |
 
 ```tsx
 <SiteFooter
@@ -907,14 +915,6 @@ Marketing footer.
 />
 ```
 
-**Slots:** `root` `brand` `column` `columnTitle` `grid` `link` `meta`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `brand` | `content` |  |  |
-| `columns` | `{ title: string; links: SiteFooterLink[]; }[]` |  |  |
-| `meta` | `content` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Divider
@@ -935,12 +935,6 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Fixed-ratio box (`--a-aspect`).
 
-```tsx
-<AspectRatio style={{ "max-width": "20rem" }} ratio={16 / 9}>
-	<img src="/images/16-9.jpg" alt="16 by 9 placeholder" />
-</AspectRatio>
-```
-
 **Slots:** `root` `inner`
 
 | Prop | Type | Required | Description |
@@ -948,11 +942,22 @@ Fixed-ratio box (`--a-aspect`).
 | `children` | `content` |  |  |
 | `ratio` | `number` |  |  |
 
+```tsx
+<AspectRatio style={{ "max-width": "20rem" }} ratio={16 / 9}>
+	<img src="/images/16-9.jpg" alt="16 by 9 placeholder" />
+</AspectRatio>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ScrollArea
 
 Scrollable region with a max height.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `maxHeight` | `string` |  |  |
 
 ```tsx
 <ScrollArea maxHeight="6rem">
@@ -967,26 +972,11 @@ Scrollable region with a max height.
 </ScrollArea>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `maxHeight` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Splitter
 
 Two resizable panes (pointer + ← → Home End).
-
-```tsx
-<Splitter
-	style={{ height: "8rem" }}
-	label="Resize panes"
-	initial={40}
-	left={<Text>Files</Text>}
-	right={<Text>Editor</Text>}
-/>
-```
 
 **Slots:** `root` `handle` `pane`
 
@@ -999,31 +989,64 @@ Two resizable panes (pointer + ← → Home End).
 | `min` | `number` |  |  |
 | `right` | `content` |  |  |
 
+```tsx
+<Splitter
+	style={{ height: "8rem" }}
+	label="Resize panes"
+	initial={40}
+	left={<Text>Files</Text>}
+	right={<Text>Editor</Text>}
+/>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Masonry
 
 Masonry layout of variable-height items in columns.
 
-```tsx
-<Masonry columns={3}>
-	<img src="/images/1.jpg" alt="Tall" width="240" height="320" />
-	<img src="/images/2.jpg" alt="Short" width="240" height="160" />
-	<img src="/images/3.jpg" alt="Square" width="240" height="240" />
-	<img src="/images/4.jpg" alt="Wide" width="240" height="180" />
-</Masonry>
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `children` | `content` |  |  |
 | `columns` | `2 \| 3 \| 4` |  |  |
+
+```tsx
+function Example() {
+	const notes = [
+		{ title: "Release 2.4", body: "Dark theme, a component reference and interactive examples." },
+		{ title: "Standup", body: "Ship the tree search." },
+		{
+			title: "Design review",
+			body: "Tighten the button group borders, fix the burger icon, make quote backgrounds optional and give the tree folder icons.",
+		},
+		{ title: "Bug", body: "PIN input needed two Backspaces." },
+		{ title: "Idea", body: "Masonry packs cards of different heights into columns without gaps." },
+		{ title: "Reading", body: "WAI-ARIA tree pattern." },
+	];
+	return (
+		<Masonry columns={3}>
+			<For each={notes}>
+				{(note) => (
+					<Paper withBorder padding="md">
+						<strong>{note.title}</strong>
+						<Text muted>{note.body}</Text>
+					</Paper>
+				)}
+			</For>
+		</Masonry>
+	);
+}
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Reel
 
 Horizontal scroll reel.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 <Reel>
@@ -1034,15 +1057,16 @@ Horizontal scroll reel.
 </Reel>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## GalleryGrid
 
 Image grid.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `columns` | `2 \| 3 \| 4` |  |  |
 
 ```tsx
 <GalleryGrid columns={3}>
@@ -1052,16 +1076,15 @@ Image grid.
 </GalleryGrid>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `columns` | `2 \| 3 \| 4` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## FilterBar
 
 Horizontal toolbar for filters and chips.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
 
 ```tsx
 function Example() {
@@ -1085,9 +1108,5 @@ function Example() {
 	);
 }
 ```
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.

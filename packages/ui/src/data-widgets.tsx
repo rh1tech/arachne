@@ -1,9 +1,11 @@
 import { For, Show } from "@arachne/render";
 import { computed, effect, signal, untrack } from "@arachne/signals";
 import { watchClickOutside } from "./click-outside.ts";
+import { autoPosition } from "./floating.ts";
 import { whenConnected } from "./focus.ts";
-import { Icon } from "./icons.tsx";
+import { Icon, type IconName } from "./icons.tsx";
 import { watchEscape } from "./layers.ts";
+import { Highlight } from "./overlays-extra.tsx";
 import { type BaseProps, createId, type SlotProps, type Slots, setup } from "./system.ts";
 import { ActionIcon } from "./widgets.tsx";
 
@@ -11,9 +13,24 @@ export type TreeNode = {
 	id: string;
 	label: string;
 	children?: TreeNode[] | undefined;
+	/** Leading icon: an icon name or any content. */
+	icon?: IconName | (string & {}) | unknown;
+	/** Trailing content, e.g. a count or status badge. */
+	badge?: unknown;
+	/** Shown and focusable, but can't be selected. */
+	disabled?: boolean | undefined;
 };
 
-export type TreeSlot = "root" | "group" | "item" | "row" | "toggle" | "label";
+export type TreeSlot =
+	| "root"
+	| "group"
+	| "item"
+	| "row"
+	| "toggle"
+	| "icon"
+	| "label"
+	| "badge"
+	| "empty";
 
 export type TreeProps = SlotProps<TreeSlot> & {
 	data: TreeNode[];
@@ -23,6 +40,19 @@ export type TreeProps = SlotProps<TreeSlot> & {
 	defaultExpanded?: string[] | undefined;
 	/** Accessible name for the tree. */
 	label?: string | undefined;
+	/**
+	 * Show only nodes whose label contains this text (case-insensitive), plus their
+	 * ancestors, expanded, with the match highlighted.
+	 */
+	filter?: string | undefined;
+	/** Shown when `filter` matches nothing (default "No matches"). */
+	emptyLabel?: unknown;
+	/** `"auto"`: folder / file icons for nodes without their own `icon`. */
+	icons?: "auto" | "none" | undefined;
+	/** Clicking a parent row also expands / collapses it (default true). */
+	expandOnClick?: boolean | undefined;
+	/** Called when a node is expanded or collapsed by the user. */
+	onToggle?: ((id: string, open: boolean) => void) | undefined;
 };
 
 type VisibleNode = { node: TreeNode; level: number; parent: string | undefined };
@@ -42,6 +72,18 @@ function flattenVisible(
 		const self = { node, level, parent };
 		if (!hasChildren(node) || !expanded.has(node.id)) return [self];
 		return [self, ...flattenVisible(node.children ?? [], expanded, level + 1, node.id)];
+	});
+}
+
+/** Nodes matching `query` (and their ancestors); `open` collects ancestors to force open. */
+function filterTree(nodes: TreeNode[], query: string, open: Set<string>): TreeNode[] {
+	return nodes.flatMap((node) => {
+		const kids = filterTree(node.children ?? [], query, open);
+		const matches = node.label.toLowerCase().includes(query);
+		if (!matches && kids.length === 0) return [];
+		if (kids.length > 0) open.add(node.id);
+		// A matching parent keeps all of its children; otherwise only the matching path.
+		return [{ ...node, children: matches && kids.length === 0 ? node.children : kids }];
 	});
 }
 
@@ -110,7 +152,30 @@ type TreeContext = {
 	value: () => string | undefined;
 	tabStop: () => string | undefined;
 	isOpen: (id: string) => boolean;
+	query: () => string;
+	autoIcons: () => boolean;
 };
+
+function TreeIcon(props: { node: TreeNode; open: boolean; ctx: TreeContext }) {
+	const icon = () => {
+		const own = props.node.icon;
+		if (own != null)
+			return typeof own === "string" ? <Icon name={own as IconName} size={16} /> : own;
+		if (!props.ctx.autoIcons()) return null;
+		return <Icon name={hasChildren(props.node) ? "folder" : "file"} size={16} />;
+	};
+	return (
+		<Show when={icon()}>
+			<span
+				class={props.ctx.slot.class("icon", "a-tree-icon")}
+				style={props.ctx.slot.style("icon")}
+				aria-hidden="true"
+			>
+				{icon()}
+			</span>
+		</Show>
+	);
+}
 
 function TreeBranch(props: { nodes: TreeNode[]; level: number; ctx: TreeContext }) {
 	const { slot } = props.ctx;
@@ -129,6 +194,7 @@ function TreeBranch(props: { nodes: TreeNode[]; level: number; ctx: TreeContext 
 						aria-level={props.level}
 						aria-expanded={kids.length > 0 ? open() : undefined}
 						aria-selected={selected()}
+						aria-disabled={node.disabled || undefined}
 						class={slot.class("item", "a-tree-node")}
 						style={slot.style("item")}
 					>
@@ -155,9 +221,17 @@ function TreeBranch(props: { nodes: TreeNode[]; level: number; ctx: TreeContext 
 							) : (
 								<span class={slot.class("toggle", "a-tree-spacer")} aria-hidden="true" />
 							)}
+							<TreeIcon node={node} open={open()} ctx={props.ctx} />
 							<span class={slot.class("label", "a-tree-label")} style={slot.style("label")}>
-								{node.label}
+								<Show when={props.ctx.query()} fallback={node.label}>
+									<Highlight text={node.label} highlight={props.ctx.query()} />
+								</Show>
 							</span>
+							<Show when={node.badge != null}>
+								<span class={slot.class("badge", "a-tree-badge")} style={slot.style("badge")}>
+									{node.badge as unknown}
+								</span>
+							</Show>
 						</div>
 						<Show when={kids.length > 0 && open()}>
 							{/* biome-ignore lint/a11y/useSemanticElements: APG tree — nested ul[role=group], not a form fieldset */}
@@ -178,22 +252,50 @@ function TreeBranch(props: { nodes: TreeNode[]; level: number; ctx: TreeContext 
 
 /**
  * WAI-ARIA tree: one tab stop, ↑ ↓ move, → expands / enters, ← collapses /
- * goes to parent, Home End, Enter/Space select.
- * Slots: `root` `group` `item` `row` `toggle` `label`.
+ * goes to parent, Home End, Enter/Space select, type-ahead. Node icons and
+ * badges, `filter` for search, `icons="auto"` for folder/file icons.
+ * Slots: `root` `group` `item` `row` `toggle` `icon` `label` `badge` `empty`.
  */
 export function Tree(input: TreeProps) {
 	const [props, rest, slot] = setup(
 		"Tree",
 		input,
 		{},
-		["data", "value", "onChange", "defaultExpanded", "label"],
+		[
+			"data",
+			"value",
+			"onChange",
+			"defaultExpanded",
+			"label",
+			"filter",
+			"emptyLabel",
+			"icons",
+			"expandOnClick",
+			"onToggle",
+		],
 		"root" as TreeSlot,
 	);
 	const expanded = signal(new Set<string>(untrack(() => props.defaultExpanded) ?? []));
 	const focused = signal<string | undefined>(undefined);
 	let root: HTMLElement | undefined;
 
-	const visible = () => flattenVisible(props.data, expanded());
+	const query = () => (props.filter ?? "").trim().toLowerCase();
+	/** Data after `filter`, plus the ancestors it forces open. */
+	const view = computed(() => {
+		const open = new Set<string>();
+		const q = query();
+		return { nodes: q ? filterTree(props.data, q, open) : props.data, open };
+	});
+	const isOpen = (id: string) => (query() ? view().open.has(id) : expanded().has(id));
+	const findNode = (id: string, nodes = props.data): TreeNode | undefined => {
+		for (const node of nodes) {
+			if (node.id === id) return node;
+			const found = findNode(id, node.children ?? []);
+			if (found) return found;
+		}
+		return undefined;
+	};
+	const visible = () => flattenVisible(view().nodes, query() ? view().open : expanded());
 	const isVisible = (id: string | undefined) =>
 		Boolean(id && visible().some((v) => v.node.id === id));
 	const tabStop = () => {
@@ -203,10 +305,16 @@ export function Tree(input: TreeProps) {
 		return visible()[0]?.node.id;
 	};
 	const toggle = (id: string) => {
+		if (query()) return; // Filtering shows every matching path open.
 		const next = new Set(expanded());
-		if (next.has(id)) next.delete(id);
-		else next.add(id);
+		const open = !next.has(id);
+		if (open) next.add(id);
+		else next.delete(id);
 		expanded.set(next);
+		props.onToggle?.(id, open);
+	};
+	const select = (id: string) => {
+		if (!findNode(id)?.disabled) props.onChange?.(id);
 	};
 	const itemFrom = (target: EventTarget | null) =>
 		(target as Element | null)?.closest<HTMLElement>('[role="treeitem"]') ?? undefined;
@@ -231,15 +339,20 @@ export function Tree(input: TreeProps) {
 		e.preventDefault();
 		if (move.toggle) toggle(move.toggle);
 		for (const id of move.expand ?? []) toggle(id);
-		if (move.select) props.onChange?.(move.select);
+		if (move.select) select(move.select);
 		if (move.focus) focusItem(move.focus);
 	};
 
 	const onClick = (e: MouseEvent) => {
 		const id = itemFrom(e.target)?.dataset["treeId"];
 		if (!id) return;
-		if ((e.target as Element).closest("[data-tree-toggle]")) toggle(id);
-		else props.onChange?.(id);
+		const onToggle = Boolean((e.target as Element).closest("[data-tree-toggle]"));
+		const node = findNode(id);
+		if (onToggle) toggle(id);
+		else {
+			select(id);
+			if (node && hasChildren(node) && props.expandOnClick !== false) toggle(id);
+		}
 		focusItem(id);
 	};
 
@@ -247,7 +360,9 @@ export function Tree(input: TreeProps) {
 		slot,
 		value: () => props.value,
 		tabStop,
-		isOpen: (id) => expanded().has(id),
+		isOpen,
+		query,
+		autoIcons: () => props.icons === "auto",
 	};
 
 	return (
@@ -268,7 +383,12 @@ export function Tree(input: TreeProps) {
 				if (id) focused.set(id);
 			}}
 		>
-			<TreeBranch nodes={props.data} level={1} ctx={ctx} />
+			<TreeBranch nodes={view().nodes} level={1} ctx={ctx} />
+			<Show when={query() && view().nodes.length === 0}>
+				<li role="none" class={slot.class("empty", "a-tree-empty")} style={slot.style("empty")}>
+					{props.emptyLabel ?? "No matches"}
+				</li>
+			</Show>
 		</ul>
 	);
 }
@@ -802,6 +922,18 @@ export function DatePicker(input: DatePickerProps) {
 		"root" as DatePickerSlot,
 	);
 	const open = signal(false);
+	let dropdown: HTMLElement | undefined;
+	// Fixed, collision-aware placement: escapes overflow clipping and stacking of later siblings.
+	effect(() => {
+		if (!open()) return;
+		return whenConnected(
+			() => dropdown,
+			(el) => {
+				const trigger = host?.querySelector("[data-datepicker-trigger]");
+				return trigger ? autoPosition(trigger, el, () => "bottom-start", { offset: 6 }) : undefined;
+			},
+		);
+	});
 	const id = createId("datepicker", props.id);
 	let host: HTMLElement | undefined;
 	const focusTrigger = () => host?.querySelector<HTMLElement>("[data-datepicker-trigger]")?.focus();
@@ -854,6 +986,9 @@ export function DatePicker(input: DatePickerProps) {
 			</button>
 			<Show when={open()} fallback={null}>
 				<div
+					ref={(el: HTMLElement) => {
+						dropdown = el;
+					}}
 					class={slot.class("dropdown", "a-datepicker-dropdown")}
 					style={slot.style("dropdown")}
 					id={`${id}-dropdown`}

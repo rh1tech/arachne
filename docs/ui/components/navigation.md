@@ -7,6 +7,18 @@
 
 Responsive navbar with nested menus (hover or click), overflow scrolling and a mobile drawer (focus trap, scroll lock). Nested lists take the `list` / `item` / `link` slots.
 
+**Slots:** `root` `backdrop` `brand` `burger` `close` `desktop` `end` `header` `item` `link` `list` `mobile` `panel` `scroll` `shell` `title` `track` `viewport`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `ctrl` | `NavbarController` | yes | Pass a stable controller from `createNavbarController()` (required for multiple navbars). |
+| `items` | `NavMenuItem[]` | yes |  |
+| `brand` | `content` |  |  |
+| `end` | `content` |  |  |
+| `label` | `string` |  | Accessible name for the desktop `&lt;nav>` (default "Primary"). |
+| `placement` | `NavbarPlacement` |  | Pin the bar to the top of the scrollport / viewport. Default: static |
+| `trigger` | `NavMenuTrigger` |  | Desktop submenu open mode. Mobile always uses click. Default: hover |
+
 ```tsx
 function Example() {
 	const ctrl = createNavbarController();
@@ -33,18 +45,6 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `backdrop` `brand` `burger` `close` `desktop` `end` `header` `item` `link` `list` `mobile` `panel` `scroll` `shell` `title` `track` `viewport`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `ctrl` | `NavbarController` | yes | Pass a stable controller from `createNavbarController()` (required for multiple navbars). |
-| `items` | `NavMenuItem[]` | yes |  |
-| `brand` | `content` |  |  |
-| `end` | `content` |  |  |
-| `label` | `string` |  | Accessible name for the desktop `&lt;nav>` (default "Primary"). |
-| `placement` | `NavbarPlacement` |  | Pin the bar to the top of the scrollport / viewport. Default: static |
-| `trigger` | `NavMenuTrigger` |  | Desktop submenu open mode. Mobile always uses click. Default: hover |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 **Parts**
@@ -53,12 +53,6 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 
 Standalone navbar link (renders `<a>` when `href` is set).
 
-```tsx
-<NavbarLink href="#pricing" active>
-	Pricing
-</NavbarLink>
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `active` | `boolean` |  |  |
@@ -66,9 +60,24 @@ Standalone navbar link (renders `<a>` when `href` is set).
 | `href` | `string` |  |  |
 | `onClick` | `(e: MouseEvent) => void` |  |  |
 
+```tsx
+<NavbarLink href="#pricing" active>
+	Pricing
+</NavbarLink>
+```
+
 ## AppShell
 
 Application chrome: optional sidebar + header around main content.
+
+**Slots:** `root` `content` `header` `main` `sidebar`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `contentAs` | `"main" \| "div"` |  | Element for the content area (default `"main"`). Use `"div"` when the shell is nested in a page that already has a `&lt;main>` landmark. |
+| `header` | `content` |  |  |
+| `sidebar` | `content` |  |  |
 
 ```tsx
 const sections = [
@@ -91,20 +100,20 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `content` `header` `main` `sidebar`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `contentAs` | `"main" \| "div"` |  | Element for the content area (default `"main"`). Use `"div"` when the shell is nested in a page that already has a `&lt;main>` landmark. |
-| `header` | `content` |  |  |
-| `sidebar` | `content` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## SidebarNav
 
 Vertical nav list.
+
+**Slots:** `root` `link`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `SidebarItem[]` | yes |  |
+| `label` | `string` |  | Accessible name for the nav (default "Sidebar"). |
+| `onChange` | `(id: string) => void` |  |  |
+| `value` | `string` |  |  |
 
 ```tsx
 const sections = [
@@ -119,20 +128,18 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `link`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `SidebarItem[]` | yes |  |
-| `label` | `string` |  | Accessible name for the nav (default "Sidebar"). |
-| `onChange` | `(id: string) => void` |  |  |
-| `value` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Breadcrumb
 
 Trail of links; the last item is the current page. Links render as `<a>` when `href` is set.
+
+**Slots:** `root` `current` `item` `link` `list` `separator`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `BreadcrumbItem[]` | yes |  |
+| `separator` | `content` |  | Separator node (default `/`). |
 
 ```tsx
 <Breadcrumb
@@ -144,18 +151,24 @@ Trail of links; the last item is the current page. Links render as `<a>` when `h
 />
 ```
 
-**Slots:** `root` `current` `item` `link` `list` `separator`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `BreadcrumbItem[]` | yes |  |
-| `separator` | `content` |  | Separator node (default `/`). |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Tabs
 
 WAI-ARIA tabs: roving tabindex, ← → Home End, linked panels, animated indicator (transform only), overflow scroll buttons.
+
+**Slots:** `root` `badge` `icon` `indicator` `list` `panel` `scroll` `tab` `viewport`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `TabItem[]` | yes |  |
+| `onChange` | `(id: string) => void` | yes |  |
+| `value` | `string` | yes |  |
+| `activation` | `"auto" \| "manual"` |  | `auto` selects on arrow focus (default); `manual` waits for Enter/Space. |
+| `grow` | `boolean` |  | Stretch tabs to fill the row. |
+| `label` | `string` |  | Accessible name for the tablist. |
+| `size` | `"sm" \| "md" \| "lg"` |  |  |
+| `variant` | `"line" \| "pills" \| "enclosed" \| "segmented"` |  | `line` (underline), `pills`, `enclosed` (card tabs) or `segmented`. |
 
 ```tsx
 function Example() {
@@ -180,24 +193,20 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `badge` `icon` `indicator` `list` `panel` `scroll` `tab` `viewport`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `TabItem[]` | yes |  |
-| `onChange` | `(id: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `activation` | `"auto" \| "manual"` |  | `auto` selects on arrow focus (default); `manual` waits for Enter/Space. |
-| `grow` | `boolean` |  | Stretch tabs to fill the row. |
-| `label` | `string` |  | Accessible name for the tablist. |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
-| `variant` | `"line" \| "pills" \| "enclosed" \| "segmented"` |  | `line` (underline), `pills`, `enclosed` (card tabs) or `segmented`. |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Steps
 
 Step indicator.
+
+**Slots:** `root` `button` `copy` `description` `index` `label` `step`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `StepItem[]` | yes |  |
+| `value` | `string` | yes | Current step id (active). Prior steps are complete. |
+| `label` | `string` |  | Accessible name (default "Progress"). |
+| `onChange` | `(id: string) => void` |  |  |
 
 ```tsx
 function Example() {
@@ -217,27 +226,11 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `button` `copy` `description` `index` `label` `step`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `StepItem[]` | yes |  |
-| `value` | `string` | yes | Current step id (active). Prior steps are complete. |
-| `label` | `string` |  | Accessible name (default "Progress"). |
-| `onChange` | `(id: string) => void` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Pagination
 
 Page navigation with previous/next controls and numbered pages (`variant="simple"` shows a status instead). Collapses to arrows on narrow screens.
-
-```tsx
-function Example() {
-	const page = signal(3);
-	return <Pagination page={page()} pageCount={12} onChange={page.set} />;
-}
-```
 
 **Slots:** `root` `control` `ellipsis` `page` `pages` `status`
 
@@ -251,11 +244,27 @@ function Example() {
 | `siblings` | `number` |  | Pages shown on each side of the current page (default 1). |
 | `variant` | `"pages" \| "simple"` |  | `simple` = prev/next + status; `pages` = numbered buttons (default). |
 
+```tsx
+function Example() {
+	const page = signal(3);
+	return <Pagination page={page()} pageCount={12} onChange={page.set} />;
+}
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## DotPagination
 
 Dot indicators for carousels and slides.
+
+**Slots:** `root` `dot`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `count` | `number` | yes |  |
+| `onChange` | `(index: number) => void` | yes |  |
+| `value` | `number` | yes |  |
+| `label` | `string` |  | Accessible name (default "Pagination"). |
 
 ```tsx
 function Example() {
@@ -269,20 +278,22 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `dot`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `count` | `number` | yes |  |
-| `onChange` | `(index: number) => void` | yes |  |
-| `value` | `number` | yes |  |
-| `label` | `string` |  | Accessible name (default "Pagination"). |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## NextPrev
 
 Previous / next navigation pair.
+
+**Slots:** `root` `next` `prev`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `nextDisabled` | `boolean` |  |  |
+| `nextLabel` | `string` |  |  |
+| `onNext` | `() => void` |  |  |
+| `onPrev` | `() => void` |  |  |
+| `prevDisabled` | `boolean` |  |  |
+| `prevLabel` | `string` |  |  |
 
 ```tsx
 function Example() {
@@ -306,28 +317,11 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `next` `prev`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `nextDisabled` | `boolean` |  |  |
-| `nextLabel` | `string` |  |  |
-| `onNext` | `() => void` |  |  |
-| `onPrev` | `() => void` |  |  |
-| `prevDisabled` | `boolean` |  |  |
-| `prevLabel` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## BackLink
 
 "Back" link with an arrow.
-
-```tsx
-<BackLink href="#projects">
-	All projects
-</BackLink>
-```
 
 **Slots:** `root` `icon` `label`
 
@@ -337,11 +331,26 @@ Also accepts the [shared props](../customization.md#shared-props): pass-through 
 | `href` | `string` |  | Render as a link. |
 | `onClick` | `(e: MouseEvent) => void` |  |  |
 
+```tsx
+<BackLink href="#projects">
+	All projects
+</BackLink>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Subnav
 
 Compact pill/sub navigation (UIkit subnav).
+
+**Slots:** `root` `item`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `SubnavItem[]` | yes |  |
+| `onChange` | `(id: string) => void` | yes |  |
+| `value` | `string` | yes |  |
+| `label` | `string` |  | Accessible name (default "Sub navigation"). |
 
 ```tsx
 function Example() {
@@ -361,20 +370,20 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `item`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `SubnavItem[]` | yes |  |
-| `onChange` | `(id: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `label` | `string` |  | Accessible name (default "Sub navigation"). |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Iconnav
 
 Icon-only navigation.
+
+**Slots:** `root` `item`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `IconnavItem[]` | yes |  |
+| `label` | `string` |  | Accessible name (default "Icon navigation"). |
+| `onChange` | `(id: string) => void` |  |  |
+| `value` | `string` |  |  |
 
 ```tsx
 function Example() {
@@ -394,24 +403,11 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `item`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `IconnavItem[]` | yes |  |
-| `label` | `string` |  | Accessible name (default "Icon navigation"). |
-| `onChange` | `(id: string) => void` |  |  |
-| `value` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## NavLink
 
 Navigation row (button, or `<a>` with `href`).
-
-```tsx
-<NavLink label="Deploys" description="History and logs" href="#deploys" active />
-```
 
 **Slots:** `root` `description` `label` `left` `main` `right`
 
@@ -426,17 +422,15 @@ Navigation row (button, or `<a>` with `href`).
 | `onClick` | `(e: MouseEvent) => void` |  |  |
 | `rightSection` | `content` |  |  |
 
+```tsx
+<NavLink label="Deploys" description="History and logs" href="#deploys" active />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Anchor
 
 Text link; `external` opens a new tab with `rel="noreferrer noopener"`.
-
-```tsx
-<Anchor href="/docs">
-	Read the docs
-</Anchor>
-```
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -444,11 +438,24 @@ Text link; `external` opens a new tab with `rel="noreferrer noopener"`.
 | `children` | `content` |  |  |
 | `external` | `boolean` |  |  |
 
+```tsx
+<Anchor href="/docs">
+	Read the docs
+</Anchor>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## TableOfContents
 
 "On this page" navigation.
+
+**Slots:** `root` `link` `list` `title`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `TocItem[]` | yes |  |
+| `title` | `string` |  |  |
 
 ```tsx
 function Example() {
@@ -471,18 +478,19 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `link` `list` `title`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `TocItem[]` | yes |  |
-| `title` | `string` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ScrollSpy
 
 Highlights the section currently in view, in the page or in the sections' scroll container.
+
+**Slots:** `root` `item`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `ScrollSpyItem[]` | yes |  |
+| `label` | `string` |  | Accessible name (default "On this page"). |
+| `offset` | `number` |  |  |
 
 ```tsx
 function Example() {
@@ -513,36 +521,55 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `item`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `ScrollSpyItem[]` | yes |  |
-| `label` | `string` |  | Accessible name (default "On this page"). |
-| `offset` | `number` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## SkipLink
 
 Visually hidden until focused; jumps to `#main` by default.
 
-```tsx
-<SkipLink href="#main">
-	Skip to content (focus me)
-</SkipLink>
-```
-
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
 | `children` | `content` |  |  |
 | `href` | `string` |  |  |
+
+```tsx
+function Example() {
+	let link: HTMLAnchorElement | undefined;
+	return (
+		<Box style={{ position: "relative", "padding-top": "3rem" }}>
+			<SkipLink
+				href="#main"
+				ref={(el: HTMLElement) => {
+					link = el as HTMLAnchorElement;
+				}}
+			>
+				Skip to content
+			</SkipLink>
+			<Group gap="0.75rem">
+				<Button size="sm" variant="outline" onClick={() => link?.focus()}>
+					Reveal the skip link
+				</Button>
+				<Text muted>It appears only while focused — keyboard users meet it first on Tab.</Text>
+			</Group>
+		</Box>
+	);
+}
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## BottomNav
 
 Mobile tab bar.
+
+**Slots:** `root` `icon` `item` `label`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | `BottomNavItem[]` | yes |  |
+| `onChange` | `(id: string) => void` | yes |  |
+| `value` | `string` | yes |  |
+| `label` | `string` |  | Accessible name (default "Bottom"). |
 
 ```tsx
 function Example() {
@@ -562,38 +589,11 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `icon` `item` `label`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `items` | `BottomNavItem[]` | yes |  |
-| `onChange` | `(id: string) => void` | yes |  |
-| `value` | `string` | yes |  |
-| `label` | `string` |  | Accessible name (default "Bottom"). |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Thumbnav
 
 Thumbnail picker.
-
-```tsx
-function Example() {
-	const photo = signal("2");
-	return (
-		<Thumbnav
-			label="Photos"
-			items={[
-				{ id: "1", src: "/images/1.jpg", alt: "Photo 1" },
-				{ id: "2", src: "/images/2.jpg", alt: "Photo 2" },
-				{ id: "3", src: "/images/3.jpg", alt: "Photo 3" },
-			]}
-			value={photo()}
-			onChange={photo.set}
-		/>
-	);
-}
-```
 
 **Slots:** `root` `image` `item`
 
@@ -604,15 +604,36 @@ function Example() {
 | `value` | `string` | yes |  |
 | `label` | `string` |  | Accessible name (default "Thumbnails"). |
 
+```tsx
+function Example() {
+	const photos = [
+		{ id: "lake", src: "/images/lake.jpg", alt: "Lake at dawn" },
+		{ id: "forest", src: "/images/forest.jpg", alt: "Forest trail" },
+		{ id: "desert", src: "/images/desert.jpg", alt: "Desert dunes" },
+		{ id: "city", src: "/images/city.jpg", alt: "City at night" },
+	];
+	const photo = signal("forest");
+	const current = () => photos.find((ph) => ph.id === photo()) ?? photos[0];
+	return (
+		<Stack gap="0.75rem" style={{ "max-width": "24rem" }}>
+			<img
+				src={current()?.src}
+				alt={current()?.alt}
+				width="640"
+				height="400"
+				style={{ width: "100%", height: "auto", "border-radius": "var(--a-radius)" }}
+			/>
+			<Thumbnav label="Photos" items={photos} value={photo()} onChange={photo.set} />
+		</Stack>
+	);
+}
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## ToTop
 
 Scroll-to-top control (UIkit totop).
-
-```tsx
-<ToTop offset={-1} />
-```
 
 **Slots:** `root`
 
@@ -622,11 +643,21 @@ Scroll-to-top control (UIkit totop).
 | `label` | `string` |  |  |
 | `offset` | `number` |  | Scroll distance (px) before the button appears (default 320). |
 
+```tsx
+<ToTop offset={-1} />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Affix
 
 Viewport-pinned container.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `offset` | `string` |  |  |
+| `position` | `"bottom-right" \| "bottom-left" \| "top-left" \| "top-right"` |  |  |
 
 ```tsx
 <Affix position="bottom-right" offset="1rem">
@@ -636,23 +667,11 @@ Viewport-pinned container.
 </Affix>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `offset` | `string` |  |  |
-| `position` | `"bottom-right" \| "bottom-left" \| "top-left" \| "top-right"` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## Sticky
 
 Sticks its content to an edge of the scroll container.
-
-```tsx
-<Sticky offset={8}>
-	<Paper withBorder>Sticks 8px from the top while its container scrolls.</Paper>
-</Sticky>
-```
 
 | Prop | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -660,11 +679,22 @@ Sticks its content to an edge of the scroll container.
 | `offset` | `number` |  |  |
 | `position` | `"top" \| "bottom"` |  |  |
 
+```tsx
+<Sticky offset={8}>
+	<Paper withBorder>Sticks 8px from the top while its container scrolls.</Paper>
+</Sticky>
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## StickyBar
 
 Bar pinned to the top/bottom of its scroll container.
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `children` | `content` |  |  |
+| `position` | `"top" \| "bottom"` |  |  |
 
 ```tsx
 <StickyBar position="bottom">
@@ -675,20 +705,11 @@ Bar pinned to the top/bottom of its scroll container.
 </StickyBar>
 ```
 
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `children` | `content` |  |  |
-| `position` | `"top" \| "bottom"` |  |  |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## UserButton
 
 Button showing a user's avatar, name and email.
-
-```tsx
-<UserButton name="Ada Lovelace" email="ada@example.com" onClick={() => {}} />
-```
 
 **Slots:** `root` `avatar` `chevron` `email` `name` `text`
 
@@ -700,11 +721,24 @@ Button showing a user's avatar, name and email.
 | `onClick` | `(e: MouseEvent) => void` |  |  |
 | `src` | `string` |  |  |
 
+```tsx
+<UserButton name="Ada Lovelace" email="ada@example.com" onClick={() => {}} />
+```
+
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## LocaleSwitcher
 
 Inline language picker.
+
+**Slots:** `root` `option`
+
+| Prop | Type | Required | Description |
+| --- | --- | --- | --- |
+| `onChange` | `(value: string) => void` | yes |  |
+| `options` | `LocaleOption[]` | yes |  |
+| `value` | `string` | yes |  |
+| `label` | `string` |  | Accessible name (default "Language"). |
 
 ```tsx
 function Example() {
@@ -724,27 +758,11 @@ function Example() {
 }
 ```
 
-**Slots:** `root` `option`
-
-| Prop | Type | Required | Description |
-| --- | --- | --- | --- |
-| `onChange` | `(value: string) => void` | yes |  |
-| `options` | `LocaleOption[]` | yes |  |
-| `value` | `string` | yes |  |
-| `label` | `string` |  | Accessible name (default "Language"). |
-
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.
 
 ## OrgSwitcher
 
 Workspace switcher button.
-
-```tsx
-<OrgSwitcher
-	org={{ id: "acme", name: "Acme Inc.", plan: "Pro" }}
-	onClick={() => {}}
-/>
-```
 
 **Slots:** `root` `avatar` `chevron` `meta` `name` `plan`
 
@@ -752,5 +770,12 @@ Workspace switcher button.
 | --- | --- | --- | --- |
 | `org` | `OrgOption` | yes |  |
 | `onClick` | `() => void` |  |  |
+
+```tsx
+<OrgSwitcher
+	org={{ id: "acme", name: "Acme Inc.", plan: "Pro" }}
+	onClick={() => {}}
+/>
+```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.

@@ -578,7 +578,9 @@ export function ProfileHeader(input: ProfileHeaderProps) {
 				<div class={slot.class("meta", "a-profile-meta")} style={slot.style("meta")}>
 					<h3 class={slot.class("name", "a-profile-name")}>{props.name}</h3>
 					<Show when={props.handle}>
-						<p class={slot.class("handle", "a-profile-handle")}>@{props.handle}</p>
+						<p class={slot.class("handle", "a-profile-handle")}>
+							@{props.handle?.replace(/^@/, "")}
+						</p>
 					</Show>
 					<Show when={props.bio}>
 						<p class={slot.class("bio", "a-profile-bio")}>{props.bio}</p>
