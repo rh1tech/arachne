@@ -28,6 +28,17 @@
         "@arachne/vite": "workspace:*",
       },
     },
+    "packages/acl": {
+      "name": "@arachne/acl",
+      "version": "0.0.1",
+      "dependencies": {
+        "@arachne/mcp": "workspace:*",
+        "zod": "3.25.76",
+      },
+      "devDependencies": {
+        "typescript": "^5.9.2",
+      },
+    },
     "packages/config": {
       "name": "@arachne/config",
       "version": "0.0.1",
@@ -243,6 +254,8 @@
     },
   },
   "packages": {
+    "@arachne/acl": ["@arachne/acl@workspace:packages/acl"],
+
     "@arachne/config": ["@arachne/config@workspace:packages/config"],
 
     "@arachne/core": ["@arachne/core@workspace:packages/core"],

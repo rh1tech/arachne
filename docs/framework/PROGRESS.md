@@ -33,7 +33,7 @@ logout, email verification, password reset, email sending, access levels
 | 3 | Server: typed routes with validation, body/multipart parsing, errors, cookies, CORS, security headers, rate limit, static files, groups, OpenAPI | `@arachne/server` | [x] |
 | 4 | DB: update, operators, order/limit/offset, count, nullable/json columns, indexes, transactions | `@arachne/db`, `@arachne/db-sqlite` | [x] |
 | 5 | Migrations | `@arachne/migrate` | [x] |
-| 6 | Access control (core) | `@arachne/acl` | [ ] |
+| 6 | Access control (core) | `@arachne/acl` | [x] |
 | 7 | Mail | `@arachne/mailer` | [ ] |
 | 8 | File storage (disk, memory, S3) | `@arachne/storage` | [ ] |
 | 9 | Auth: users, sessions, tokens, registration, verification, reset, blocking, groups, throttling, CSRF, HTTP routes | `@arachne/auth` | [ ] |
@@ -133,6 +133,16 @@ logout, email verification, password reset, email sending, access levels
   (moved from its MCP module); db MCP exports `tableSpecSchema`.
 - MCP: `arachne_migrate_plan`. Workspace MCP registry lists migrate, storage,
   mailer, kit.
+
+### M6 — `@arachne/acl` (2026-09-30)
+
+- `acl.ts`: `createAcl({ permissions?, conditions, groups })` → `can`,
+  `assert` (`AccessDenied`), `explain`, `permissions`, `level`, `atLeast`,
+  `canManage`, `with`. Rules are strings (`x:y`, wildcards, `!deny`,
+  `@cond,cond`) so they can live in the DB; config errors throw at creation.
+- Order: blocked → scopes → direct user rules → group rules (deny wins in a tier).
+- Typed permissions when a registry is given (`const P`).
+- MCP: `arachne_acl_check` (with assumed conditions), `arachne_acl_permissions`.
 
 ## Known gaps / next steps
 

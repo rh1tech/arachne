@@ -6,6 +6,7 @@
 		"server/src/cbor.ts",
 		"db",
 		"db-sqlite",
-		"migrate"
+		"migrate",
+		"acl"
 	]
 }
