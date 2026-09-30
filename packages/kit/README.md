@@ -5,13 +5,12 @@ from one project layout, with a dev server that reloads as you type. See
 [ADR 0015](../../docs/adr/0015-universal-framework.md).
 
 ```bash
-bun run arachne create apps/my-app --template server   # or static | api
-cd apps/my-app && bun install && bun run dev
+bunx @arachnejs/kit create my-app --template server   # or static | api
+cd my-app && bun install && bun run dev
 ```
 
-> Pre-release: `@arachnejs/*` isn't on npm yet, and the unscoped `arachne`
-> package on npm is unrelated. Run the CLI from a checkout with `bun run arachne`
-> (see [Getting started](../../docs/getting-started.md)).
+The CLI is `arachne`: inside a project, `bunx arachne …`; elsewhere,
+`bunx @arachnejs/kit …` (the unscoped `arachne` package on npm is unrelated).
 
 ## Project layout
 

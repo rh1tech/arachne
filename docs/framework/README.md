@@ -7,15 +7,11 @@ Status and history: [PROGRESS.md](PROGRESS.md).
 ## Start a project
 
 ```bash
-bun run arachne create apps/my-site --template static   # pre-rendered site, no server
-bun run arachne create apps/my-app  --template server   # SSR + API + accounts
-bun run arachne create apps/my-api  --template api      # API only
-bun install && cd apps/my-app && bun run dev
+bunx @arachnejs/kit create my-site --template static   # pre-rendered site, no server
+bunx @arachnejs/kit create my-app  --template server   # SSR + API + accounts
+bunx @arachnejs/kit create my-api  --template api      # API only
+cd my-app && bun install && bun run dev
 ```
-
-> Pre-release: `@arachnejs/*` isn't on npm yet, and the unscoped `arachne`
-> package on npm is unrelated. Run the CLI from a checkout with `bun run arachne`
-> (see [Getting started](../getting-started.md)).
 
 | What | Static | Server | API |
 |---|---|---|---|

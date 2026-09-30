@@ -2,18 +2,18 @@
 
 Universal, modular, high-performance web framework for TypeScript / Bun.
 
-> Status: **pre-release** (0.0.x). Static, server and API apps work end to
-> end; see [docs/framework/PROGRESS.md](docs/framework/PROGRESS.md).
+> Status: **pre-release** (0.x): APIs can still change. Static, server and API
+> apps work end to end; see [docs/framework/PROGRESS.md](docs/framework/PROGRESS.md).
+> Website and docs: <https://arachne.rh1.tech>.
 
 ```bash
-bun run arachne create apps/my-app --template server   # static | server | api
-cd apps/my-app && bun install && bun run dev         # hot reload
-bun run build && bun run start                  # production
+bunx @arachnejs/kit create my-app --template server   # static | server | api
+cd my-app && bun install && bun run dev               # hot reload
+bun run build && bun run start                        # production
 ```
 
-> Pre-release: `@arachnejs/*` isn't on npm yet, and the unscoped `arachne`
-> package on npm is unrelated. Run the CLI from a checkout with `bun run arachne`
-> (see [Getting started](docs/getting-started.md)).
+Packages are published as `@arachnejs/*` (the unscoped `arachne` package on
+npm is unrelated). See [Getting started](docs/getting-started.md).
 
 Start with the [framework guide](docs/framework/README.md).
 

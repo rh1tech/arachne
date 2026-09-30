@@ -13,30 +13,19 @@ pieces fit together afterwards.
 - [Bun](https://bun.sh) 1.3 or newer (`bun --version`).
 - macOS, Linux or WSL.
 
-## Get the source
-
-Arachne is pre-release (`0.0.x`) and the `@arachnejs/*` packages are not on
-npm yet. Until they are, projects live inside a checkout of the repository,
-where Bun's workspaces link every package:
+## Create a project
 
 ```bash
-git clone https://github.com/rh1tech/arachne.git
-cd arachne
+bunx @arachnejs/kit create my-site --template static
+cd my-site
 bun install
-```
-
-> The unscoped `arachne` package on npm is unrelated to this project. Don't
-> run `bunx arachne` until the first release; use `bun run arachne` from the
-> checkout instead.
-
-## Start from a template
-
-```bash
-bun run arachne create apps/my-site --template static
-bun install
-cd apps/my-site
 bun run dev            # http://localhost:3000, reloads as you edit
 ```
+
+The CLI is `arachne`, from [`@arachnejs/kit`](../packages/kit/README.md). Inside
+a project, `bunx arachne …` runs it (for example `bunx arachne routes`). Outside
+one, use `bunx @arachnejs/kit …`: the unscoped `arachne` package on npm is
+unrelated to this project.
 
 | Template | What you get |
 |---|---|
@@ -51,7 +40,7 @@ file does.
 
 ### 1. The package
 
-Create `apps/hello/package.json`:
+In an empty directory `hello/`, create `package.json`:
 
 ```json
 {
@@ -61,20 +50,21 @@ Create `apps/hello/package.json`:
   "scripts": {
     "dev": "arachne dev",
     "build": "arachne build",
-    "start": "arachne start"
+    "start": "arachne start",
+    "preview": "arachne preview"
   },
   "dependencies": {
-    "@arachnejs/kit": "^0.0.1",
-    "@arachnejs/render": "^0.0.1",
-    "@arachnejs/router": "^0.0.1",
-    "@arachnejs/schema": "^0.0.1",
-    "@arachnejs/server": "^0.0.1",
-    "@arachnejs/signals": "^0.0.1"
+    "@arachnejs/kit": "^0.1.0",
+    "@arachnejs/render": "^0.1.0",
+    "@arachnejs/router": "^0.1.0",
+    "@arachnejs/schema": "^0.1.0",
+    "@arachnejs/server": "^0.1.0",
+    "@arachnejs/signals": "^0.1.0"
   }
 }
 ```
 
-And `apps/hello/tsconfig.json`, so your editor type-checks the JSX:
+And `tsconfig.json`, so your editor type-checks the JSX:
 
 ```json
 {
@@ -94,7 +84,7 @@ And `apps/hello/tsconfig.json`, so your editor type-checks the JSX:
 }
 ```
 
-Run `bun install` from the repository root to link the packages.
+Then run `bun install`.
 
 ### 2. Pages
 
@@ -145,7 +135,6 @@ export const routes: RouteDefinition[] = [
 ```
 
 ```bash
-cd apps/hello
 bun run dev
 ```
 
@@ -258,7 +247,7 @@ data for each page that has a loader, `404.html` and `sitemap.xml`. Loaders run 
 time. API routes are not served, because there is no server. Dynamic
 routes such as `blog/:slug` list their pages with `paths` in
 `app/server.ts`; see [kit: Server](../packages/kit/README.md#server).
-`bun run arachne preview` serves the result locally.
+`bun run preview` serves the result locally.
 
 This website is an Arachne static build: each page is rendered from the
 repository's Markdown at build time.

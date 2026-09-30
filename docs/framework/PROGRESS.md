@@ -49,6 +49,7 @@ next steps" at the bottom, run `bun run ci` and `(cd packages/kit && bun run e2e
 | 12d | Binary codecs: CBOR in server (content negotiation); protobuf/Connect later | `@arachnejs/server` | [~] CBOR done |
 | 13 | Docs + README per package, root README update | docs | [x] |
 | 14 | Website (arachne.rh1.tech), built with Arachne from the repo's Markdown | `apps/site` | [x] |
+| 15 | npm packages (`@arachnejs/*` 0.1.0), release workflow, self-hosted CI | `scripts/release.ts`, `.github/` | [x] |
 
 ## Implemented (detail)
 
@@ -331,6 +332,17 @@ light and dark. Fixes found on the way:
   `layouts-dom.test.ts`.
 - site: the mobile contents drawer didn't scroll (the desktop
   `align-self: start` shrank the fixed drawer to its content).
+
+### M15 — npm and CI (2026-09-30)
+
+- All 21 packages published as `@arachnejs/*` **0.1.0** (fixed version
+  group), with provenance; tags `<name>@0.1.0`. Verified from the public
+  registry: `bunx @arachnejs/kit create` (server, static) → install → build
+  → start. How releases work: [releasing.md](../releasing.md).
+- CI runs on the self-hosted runner `rbx1-arachne-ci` (unprivileged user,
+  systemd limits); fork PRs on GitHub-hosted runners with approval; the
+  publish job on GitHub-hosted runners (provenance/OIDC).
+- Next: npm trusted publishing per package, then delete `NPM_TOKEN`.
 
 ## Known gaps / next steps
 

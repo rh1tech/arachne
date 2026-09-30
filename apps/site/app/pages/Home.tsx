@@ -3,9 +3,9 @@ import { Link, type RouteProps } from "@arachnejs/router";
 import { copyCode } from "../components/copy.ts";
 import type { HomeData } from "../site.ts";
 
-const SYNOPSIS = `git clone https://github.com/rh1tech/arachne.git && cd arachne && bun install
-bun run arachne create apps/my-app --template static
-cd apps/my-app && bun run dev`;
+const SYNOPSIS = `bunx @arachnejs/kit create my-app --template static
+cd my-app && bun install
+bun run dev`;
 
 const MODES = [
 	{
@@ -76,8 +76,8 @@ export function Home(props: RouteProps) {
 					</pre>
 				</div>
 				<p class="note">
-					Version {data().version} is a pre-release and isn't on npm yet, so projects live in a
-					checkout of the repository. <Link href="/docs">Getting started</Link> walks through it.
+					Version {data().version} is a pre-release: APIs can still change.{" "}
+					<Link href="/docs">Getting started</Link> walks through a first app.
 				</p>
 			</Section>
 
