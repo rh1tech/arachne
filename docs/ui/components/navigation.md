@@ -17,7 +17,7 @@ Responsive navbar with nested menus (hover or click), overflow scrolling and a m
 | `items` | `NavMenuItem[]` | yes |  | Top-level items; items with `children` open submenus. |
 | `brand` | `content` |  |  | Logo or name at the start of the bar. |
 | `end` | `content` |  |  | Content at the end of the bar, e.g. buttons. |
-| `label` | `string` |  | `"Primary"` | Accessible name for the desktop `&lt;nav>` (default "Primary"). |
+| `label` | `string` |  | `"Primary"` | Accessible name for the desktop `<nav>` (default "Primary"). |
 | `placement` | `NavbarPlacement` |  | `"static"` | Pin the bar to the top of the scrollport / viewport. Default: static |
 | `trigger` | `NavMenuTrigger` |  | `"hover"` | Desktop submenu open mode. Mobile always uses click. Default: hover |
 

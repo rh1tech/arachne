@@ -17,12 +17,19 @@ Component docs page: title, short description, then example blocks.
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `title` | `string` | yes |  | Page title (`&lt;h1>`). |
+| `title` | `string` | yes |  | Page title. |
 | `children` | `content` |  |  | Page body: `DocExample`s and other content. |
-| `description` | `content` |  |  | Text or inline content (e.g. with `&lt;Code>` spans). |
+| `description` | `content` |  |  | Text or inline content (e.g. with `<Code>` spans). |
+| `titleOrder` | `HeadingLevel` |  | `1` | Heading level of `title`: `1` for a page, deeper when embedded. Default `1`. |
+
+**`HeadingLevel`**
+
+```ts
+type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
+```
 
 ```tsx
-<DocPage title="Buttons" description="Trigger an action or an event.">
+<DocPage title="Buttons" titleOrder={4} description="Trigger an action or an event.">
 	<Text>Page content goes here.</Text>
 </DocPage>
 ```
@@ -37,12 +44,19 @@ Live preview + code snippet — the Bulma docs pattern.
 | --- | --- | --- | --- | --- |
 | `code` | `string` | yes |  | Source shown under the live preview. |
 | `children` | `content` |  |  | The live preview. |
-| `description` | `content` |  |  | Text or inline content (e.g. with `&lt;Code>` spans). |
+| `description` | `content` |  |  | Text or inline content (e.g. with `<Code>` spans). |
 | `language` | `string` |  | `"tsx"` | Language for highlighting the code. |
 | `title` | `string` |  |  | Optional section title above the example (e.g. "Colors"). |
+| `titleOrder` | `HeadingLevel` |  | `2` | Heading level of `title`, to fit the page's outline. Default `2`. |
+
+**`HeadingLevel`**
+
+```ts
+type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
+```
 
 ```tsx
-<DocExample title="Primary button" code={"<Button>Save</Button>"}>
+<DocExample title="Primary button" titleOrder={4} code={"<Button>Save</Button>"}>
 	<Button onClick={() => {}}>Save</Button>
 </DocExample>
 ```

@@ -132,7 +132,7 @@ function ToastDemo() {
 	const toaster = createToaster();
 	return (
 		<>
-			<Group gap="0.5rem">
+			<Group gap="0.5rem" wrap>
 				<Button onClick={() => toaster.push({ title: "Saved", message: "Your changes are live." })}>
 					Info toast
 				</Button>

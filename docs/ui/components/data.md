@@ -194,7 +194,7 @@ Sortable data grid with ARIA table semantics (`rowgroup`s, `aria-sort`, header s
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `columns` | `DataTableColumn&lt;T>[]` | yes |  | Column definitions, in order. |
+| `columns` | `DataTableColumn<T>[]` | yes |  | Column definitions, in order. |
 | `rows` | `T[]` | yes |  | Row data; each row needs a unique `id`. |
 | `defaultSort` | `DataTableSort` |  |  | Initial sort (read once). |
 | `empty` | `content` |  |  | Shown when there are no rows. |
@@ -258,8 +258,8 @@ Label / value pairs (`<dl>`).
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `label` | `string` | yes | Term (rendered as `&lt;dt>`). |
-| `value` | `content` | yes | Description text or content (rendered as `&lt;dd>`). |
+| `label` | `string` | yes | Term (rendered as `<dt>`). |
+| `value` | `content` | yes | Description text or content (rendered as `<dd>`). |
 
 ```tsx
 <DescriptionList
@@ -311,7 +311,7 @@ Styled list (`ordered` for numbers).
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `children` | `content` |  |  | `ListItem`s. |
-| `ordered` | `boolean` |  |  | Render `&lt;ol>` instead of `&lt;ul>`; fixed at mount. |
+| `ordered` | `boolean` |  |  | Render `<ol>` instead of `<ul>`; fixed at mount. |
 
 ```tsx
 <List>
@@ -377,7 +377,7 @@ List-group row.
 | `active` | `boolean` |  |  | Marks the current row. |
 | `children` | `content` |  |  | Row content. |
 | `disabled` | `boolean` |  |  | Dims the row and blocks clicks. |
-| `onClick` | `(e: MouseEvent) => void` |  |  | Makes the row a button (fixed at mount); the `&lt;li>` becomes the `item` slot. |
+| `onClick` | `(e: MouseEvent) => void` |  |  | Makes the row a button (fixed at mount); the `<li>` becomes the `item` slot. |
 
 ```tsx
 <ListGroup>

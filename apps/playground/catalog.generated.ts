@@ -8895,7 +8895,7 @@ export const catalog: CatalogEntry[] = [
 				"definition": "| \"top-left\" | \"top-center\" | \"top-right\" | \"bottom-left\" | \"bottom-center\" | \"bottom-right\""
 			}
 		],
-		"code": "function Example() {\n\tconst toaster = createToaster();\n\treturn (\n\t\t<>\n\t\t\t<Group gap=\"0.5rem\">\n\t\t\t\t<Button onClick={() => toaster.push({ title: \"Saved\", message: \"Your changes are live.\" })}>\n\t\t\t\t\tInfo toast\n\t\t\t\t</Button>\n\t\t\t\t<Button\n\t\t\t\t\tvariant=\"success\"\n\t\t\t\t\tonClick={() => toaster.push({ tone: \"success\", message: \"Deployment finished.\" })}\n\t\t\t\t>\n\t\t\t\t\tSuccess\n\t\t\t\t</Button>\n\t\t\t\t<Button\n\t\t\t\t\tvariant=\"danger\"\n\t\t\t\t\tonClick={() =>\n\t\t\t\t\t\ttoaster.push({\n\t\t\t\t\t\t\ttone: \"danger\",\n\t\t\t\t\t\t\tmessage: \"Build failed.\",\n\t\t\t\t\t\t\taction: { label: \"Retry\", onClick: () => {} },\n\t\t\t\t\t\t})\n\t\t\t\t\t}\n\t\t\t\t>\n\t\t\t\t\tError with action\n\t\t\t\t</Button>\n\t\t\t</Group>\n\t\t\t<ToastHost toaster={toaster} aria-label=\"Demo notifications\" />\n\t\t</>\n\t);\n}",
+		"code": "function Example() {\n\tconst toaster = createToaster();\n\treturn (\n\t\t<>\n\t\t\t<Group gap=\"0.5rem\" wrap>\n\t\t\t\t<Button onClick={() => toaster.push({ title: \"Saved\", message: \"Your changes are live.\" })}>\n\t\t\t\t\tInfo toast\n\t\t\t\t</Button>\n\t\t\t\t<Button\n\t\t\t\t\tvariant=\"success\"\n\t\t\t\t\tonClick={() => toaster.push({ tone: \"success\", message: \"Deployment finished.\" })}\n\t\t\t\t>\n\t\t\t\t\tSuccess\n\t\t\t\t</Button>\n\t\t\t\t<Button\n\t\t\t\t\tvariant=\"danger\"\n\t\t\t\t\tonClick={() =>\n\t\t\t\t\t\ttoaster.push({\n\t\t\t\t\t\t\ttone: \"danger\",\n\t\t\t\t\t\t\tmessage: \"Build failed.\",\n\t\t\t\t\t\t\taction: { label: \"Retry\", onClick: () => {} },\n\t\t\t\t\t\t})\n\t\t\t\t\t}\n\t\t\t\t>\n\t\t\t\t\tError with action\n\t\t\t\t</Button>\n\t\t\t</Group>\n\t\t\t<ToastHost toaster={toaster} aria-label=\"Demo notifications\" />\n\t\t</>\n\t);\n}",
 		"interactive": true,
 		"logsActions": false
 	},
@@ -14753,7 +14753,7 @@ export const catalog: CatalogEntry[] = [
 				"name": "title",
 				"type": "string",
 				"required": true,
-				"description": "Page title (`<h1>`)."
+				"description": "Page title."
 			},
 			{
 				"name": "children",
@@ -14766,10 +14766,23 @@ export const catalog: CatalogEntry[] = [
 				"type": "content",
 				"required": false,
 				"description": "Text or inline content (e.g. with `<Code>` spans)."
+			},
+			{
+				"name": "titleOrder",
+				"type": "HeadingLevel",
+				"required": false,
+				"defaultValue": "1",
+				"description": "Heading level of `title`: `1` for a page, deeper when embedded. Default `1`."
 			}
 		],
-		"types": [],
-		"code": "<DocPage title=\"Buttons\" description=\"Trigger an action or an event.\">\n\t<Text>Page content goes here.</Text>\n</DocPage>",
+		"types": [
+			{
+				"name": "HeadingLevel",
+				"description": "",
+				"definition": "1 | 2 | 3 | 4 | 5 | 6"
+			}
+		],
+		"code": "<DocPage title=\"Buttons\" titleOrder={4} description=\"Trigger an action or an event.\">\n\t<Text>Page content goes here.</Text>\n</DocPage>",
 		"interactive": false,
 		"logsActions": false
 	},
@@ -14816,10 +14829,23 @@ export const catalog: CatalogEntry[] = [
 				"type": "string",
 				"required": false,
 				"description": "Optional section title above the example (e.g. \"Colors\")."
+			},
+			{
+				"name": "titleOrder",
+				"type": "HeadingLevel",
+				"required": false,
+				"defaultValue": "2",
+				"description": "Heading level of `title`, to fit the page's outline. Default `2`."
 			}
 		],
-		"types": [],
-		"code": "<DocExample title=\"Primary button\" code={\"<Button>Save</Button>\"}>\n\t<Button onClick={() => {}}>Save</Button>\n</DocExample>",
+		"types": [
+			{
+				"name": "HeadingLevel",
+				"description": "",
+				"definition": "1 | 2 | 3 | 4 | 5 | 6"
+			}
+		],
+		"code": "<DocExample title=\"Primary button\" titleOrder={4} code={\"<Button>Save</Button>\"}>\n\t<Button onClick={() => {}}>Save</Button>\n</DocExample>",
 		"interactive": false,
 		"logsActions": true
 	},

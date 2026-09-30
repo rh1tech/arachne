@@ -212,7 +212,7 @@ Native fieldset with optional legend.
 | --- | --- | --- | --- | --- |
 | `children` | `content` |  |  | The grouped fields. |
 | `disabled` | `boolean` |  |  | Disables every control inside. |
-| `legend` | `content` |  |  | Group caption (`&lt;legend>`). |
+| `legend` | `content` |  |  | Group caption (`<legend>`). |
 
 ```tsx
 function Example() {

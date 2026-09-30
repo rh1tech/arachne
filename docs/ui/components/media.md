@@ -45,7 +45,7 @@ Figure with an optional caption.
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `caption` | `content` |  |  | Caption under the content (`&lt;figcaption>`). |
+| `caption` | `content` |  |  | Caption under the content (`<figcaption>`). |
 | `children` | `content` |  |  | The image or other figure content. |
 
 ```tsx

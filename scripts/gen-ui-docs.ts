@@ -15,6 +15,7 @@ import {
 	itemComponents,
 	parts,
 } from "../packages/ui/examples/catalog-map.ts";
+import { codeCell, escapeCell } from "./md-cell.ts";
 
 const ROOT = join(import.meta.dir, "..");
 const UI = join(ROOT, "packages/ui");
@@ -537,8 +538,6 @@ export type CatalogEntry = {
 export const catalog: CatalogEntry[] = ${JSON.stringify(entries, null, "\t")};
 `;
 
-const escapeCell = (text: string) => text.replace(/\|/g, "\\|").replace(/</g, "&lt;");
-
 function componentMarkdown(e: Entry, level = 2): string {
 	const hashes = "#".repeat(level);
 	const lines = [`${hashes} ${e.name}`, "", e.summary || "_No description._", ""];
@@ -554,7 +553,7 @@ function componentMarkdown(e: Entry, level = 2): string {
 				? `**Deprecated:** ${p.deprecated} ${p.description}`.trim()
 				: p.description;
 			lines.push(
-				`| \`${p.name}\` | \`${escapeCell(p.type)}\` | ${p.required ? "yes" : ""} | ${p.defaultValue ? `\`${escapeCell(p.defaultValue)}\`` : ""} | ${escapeCell(description)} |`,
+				`| \`${p.name}\` | ${codeCell(p.type)} | ${p.required ? "yes" : ""} | ${p.defaultValue ? codeCell(p.defaultValue) : ""} | ${escapeCell(description)} |`,
 			);
 		}
 		lines.push("");
@@ -565,7 +564,7 @@ function componentMarkdown(e: Entry, level = 2): string {
 			lines.push("| Field | Type | Required | Description |", "| --- | --- | --- | --- |");
 			for (const f of t.fields) {
 				lines.push(
-					`| \`${f.name}\` | \`${escapeCell(f.type)}\` | ${f.required ? "yes" : ""} | ${escapeCell(f.description)} |`,
+					`| \`${f.name}\` | ${codeCell(f.type)} | ${f.required ? "yes" : ""} | ${escapeCell(f.description)} |`,
 				);
 			}
 			lines.push("");

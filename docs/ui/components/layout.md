@@ -576,7 +576,7 @@ Application chrome: optional sidebar + header around main content.
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `children` | `content` |  |  | Main content. |
-| `contentAs` | `"main" \| "div"` |  |  | Element for the content area (default `"main"`). Use `"div"` when the shell is nested in a page that already has a `&lt;main>` landmark. |
+| `contentAs` | `"main" \| "div"` |  |  | Element for the content area (default `"main"`). Use `"div"` when the shell is nested in a page that already has a `<main>` landmark. |
 | `header` | `content` |  |  | Content of the top bar. |
 | `sidebar` | `content` |  |  | Content of the side column, e.g. a `SidebarNav`. |
 
@@ -611,7 +611,7 @@ Page title block with breadcrumb, description and actions.
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `title` | `string` | yes |  | Page title (rendered as `&lt;h1>`). |
+| `title` | `string` | yes |  | Page title (rendered as `<h1>`). |
 | `actions` | `content` |  |  | Buttons aligned to the end of the header. |
 | `breadcrumb` | `content` |  |  | Breadcrumb above the title. |
 | `description` | `content` |  |  | Text under the title. |

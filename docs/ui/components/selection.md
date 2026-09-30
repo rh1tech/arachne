@@ -50,7 +50,7 @@ Multiple-choice checkboxes in a fieldset.
 | `options` | `{ value: string; label: unknown; disabled?: boolean; }[]` | yes |  | Options: `value`, `label`, optional `disabled`. |
 | `value` | `string[]` | yes |  | Values of the checked options (controlled). |
 | `disabled` | `boolean` |  |  | Disables every option. |
-| `legend` | `content` |  |  | Visible group label rendered as `&lt;legend>`. |
+| `legend` | `content` |  |  | Visible group label rendered as `<legend>`. |
 
 ```tsx
 const regions = [
@@ -737,7 +737,7 @@ Toggle between light and dark themes.
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `onChange` | `(theme: "dark" \| "light") => void` | yes |  | Called with the theme to switch to; apply it yourself (e.g. `data-theme` on `&lt;html>`). |
+| `onChange` | `(theme: "dark" \| "light") => void` | yes |  | Called with the theme to switch to; apply it yourself (e.g. `data-theme` on `<html>`). |
 | `value` | `"dark" \| "light"` | yes |  | Current theme. |
 
 ```tsx

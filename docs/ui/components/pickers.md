@@ -278,7 +278,7 @@ Color chip; renders a `<button>` when `onClick` is set (use `selected` for a pic
 | --- | --- | --- | --- | --- |
 | `color` | `string` | yes |  | Any CSS colour. |
 | `children` | `content` |  |  | Content inside the swatch (replaces the check mark when `selected`). |
-| `label` | `string` |  |  | Accessible name (default `Color &lt;color>`). |
+| `label` | `string` |  |  | Accessible name (default `Color <color>`). |
 | `onClick` | `(e: MouseEvent) => void` |  |  | Makes the swatch a button; called when it is pressed. |
 | `selected` | `boolean` |  |  | Marks the chosen swatch (ring + check; `aria-pressed` when clickable). |
 | `size` | `number` |  | `28` | Diameter in pixels. |

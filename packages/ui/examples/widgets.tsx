@@ -405,7 +405,7 @@ export const examples: Example[] = [
 	{
 		name: "DocPage",
 		render: (p) => (
-			<DocPage {...p} title="Buttons" description="Trigger an action or an event.">
+			<DocPage {...p} title="Buttons" titleOrder={4} description="Trigger an action or an event.">
 				<Text>Page content goes here.</Text>
 			</DocPage>
 		),
@@ -413,7 +413,7 @@ export const examples: Example[] = [
 	{
 		name: "DocExample",
 		render: (p) => (
-			<DocExample {...p} title="Primary button" code={"<Button>Save</Button>"}>
+			<DocExample {...p} title="Primary button" titleOrder={4} code={"<Button>Save</Button>"}>
 				<Button onClick={action("Save")}>Save</Button>
 			</DocExample>
 		),

@@ -265,7 +265,7 @@ Autosave state (saving, saved, error).
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `state` | `AutosaveState` | yes |  | Save state; sets the icon and text. |
-| `labels` | `Partial&lt;Record&lt;AutosaveState, string>>` |  |  | Override the text per state. |
+| `labels` | `Partial<Record<AutosaveState, string>>` |  |  | Override the text per state. |
 
 **`AutosaveState`**
 

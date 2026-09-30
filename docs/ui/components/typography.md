@@ -16,7 +16,7 @@ Section title. `order` picks the semantic level and `size` only the look, so a s
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `children` | `content` |  |  | Heading text. |
-| `order` | `HeadingOrder` |  | `3` | Heading level (`&lt;h1>`–`&lt;h6>`) for the document outline. Default 2. |
+| `order` | `HeadingOrder` |  | `3` | Heading level (`<h1>`–`<h6>`) for the document outline. Default 2. |
 | `size` | `HeadingOrder` |  |  | Visual size 1–6 (1 is largest), independent of the level. Default: `order`, else 3. |
 | `spaced` | `boolean` |  |  | Keep the normal gap before a following `Subtitle`. |
 
@@ -39,7 +39,7 @@ Secondary line under a title.
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `children` | `content` |  |  | Subtitle text. |
-| `order` | `HeadingOrder` |  | `5` | Render as a heading at this level; by default a subtitle is a `&lt;p>`. |
+| `order` | `HeadingOrder` |  | `5` | Render as a heading at this level; by default a subtitle is a `<p>`. |
 | `size` | `HeadingOrder` |  | `3` | Visual size 1–6. Default 5. |
 
 **`HeadingOrder`**

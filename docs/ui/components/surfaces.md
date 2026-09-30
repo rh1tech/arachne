@@ -159,7 +159,7 @@ Side panel / filter panel (Bulma).
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `children` | `content` |  |  | `PanelHeading`, `PanelTabs` and `PanelBlock`s. |
-| `label` | `string` |  |  | Accessible name of the panel's `&lt;nav>` landmark; set it when a page has several panels. |
+| `label` | `string` |  |  | Accessible name of the panel's `<nav>` landmark; set it when a page has several panels. |
 
 ```tsx
 function Example() {

@@ -195,7 +195,7 @@ Click-to-toggle panel anchored to a trigger. Escape / outside click close it and
 | `label` | `content` |  | `"Open"` | Label for the built-in trigger button |
 | `panelLabel` | `string` |  |  | Accessible name for the panel (defaults to the trigger label when it's text). |
 | `placement` | `PopoverPlacement` |  | `"bottom-start"` | Preferred side and alignment; flips and shifts to stay in view. |
-| `trigger` | `(api: PopoverTriggerApi) => unknown` |  |  | Render your own trigger: `trigger={(t) => &lt;MyButton {...t.attrs} />}`. |
+| `trigger` | `(api: PopoverTriggerApi) => unknown` |  |  | Render your own trigger: `trigger={(t) => <MyButton {...t.attrs} />}`. |
 
 **`PopoverTriggerApi`** — Attributes to spread on a custom trigger so it stays wired for a11y.
 
