@@ -223,6 +223,17 @@
         "typescript": "^5.9.2",
       },
     },
+    "packages/storage": {
+      "name": "@arachne/storage",
+      "version": "0.0.1",
+      "dependencies": {
+        "@arachne/mcp": "workspace:*",
+        "zod": "3.25.76",
+      },
+      "devDependencies": {
+        "typescript": "^5.9.2",
+      },
+    },
     "packages/testing": {
       "name": "@arachne/testing",
       "version": "0.0.1",
@@ -299,6 +310,8 @@
     "@arachne/server": ["@arachne/server@workspace:packages/server"],
 
     "@arachne/signals": ["@arachne/signals@workspace:packages/signals"],
+
+    "@arachne/storage": ["@arachne/storage@workspace:packages/storage"],
 
     "@arachne/testing": ["@arachne/testing@workspace:packages/testing"],
 

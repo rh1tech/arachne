@@ -11,6 +11,7 @@
 		"packages/migrate/src/**/*.ts",
 		"packages/acl/src/**/*.ts",
 		"packages/mailer/src/**/*.ts",
+		"packages/storage/src/**/*.ts",
 		"scripts/**/*.ts"
 	]
 }

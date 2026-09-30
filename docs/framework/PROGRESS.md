@@ -35,7 +35,7 @@ logout, email verification, password reset, email sending, access levels
 | 5 | Migrations | `@arachne/migrate` | [x] |
 | 6 | Access control (core) | `@arachne/acl` | [x] |
 | 7 | Mail | `@arachne/mailer` | [x] |
-| 8 | File storage (disk, memory, S3) | `@arachne/storage` | [ ] |
+| 8 | File storage (disk, memory, S3) | `@arachne/storage` | [x] |
 | 9 | Auth: users, sessions, tokens, registration, verification, reset, blocking, groups, throttling, CSRF, HTTP routes | `@arachne/auth` | [ ] |
 | 10 | Router: `Link`, click interception, lazy routes, layouts, head | `@arachne/router` | [ ] |
 | 11 | Kit: `defineApp`, SSR pages, static prerender build, dev server with hot reload, `arachne` CLI | `@arachne/kit` | [ ] |
@@ -158,6 +158,17 @@ logout, email verification, password reset, email sending, access levels
 - Tests include a real SMTP exchange against an in-process sink (Bun.listen).
 - MCP: `arachne_mailer_preview`, `arachne_mailer_html_to_text`.
 - Boundary map: `mailer` may use `schema`.
+
+### M8 — `@arachne/storage` (2026-09-30)
+
+- `storage.ts`: `Storage` interface, `assertKey` (traversal/empty/control
+  chars), `guessType`, `saveUpload` (UUID keys, size/type limits,
+  `originalName` metadata), `toResponse` (streaming, RFC 6266 disposition).
+- `drivers.ts`: `memoryStorage`, `diskStorage` (sidecar metadata in
+  `.arachne-meta/`). `s3.ts`: `s3Storage` over `Bun.S3Client` or an injected
+  `S3Like`; presigned GET/PUT; `publicUrl` for CDNs.
+- Same behavioural suite runs against all three drivers (`describe.each`).
+- MCP: `arachne_storage_check_key`.
 
 ## Known gaps / next steps
 
