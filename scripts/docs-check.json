@@ -1,1 +1,3 @@
-{ "packages": ["schema", "server", "server/src/client.ts", "server/src/cbor.ts"] }
+{
+	"packages": ["schema", "server", "server/src/client.ts", "server/src/cbor.ts", "db", "db-sqlite"]
+}

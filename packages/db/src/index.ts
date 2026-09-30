@@ -1,23 +1,30 @@
-export {
-	type CreateDbOptions,
-	createDb,
-	type DbClient,
-	type DeleteBuilder,
-	type InsertBuilder,
-	type SelectBuilder,
-} from "./client.ts";
-export type { Dialect } from "./dialect.ts";
-export { placeholders, quoteIdent } from "./dialect.ts";
+export { type CreateDbOptions, createDb, type DbClient, type DbQueries } from "./client.ts";
+export { createIndexSQL, createTableSQL, indexName, sqlTypeDDL } from "./ddl.ts";
+export { type Dialect, placeholders, quoteIdent, type RunResult } from "./dialect.ts";
+export type {
+	DeleteBuilder,
+	Executor,
+	InsertBuilder,
+	SelectBuilder,
+	UpdateBuilder,
+} from "./query.ts";
 export {
 	type ColumnDef,
 	type ColumnMap,
 	type ColumnOptions,
+	type ColumnReference,
 	col,
-	createTableSQL,
+	decodeValue,
 	defineTable,
+	encodeValue,
+	type IndexDef,
+	type InferInsert,
 	type InferRow,
+	parseColumn,
 	parseRow,
+	type ReferentialAction,
 	type SqlType,
-	sqlTypeDDL,
 	type TableDef,
+	type TableOptions,
 } from "./table.ts";
+export { compileWhere, type Operators, type SqlFragment, type Where } from "./where.ts";

@@ -31,7 +31,7 @@ logout, email verification, password reset, email sending, access levels
 | 1 | Plan + ADR + this log | docs | [x] |
 | 2 | Schema: formats, coercion, refine/transform, record, file, JSON Schema export | `@arachne/schema` | [x] |
 | 3 | Server: typed routes with validation, body/multipart parsing, errors, cookies, CORS, security headers, rate limit, static files, groups, OpenAPI | `@arachne/server` | [x] |
-| 4 | DB: update, operators, order/limit/offset, count, nullable/json columns, indexes, transactions | `@arachne/db`, `@arachne/db-sqlite` | [ ] |
+| 4 | DB: update, operators, order/limit/offset, count, nullable/json columns, indexes, transactions | `@arachne/db`, `@arachne/db-sqlite` | [x] |
 | 5 | Migrations | `@arachne/migrate` | [ ] |
 | 6 | Access control (core) | `@arachne/acl` | [ ] |
 | 7 | Mail | `@arachne/mailer` | [ ] |
@@ -99,6 +99,25 @@ logout, email verification, password reset, email sending, access levels
 - Tests: `route.test.ts`, `body.test.ts`, `middleware.test.ts`,
   `openapi.test.ts`, `mcp.test.ts`, `index.test.ts`.
 
+### M4 — `@arachne/db`, `@arachne/db-sqlite` (2026-09-30)
+
+- `table.ts`: `col.text/integer/real/boolean/json/date`, options
+  `primaryKey/autoIncrement/unique/notNull/default/references`; nullability
+  inferred from the schema; `InferInsert` (defaults/auto-increment optional);
+  `encodeValue`/`decodeValue` (bool 0/1, JSON text, dates as epoch ms).
+- `ddl.ts`: `createTableSQL`, `createIndexSQL`, dialect type overrides.
+- `where.ts`: `Where<C>` with operators and `$or`/`$and`; `compileWhere`.
+- `query.ts`: insert (`values`, `many`), select (`where/orderBy/limit/offset/
+  all/get/count`), update (`set/where/run`), delete. Unknown columns throw at
+  build time; update/delete require `where`.
+- `client.ts`: `transaction()` with savepoints and a gate so outside queries
+  wait; `query`/`execute` raw SQL.
+- `db-sqlite`: `name`, WAL + busy timeout for files, **direct** change counts
+  (bun:sqlite's `run().changes` includes FK cascades — we read `changes()`).
+- Tests use a real in-memory bun:sqlite fixture (`src/fixtures/bun-sqlite.ts`)
+  instead of the old regex fake.
+- MCP: `arachne_db_table_sql`, `arachne_db_where_sql`, `arachne_db_simulate`.
+
 ## Known gaps / next steps
 
 - **Docs backlog:** pre-existing packages not yet in `docs-check.json`
@@ -112,6 +131,9 @@ logout, email verification, password reset, email sending, access levels
   `assign`, cors/security/static middleware, server `fetch`, openapi
   `operation`, client `call`, schema `validateObject`/`string`) — split in
   a polish pass.
+- DB: no joins/aggregates beyond `count` (use `db.query`); no Postgres/MySQL
+  driver yet (Dialect has `types`/`autoIncrement` hooks; Postgres needs `?`→`$n`
+  and `RETURNING` for generated ids).
 - Schema: async validators are rejected (sync-only by design); no
   discriminated-union optimisation; `lazy`/recursive schemas not supported.
 
