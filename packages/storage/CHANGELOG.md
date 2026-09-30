@@ -1,5 +1,11 @@
 # @arachnejs/storage
 
+## 0.1.1
+
+### Patch Changes
+
+- @arachnejs/mcp@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes

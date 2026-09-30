@@ -1,5 +1,13 @@
 # @arachnejs/render
 
+## 0.1.1
+
+### Patch Changes
+
+- b6e210c: `hydrate(code, element, { renderId })` hydrates markup rendered with `renderToString(…, { renderId })`, so several islands can hydrate separately inside one page without hydration-key collisions.
+  - @arachnejs/mcp@0.1.1
+  - @arachnejs/signals@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes
