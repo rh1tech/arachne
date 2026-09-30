@@ -56,7 +56,6 @@ jobs:
           commit: "chore: version packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # First releases: an npm automation token. Once trusted publishing is
-          # configured for every package on npmjs.com, delete the NPM_TOKEN secret.
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # No npm token: every @arachnejs/* package trusts this workflow
+          # (npm trusted publishing over OIDC, "Allow npm publish" on).
           NPM_CONFIG_PROVENANCE: "true"

@@ -342,7 +342,8 @@ light and dark. Fixes found on the way:
 - CI runs on the self-hosted runner `rbx1-arachne-ci` (unprivileged user,
   systemd limits); fork PRs on GitHub-hosted runners with approval; the
   publish job on GitHub-hosted runners (provenance/OIDC).
-- Next: npm trusted publishing per package, then delete `NPM_TOKEN`.
+- Publishing is token-free: npm trusted publishing (OIDC) for every
+  package; the `NPM_TOKEN` secret is deleted. 0.1.1 released this way.
 
 ### M14c — pre-rendered live examples (2026-09-30)
 

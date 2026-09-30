@@ -28,34 +28,21 @@ replaces `workspace:*` with the real versions and applies `files` (tests
 and fixtures stay out); the repository's `LICENSE-MIT` and `LICENSE-APACHE`
 are copied in; `npm publish <tarball>` uploads it.
 
-## One-time setup
+## Authentication
 
-1. On npmjs.com, signed in as the owner account, create the free
-   organization **`arachnejs`** (Add Organization → Unlimited public packages).
-2. Create a **granular access token**: Packages and scopes → Read and write
-   → scope `@arachnejs`, organization `arachnejs`; allow publishing without
-   2FA prompts ("bypass 2FA" for automation).
-3. Store it as the repository secret `NPM_TOKEN`:
+Publishing uses **npm trusted publishing** (OIDC); there is no npm token.
+Each `@arachnejs/*` package on npmjs.com → Settings → Trusted publishing has
+one GitHub Actions entry: organization `rh1tech`, repository `arachne`,
+workflow `release.yml`, no environment, and **Allow `npm publish`** ticked
+(without it only `npm stage publish` is allowed and a publish fails with
+"OIDC permission denied for this action"). A new package needs its entry
+before its first release; npm can't create one for a package that doesn't
+exist yet, so publish it once by hand (`npm publish` after `npm login`).
 
-   ```bash
-   gh secret set NPM_TOKEN --repo rh1tech/arachne
-   ```
-
-4. Repository → Settings → Actions → General: allow GitHub Actions to create
-   pull requests (for the version PR).
-
-## After the first release: trusted publishing
-
-Once every package exists on npm, switch from the token to OIDC:
-
-1. For each `@arachnejs/*` package on npmjs.com → Settings → Trusted
-   publishing → GitHub Actions: repository `rh1tech/arachne`, workflow
-   `release.yml`.
-2. Optionally set "Require two-factor authentication and disallow tokens".
-3. Delete the `NPM_TOKEN` secret and the token on npmjs.com.
-
-The workflow already requests `id-token: write` and uses npm ≥ 11.5.1, so
-no workflow change is needed.
+The Release workflow requests `id-token: write`, runs on a GitHub-hosted
+runner (trusted publishing doesn't accept self-hosted ones) and uses
+npm ≥ 11.5.1. Repository → Settings → Actions → General allows GitHub
+Actions to create pull requests (the version PR).
 
 ## Where CI runs
 
