@@ -43,8 +43,13 @@ export function Shell(props: RouteProps) {
 						</a>
 					))}
 					{SITE.sourceUrl ? (
-						<a href={SITE.sourceUrl} rel="external" class="nav-external">
-							GitHub
+						<a
+							href={SITE.sourceUrl}
+							target="_blank"
+							rel="external noopener noreferrer"
+							class="nav-external"
+						>
+							GitHub<span class="sr-only"> (opens in a new tab)</span>
 						</a>
 					) : null}
 				</nav>
@@ -55,7 +60,10 @@ export function Shell(props: RouteProps) {
 			</main>
 			<footer class="site-footer">
 				<span>
-					© 2026 Mikhail Matveev, <a href="https://rh1.tech">rh1.tech</a>
+					© 2026 Mikhail Matveev,{" "}
+					<a href="https://rh1.tech" target="_blank" rel="external noopener noreferrer">
+						rh1.tech<span class="sr-only"> (opens in a new tab)</span>
+					</a>
 				</span>
 				<span>arachne {kit.version} · MIT OR Apache-2.0</span>
 				<span>This site is an Arachne static build, rendered from the repository's Markdown.</span>

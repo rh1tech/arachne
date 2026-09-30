@@ -37,6 +37,14 @@ describe("loadDoc", () => {
 		expect((await loadDoc("/docs/ui/components"))?.previews).toBe(false);
 	});
 
+	test("links repository files to GitHub on the default branch, in a new tab", async () => {
+		const doc = await loadDoc("/docs/packages/kit");
+		expect(doc?.html).toContain(
+			'href="https://github.com/rh1tech/arachne/blob/master/packages/kit/templates/static" target="_blank"',
+		);
+		expect(doc?.html).not.toContain("/blob/main/");
+	});
+
 	test("returns undefined for unknown paths", async () => {
 		expect(await loadDoc("/docs/nope")).toBeUndefined();
 	});

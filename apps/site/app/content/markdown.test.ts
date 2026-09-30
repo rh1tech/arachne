@@ -31,8 +31,31 @@ describe("renderMarkdown", () => {
 			"See [kit](../kit/README.md#pages), [ext](https://x.dev/?a=1&b=2) and [tpl](templates/static).",
 		);
 		expect(doc.html).toContain('<a href="/docs/packages/kit#pages">kit</a>');
-		expect(doc.html).toContain('<a href="https://x.dev/?a=1&amp;b=2" rel="external">ext</a>');
+		expect(doc.html).toContain(
+			'<a href="https://x.dev/?a=1&amp;b=2" target="_blank" rel="external noopener noreferrer">ext<span class="sr-only"> (opens in a new tab)</span></a>',
+		);
 		expect(doc.html).toContain('<span class="xref">tpl</span>');
+	});
+
+	test("links repository files to the configured branch", () => {
+		const doc = renderMarkdown("[tpl](templates/static)", {
+			from: "packages/kit/README.md",
+			pages,
+			sourceUrl: "https://github.com/o/r",
+			branch: "master",
+		});
+		expect(doc.html).toContain(
+			'href="https://github.com/o/r/blob/master/packages/kit/templates/static"',
+		);
+	});
+
+	test("the new-tab note stays out of summaries and headings", () => {
+		const doc = render(
+			"# T\n\nBuilt on [Bun](https://bun.sh).\n\n## About [Bun](https://bun.sh)\n",
+		);
+		expect(doc.summary).toBe("Built on Bun.");
+		expect(doc.headings[0]?.text).toBe("About Bun");
+		expect(doc.headings[0]?.id).toBe("about-bun");
 	});
 
 	test("escapes inline HTML instead of rendering it", () => {

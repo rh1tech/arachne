@@ -64,8 +64,11 @@ export function escapeHtml(text: string): string {
 		.replaceAll('"', "&quot;");
 }
 
+/** Announced after external links, which open in a new tab. */
+const NEW_TAB = '<span class="sr-only"> (opens in a new tab)</span>';
+
 const textOf = (html: string) =>
-	decodeEntities(html.replace(/<[^>]*>/g, ""))
+	decodeEntities(html.replaceAll(NEW_TAB, "").replace(/<[^>]*>/g, ""))
 		.replace(/\s+/g, " ")
 		.trim();
 
@@ -107,10 +110,15 @@ export function renderMarkdown(markdown: string, options: RenderOptions): Render
 				options.from,
 				options.pages,
 				options.sourceUrl,
+				options.branch,
 			);
 			if (!link) return `<span class="xref">${inner}</span>`;
-			const rel = link.external ? ' rel="external"' : "";
-			return `<a href="${escapeHtml(link.href)}"${attrs}${rel}>${inner}</a>`;
+			if (!link.external) return `<a href="${escapeHtml(link.href)}"${attrs}>${inner}</a>`;
+			// Other sites open in a new tab; screen readers are told so.
+			return (
+				`<a href="${escapeHtml(link.href)}"${attrs} target="_blank" rel="external noopener noreferrer">` +
+				`${inner}${NEW_TAB}</a>`
+			);
 		},
 	);
 	html = html

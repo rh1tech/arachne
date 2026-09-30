@@ -138,6 +138,30 @@ describe("desktop", () => {
 		await page.close();
 	}, 30_000);
 
+	test("links to other sites open in a new tab", async () => {
+		const page = await browser.newPage();
+		const external: string[] = [];
+		for (const path of ["/", "/docs/packages/kit", "/docs/packages/signals"]) {
+			await page.goto(`${site.url}${path}`, { waitUntil: "networkidle" });
+			const links = await page.$$eval("a[href^='http']", (anchors) =>
+				anchors.map((a) => ({
+					href: a.getAttribute("href") ?? "",
+					target: a.getAttribute("target"),
+					rel: a.getAttribute("rel") ?? "",
+				})),
+			);
+			for (const link of links) {
+				if (link.target !== "_blank" || !link.rel.includes("noopener"))
+					external.push(`${path}: ${link.href}`);
+			}
+			expect(links.some((l) => l.href.startsWith("https://github.com/rh1tech/arachne"))).toBe(true);
+		}
+		expect(external).toEqual([]);
+		// The footer's rh1.tech link too.
+		expect(await page.getAttribute("footer a[href='https://rh1.tech']", "target")).toBe("_blank");
+		await page.close();
+	}, 30_000);
+
 	test("an unknown docs URL gets the 404 page, hydrated without errors", async () => {
 		const page = await browser.newPage();
 		const errors = watch(page);
