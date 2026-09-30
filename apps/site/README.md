@@ -39,7 +39,14 @@ without a page go to the GitHub repository (`SITE.sourceUrl` in
 
 ## Deploy
 
-Static files on `rbx1` behind Cloudflare, like the other `*.rh1.tech` sites:
+Automatic: after CI passes on `master`, the **Site** workflow
+(`.github/workflows/site.yml`) builds the site on the rbx1 runner, runs the
+browser tests, copies `dist/` into `/var/www/arachne-site` (owned by the
+runner's user `arachne-ci`; `rsync --delay-updates`), and checks that
+arachne.rh1.tech serves the new commit. Run it by hand from the Actions tab
+(or `gh workflow run site.yml`).
+
+By hand, if ever needed (as a user who can write `/var/www/arachne-site`):
 
 ```bash
 bun run build

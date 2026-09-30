@@ -56,3 +56,5 @@ Actions to create pull requests (the version PR).
   and outside contributors' workflows need a maintainer's approval.
 - The **Release** publish job runs on GitHub-hosted runners: npm provenance
   and trusted publishing don't accept self-hosted runners.
+- The **Site** workflow deploys arachne.rh1.tech from the rbx1 runner after
+  CI passes on `master` (see `apps/site/README.md`).
