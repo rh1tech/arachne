@@ -87,14 +87,16 @@ const DEP_FIELDS = [
 ] as const;
 const LICENSES = ["LICENSE-MIT", "LICENSE-APACHE"];
 
-function run(cmd: string[], cwd = ROOT): { ok: boolean; out: string } {
+function run(cmd: string[], cwd = ROOT): { ok: boolean; out: string; stdout: string } {
 	const result = Bun.spawnSync(cmd, { cwd, stdout: "pipe", stderr: "pipe" });
-	return { ok: result.success, out: `${result.stdout}${result.stderr}` };
+	const stdout = result.stdout.toString();
+	return { ok: result.success, out: `${stdout}${result.stderr}`, stdout };
 }
 
 function isPublished(name: string, version: string): boolean {
 	const result = run(["npm", "view", `${name}@${version}`, "version"]);
-	if (result.ok) return result.out.trim() === version;
+	// stdout only: npm prints config warnings on stderr (seen in CI).
+	if (result.ok) return result.stdout.trim() === version;
 	if (/E404|404 Not Found/.test(result.out)) return false;
 	throw new Error(`npm view ${name}@${version} failed:\n${result.out}`);
 }
@@ -186,10 +188,11 @@ if (import.meta.main) {
 		console.info(result.out.trim());
 		if (!result.ok && alreadyPublished(result.out)) {
 			// The registry's metadata can lag behind a publish (npm view said no).
+			// Not new: no "New tag" line, the tag exists already.
 			console.info(`${manifest.name}@${manifest.version} is already on npm`);
-		} else if (!result.ok) {
-			throw new Error(`publishing ${manifest.name}@${manifest.version} failed`);
+			continue;
 		}
+		if (!result.ok) throw new Error(`publishing ${manifest.name}@${manifest.version} failed`);
 		if (dryRun) {
 			console.info(`would publish ${manifest.name}@${manifest.version}`);
 			continue;
