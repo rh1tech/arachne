@@ -9,6 +9,7 @@
 		"migrate",
 		"acl",
 		"mailer",
-		"storage"
+		"storage",
+		"auth"
 	]
 }

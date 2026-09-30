@@ -39,6 +39,23 @@
         "typescript": "^5.9.2",
       },
     },
+    "packages/auth": {
+      "name": "@arachne/auth",
+      "version": "0.0.1",
+      "dependencies": {
+        "@arachne/acl": "workspace:*",
+        "@arachne/db": "workspace:*",
+        "@arachne/mcp": "workspace:*",
+        "@arachne/schema": "workspace:*",
+        "@arachne/server": "workspace:*",
+        "zod": "3.25.76",
+      },
+      "devDependencies": {
+        "@arachne/db-sqlite": "workspace:*",
+        "@arachne/mailer": "workspace:*",
+        "typescript": "^5.9.2",
+      },
+    },
     "packages/config": {
       "name": "@arachne/config",
       "version": "0.0.1",
@@ -280,6 +297,8 @@
   },
   "packages": {
     "@arachne/acl": ["@arachne/acl@workspace:packages/acl"],
+
+    "@arachne/auth": ["@arachne/auth@workspace:packages/auth"],
 
     "@arachne/config": ["@arachne/config@workspace:packages/config"],
 

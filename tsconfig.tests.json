@@ -12,6 +12,7 @@
 		"packages/acl/src/**/*.ts",
 		"packages/mailer/src/**/*.ts",
 		"packages/storage/src/**/*.ts",
+		"packages/auth/src/**/*.ts",
 		"scripts/**/*.ts"
 	]
 }

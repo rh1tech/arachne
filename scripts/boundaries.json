@@ -17,7 +17,7 @@
 		"db-mongo": ["db", "schema", "mcp"],
 		"migrate": ["db", "schema", "core", "mcp"],
 		"acl": ["core", "mcp"],
-		"auth": ["core", "db", "acl", "mcp"],
+		"auth": ["core", "db", "acl", "server", "schema", "mcp"],
 		"i18n": ["core", "mcp"],
 		"ui": ["signals", "jsx", "render", "mcp"],
 		"forms": ["schema", "signals", "ui", "render", "mcp"],

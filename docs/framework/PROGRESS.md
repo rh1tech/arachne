@@ -36,7 +36,7 @@ logout, email verification, password reset, email sending, access levels
 | 6 | Access control (core) | `@arachne/acl` | [x] |
 | 7 | Mail | `@arachne/mailer` | [x] |
 | 8 | File storage (disk, memory, S3) | `@arachne/storage` | [x] |
-| 9 | Auth: users, sessions, tokens, registration, verification, reset, blocking, groups, throttling, CSRF, HTTP routes | `@arachne/auth` | [ ] |
+| 9 | Auth: users, sessions, tokens, registration, verification, reset, blocking, groups, throttling, CSRF, HTTP routes | `@arachne/auth` | [x] |
 | 10 | Router: `Link`, click interception, lazy routes, layouts, head | `@arachne/router` | [ ] |
 | 11 | Kit: `defineApp`, SSR pages, static prerender build, dev server with hot reload, `arachne` CLI | `@arachne/kit` | [ ] |
 | 12 | Examples: static site, full-stack, API-only | `apps/examples/*` | [ ] |
@@ -170,6 +170,24 @@ logout, email verification, password reset, email sending, access levels
 - Same behavioural suite runs against all three drivers (`describe.each`).
 - MCP: `arachne_storage_check_key`.
 
+### M9 — `@arachne/auth` (2026-09-30)
+
+- Files: `core.ts` (shared helpers, DB-backed ACL, one-time tokens, events,
+  mail), `accounts.ts` (register/verify/login/MFA step/reset/change/email
+  change), `sessions.ts` (sessions + API tokens), `mfa.ts` (TOTP, recovery
+  codes, replay protection, AES-GCM secret sealing), `admin.ts` (users,
+  groups, grants, blocking, events; permission + level + "only grant what you
+  hold" checks), `http.ts` (middleware, CSRF, route-meta guards, module
+  augmentation of `ContextState`/`RouteMeta`), `routes.ts` (`/auth/*`),
+  `tables.ts`, `crypto.ts`, `mail.ts` (default templates), `errors.ts`
+  (`AuthError` extends `HttpError`).
+- Security review fixes (tests included): privilege escalation through
+  grants/groups; login CSRF via foreign `Origin`.
+- Tests: `accounts.test.ts`, `admin.test.ts`, `http.test.ts` (real server,
+  memory mailbox, controllable clock via `fixtures/setup.ts`), `mcp.test.ts`.
+- MCP: `arachne_auth_routes`, `arachne_auth_policy`, `arachne_auth_password_check`.
+- Boundary map: `auth` may use `server` and `schema`.
+
 ## Known gaps / next steps
 
 - **Docs backlog:** pre-existing packages not yet in `docs-check.json`
@@ -186,6 +204,10 @@ logout, email verification, password reset, email sending, access levels
 - DB: no joins/aggregates beyond `count` (use `db.query`); no Postgres/MySQL
   driver yet (Dialect has `types`/`autoIncrement` hooks; Postgres needs `?`→`$n`
   and `RETURNING` for generated ids).
+- Auth: no OAuth/social login, passkeys (WebAuthn) or magic links yet; the
+  ACL cache is per process (multi-instance deployments must reload groups,
+  e.g. `auth.setup()` on an interval or a pub/sub hook); lockout can be used
+  to lock a known account (bounded by rate limits).
 - Mailer: no queue/outbox yet (send is inline with retries); JSX email
   templates are possible via `renderToString` but not wrapped.
 - Schema: async validators are rejected (sync-only by design); no
