@@ -15,7 +15,8 @@ export function sqlTypeDDL(sqlType: SqlType, dialect?: Pick<Dialect, "types">): 
 	return dialect?.types?.[sqlType] ?? SQLITE_TYPES[sqlType];
 }
 
-function columnDDL(
+/** Column definition fragment (`"name" TYPE NOT NULL …`), as used in `CREATE TABLE` and `ADD COLUMN`. */
+export function columnSQL(
 	name: string,
 	column: ColumnDef,
 	dialect?: Pick<Dialect, "types" | "autoIncrement">,
@@ -44,7 +45,7 @@ export function createTableSQL(
 	dialect?: Pick<Dialect, "types" | "autoIncrement">,
 ): string {
 	const parts = Object.entries(table.columns).map(([name, column]) =>
-		columnDDL(name, column, dialect),
+		columnSQL(name, column, dialect),
 	);
 	return `CREATE TABLE IF NOT EXISTS ${quoteIdent(table.name)} (${parts.join(", ")})`;
 }

@@ -1,44 +1,15 @@
 import { Database } from "bun:sqlite";
 import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp";
-import { type SchemaSpec, schemaFromSpec } from "@arachne/schema";
 import { schemaSpecSchema } from "@arachne/schema/mcp";
 import { z } from "zod";
 import { createDb } from "./client.ts";
 import { createIndexSQL, createTableSQL } from "./ddl.ts";
 import type { Dialect } from "./dialect.ts";
-import {
-	type ColumnDef,
-	type ColumnMap,
-	type ColumnOptions,
-	col,
-	defineTable,
-	type SqlType,
-	type TableDef,
-} from "./table.ts";
+import { type TableSpec, tableFromSpec } from "./spec.ts";
 import { compileWhere } from "./where.ts";
 
-/** A column described with a SchemaSpec (MCP input). */
-interface ColumnSpec {
-	type: SqlType;
-	schema?: SchemaSpec;
-	primaryKey?: boolean;
-	autoIncrement?: boolean;
-	unique?: boolean;
-	references?: {
-		table: string;
-		column?: string;
-		onDelete?: "cascade" | "restrict" | "set null" | "no action";
-	};
-}
-
-/** A table described with SchemaSpecs (MCP input). */
-interface TableSpec {
-	name: string;
-	columns: Record<string, ColumnSpec>;
-	indexes?: Array<{ columns: string[]; unique?: boolean }>;
-}
-
-const columnSpecSchema = z.object({
+/** Zod validator for a column spec. */
+export const columnSpecSchema = z.object({
 	type: z.enum(["text", "integer", "real", "boolean", "json", "date"]),
 	schema: schemaSpecSchema.optional(),
 	primaryKey: z.boolean().optional(),
@@ -53,41 +24,14 @@ const columnSpecSchema = z.object({
 		.optional(),
 });
 
-const tableSpecSchema = z.object({
+/** Zod validator for a {@link TableSpec}, shared with other MCP modules. */
+export const tableSpecSchema = z.object({
 	name: z.string().min(1),
 	columns: z.record(columnSpecSchema),
 	indexes: z
 		.array(z.object({ columns: z.array(z.string()), unique: z.boolean().optional() }))
 		.optional(),
 });
-
-/** Schema used when a column spec omits one. */
-const DEFAULT_SPECS: Record<Exclude<SqlType, "date">, SchemaSpec> = {
-	text: { kind: "string" },
-	integer: { kind: "number", int: true },
-	real: { kind: "number" },
-	boolean: { kind: "boolean" },
-	json: { kind: "object", fields: {} },
-};
-
-function toColumn(spec: ColumnSpec): ColumnDef {
-	const options = {
-		...(spec.primaryKey ? { primaryKey: true } : {}),
-		...(spec.autoIncrement ? { autoIncrement: true } : {}),
-		...(spec.unique ? { unique: true } : {}),
-		...(spec.references ? { references: spec.references } : {}),
-	};
-	if (spec.type === "date") return col.date(options) as ColumnDef;
-	const schema = schemaFromSpec(spec.schema ?? DEFAULT_SPECS[spec.type]);
-	const build = col[spec.type] as (schema: never, options: ColumnOptions) => ColumnDef;
-	return build(schema as never, options);
-}
-
-function toTable(spec: TableSpec): TableDef {
-	const columns: ColumnMap = {};
-	for (const [name, column] of Object.entries(spec.columns)) columns[name] = toColumn(column);
-	return defineTable(spec.name, columns, { indexes: spec.indexes ?? [] });
-}
 
 function memorySqlite(): Dialect & { close: () => void } {
 	const database = new Database(":memory:");
@@ -113,7 +57,7 @@ export const mcpModule = defineMcpModule({
 				"Generate CREATE TABLE and CREATE INDEX SQL for a table spec (columns: type, SchemaSpec, primaryKey, autoIncrement, unique, references). Nullability follows the schema.",
 			inputSchema: { table: tableSpecSchema },
 			handler: (args) => {
-				const table = toTable(args["table"] as TableSpec);
+				const table = tableFromSpec(args["table"] as TableSpec);
 				return jsonResult({ table: createTableSQL(table), indexes: createIndexSQL(table) });
 			},
 		},
@@ -125,7 +69,7 @@ export const mcpModule = defineMcpModule({
 			handler: (args) =>
 				jsonResult(
 					compileWhere(
-						toTable(args["table"] as TableSpec),
+						tableFromSpec(args["table"] as TableSpec),
 						args["where"] as Record<string, unknown>,
 					),
 				),
@@ -140,7 +84,7 @@ export const mcpModule = defineMcpModule({
 				where: z.record(z.unknown()).optional(),
 			},
 			handler: async (args) => {
-				const table = toTable(args["table"] as TableSpec);
+				const table = tableFromSpec(args["table"] as TableSpec);
 				const dialect = memorySqlite();
 				const db = createDb({ dialect, tables: { [table.name]: table } });
 				try {

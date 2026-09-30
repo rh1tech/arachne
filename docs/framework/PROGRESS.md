@@ -32,7 +32,7 @@ logout, email verification, password reset, email sending, access levels
 | 2 | Schema: formats, coercion, refine/transform, record, file, JSON Schema export | `@arachne/schema` | [x] |
 | 3 | Server: typed routes with validation, body/multipart parsing, errors, cookies, CORS, security headers, rate limit, static files, groups, OpenAPI | `@arachne/server` | [x] |
 | 4 | DB: update, operators, order/limit/offset, count, nullable/json columns, indexes, transactions | `@arachne/db`, `@arachne/db-sqlite` | [x] |
-| 5 | Migrations | `@arachne/migrate` | [ ] |
+| 5 | Migrations | `@arachne/migrate` | [x] |
 | 6 | Access control (core) | `@arachne/acl` | [ ] |
 | 7 | Mail | `@arachne/mailer` | [ ] |
 | 8 | File storage (disk, memory, S3) | `@arachne/storage` | [ ] |
@@ -117,6 +117,22 @@ logout, email verification, password reset, email sending, access levels
 - Tests use a real in-memory bun:sqlite fixture (`src/fixtures/bun-sqlite.ts`)
   instead of the old regex fake.
 - MCP: `arachne_db_table_sql`, `arachne_db_where_sql`, `arachne_db_simulate`.
+
+### M5 — `@arachne/migrate` (2026-09-30)
+
+- `migration.ts`: `defineMigration`, helpers `sql`, `createTable`,
+  `addColumn`, `dropTable`.
+- `runner.ts`: `migrate`, `rollback({ steps })`, `migrationStatus` (applied /
+  pending / unknown), journal `_arachne_migrations`, one transaction per
+  migration, `assertOrdered` (unique ascending ids).
+- `plan.ts`: `planSchema(db, tables)` via SQLite PRAGMAs → statements +
+  warnings (drops, type changes, NOT NULL adds are never auto-planned);
+  `renderMigration(id, plan)` → module source.
+- `load.ts`: `loadMigrations(dir)`.
+- `@arachne/db` gained public `columnSQL` and `tableFromSpec`/`TableSpec`
+  (moved from its MCP module); db MCP exports `tableSpecSchema`.
+- MCP: `arachne_migrate_plan`. Workspace MCP registry lists migrate, storage,
+  mailer, kit.
 
 ## Known gaps / next steps
 

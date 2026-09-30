@@ -119,6 +119,20 @@
         "typescript": "^5.9.2",
       },
     },
+    "packages/migrate": {
+      "name": "@arachne/migrate",
+      "version": "0.0.1",
+      "dependencies": {
+        "@arachne/db": "workspace:*",
+        "@arachne/mcp": "workspace:*",
+        "@arachne/schema": "workspace:*",
+        "zod": "3.25.76",
+      },
+      "devDependencies": {
+        "@arachne/db-sqlite": "workspace:*",
+        "typescript": "^5.9.2",
+      },
+    },
     "packages/render": {
       "name": "@arachne/render",
       "version": "0.0.1",
@@ -242,6 +256,8 @@
     "@arachne/jsx": ["@arachne/jsx@workspace:packages/jsx"],
 
     "@arachne/mcp": ["@arachne/mcp@workspace:packages/mcp"],
+
+    "@arachne/migrate": ["@arachne/migrate@workspace:packages/migrate"],
 
     "@arachne/playground": ["@arachne/playground@workspace:apps/playground"],
 

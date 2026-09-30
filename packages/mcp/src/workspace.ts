@@ -15,6 +15,9 @@ const KNOWN_MODULES = [
 	"vite",
 	"db",
 	"db-sqlite",
+	"migrate",
+	"storage",
+	"mailer",
 	"auth",
 	"acl",
 	"ui",
@@ -22,6 +25,7 @@ const KNOWN_MODULES = [
 	"table",
 	"admin",
 	"cli",
+	"kit",
 ] as const;
 
 export type KnownModuleName = (typeof KNOWN_MODULES)[number];

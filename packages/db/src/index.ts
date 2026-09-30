@@ -1,5 +1,5 @@
 export { type CreateDbOptions, createDb, type DbClient, type DbQueries } from "./client.ts";
-export { createIndexSQL, createTableSQL, indexName, sqlTypeDDL } from "./ddl.ts";
+export { columnSQL, createIndexSQL, createTableSQL, indexName, sqlTypeDDL } from "./ddl.ts";
 export { type Dialect, placeholders, quoteIdent, type RunResult } from "./dialect.ts";
 export type {
 	DeleteBuilder,
@@ -8,6 +8,7 @@ export type {
 	SelectBuilder,
 	UpdateBuilder,
 } from "./query.ts";
+export { type ColumnSpec, type TableSpec, tableFromSpec } from "./spec.ts";
 export {
 	type ColumnDef,
 	type ColumnMap,

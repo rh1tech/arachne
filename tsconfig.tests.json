@@ -1,11 +1,14 @@
 {
 	"extends": "./tsconfig.base.json",
-	"compilerOptions": { "noEmit": true },
+	"compilerOptions": {
+		"noEmit": true
+	},
 	"include": [
 		"packages/schema/src/**/*.ts",
 		"packages/server/src/**/*.ts",
 		"packages/db/src/**/*.ts",
 		"packages/db-sqlite/src/**/*.ts",
+		"packages/migrate/src/**/*.ts",
 		"scripts/**/*.ts"
 	]
 }
