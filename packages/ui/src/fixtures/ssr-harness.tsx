@@ -1,5 +1,5 @@
 /** Server-renders every registered contract case (compiled with target "ssr"). */
-import { renderToString } from "@arachne/render/ssr";
+import { renderToString } from "@arachnejs/render/ssr";
 import type { ContractCase, ContractProbe } from "../test-utils/contract.tsx";
 import { cases as app } from "./contract-app-harness.tsx";
 import { cases as core } from "./contract-core-harness.tsx";

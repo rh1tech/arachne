@@ -1,5 +1,5 @@
 ---
-"@arachne/vite": minor
+"@arachnejs/vite": minor
 ---
 
-With `target: "ssr"`, `bunPlugin` and `vitePlugin` resolve bare `@arachne/render` imports to `@arachne/render/ssr`. Library code such as the UI kit now uses server-safe runtime helpers when bundled for the server.
+With `target: "ssr"`, `bunPlugin` and `vitePlugin` resolve bare `@arachnejs/render` imports to `@arachnejs/render/ssr`. Library code such as the UI kit now uses server-safe runtime helpers when bundled for the server.

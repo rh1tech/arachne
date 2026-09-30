@@ -1,4 +1,4 @@
-import { defineMcpModule, jsonResult, toolName } from "@arachne/mcp";
+import { defineMcpModule, jsonResult, toolName } from "@arachnejs/mcp";
 import { z } from "zod";
 import { island } from "./islands.ts";
 import { escape, renderToString, ssr, wrapIsland } from "./ssr.ts";

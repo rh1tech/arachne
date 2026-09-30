@@ -13,7 +13,7 @@ import {
 	securityHeaders,
 	serveStatic,
 	toRoute,
-} from "@arachne/server";
+} from "@arachnejs/server";
 import { buildIdOf } from "./build-id.ts";
 import type { ClientBuild, SsrModule } from "./bundle.ts";
 import type { ResolvedConfig } from "./config.ts";

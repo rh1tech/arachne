@@ -1,4 +1,4 @@
-import { omitProps } from "@arachne/render";
+import { omitProps } from "@arachnejs/render";
 import { shouldIntercept } from "./links.ts";
 import { currentRouter, type Router } from "./router.ts";
 

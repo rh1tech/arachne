@@ -9,13 +9,13 @@
 		"openapi": "arachne openapi --out openapi.json"
 	},
 	"dependencies": {
-		"@arachne/auth": "workspace:*",
-		"@arachne/db": "workspace:*",
-		"@arachne/db-sqlite": "workspace:*",
-		"@arachne/kit": "workspace:*",
-		"@arachne/mailer": "workspace:*",
-		"@arachne/schema": "workspace:*",
-		"@arachne/server": "workspace:*",
-		"@arachne/storage": "workspace:*"
+		"@arachnejs/auth": "workspace:*",
+		"@arachnejs/db": "workspace:*",
+		"@arachnejs/db-sqlite": "workspace:*",
+		"@arachnejs/kit": "workspace:*",
+		"@arachnejs/mailer": "workspace:*",
+		"@arachnejs/schema": "workspace:*",
+		"@arachnejs/server": "workspace:*",
+		"@arachnejs/storage": "workspace:*"
 	}
 }

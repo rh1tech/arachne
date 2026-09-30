@@ -48,7 +48,7 @@ type RadiusName = "none" | "sm" | "lg";
 	language="tsx"
 	radius="lg"
 	code={
-		'import { Button } from "@arachne/ui";\n\nexport const Save = () => <Button>Save</Button>;'
+		'import { Button } from "@arachnejs/ui";\n\nexport const Save = () => <Button>Save</Button>;'
 	}
 />
 ```
@@ -137,7 +137,7 @@ Terminal window mock-up.
 
 ```tsx
 <Terminal title="zsh">
-	{"$ bun add @arachne/ui\ninstalled @arachne/ui@2.4.0"}
+	{"$ bun add @arachnejs/ui\ninstalled @arachnejs/ui@2.4.0"}
 </Terminal>
 ```
 

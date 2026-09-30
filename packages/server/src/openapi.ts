@@ -1,4 +1,4 @@
-import { type JsonSchema, toJSONSchema } from "@arachne/schema";
+import { type JsonSchema, toJSONSchema } from "@arachnejs/schema";
 import { html, json } from "./context.ts";
 import { type AnyRoute, route } from "./route.ts";
 

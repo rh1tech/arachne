@@ -1,5 +1,5 @@
-import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp";
-import { s } from "@arachne/schema";
+import { defineMcpModule, jsonResult, textResult, toolName } from "@arachnejs/mcp";
+import { s } from "@arachnejs/schema";
 import { z } from "zod";
 import { createForm } from "./create-form.ts";
 
@@ -37,7 +37,7 @@ export const mcpModule = defineMcpModule({
 		},
 		{
 			name: toolName("forms", "api_summary"),
-			description: "Summarize @arachne/forms public API.",
+			description: "Summarize @arachnejs/forms public API.",
 			handler: () =>
 				textResult(
 					[

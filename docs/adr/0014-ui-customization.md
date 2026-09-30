@@ -6,7 +6,7 @@
 
 ## Context
 
-`@arachne/ui` components accepted only `class`. Apps could not forward `id`,
+`@arachnejs/ui` components accepted only `class`. Apps could not forward `id`,
 `data-*`, `aria-*`, `style` or handlers, restyle inner parts, or set app-wide
 defaults. The stylesheet was unlayered, so overrides fought specificity.
 Overlays mounted and unmounted with no exit motion, and keyboard/focus
@@ -40,7 +40,7 @@ Shared primitives:
 - `DialogFrame`: the shared base for Modal and Drawer, and the intended base
   for BottomSheet and ConfirmDialog.
 
-Framework prerequisites fixed in `@arachne/render` / `@arachne/signals`:
+Framework prerequisites fixed in `@arachnejs/render` / `@arachnejs/signals`:
 
 - `untrack` preserves ownership, so component effects are disposed on unmount.
 - `spread`, `ref` and `splitProps` are exported; they were emitted by the

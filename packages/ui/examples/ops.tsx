@@ -1,5 +1,5 @@
-import { For, Show } from "@arachne/render";
-import { signal } from "@arachne/signals";
+import { For, Show } from "@arachnejs/render";
+import { signal } from "@arachnejs/signals";
 import { Button } from "../src/button.tsx";
 import { FileInput, InputAddon, InputGroup, Skeleton, Tag, Tags } from "../src/extras.tsx";
 import { TextInput } from "../src/input.tsx";
@@ -700,8 +700,8 @@ export const examples: Example[] = [
 		name: "CopyButton",
 		render: (p) => (
 			<Group gap="0.5rem">
-				<code>bun add @arachne/ui</code>
-				<CopyButton {...p} value="bun add @arachne/ui" />
+				<code>bun add @arachnejs/ui</code>
+				<CopyButton {...p} value="bun add @arachnejs/ui" />
 			</Group>
 		),
 	},

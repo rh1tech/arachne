@@ -1,4 +1,4 @@
-import { clearDelegatedEvents, delegateEvents, render } from "@arachne/render";
+import { clearDelegatedEvents, delegateEvents, render } from "@arachnejs/render";
 import {
 	Column,
 	Columns,

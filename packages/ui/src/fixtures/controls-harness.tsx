@@ -1,5 +1,5 @@
-import { clearDelegatedEvents, delegateEvents, render } from "@arachne/render";
-import { signal } from "@arachne/signals";
+import { clearDelegatedEvents, delegateEvents, render } from "@arachnejs/render";
+import { signal } from "@arachnejs/signals";
 import {
 	Autocomplete,
 	Checkbox,

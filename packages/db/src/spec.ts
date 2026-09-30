@@ -1,4 +1,4 @@
-import { type SchemaSpec, schemaFromSpec } from "@arachne/schema";
+import { type SchemaSpec, schemaFromSpec } from "@arachnejs/schema";
 import {
 	type ColumnDef,
 	type ColumnMap,

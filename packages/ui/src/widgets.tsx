@@ -1,5 +1,5 @@
-import { Show } from "@arachne/render";
-import { signal } from "@arachne/signals";
+import { Show } from "@arachnejs/render";
+import { signal } from "@arachnejs/signals";
 import { Icon, type IconName } from "./icons.tsx";
 import { type BaseProps, createId, type SlotProps, type StyleValue, setup } from "./system.ts";
 

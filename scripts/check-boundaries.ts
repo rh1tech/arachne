@@ -1,5 +1,5 @@
 /**
- * Enforces downward-only @arachne/* package dependencies.
+ * Enforces downward-only @arachnejs/* package dependencies.
  * Allowed edges are declared in ./boundaries.json (layer map from ADR-0001).
  */
 import { readdir, readFile } from "node:fs/promises";
@@ -20,8 +20,8 @@ const root = join(import.meta.dir, "..");
 const packagesDir = join(root, "packages");
 
 function packageToLayer(name: string): string | undefined {
-	if (!name.startsWith("@arachne/")) return undefined;
-	const short = name.slice("@arachne/".length);
+	if (!name.startsWith("@arachnejs/")) return undefined;
+	const short = name.slice("@arachnejs/".length);
 	if (short === "vite") return "vite";
 	if (short === "otel") return "observability";
 	return short;
@@ -44,7 +44,7 @@ async function readPackage(pkgPath: string): Promise<PackageJson | undefined> {
 
 function checkPackage(pkg: PackageJson, layers: Boundaries["layers"]): string[] {
 	const errors: string[] = [];
-	if (!pkg.name?.startsWith("@arachne/")) return errors;
+	if (!pkg.name?.startsWith("@arachnejs/")) return errors;
 
 	const fromLayer = packageToLayer(pkg.name);
 	if (!fromLayer) {

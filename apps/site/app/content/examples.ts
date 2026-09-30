@@ -6,8 +6,8 @@ export const EXAMPLES = [
 	{
 		file: "app/routes.tsx",
 		lang: "tsx",
-		code: `import type { RouteDefinition, RouteProps } from "@arachne/router";
-import { signal } from "@arachne/signals";
+		code: `import type { RouteDefinition, RouteProps } from "@arachnejs/router";
+import { signal } from "@arachnejs/signals";
 
 function Home(props: RouteProps) {
   const data = props.data as { now: string };
@@ -31,9 +31,9 @@ export const routes: RouteDefinition[] = [
 	{
 		file: "app/server.ts",
 		lang: "ts",
-		code: `import { defineServer } from "@arachne/kit";
-import { s } from "@arachne/schema";
-import { route } from "@arachne/server";
+		code: `import { defineServer } from "@arachnejs/kit";
+import { s } from "@arachnejs/schema";
+import { route } from "@arachnejs/server";
 
 const greet = route({
   method: "GET",

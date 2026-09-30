@@ -1,4 +1,4 @@
-import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp";
+import { defineMcpModule, jsonResult, textResult, toolName } from "@arachnejs/mcp";
 import { z } from "zod";
 import { type Condition, createAcl, type GroupDef, type Subject } from "./acl.ts";
 
@@ -44,7 +44,7 @@ function build(args: Record<string, unknown>) {
 	return { acl: createAcl({ groups, conditions: assumed(groups, subject, assume) }), subject };
 }
 
-/** MCP tools for designing and debugging `@arachne/acl` policies. */
+/** MCP tools for designing and debugging `@arachnejs/acl` policies. */
 export const mcpModule = defineMcpModule({
 	name: "acl",
 	version: "0.0.1",
@@ -84,7 +84,7 @@ export const mcpModule = defineMcpModule({
 		},
 		{
 			name: toolName("acl", "api_summary"),
-			description: "Summarize the @arachne/acl model and API.",
+			description: "Summarize the @arachnejs/acl model and API.",
 			handler: () =>
 				textResult(
 					[

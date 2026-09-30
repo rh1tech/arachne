@@ -8,8 +8,8 @@ import {
 	planSchema,
 	renderMigration,
 	rollback,
-} from "@arachne/migrate";
-import { openapi, toRoute } from "@arachne/server";
+} from "@arachnejs/migrate";
+import { openapi, toRoute } from "@arachnejs/server";
 import { build } from "./build.ts";
 import { buildSsr } from "./bundle.ts";
 import { type AppMode, resolveConfig } from "./config.ts";

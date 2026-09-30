@@ -1,11 +1,11 @@
-# @arachne/signals
+# @arachnejs/signals
 
 Fine-grained reactivity for Arachne. Algorithm by
 [alien-signals](https://github.com/stackblitz/alien-signals) (MIT); public API
 is ours.
 
 ```ts
-import { signal, computed, effect, batch, untrack, resource } from "@arachne/signals";
+import { signal, computed, effect, batch, untrack, resource } from "@arachnejs/signals";
 
 const count = signal(0);
 const doubled = computed(() => count() * 2);

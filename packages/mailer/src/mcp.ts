@@ -1,4 +1,4 @@
-import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp";
+import { defineMcpModule, jsonResult, textResult, toolName } from "@arachnejs/mcp";
 import MailComposer from "nodemailer/lib/mail-composer/index.js";
 import { z } from "zod";
 import { htmlToText } from "./html.ts";
@@ -10,7 +10,7 @@ const address = z.union([
 ]);
 const addresses = z.union([address, z.array(address)]);
 
-/** MCP tools for previewing and checking mail with `@arachne/mailer`. */
+/** MCP tools for previewing and checking mail with `@arachnejs/mailer`. */
 export const mcpModule = defineMcpModule({
 	name: "mailer",
 	version: "0.0.1",
@@ -61,7 +61,7 @@ export const mcpModule = defineMcpModule({
 		},
 		{
 			name: toolName("mailer", "api_summary"),
-			description: "Summarize @arachne/mailer public API.",
+			description: "Summarize @arachnejs/mailer public API.",
 			handler: () =>
 				textResult(
 					[

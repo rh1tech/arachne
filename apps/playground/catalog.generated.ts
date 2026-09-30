@@ -2779,7 +2779,7 @@ export const catalog: CatalogEntry[] = [
 			}
 		],
 		"types": [],
-		"code": "<Group gap=\"0.5rem\">\n\t<code>bun add @arachne/ui</code>\n\t<CopyButton value=\"bun add @arachne/ui\" />\n</Group>",
+		"code": "<Group gap=\"0.5rem\">\n\t<code>bun add @arachnejs/ui</code>\n\t<CopyButton value=\"bun add @arachnejs/ui\" />\n</Group>",
 		"interactive": false,
 		"logsActions": false
 	},
@@ -13598,7 +13598,7 @@ export const catalog: CatalogEntry[] = [
 				"definition": "\"none\" | \"sm\" | \"lg\""
 			}
 		],
-		"code": "<CodeBlock\n\tlanguage=\"tsx\"\n\tradius=\"lg\"\n\tcode={\n\t\t'import { Button } from \"@arachne/ui\";\\n\\nexport const Save = () => <Button>Save</Button>;'\n\t}\n/>",
+		"code": "<CodeBlock\n\tlanguage=\"tsx\"\n\tradius=\"lg\"\n\tcode={\n\t\t'import { Button } from \"@arachnejs/ui\";\\n\\nexport const Save = () => <Button>Save</Button>;'\n\t}\n/>",
 		"interactive": false,
 		"logsActions": false
 	},
@@ -13737,7 +13737,7 @@ export const catalog: CatalogEntry[] = [
 			}
 		],
 		"types": [],
-		"code": "<Terminal title=\"zsh\">\n\t{\"$ bun add @arachne/ui\\ninstalled @arachne/ui@2.4.0\"}\n</Terminal>",
+		"code": "<Terminal title=\"zsh\">\n\t{\"$ bun add @arachnejs/ui\\ninstalled @arachnejs/ui@2.4.0\"}\n</Terminal>",
 		"interactive": false,
 		"logsActions": false
 	},

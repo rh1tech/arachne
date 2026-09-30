@@ -1,5 +1,5 @@
-import type { Acl, Subject } from "@arachne/acl";
-import type { AnyRoute, Context, Middleware } from "@arachne/server";
+import type { Acl, Subject } from "@arachnejs/acl";
+import type { AnyRoute, Context, Middleware } from "@arachnejs/server";
 import { type Accounts, createAccounts } from "./accounts.ts";
 import { type Admin, createAdmin } from "./admin.ts";
 import { createCore } from "./core.ts";

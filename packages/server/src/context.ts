@@ -1,4 +1,4 @@
-import type { PathParams } from "@arachne/router/path";
+import type { PathParams } from "@arachnejs/router/path";
 import { type CookieJar, createCookieJar } from "./cookies.ts";
 
 /** HTTP methods a route can declare; `*` matches any method. */
@@ -10,7 +10,7 @@ export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "HEAD" | 
  *
  * @example
  * ```ts
- * declare module "@arachne/server" {
+ * declare module "@arachnejs/server" {
  *   interface ContextState { user?: { id: string } }
  * }
  * ```

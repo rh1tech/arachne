@@ -1,5 +1,5 @@
-import { For, omitProps, Show } from "@arachne/render";
-import { effect } from "@arachne/signals";
+import { For, omitProps, Show } from "@arachnejs/render";
+import { effect } from "@arachnejs/signals";
 import { watchClickOutside } from "./click-outside.ts";
 import { autoPosition } from "./floating.ts";
 import { rovingIndex, whenConnected } from "./focus.ts";

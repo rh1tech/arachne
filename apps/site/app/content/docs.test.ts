@@ -19,7 +19,7 @@ describe("documentation sources", () => {
 describe("loadDoc", () => {
 	test("renders a page with its title, outline, source and neighbours", async () => {
 		const doc = await loadDoc("/docs/packages/kit/");
-		expect(doc?.title).toBe("@arachne/kit");
+		expect(doc?.title).toBe("@arachnejs/kit");
 		expect(doc?.source).toBe("packages/kit/README.md");
 		expect(doc?.section).toBe("Pages");
 		expect(doc?.headings.map((h) => h.id)).toContain("build-and-deploy");
@@ -69,11 +69,11 @@ describe("searchIndex", () => {
 	test("has a record per page and per h2/h3", async () => {
 		const index = await searchIndex();
 		const kit = index.find((record) => record.url === "/docs/packages/kit");
-		expect(kit).toMatchObject({ title: "@arachne/kit", section: "Pages" });
+		expect(kit).toMatchObject({ title: "@arachnejs/kit", section: "Pages" });
 		expect(kit?.text).toStartWith("Build static sites");
 		expect(index).toContainEqual({
 			title: "Build and deploy",
-			page: "@arachne/kit",
+			page: "@arachnejs/kit",
 			section: "Pages",
 			url: "/docs/packages/kit#build-and-deploy",
 		});

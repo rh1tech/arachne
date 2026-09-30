@@ -1,4 +1,4 @@
-import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp";
+import { defineMcpModule, jsonResult, textResult, toolName } from "@arachnejs/mcp";
 import { z } from "zod";
 import { compile } from "./index.ts";
 
@@ -64,7 +64,7 @@ export const mcpModule = defineMcpModule({
 						role: "user",
 						content: {
 							type: "text",
-							text: `Write Arachne JSX component ${args["name"] ?? "Widget"} using @arachne/signals. One function body run; fine-grained updates. Optional "use island" for islands.`,
+							text: `Write Arachne JSX component ${args["name"] ?? "Widget"} using @arachnejs/signals. One function body run; fine-grained updates. Optional "use island" for islands.`,
 						},
 					},
 				],

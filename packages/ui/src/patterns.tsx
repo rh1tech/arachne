@@ -1,5 +1,5 @@
-import { For, mergeProps, Show } from "@arachne/render";
-import { effect, signal, untrack } from "@arachne/signals";
+import { For, mergeProps, Show } from "@arachnejs/render";
+import { effect, signal, untrack } from "@arachnejs/signals";
 import { Button } from "./button.tsx";
 import { type DialogBaseProps, DialogFrame } from "./dialog.tsx";
 import type { AlertTone } from "./feedback.tsx";

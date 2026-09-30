@@ -1,7 +1,7 @@
-import type { Auth } from "@arachne/auth";
-import type { DbQueries } from "@arachne/db";
-import { s } from "@arachne/schema";
-import { group, HttpError, route } from "@arachne/server";
+import type { Auth } from "@arachnejs/auth";
+import type { DbQueries } from "@arachnejs/db";
+import { s } from "@arachnejs/schema";
+import { group, HttpError, route } from "@arachnejs/server";
 import { notes } from "./tables.ts";
 
 export const Note = s.describe(

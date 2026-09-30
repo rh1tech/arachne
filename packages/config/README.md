@@ -1,4 +1,4 @@
-# @arachne/config
+# @arachnejs/config
 
 Typed, schema-validated configuration loader. Merges defaults → file → env →
 CLI/overrides and fails fast on invalid input.
@@ -6,13 +6,13 @@ CLI/overrides and fails fast on invalid input.
 ## Install
 
 ```bash
-bun add @arachne/config
+bun add @arachnejs/config
 ```
 
 ## Example
 
 ```ts
-import { loadConfig, c } from "@arachne/config";
+import { loadConfig, c } from "@arachnejs/config";
 
 const schema = c.object({
   port: c.defaulted(c.number(), 3000),

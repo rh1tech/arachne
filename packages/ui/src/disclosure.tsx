@@ -1,4 +1,4 @@
-import { For, omitProps, Show } from "@arachne/render";
+import { For, omitProps, Show } from "@arachnejs/render";
 import { createId, createSlots, type SlotProps, withDefaults } from "./system.ts";
 
 export type AccordionItem = {

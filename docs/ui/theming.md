@@ -33,7 +33,7 @@ Components add their own tokens on top, e.g. `--a-btn-height`, `--a-modal-width`
 Thirty-two named presets map a brand palette onto these roles. Graphite is the default.
 
 ```ts
-import { applyPalette, applyRadius, paletteStyle, palettes } from "@arachne/ui";
+import { applyPalette, applyRadius, paletteStyle, palettes } from "@arachnejs/ui";
 
 const restore = applyPalette("lagoon"); // writes --a-* variables on <html>; returns an undo function
 applyRadius("lg"); // "none" | "sm" (default) | "lg"

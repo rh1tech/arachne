@@ -1,6 +1,6 @@
 import { join } from "node:path";
-import { createServer, html, json } from "@arachne/server";
-import { bunPlugin } from "@arachne/vite";
+import { createServer, html, json } from "@arachnejs/server";
+import { bunPlugin } from "@arachnejs/vite";
 import { db, notes } from "./db.ts";
 
 const root = import.meta.dir;
@@ -62,7 +62,7 @@ const app = createServer({
 		{
 			method: "GET",
 			path: "/api/health",
-			handler: () => json({ ok: true, package: "@arachne/server" }),
+			handler: () => json({ ok: true, package: "@arachnejs/server" }),
 		},
 		{
 			method: "GET",

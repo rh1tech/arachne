@@ -1,5 +1,5 @@
-import { For, mergeProps, Portal, Show } from "@arachne/render";
-import { effect, signal } from "@arachne/signals";
+import { For, mergeProps, Portal, Show } from "@arachnejs/render";
+import { effect, signal } from "@arachnejs/signals";
 import { Button } from "./button.tsx";
 import { watchClickOutside } from "./click-outside.ts";
 import { cx } from "./cx.ts";

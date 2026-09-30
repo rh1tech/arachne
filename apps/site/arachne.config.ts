@@ -1,4 +1,4 @@
-import { defineConfig } from "@arachne/kit";
+import { defineConfig } from "@arachnejs/kit";
 import { SITE } from "./app/site.ts";
 
 const preload = (file: string) =>

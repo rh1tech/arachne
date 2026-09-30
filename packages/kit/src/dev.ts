@@ -1,6 +1,6 @@
 import { existsSync, type FSWatcher, watch } from "node:fs";
 import { join, relative, resolve, sep } from "node:path";
-import { bunPlugin } from "@arachne/vite";
+import { bunPlugin } from "@arachnejs/vite";
 import type { ServerWebSocket } from "bun";
 import { type AppServer, createAppServer } from "./app.ts";
 import { ROUTES_FILES, resolveConfig, SERVER_FILES } from "./config.ts";

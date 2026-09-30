@@ -1,5 +1,5 @@
-import { clearDelegatedEvents, delegateEvents, render, Show } from "@arachne/render";
-import { signal } from "@arachne/signals";
+import { clearDelegatedEvents, delegateEvents, render, Show } from "@arachnejs/render";
+import { signal } from "@arachnejs/signals";
 import { DocMenu } from "../index.ts";
 
 const page = signal("overview");

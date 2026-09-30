@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, test } from "bun:test";
-import { col, createDb, type DbClient, defineTable } from "@arachne/db";
-import { sqlite } from "@arachne/db-sqlite";
-import { s } from "@arachne/schema";
+import { col, createDb, type DbClient, defineTable } from "@arachnejs/db";
+import { sqlite } from "@arachnejs/db-sqlite";
+import { s } from "@arachnejs/schema";
 import {
 	addColumn,
 	createTable,
@@ -136,7 +136,7 @@ describe("planSchema", () => {
 	test("renderMigration writes a migration module for the plan", async () => {
 		const plan = await planSchema(db, { posts });
 		const source = renderMigration("0004_posts", plan);
-		expect(source).toContain('import { defineMigration, sql } from "@arachne/migrate";');
+		expect(source).toContain('import { defineMigration, sql } from "@arachnejs/migrate";');
 		expect(source).toContain('id: "0004_posts"');
 		expect(source).toContain("CREATE TABLE IF NOT EXISTS");
 	});

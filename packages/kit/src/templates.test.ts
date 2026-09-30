@@ -259,7 +259,10 @@ describe("arachne create", () => {
 			dependencies: Record<string, string>;
 		};
 		expect(pkg.name).toBe("my-new-site");
-		expect(pkg.dependencies["@arachne/kit"]).toBe("^0.0.1");
+		expect(pkg.dependencies["@arachnejs/kit"]).toBe("^0.0.1");
+		// npm drops .gitignore from tarballs, so templates ship it as `gitignore`.
+		expect(readFileSync(join(target, ".gitignore"), "utf8")).toContain("node_modules/");
+		expect(existsSync(join(target, "gitignore"))).toBe(false);
 		await expect(createProject(target, "static")).rejects.toThrow("not empty");
 		await expect(createProject(join(scratch, "x"), "nope" as never)).rejects.toThrow(
 			"unknown template",

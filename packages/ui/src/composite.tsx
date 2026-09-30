@@ -1,5 +1,5 @@
-import { For, Show } from "@arachne/render";
-import { signal } from "@arachne/signals";
+import { For, Show } from "@arachnejs/render";
+import { signal } from "@arachnejs/signals";
 import { Button } from "./button.tsx";
 import type { AlertTone } from "./feedback.tsx";
 import { CloseButton, Icon, type IconName } from "./icons.tsx";

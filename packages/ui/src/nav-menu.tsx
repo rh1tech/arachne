@@ -1,5 +1,5 @@
-import { For, Portal, Show } from "@arachne/render";
-import { effect, signal } from "@arachne/signals";
+import { For, Portal, Show } from "@arachnejs/render";
+import { effect, signal } from "@arachnejs/signals";
 import { rovingIndex, trapFocus, whenConnected } from "./focus.ts";
 import { lockBodyScroll } from "./scroll-lock.ts";
 import { createScrollOverflow, watchScrollOverflow } from "./scroll-overflow.ts";

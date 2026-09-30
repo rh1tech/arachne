@@ -1,5 +1,5 @@
-import { col, defineTable } from "@arachne/db";
-import { s } from "@arachne/schema";
+import { col, defineTable } from "@arachnejs/db";
+import { s } from "@arachnejs/schema";
 
 const id = () =>
 	col.text(s.string({ min: 1 }), { primaryKey: true, default: () => crypto.randomUUID() });
@@ -8,7 +8,7 @@ const nullableDate = () => col.date({ schema: s.nullable(s.date()), default: () 
 const stringList = () => col.json(s.array(s.string()), { default: () => [] });
 
 /**
- * Tables used by `@arachne/auth`. Names can be prefixed (`auth_users`, …).
+ * Tables used by `@arachnejs/auth`. Names can be prefixed (`auth_users`, …).
  * Pass them to migrations (`createTable(auth.tables.users)`) or let
  * `auth.setup()` create them.
  */

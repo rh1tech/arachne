@@ -4,8 +4,8 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
-import { clearDelegatedEvents } from "@arachne/render";
-import { bunPlugin } from "@arachne/vite";
+import { clearDelegatedEvents } from "@arachnejs/render";
+import { bunPlugin } from "@arachnejs/vite";
 import { Window } from "happy-dom";
 
 const outdir = join(import.meta.dir, "../.test-out");
@@ -27,7 +27,7 @@ async function loadHarness(): Promise<{ run: (root: HTMLElement) => Api }> {
 		target: "browser",
 		format: "esm",
 		plugins: [bunPlugin({ hydratable: false })],
-		external: ["@arachne/render", "@arachne/signals", "@arachne/ui"],
+		external: ["@arachnejs/render", "@arachnejs/signals", "@arachnejs/ui"],
 	});
 	if (!result.success) throw new Error(result.logs.map(String).join("\n"));
 	const out = result.outputs[0];

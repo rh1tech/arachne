@@ -1,5 +1,5 @@
-import { omitProps, Show } from "@arachne/render";
-import { effect } from "@arachne/signals";
+import { omitProps, Show } from "@arachnejs/render";
+import { effect } from "@arachnejs/signals";
 import { Button } from "./button.tsx";
 import { watchClickOutside } from "./click-outside.ts";
 import { autoPosition } from "./floating.ts";

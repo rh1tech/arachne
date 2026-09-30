@@ -1,4 +1,4 @@
-import type { LogBindings, Logger, LogLevel } from "@arachne/core";
+import type { LogBindings, Logger, LogLevel } from "@arachnejs/core";
 
 export interface LogEntry {
 	level: Exclude<LogLevel, "silent">;

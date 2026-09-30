@@ -1,12 +1,12 @@
-import type { Subject } from "@arachne/acl";
-import type { Context, Middleware } from "@arachne/server";
+import type { Subject } from "@arachnejs/acl";
+import type { Context, Middleware } from "@arachnejs/server";
 import type { Core } from "./core.ts";
 import { hmac, safeEqual } from "./crypto.ts";
 import { AuthError } from "./errors.ts";
 import type { ApiTokens, Sessions } from "./sessions.ts";
 import type { ApiTokenInfo, AuthUser, RequestMeta, SessionInfo } from "./types.ts";
 
-declare module "@arachne/server" {
+declare module "@arachnejs/server" {
 	interface ContextState {
 		/** Signed-in user (session cookie or API token). */
 		user?: AuthUser;

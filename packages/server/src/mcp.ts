@@ -1,6 +1,6 @@
-import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp";
-import { type SchemaSpec, schemaFromSpec } from "@arachne/schema";
-import { schemaSpecSchema } from "@arachne/schema/mcp";
+import { defineMcpModule, jsonResult, textResult, toolName } from "@arachnejs/mcp";
+import { type SchemaSpec, schemaFromSpec } from "@arachnejs/schema";
+import { schemaSpecSchema } from "@arachnejs/schema/mcp";
 import { z } from "zod";
 import { createServer, openapi, route } from "./index.ts";
 
@@ -51,7 +51,7 @@ function toRoutes(specs: RouteSpec[]) {
 	);
 }
 
-/** MCP tools for designing and trying out `@arachne/server` routes. */
+/** MCP tools for designing and trying out `@arachnejs/server` routes. */
 export const mcpModule = defineMcpModule({
 	name: "server",
 	version: "0.0.1",
@@ -109,7 +109,7 @@ export const mcpModule = defineMcpModule({
 		},
 		{
 			name: toolName("server", "api_summary"),
-			description: "Summarize @arachne/server public API.",
+			description: "Summarize @arachnejs/server public API.",
 			handler: () =>
 				textResult(
 					[
@@ -118,11 +118,11 @@ export const mcpModule = defineMcpModule({
 						"createServer({ routes, middleware, codecs, bodyLimit, validateResponses, trustProxy, onError })",
 						"server.fetch(Request) for tests · server.listen(port)",
 						"ctx: params/query/body typed · cookies · state · route · ip · nonce · status() · header()",
-						"Bodies: JSON, multipart (s.file), urlencoded (a[b][0] keys), CBOR via @arachne/server/cbor",
+						"Bodies: JSON, multipart (s.file), urlencoded (a[b][0] keys), CBOR via @arachnejs/server/cbor",
 						"Errors: throw new HttpError(status, message, { code, details }) → { error: { status, code, message } }",
 						"Middleware: cors, securityHeaders (CSP nonce), rateLimit, requestId, serveStatic",
 						"sse(producer) · openapi({ info, routes }) · apiDocs() → /openapi.json + /docs",
-						"@arachne/server/client: createClient<typeof routes>() typed fetch client",
+						"@arachnejs/server/client: createClient<typeof routes>() typed fetch client",
 					].join("\n"),
 				),
 		},

@@ -1,8 +1,21 @@
 {
-	"name": "@arachne/migrate",
+	"name": "@arachnejs/migrate",
 	"version": "0.0.1",
-	"description": "Versioned database migrations and schema diffing for @arachne/db",
+	"description": "Versioned database migrations and schema diffing for @arachnejs/db",
 	"license": "MIT OR Apache-2.0",
+	"author": "Mikhail Matveev (https://rh1.tech)",
+	"homepage": "https://arachne.rh1.tech/docs/packages/migrate",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/rh1tech/arachne.git",
+		"directory": "packages/migrate"
+	},
+	"bugs": {
+		"url": "https://github.com/rh1tech/arachne/issues"
+	},
+	"engines": {
+		"bun": ">=1.3.0"
+	},
 	"type": "module",
 	"exports": {
 		".": {
@@ -18,7 +31,13 @@
 	},
 	"files": [
 		"src",
-		"README.md"
+		"!src/**/*.test.ts",
+		"!src/**/*.test.tsx",
+		"!src/**/fixtures",
+		"!src/test-utils",
+		"README.md",
+		"LICENSE-APACHE",
+		"LICENSE-MIT"
 	],
 	"scripts": {
 		"test": "bun test",
@@ -26,13 +45,13 @@
 		"build": "bun run typecheck"
 	},
 	"dependencies": {
-		"@arachne/db": "workspace:*",
-		"@arachne/mcp": "workspace:*",
-		"@arachne/schema": "workspace:*",
+		"@arachnejs/db": "workspace:*",
+		"@arachnejs/mcp": "workspace:*",
+		"@arachnejs/schema": "workspace:*",
 		"zod": "3.25.76"
 	},
 	"devDependencies": {
-		"@arachne/db-sqlite": "workspace:*",
+		"@arachnejs/db-sqlite": "workspace:*",
 		"typescript": "^5.9.2"
 	},
 	"publishConfig": {

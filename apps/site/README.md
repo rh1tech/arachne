@@ -18,7 +18,7 @@ bun run e2e        # Chromium: search, navigation, 404, drawer, every live examp
 | `app/content/` | Build-time only: Markdown → HTML (`Bun.markdown`), GitHub-style heading ids, link rewriting, Shiki highlighting, search index. |
 | `app/server.ts` | Loaders for `/` and `/docs/*`, and the list of pages to prerender. |
 | `app/components/`, `app/pages/` | Layout, search dialog, doc and home pages. |
-| `app/ui/previews.tsx` | Live UI examples on component pages: its own chunk (`@arachne/ui` + `packages/ui/examples`), loaded on demand; mounts each example as it nears the viewport. |
+| `app/ui/previews.tsx` | Live UI examples on component pages: its own chunk (`@arachnejs/ui` + `packages/ui/examples`), loaded on demand; mounts each example as it nears the viewport. |
 | `app/styles/` | Tokens (light and dark), base, home, docs. |
 | `scripts/prepare.ts` | Copies the IBM Plex fonts from `@fontsource` and the UI kit stylesheet (`public/ui.css`), and writes `public/search.json`. `dev` and `build` run it first. |
 

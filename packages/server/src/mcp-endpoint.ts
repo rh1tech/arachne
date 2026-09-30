@@ -1,5 +1,5 @@
-import { compilePath } from "@arachne/router/path";
-import { type JsonSchema, toJSONSchema } from "@arachne/schema";
+import { compilePath } from "@arachnejs/router/path";
+import { type JsonSchema, toJSONSchema } from "@arachnejs/schema";
 import { json } from "./context.ts";
 import { type AnyRoute, route } from "./route.ts";
 

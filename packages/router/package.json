@@ -1,8 +1,21 @@
 {
-	"name": "@arachne/router",
+	"name": "@arachnejs/router",
 	"version": "0.0.1",
 	"description": "Signal-driven client router for Arachne",
 	"license": "MIT OR Apache-2.0",
+	"author": "Mikhail Matveev (https://rh1.tech)",
+	"homepage": "https://arachne.rh1.tech/docs/packages/router",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/rh1tech/arachne.git",
+		"directory": "packages/router"
+	},
+	"bugs": {
+		"url": "https://github.com/rh1tech/arachne/issues"
+	},
+	"engines": {
+		"bun": ">=1.3.0"
+	},
 	"type": "module",
 	"exports": {
 		".": {
@@ -23,7 +36,13 @@
 	},
 	"files": [
 		"src",
-		"README.md"
+		"!src/**/*.test.ts",
+		"!src/**/*.test.tsx",
+		"!src/**/fixtures",
+		"!src/test-utils",
+		"README.md",
+		"LICENSE-APACHE",
+		"LICENSE-MIT"
 	],
 	"scripts": {
 		"test": "bun test",
@@ -31,9 +50,9 @@
 		"build": "bun run typecheck"
 	},
 	"dependencies": {
-		"@arachne/mcp": "workspace:*",
-		"@arachne/render": "workspace:*",
-		"@arachne/signals": "workspace:*",
+		"@arachnejs/mcp": "workspace:*",
+		"@arachnejs/render": "workspace:*",
+		"@arachnejs/signals": "workspace:*",
 		"zod": "3.25.76"
 	},
 	"devDependencies": {

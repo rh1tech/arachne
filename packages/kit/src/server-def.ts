@@ -1,7 +1,13 @@
 import { pathToFileURL } from "node:url";
-import type { DbQueries, TableDef } from "@arachne/db";
-import type { PathParams } from "@arachne/router/path";
-import type { AnyRoute, Context, Middleware, OpenApiInfo, RouteDefinition } from "@arachne/server";
+import type { DbQueries, TableDef } from "@arachnejs/db";
+import type { PathParams } from "@arachnejs/router/path";
+import type {
+	AnyRoute,
+	Context,
+	Middleware,
+	OpenApiInfo,
+	RouteDefinition,
+} from "@arachnejs/server";
 import type { AppMode, ResolvedConfig } from "./config.ts";
 
 /** Arguments a loader receives. `ctx` is absent while prerendering. */

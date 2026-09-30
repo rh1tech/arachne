@@ -1,4 +1,4 @@
-import { Show } from "@arachne/render";
+import { Show } from "@arachnejs/render";
 import {
 	Button,
 	Checkbox,
@@ -16,7 +16,7 @@ import {
 	Text,
 	TextArea,
 	TextInput,
-} from "@arachne/ui";
+} from "@arachnejs/ui";
 import type { FormApi } from "./create-form.ts";
 
 export type TextFieldProps<T extends Record<string, unknown>> = {

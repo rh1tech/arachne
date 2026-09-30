@@ -10,7 +10,7 @@
  * - **Unstyled** — `unstyled` drops the built-in `a-*` classes; state still
  *   surfaces through `data-*` attributes for your own CSS.
  */
-import { createUniqueId, mergeProps, omitProps } from "@arachne/render";
+import { createUniqueId, mergeProps, omitProps } from "@arachnejs/render";
 import { cx } from "./cx.ts";
 
 export type StyleValue = string | Record<string, string | number | null | undefined>;
@@ -247,7 +247,7 @@ export function setup<
 
 /**
  * Element id for ARIA wiring. Matches between SSR and hydration (per-render
- * counter from `@arachne/render`); an explicit `id` prop always wins.
+ * counter from `@arachnejs/render`); an explicit `id` prop always wins.
  */
 export function createId(prefix: string, explicit?: string | undefined): string {
 	return explicit ?? `a-${prefix}-${createUniqueId()}`;

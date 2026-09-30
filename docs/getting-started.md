@@ -15,7 +15,7 @@ pieces fit together afterwards.
 
 ## Get the source
 
-Arachne is pre-release (`0.0.x`) and the `@arachne/*` packages are not on
+Arachne is pre-release (`0.0.x`) and the `@arachnejs/*` packages are not on
 npm yet. Until they are, projects live inside a checkout of the repository,
 where Bun's workspaces link every package:
 
@@ -64,12 +64,12 @@ Create `apps/hello/package.json`:
     "start": "arachne start"
   },
   "dependencies": {
-    "@arachne/kit": "^0.0.1",
-    "@arachne/render": "^0.0.1",
-    "@arachne/router": "^0.0.1",
-    "@arachne/schema": "^0.0.1",
-    "@arachne/server": "^0.0.1",
-    "@arachne/signals": "^0.0.1"
+    "@arachnejs/kit": "^0.0.1",
+    "@arachnejs/render": "^0.0.1",
+    "@arachnejs/router": "^0.0.1",
+    "@arachnejs/schema": "^0.0.1",
+    "@arachnejs/server": "^0.0.1",
+    "@arachnejs/signals": "^0.0.1"
   }
 }
 ```
@@ -86,7 +86,7 @@ And `apps/hello/tsconfig.json`, so your editor type-checks the JSX:
     "types": ["bun"],
     "strict": true,
     "jsx": "react-jsx",
-    "jsxImportSource": "@arachne/render",
+    "jsxImportSource": "@arachnejs/render",
     "allowImportingTsExtensions": true,
     "noEmit": true
   },
@@ -102,8 +102,8 @@ Pages are a route table in `app/routes.tsx`. A route with `children` is a
 layout: it renders the matched child as `props.children`.
 
 ```tsx
-import { Link, type RouteDefinition, type RouteProps } from "@arachne/router";
-import { signal } from "@arachne/signals";
+import { Link, type RouteDefinition, type RouteProps } from "@arachnejs/router";
+import { signal } from "@arachnejs/signals";
 
 function Layout(props: RouteProps) {
   return (
@@ -161,9 +161,9 @@ middleware, and **loaders**, which provide data for a page. Loaders are keyed
 by route pattern.
 
 ```ts
-import { defineServer } from "@arachne/kit";
-import { s } from "@arachne/schema";
-import { route } from "@arachne/server";
+import { defineServer } from "@arachnejs/kit";
+import { s } from "@arachnejs/schema";
+import { route } from "@arachnejs/server";
 
 const greet = route({
   method: "GET",
@@ -236,7 +236,7 @@ bun run build          # dist/client (assets) + dist/server/index.js
 bun run start          # PORT=8080 bun run start to pick a port
 ```
 
-The server bundle includes the `@arachne/*` code. Your app's other
+The server bundle includes the `@arachnejs/*` code. Your app's other
 dependencies stay in `node_modules`, so deploy with
 `bun install --production` next to `dist/`.
 
@@ -245,7 +245,7 @@ dependencies stay in `node_modules`, so deploy with
 Set the mode in `arachne.config.ts` to pre-render every page:
 
 ```ts
-import { defineConfig } from "@arachne/kit";
+import { defineConfig } from "@arachnejs/kit";
 
 export default defineConfig({
   mode: "static",

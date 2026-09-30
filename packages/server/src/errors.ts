@@ -1,4 +1,4 @@
-import type { StandardSchemaV1 } from "@arachne/schema";
+import type { StandardSchemaV1 } from "@arachnejs/schema";
 
 /** Part of the request a validation issue refers to. */
 export type IssueLocation = "params" | "query" | "headers" | "body" | "response";

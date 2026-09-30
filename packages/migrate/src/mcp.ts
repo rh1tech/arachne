@@ -1,7 +1,7 @@
 import { Database } from "bun:sqlite";
-import { createDb, type Dialect, type TableSpec, tableFromSpec } from "@arachne/db";
-import { tableSpecSchema } from "@arachne/db/mcp";
-import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp";
+import { createDb, type Dialect, type TableSpec, tableFromSpec } from "@arachnejs/db";
+import { tableSpecSchema } from "@arachnejs/db/mcp";
+import { defineMcpModule, jsonResult, textResult, toolName } from "@arachnejs/mcp";
 import { z } from "zod";
 import { planSchema, renderMigration } from "./plan.ts";
 
@@ -17,7 +17,7 @@ function memorySqlite(): Dialect & { close: () => void } {
 	};
 }
 
-/** MCP tools for planning migrations with `@arachne/migrate`. */
+/** MCP tools for planning migrations with `@arachnejs/migrate`. */
 export const mcpModule = defineMcpModule({
 	name: "migrate",
 	version: "0.0.1",
@@ -50,7 +50,7 @@ export const mcpModule = defineMcpModule({
 		},
 		{
 			name: toolName("migrate", "api_summary"),
-			description: "Summarize @arachne/migrate public API.",
+			description: "Summarize @arachnejs/migrate public API.",
 			handler: () =>
 				textResult(
 					[
@@ -60,7 +60,7 @@ export const mcpModule = defineMcpModule({
 						"rollback(db, migrations, { steps }) · migrationStatus(db, migrations) → { applied, pending, unknown }",
 						"loadMigrations(dir) — default exports, sorted",
 						"planSchema(db, tables) → { statements, warnings } · renderMigration(id, plan) → module source",
-						"CLI: arachne migrate [up|down|status|generate] (via @arachne/kit)",
+						"CLI: arachne migrate [up|down|status|generate] (via @arachnejs/kit)",
 					].join("\n"),
 				),
 		},

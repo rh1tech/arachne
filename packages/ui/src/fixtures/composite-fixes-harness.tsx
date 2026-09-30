@@ -1,5 +1,5 @@
-import { render } from "@arachne/render";
-import { signal } from "@arachne/signals";
+import { render } from "@arachnejs/render";
+import { signal } from "@arachnejs/signals";
 import { clampToViewport, wrapIndex } from "../advanced.tsx";
 import { percentOf } from "../display.tsx";
 import { matchesAccept } from "../files-nav.tsx";

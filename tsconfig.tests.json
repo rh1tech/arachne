@@ -3,7 +3,7 @@
 	"compilerOptions": {
 		"noEmit": true,
 		"jsx": "react-jsx",
-		"jsxImportSource": "@arachne/render"
+		"jsxImportSource": "@arachnejs/render"
 	},
 	"include": [
 		"packages/schema/src/**/*.ts",

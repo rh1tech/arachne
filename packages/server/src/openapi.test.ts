@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { s } from "@arachne/schema";
+import { s } from "@arachnejs/schema";
 import { ApiError, createClient } from "./client.ts";
 import { apiDocs, createServer, group, openapi, route } from "./index.ts";
 

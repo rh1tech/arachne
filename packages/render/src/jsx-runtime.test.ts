@@ -1,4 +1,4 @@
-/** The non-compiled JSX runtime (used by tsc/Bun paths that skip @arachne/jsx). */
+/** The non-compiled JSX runtime (used by tsc/Bun paths that skip @arachnejs/jsx). */
 import { afterEach, beforeEach, expect, test } from "bun:test";
 import { Window } from "happy-dom";
 import { Fragment, jsx } from "./jsx-runtime.ts";

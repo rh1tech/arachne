@@ -1,4 +1,4 @@
-import { computed, renderEffect as trackEffect, untrack } from "@arachne/signals";
+import { computed, renderEffect as trackEffect, untrack } from "@arachnejs/signals";
 
 /** Shared hydration / SSR config (dom-expressions compatible subset). */
 export const sharedConfig: {

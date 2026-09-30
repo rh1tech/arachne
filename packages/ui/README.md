@@ -1,4 +1,4 @@
-# @arachne/ui
+# @arachnejs/ui
 
 JSX UI primitives for Arachne ([ADR 0013](../../docs/adr/0013-ui-forms.md)).
 
@@ -18,8 +18,8 @@ import {
   Icon, IconBadge, Group, Timeline, TimelineItem,
   applyPalette, applyRadius, palettes, paletteStyle,
   m, p, textColor, util,
-} from "@arachne/ui";
-import "@arachne/ui/styles.css";
+} from "@arachnejs/ui";
+import "@arachnejs/ui/styles.css";
 
 applyPalette("graphite"); // or "harbor" | "lagoon" | "meadow" | …
 applyRadius("sm"); // none | sm | lg — sm is default

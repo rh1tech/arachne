@@ -1,5 +1,5 @@
 /**
- * "Is every prop really implemented?" — for each exported @arachne/ui
+ * "Is every prop really implemented?" — for each exported @arachnejs/ui
  * component, list its own declared props (excluding shared pass-through
  * props) and fail when the component body never reads one. A declared but
  * unread prop is an API promise the implementation doesn't keep. Also fail when

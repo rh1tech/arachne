@@ -4,7 +4,7 @@
  *
  * @example
  * ```ts
- * import { cbor } from "@arachne/server/cbor";
+ * import { cbor } from "@arachnejs/server/cbor";
  * createServer({ routes, codecs: [cbor()] });
  * ```
  *

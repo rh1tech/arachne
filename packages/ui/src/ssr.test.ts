@@ -6,7 +6,7 @@
 import { beforeAll, describe, expect, test } from "bun:test";
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
-import { bunPlugin } from "@arachne/vite";
+import { bunPlugin } from "@arachnejs/vite";
 import type { SsrResult } from "./fixtures/ssr-harness.tsx";
 
 /**
@@ -36,7 +36,7 @@ beforeAll(async () => {
 		target: "bun",
 		format: "esm",
 		// Runtime deps resolve from node_modules; bundling them twice per process trips Bun (EISDIR).
-		external: ["@arachne/signals", "alien-signals"],
+		external: ["@arachnejs/signals", "alien-signals"],
 		plugins: [
 			{
 				name: "contract-ssr-stub",

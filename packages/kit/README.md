@@ -1,4 +1,4 @@
-# @arachne/kit
+# @arachnejs/kit
 
 Build **static sites**, **server-rendered apps** and **API-only services**
 from one project layout, with a dev server that reloads as you type. See
@@ -9,7 +9,7 @@ bun run arachne create apps/my-app --template server   # or static | api
 cd apps/my-app && bun install && bun run dev
 ```
 
-> Pre-release: `@arachne/*` isn't on npm yet, and the unscoped `arachne`
+> Pre-release: `@arachnejs/*` isn't on npm yet, and the unscoped `arachne`
 > package on npm is unrelated. Run the CLI from a checkout with `bun run arachne`
 > (see [Getting started](../../docs/getting-started.md)).
 
@@ -30,7 +30,7 @@ public/             copied as-is (favicon, robots.txt, images)
 
 ## Pages
 
-`app/routes.tsx` exports `routes` for [`@arachne/router`](../router): nested
+`app/routes.tsx` exports `routes` for [`@arachnejs/router`](../router): nested
 layouts, lazy routes, `head`. Optional exports: `NotFound` (404 page) and
 `ErrorPage` (loader errors; receives `props.error` with `status`/`message`).
 Both render inside the root / matched layouts.
@@ -64,7 +64,7 @@ export default defineServer(async ({ dev, mode, config }) => {
   await auth.setup();
   return {
     middleware: [auth.middleware()],
-    routes: [...auth.routes(), ...api],            // @arachne/server routes
+    routes: [...auth.routes(), ...api],            // @arachnejs/server routes
     openapi: { title: "My API", version: "1.0.0" }, // → /openapi.json, /docs
     loaders: {                                      // by route id (= full pattern)
       "/blog/:slug": async ({ params, ctx }) => (await posts.find(params.slug)) ?? notFound(),
@@ -132,7 +132,7 @@ arachne preview            # serve a static build locally (404.html honoured)
 arachne start              # run dist/server/index.js (server/api modes)
 ```
 
-The server bundle inlines `@arachne/*`; the app's other dependencies stay in
+The server bundle inlines `@arachnejs/*`; the app's other dependencies stay in
 `node_modules`, so deploy with `bun install --production` next to `dist/`.
 
 ## CLI

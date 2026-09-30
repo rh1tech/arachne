@@ -1,4 +1,4 @@
-import { type CompiledPath, compilePath } from "@arachne/router/path";
+import { type CompiledPath, compilePath } from "@arachnejs/router/path";
 import { DEFAULT_BODY_LIMIT } from "./body.ts";
 import { type Codec, negotiate } from "./codec.ts";
 import {
@@ -28,7 +28,7 @@ export interface CreateServerOptions {
 	port?: number | undefined;
 	/** Bind address. Default `0.0.0.0`. */
 	hostname?: string | undefined;
-	/** Extra body codecs (JSON is built in), e.g. `cbor()` from `@arachne/server/cbor`. */
+	/** Extra body codecs (JSON is built in), e.g. `cbor()` from `@arachnejs/server/cbor`. */
 	codecs?: readonly Codec[] | undefined;
 	/** Default request body limit in bytes. Default 1 MiB. */
 	bodyLimit?: number | undefined;

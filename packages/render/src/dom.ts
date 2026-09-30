@@ -1,4 +1,4 @@
-import { deferEffects, renderEffect as trackEffect, untrack } from "@arachne/signals";
+import { deferEffects, renderEffect as trackEffect, untrack } from "@arachnejs/signals";
 import {
 	createComponent,
 	createUniqueId,

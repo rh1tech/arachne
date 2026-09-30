@@ -1,8 +1,8 @@
-import type { AuthUser } from "@arachne/auth";
-import { For, Show } from "@arachne/render";
-import { currentRouter, Link, type RouteDefinition, type RouteProps } from "@arachne/router";
-import { createClient } from "@arachne/server/client";
-import { signal } from "@arachne/signals";
+import type { AuthUser } from "@arachnejs/auth";
+import { For, Show } from "@arachnejs/render";
+import { currentRouter, Link, type RouteDefinition, type RouteProps } from "@arachnejs/router";
+import { createClient } from "@arachnejs/server/client";
+import { signal } from "@arachnejs/signals";
 import type { Api } from "./api.ts";
 
 interface PageData {

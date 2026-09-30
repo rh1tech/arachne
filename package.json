@@ -26,12 +26,13 @@
 		"playground": "bun run apps/playground/server.ts",
 		"ui:docs": "bun run scripts/gen-ui-docs.ts",
 		"changeset": "changeset",
-		"version-packages": "changeset version",
+		"version-packages": "changeset version && bun install",
 		"ci": "bun run lint && bun run boundaries && bun run docs:check && bun run ui:docs --check && bun run ui:props && bun run mcp:check && bun run typecheck && bun run typecheck:tests && bun run test && bun run test:scripts",
 		"ui:props": "bun run scripts/check-ui-props.ts",
 		"docs:check": "bun run scripts/check-docs.ts",
 		"test:scripts": "bun test scripts",
-		"typecheck:tests": "tsc -p tsconfig.tests.json"
+		"typecheck:tests": "tsc -p tsconfig.tests.json",
+		"release": "bun run scripts/release.ts"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.2.4",

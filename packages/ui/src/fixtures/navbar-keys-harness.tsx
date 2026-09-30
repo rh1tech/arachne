@@ -1,5 +1,5 @@
-import { render } from "@arachne/render";
-import { signal } from "@arachne/signals";
+import { render } from "@arachnejs/render";
+import { signal } from "@arachnejs/signals";
 import { createNavbarController, Navbar } from "../index.ts";
 
 export function run(root: HTMLElement) {

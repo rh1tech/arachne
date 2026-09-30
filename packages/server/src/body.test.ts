@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { s } from "@arachne/schema";
+import { s } from "@arachnejs/schema";
 import { cbor } from "./cbor.ts";
 import { createServer, formToObject, route } from "./index.ts";
 

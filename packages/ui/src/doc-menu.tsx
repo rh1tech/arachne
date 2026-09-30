@@ -1,8 +1,8 @@
 /**
  * Bulma-style hierarchical documentation / showcase menu.
  */
-import { For, Show } from "@arachne/render";
-import { signal } from "@arachne/signals";
+import { For, Show } from "@arachnejs/render";
+import { signal } from "@arachnejs/signals";
 import { Icon } from "./icons.tsx";
 import { createId, type SlotProps, setup } from "./system.ts";
 

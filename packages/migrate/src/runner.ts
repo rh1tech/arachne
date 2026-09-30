@@ -1,4 +1,4 @@
-import { type DbQueries, quoteIdent } from "@arachne/db";
+import { type DbQueries, quoteIdent } from "@arachnejs/db";
 import type { Migration } from "./migration.ts";
 
 /** Options shared by the runner functions. */

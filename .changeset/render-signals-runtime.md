@@ -1,6 +1,6 @@
 ---
-"@arachne/signals": minor
-"@arachne/render": minor
+"@arachnejs/signals": minor
+"@arachnejs/render": minor
 ---
 
 Runtime correctness for components, SSR and hydration.

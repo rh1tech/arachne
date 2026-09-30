@@ -5,8 +5,8 @@
  * are documented on their parent's page; components with a hand-written
  * showcase page get their reference (and their family's) there instead.
  */
-import { For, Show } from "@arachne/render";
-import { effect, signal, untrack } from "@arachne/signals";
+import { For, Show } from "@arachnejs/render";
+import { effect, signal, untrack } from "@arachnejs/signals";
 import {
 	Code,
 	DocExample,
@@ -23,7 +23,7 @@ import {
 	Thead,
 	Title,
 	Tr,
-} from "@arachne/ui";
+} from "@arachnejs/ui";
 import { actionLog, clearActions } from "../../packages/ui/examples/actions.ts";
 import {
 	categories,

@@ -1,4 +1,4 @@
-import { createAcl, type GroupDef, matchPermission } from "@arachne/acl";
+import { createAcl, type GroupDef, matchPermission } from "@arachnejs/acl";
 import type { Core } from "./core.ts";
 import { AuthError } from "./errors.ts";
 import type { Sessions } from "./sessions.ts";

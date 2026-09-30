@@ -8,7 +8,7 @@
 
 Arachne is a large framework of independently publishable packages. We need a
 monorepo that stays fast for local development, enforces downward-only
-dependency flow, and produces independently versioned `@arachne/*` packages.
+dependency flow, and produces independently versioned `@arachnejs/*` packages.
 
 ## Decision
 
@@ -40,6 +40,6 @@ dependency flow, and produces independently versioned `@arachne/*` packages.
 
 ## Consequences
 
-- Every package is independently publishable under `@arachne/*`.
+- Every package is independently publishable under `@arachnejs/*`.
 - CI runs `bun run boundaries` before typecheck/tests.
 - New packages must register allowed edges in `scripts/boundaries.json`.

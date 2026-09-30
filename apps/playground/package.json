@@ -1,5 +1,5 @@
 {
-	"name": "@arachne/playground",
+	"name": "@arachnejs/playground",
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
@@ -8,15 +8,15 @@
 		"typecheck": "tsc -p tsconfig.json --noEmit"
 	},
 	"dependencies": {
-		"@arachne/db": "workspace:*",
-		"@arachne/db-sqlite": "workspace:*",
-		"@arachne/forms": "workspace:*",
-		"@arachne/render": "workspace:*",
-		"@arachne/router": "workspace:*",
-		"@arachne/schema": "workspace:*",
-		"@arachne/server": "workspace:*",
-		"@arachne/signals": "workspace:*",
-		"@arachne/ui": "workspace:*",
-		"@arachne/vite": "workspace:*"
+		"@arachnejs/db": "workspace:*",
+		"@arachnejs/db-sqlite": "workspace:*",
+		"@arachnejs/forms": "workspace:*",
+		"@arachnejs/render": "workspace:*",
+		"@arachnejs/router": "workspace:*",
+		"@arachnejs/schema": "workspace:*",
+		"@arachnejs/server": "workspace:*",
+		"@arachnejs/signals": "workspace:*",
+		"@arachnejs/ui": "workspace:*",
+		"@arachnejs/vite": "workspace:*"
 	}
 }

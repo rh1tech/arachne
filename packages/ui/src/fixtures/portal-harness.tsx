@@ -1,6 +1,6 @@
 /** Portaled content must leave the DOM when its owner unmounts (overlay leaks). */
-import { Portal, render, Show } from "@arachne/render";
-import { signal } from "@arachne/signals";
+import { Portal, render, Show } from "@arachnejs/render";
+import { signal } from "@arachnejs/signals";
 import { Lightbox } from "../advanced.tsx";
 
 function Overlay(props: { open: boolean }) {

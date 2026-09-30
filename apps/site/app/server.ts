@@ -1,5 +1,5 @@
-import { defineServer } from "@arachne/kit";
-import { HttpError } from "@arachne/server";
+import { defineServer } from "@arachnejs/kit";
+import { HttpError } from "@arachnejs/server";
 import { loadDoc, loadHome } from "./content/docs.ts";
 import { ENTRIES } from "./nav.ts";
 

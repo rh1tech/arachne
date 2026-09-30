@@ -1,5 +1,5 @@
-import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp";
-import { toRoute } from "@arachne/server";
+import { defineMcpModule, jsonResult, textResult, toolName } from "@arachnejs/mcp";
+import { toRoute } from "@arachnejs/server";
 import { z } from "zod";
 import { build } from "./build.ts";
 import { buildSsr } from "./bundle.ts";
@@ -97,7 +97,7 @@ export const mcpModule = defineMcpModule({
 		},
 		{
 			name: toolName("kit", "api_summary"),
-			description: "Summarize @arachne/kit.",
+			description: "Summarize @arachnejs/kit.",
 			handler: () =>
 				textResult(
 					[

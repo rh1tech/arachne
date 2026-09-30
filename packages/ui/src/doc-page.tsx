@@ -1,7 +1,7 @@
 /**
  * Bulma-style documentation page + example blocks.
  */
-import { Show } from "@arachne/render";
+import { Show } from "@arachnejs/render";
 import { CodeBlock } from "./pickers.tsx";
 import { type SlotProps, setup } from "./system.ts";
 import { DynamicHeading, type HeadingLevel } from "./widgets.tsx";

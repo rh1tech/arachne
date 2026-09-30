@@ -2,8 +2,8 @@ import { existsSync } from "node:fs";
 import { readdir, rm } from "node:fs/promises";
 import { dirname, join, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import type { MatchedRoute } from "@arachne/router";
-import { bunPlugin } from "@arachne/vite";
+import type { MatchedRoute } from "@arachnejs/router";
+import { bunPlugin } from "@arachnejs/vite";
 import type { BunPlugin } from "bun";
 import type { ResolvedConfig } from "./config.ts";
 import { writeEntries } from "./entries.ts";
@@ -237,7 +237,7 @@ export async function buildSsr(
 		format: "esm",
 		plugins: [bunPlugin({ target: "ssr", hydratable: true, dev: options.dev })],
 		// Resolved from node_modules at runtime: one signals instance per process.
-		external: ["@arachne/signals", "alien-signals"],
+		external: ["@arachnejs/signals", "alien-signals"],
 		metafile: true,
 	} as Parameters<typeof Bun.build>[0]);
 	const file = result.outputs.find((output) => output.kind === "entry-point")?.path;

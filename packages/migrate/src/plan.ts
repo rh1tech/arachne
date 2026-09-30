@@ -7,7 +7,7 @@ import {
 	quoteIdent,
 	sqlTypeDDL,
 	type TableDef,
-} from "@arachne/db";
+} from "@arachnejs/db";
 
 /** Statements that bring the database up to the table definitions. */
 export interface SchemaPlan {
@@ -90,7 +90,7 @@ export function renderMigration(id: string, plan: SchemaPlan): string {
 	const statements = plan.statements
 		.map((statement) => `\t\t${JSON.stringify(statement)},\n`)
 		.join("");
-	return `import { defineMigration, sql } from "@arachne/migrate";
+	return `import { defineMigration, sql } from "@arachnejs/migrate";
 
 ${warnings}export default defineMigration({
 	id: ${JSON.stringify(id)},

@@ -1,6 +1,6 @@
 /** Portals are torn down with their owner: closed or unmounted overlays leave nothing behind. */
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import type { Signal } from "@arachne/signals";
+import type { Signal } from "@arachnejs/signals";
 import { type Dom, type Mounted, mountHarness, setupDom } from "./test-utils/dom.ts";
 
 type Api = {

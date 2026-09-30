@@ -39,7 +39,7 @@ function surfaceCount(mod: ArachneMcpModule): number {
 
 async function checkPackage(entryName: string): Promise<string | undefined> {
 	const pkg = await readPkg(join(packagesDir, entryName, "package.json"));
-	if (!pkg?.name?.startsWith("@arachne/")) return undefined;
+	if (!pkg?.name?.startsWith("@arachnejs/")) return undefined;
 	if (!pkg.exports?.["./mcp"]) return `${pkg.name}: missing exports["./mcp"]`;
 	try {
 		const resolved = await loadModule(entryName);

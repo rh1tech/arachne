@@ -1,5 +1,5 @@
-import { For, omitProps, Show } from "@arachne/render";
-import { effect } from "@arachne/signals";
+import { For, omitProps, Show } from "@arachnejs/render";
+import { effect } from "@arachnejs/signals";
 import { rovingIndex, whenConnected } from "./focus.ts";
 import { createScrollOverflow, watchScrollOverflow } from "./scroll-overflow.ts";
 import { createId, createSlots, type SlotProps, withDefaults } from "./system.ts";

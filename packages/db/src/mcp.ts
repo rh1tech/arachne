@@ -1,6 +1,6 @@
 import { Database } from "bun:sqlite";
-import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp";
-import { schemaSpecSchema } from "@arachne/schema/mcp";
+import { defineMcpModule, jsonResult, textResult, toolName } from "@arachnejs/mcp";
+import { schemaSpecSchema } from "@arachnejs/schema/mcp";
 import { z } from "zod";
 import { createDb } from "./client.ts";
 import { createIndexSQL, createTableSQL } from "./ddl.ts";
@@ -46,7 +46,7 @@ function memorySqlite(): Dialect & { close: () => void } {
 	};
 }
 
-/** MCP tools for designing tables and queries with `@arachne/db`. */
+/** MCP tools for designing tables and queries with `@arachnejs/db`. */
 export const mcpModule = defineMcpModule({
 	name: "db",
 	version: "0.0.1",
@@ -104,7 +104,7 @@ export const mcpModule = defineMcpModule({
 		},
 		{
 			name: toolName("db", "api_summary"),
-			description: "Summarize @arachne/db public API.",
+			description: "Summarize @arachnejs/db public API.",
 			handler: () =>
 				textResult(
 					[
@@ -117,7 +117,7 @@ export const mcpModule = defineMcpModule({
 						"filter: { col: value | null | { eq, ne, gt, gte, lt, lte, in, notIn, like, isNull }, $or: [...], $and: [...] }",
 						"db.update(t).set(values).where(filter).run() → changed rows · db.delete(t).where(filter).run()",
 						"db.transaction(async (tx) => …) — savepoints when nested · db.query(sql, params) · db.execute(sql, params)",
-						"Drivers: @arachne/db-sqlite (bun:sqlite)",
+						"Drivers: @arachnejs/db-sqlite (bun:sqlite)",
 					].join("\n"),
 				),
 		},

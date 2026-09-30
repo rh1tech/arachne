@@ -33,26 +33,26 @@ OpenAPI 3.1 generated from the same schemas (JSON Schema 2020-12).
 
 | Package | Role |
 |---|---|
-| `@arachne/schema` | + string formats, coercion, `refine`/`transform`, `record`, `file`, `toJSONSchema` |
-| `@arachne/server` | + `route()` with schema-validated params/query/body/response, body and multipart parsing, `HttpError`, cookies, CORS, security headers + CSP nonce, rate limiting, static files, route groups, OpenAPI document |
-| `@arachne/db` | + `update`, operators, ordering, paging, `count`, nullable/json columns, indexes, transactions |
-| `@arachne/migrate` | versioned migrations with a journal table |
-| `@arachne/acl` | core access control (see below) |
-| `@arachne/mailer` | `Mailer` with pluggable transports (SMTP, memory, console) and templates |
-| `@arachne/storage` | file storage drivers (memory, local disk, S3) used by uploads |
-| `@arachne/auth` | accounts, sessions, API tokens, verification/reset flows, blocking, throttling, CSRF, HTTP routes and guards |
-| `@arachne/router` | + `Link`, click interception, lazy routes, nested layouts, head/title |
-| `@arachne/kit` | `defineApp`, SSR document rendering, static prerender build, dev server with hot reload, the `arachne` CLI |
+| `@arachnejs/schema` | + string formats, coercion, `refine`/`transform`, `record`, `file`, `toJSONSchema` |
+| `@arachnejs/server` | + `route()` with schema-validated params/query/body/response, body and multipart parsing, `HttpError`, cookies, CORS, security headers + CSP nonce, rate limiting, static files, route groups, OpenAPI document |
+| `@arachnejs/db` | + `update`, operators, ordering, paging, `count`, nullable/json columns, indexes, transactions |
+| `@arachnejs/migrate` | versioned migrations with a journal table |
+| `@arachnejs/acl` | core access control (see below) |
+| `@arachnejs/mailer` | `Mailer` with pluggable transports (SMTP, memory, console) and templates |
+| `@arachnejs/storage` | file storage drivers (memory, local disk, S3) used by uploads |
+| `@arachnejs/auth` | accounts, sessions, API tokens, verification/reset flows, blocking, throttling, CSRF, HTTP routes and guards |
+| `@arachnejs/router` | + `Link`, click interception, lazy routes, nested layouts, head/title |
+| `@arachnejs/kit` | `defineApp`, SSR document rendering, static prerender build, dev server with hot reload, the `arachne` CLI |
 
 `scripts/boundaries.json` gains: `server → schema` (validation and OpenAPI),
 `auth → server` (auth mounts routes/guards; the server knows nothing about
 auth), and a new top layer `kit` that may depend on everything below it.
 `auth` talks to mail through a structural `MailSender` interface, so it does
-not depend on `@arachne/mailer`.
+not depend on `@arachnejs/mailer`.
 
 ### Access control model
 
-Access control is a core feature in `@arachne/acl`, independent of storage:
+Access control is a core feature in `@arachnejs/acl`, independent of storage:
 
 - **Permissions** are strings `resource:action` with `*` wildcards
   (`posts:*`, `*:read`, `*`).
@@ -75,7 +75,7 @@ primary API style, plus a **typed client** inferred from the route table
 (`createClient<typeof api>()`, the tRPC/Hono-RPC approach): end-to-end types
 without code generation, HTTP caching, native multipart uploads, and one
 schema for validation, docs and forms. **GraphQL** is planned as an optional
-adapter (`@arachne/graphql`) over the same schemas for clients that need
+adapter (`@arachnejs/graphql`) over the same schemas for clients that need
 flexible queries; it is not the default because it complicates caching,
 uploads and per-field authorization.
 
@@ -116,7 +116,7 @@ and ACL checks as the HTTP call. The kit mounts the app's tools on `/mcp`
    stop being Arachne-shaped and the "one schema, many outputs" contract
    (validation → OpenAPI → forms) would be split across libraries.
 2. **Vite as the dev server.** Good HMR, but a second dependency graph next to
-   `Bun.build`; the Bun-native path keeps one bundler. `@arachne/vite` stays
+   `Bun.build`; the Bun-native path keeps one bundler. `@arachnejs/vite` stays
    available for teams that want Vite.
 3. **Pure RBAC.** Simpler, but ownership rules then leak into handlers;
    policies keep them in one place.

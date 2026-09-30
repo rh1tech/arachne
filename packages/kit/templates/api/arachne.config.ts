@@ -1,4 +1,4 @@
-import { defineConfig } from "@arachne/kit";
+import { defineConfig } from "@arachnejs/kit";
 
 export default defineConfig({
 	// No pages: only the HTTP API (with OpenAPI docs at /docs).

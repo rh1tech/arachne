@@ -1,4 +1,4 @@
-import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp";
+import { defineMcpModule, jsonResult, textResult, toolName } from "@arachnejs/mcp";
 import { z } from "zod";
 import { batch, computed, signal } from "./index.ts";
 
@@ -31,7 +31,7 @@ export const mcpModule = defineMcpModule({
 		},
 		{
 			name: toolName("signals", "api_summary"),
-			description: "Summarize @arachne/signals public API.",
+			description: "Summarize @arachnejs/signals public API.",
 			handler: () =>
 				textResult(
 					[
@@ -65,7 +65,7 @@ export const mcpModule = defineMcpModule({
 						role: "user",
 						content: {
 							type: "text",
-							text: "Use @arachne/signals (not React state). Prefer signal/computed/effect. Avoid VDOM patterns.",
+							text: "Use @arachnejs/signals (not React state). Prefer signal/computed/effect. Avoid VDOM patterns.",
 						},
 					},
 				],

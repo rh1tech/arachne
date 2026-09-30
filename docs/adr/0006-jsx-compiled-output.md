@@ -14,12 +14,12 @@ licensed building blocks already exist.
 
 | Layer | Choice |
 |---|---|
-| Signals algorithm | **alien-signals** (MIT) — wrapped by `@arachne/signals` |
-| JSX transform | **`@dom-expressions/compiler`** (Oxc, MIT) — wrapped by `@arachne/jsx` |
-| DOM/SSR runtime helpers | Implement `@arachne/render` against the compiler’s emitted API (template / insert / ssr / hydration), algorithms adapted from **dom-expressions** / Solid (MIT) with attribution |
-| Islands, streaming orchestration, serializers, loaders | **Arachne-owned** in `@arachne/render` + later packages |
+| Signals algorithm | **alien-signals** (MIT) — wrapped by `@arachnejs/signals` |
+| JSX transform | **`@dom-expressions/compiler`** (Oxc, MIT) — wrapped by `@arachnejs/jsx` |
+| DOM/SSR runtime helpers | Implement `@arachnejs/render` against the compiler’s emitted API (template / insert / ssr / hydration), algorithms adapted from **dom-expressions** / Solid (MIT) with attribution |
+| Islands, streaming orchestration, serializers, loaders | **Arachne-owned** in `@arachnejs/render` + later packages |
 
-Public APIs stay `@arachne/*`. We do **not** adopt Solid/Astro/Qwik as the
+Public APIs stay `@arachnejs/*`. We do **not** adopt Solid/Astro/Qwik as the
 application framework.
 
 ### Compiled-output contract
@@ -27,8 +27,8 @@ application framework.
 Unchanged in spirit from the earlier draft: template hoist + fine-grained
 bindings (DOM); escaped string/stream concat (SSR); islands via `<a-island>`;
 hydration claim markers. Exact helper names follow what
-`@dom-expressions/compiler` emits with `moduleName: "@arachne/render"`
-(and `@arachne/render/ssr`).
+`@dom-expressions/compiler` emits with `moduleName: "@arachnejs/render"`
+(and `@arachnejs/render/ssr`).
 
 ### Equivalence invariant
 
@@ -44,7 +44,7 @@ enforced by fixture tests.
 
 ## Consequences
 
-- `@arachne/signals` depends on `alien-signals`.
-- `@arachne/jsx` depends on `@dom-expressions/compiler`.
-- `@arachne/render` stays small and owns islands / streaming integration.
+- `@arachnejs/signals` depends on `alien-signals`.
+- `@arachnejs/jsx` depends on `@dom-expressions/compiler`.
+- `@arachnejs/render` stays small and owns islands / streaming integration.
 - NOTICE / README attribution for reused MIT code.

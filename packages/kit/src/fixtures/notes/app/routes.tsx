@@ -1,5 +1,5 @@
-import { Link, type RouteDefinition, type RouteProps } from "@arachne/router";
-import { signal } from "@arachne/signals";
+import { Link, type RouteDefinition, type RouteProps } from "@arachnejs/router";
+import { signal } from "@arachnejs/signals";
 
 interface Note {
 	id: string;

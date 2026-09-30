@@ -1,5 +1,5 @@
-import { omitProps, Portal, Show } from "@arachne/render";
-import { effect } from "@arachne/signals";
+import { omitProps, Portal, Show } from "@arachnejs/render";
+import { effect } from "@arachnejs/signals";
 import { focusableIn, trapFocus, whenConnected } from "./focus.ts";
 import { CloseButton } from "./icons.tsx";
 import { watchEscape } from "./layers.ts";

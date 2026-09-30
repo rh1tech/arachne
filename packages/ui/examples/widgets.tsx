@@ -1,5 +1,5 @@
-import { Show } from "@arachne/render";
-import { effect, signal } from "@arachne/signals";
+import { Show } from "@arachnejs/render";
+import { effect, signal } from "@arachnejs/signals";
 import {
 	ActionIcon,
 	Affix,

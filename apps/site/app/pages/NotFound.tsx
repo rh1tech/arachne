@@ -1,4 +1,4 @@
-import { Link } from "@arachne/router";
+import { Link } from "@arachnejs/router";
 import { pathname } from "../components/Shell.tsx";
 
 /** 404 page (`404.html` in the build), worded like `man` when a page is missing. */

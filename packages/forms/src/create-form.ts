@@ -1,7 +1,7 @@
-import { createUniqueId } from "@arachne/render";
-import type { Schema } from "@arachne/schema";
-import { formatIssues, safeParse } from "@arachne/schema";
-import { type Signal, signal } from "@arachne/signals";
+import { createUniqueId } from "@arachnejs/render";
+import type { Schema } from "@arachnejs/schema";
+import { formatIssues, safeParse } from "@arachnejs/schema";
+import { type Signal, signal } from "@arachnejs/signals";
 
 export type FormErrors = Record<string, string>;
 

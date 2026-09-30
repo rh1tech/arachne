@@ -1,10 +1,10 @@
-# @arachne/jsx
+# @arachnejs/jsx
 
 Compiles Arachne JSX to DOM or SSR targets via
 [`@dom-expressions/compiler`](https://github.com/ryansolid/dom-expressions) (Oxc, MIT).
 
 ```ts
-import { compile } from "@arachne/jsx";
+import { compile } from "@arachnejs/jsx";
 
 const { code } = compile(source, { target: "dom", filename: "App.tsx" });
 ```

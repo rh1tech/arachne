@@ -1,4 +1,4 @@
-import { For, Show } from "@arachne/render";
+import { For, Show } from "@arachnejs/render";
 import { type SlotProps, setup } from "./system.ts";
 
 export type StepItem = {

@@ -6,7 +6,7 @@ import {
 	type EventBus,
 	type Logger,
 	type Module,
-} from "@arachne/core";
+} from "@arachnejs/core";
 
 export interface TestApp {
 	app: App;

@@ -13,16 +13,16 @@ the framework as packages land—not as an afterthought.
 
 ## Decision
 
-1. **Every `@arachne/*` package exports `./mcp`** — an `ArachneMcpModule`
+1. **Every `@arachnejs/*` package exports `./mcp`** — an `ArachneMcpModule`
    registering tools, resources, and/or prompts for that package’s domain.
-2. **`@arachne/mcp`** is the kernel: module protocol, server factory, stdio +
+2. **`@arachnejs/mcp`** is the kernel: module protocol, server factory, stdio +
    Streamable HTTP transports, workspace aggregator.
 3. **Naming:** tools are `arachne_<package>_<action>` (e.g.
    `arachne_schema_validate`, `arachne_jsx_compile`) to avoid collisions when
    many modules are composed.
 4. **Composition:** `createArachneMcpServer({ modules })` merges modules.
-   `createWorkspaceMcpServer()` discovers installed `@arachne/*/mcp` exports.
-5. **CLI:** `arachne mcp` (later via `@arachne/cli`) and package bin
+   `createWorkspaceMcpServer()` discovers installed `@arachnejs/*/mcp` exports.
+5. **CLI:** `arachne mcp` (later via `@arachnejs/cli`) and package bin
    `arachne-mcp` for stdio. HTTP mode for Cursor remote / cloud agents.
 6. **Safety:** MCP tools that mutate (migrate, deploy, write files) require an
    explicit `confirm: true` argument or dry-run default. No secrets in tool

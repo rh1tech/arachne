@@ -1,14 +1,14 @@
-# @arachne/forms
+# @arachnejs/forms
 
-Schema-bound forms on Arachne signals + `@arachne/ui`
+Schema-bound forms on Arachne signals + `@arachnejs/ui`
 ([ADR 0013](../../docs/adr/0013-ui-forms.md)).
 
 ```ts
 import {
   createForm, Form, TextField, SelectField, CheckboxField,
   FormWhen, FormColumns, FormColumn, FormSection, FormArea,
-} from "@arachne/forms";
-import { s } from "@arachne/schema";
+} from "@arachnejs/forms";
+import { s } from "@arachnejs/schema";
 
 const form = createForm({
   schema: s.object({
@@ -55,4 +55,4 @@ const form = createForm({
 
 - **`FormWhen`** — show/hide fields from related values (signal-reactive).
 - **`FormColumns` / `FormColumn`** — multi-column rows (Bulma-style sizes).
-- **`FormSection` / `FormArea`** — titled regions (re-exported from `@arachne/ui`).
+- **`FormSection` / `FormArea`** — titled regions (re-exported from `@arachnejs/ui`).

@@ -1,6 +1,6 @@
 # SSR & hydration
 
-Every `@arachne/ui` component renders on the server and hydrates on the client without rebuilding the DOM. `packages/ui/src/ssr.test.ts` renders every example to a string; `packages/ui/src/hydrate.test.ts` checks the full server → client round trip.
+Every `@arachnejs/ui` component renders on the server and hydrates on the client without rebuilding the DOM. `packages/ui/src/ssr.test.ts` renders every example to a string; `packages/ui/src/hydrate.test.ts` checks the full server → client round trip.
 
 Guides: [getting started](getting-started.md) · [customization](customization.md) · [theming](theming.md) · [accessibility](accessibility.md) · **SSR & hydration** · [component reference](components/README.md)
 
@@ -9,7 +9,7 @@ Guides: [getting started](getting-started.md) · [customization](customization.m
 Compile the app, and with it the kit's `.tsx` sources, once for the server and once for the browser. Hydration keys are only emitted and claimed when both builds set `hydratable: true` (the plugin default is `false`):
 
 ```ts
-import { bunPlugin } from "@arachne/vite";
+import { bunPlugin } from "@arachnejs/vite";
 
 await Bun.build({
 	entrypoints: ["./src/entry-server.tsx"],
@@ -23,13 +23,13 @@ await Bun.build({
 });
 ```
 
-With `target: "ssr"`, the plugin remaps the kit's `@arachne/render` imports to `@arachne/render/ssr`. The Vite plugin (`vitePlugin`) takes the same options.
+With `target: "ssr"`, the plugin remaps the kit's `@arachnejs/render` imports to `@arachnejs/render/ssr`. The Vite plugin (`vitePlugin`) takes the same options.
 
 ## Render and hydrate
 
 ```tsx
 // entry-server.tsx
-import { renderToString, type SSRPayload } from "@arachne/render/ssr";
+import { renderToString, type SSRPayload } from "@arachnejs/render/ssr";
 import { App } from "./app.tsx";
 
 export const html = () => renderToString(() => (<App />) as SSRPayload);
@@ -37,13 +37,13 @@ export const html = () => renderToString(() => (<App />) as SSRPayload);
 
 ```tsx
 // entry-client.tsx
-import { hydrate } from "@arachne/render";
+import { hydrate } from "@arachnejs/render";
 import { App } from "./app.tsx";
 
 hydrate(() => <App />, document.getElementById("app")!);
 ```
 
-Include `@arachne/ui/styles.css` in the server-rendered page, as a `<link>` in the document head, so the first paint is already styled.
+Include `@arachnejs/ui/styles.css` in the server-rendered page, as a `<link>` in the document head, so the first paint is already styled.
 
 ## What runs where
 

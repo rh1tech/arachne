@@ -1,13 +1,13 @@
-# @arachne/acl
+# @arachnejs/acl
 
 Access control for Arachne: permissions, groups (roles) with inheritance and
 levels, conditional grants for ownership-style rules, denials, and token
-scopes. Storage-agnostic; [`@arachne/auth`](../auth) keeps groups in the
+scopes. Storage-agnostic; [`@arachnejs/auth`](../auth) keeps groups in the
 database and builds subjects from users and API tokens. See
 [ADR 0015](../../docs/adr/0015-universal-framework.md#access-control-model).
 
 ```ts
-import { createAcl } from "@arachne/acl";
+import { createAcl } from "@arachnejs/acl";
 
 export const acl = createAcl({
   // Optional registry: typos in grants and checks become errors, and

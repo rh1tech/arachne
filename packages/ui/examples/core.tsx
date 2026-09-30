@@ -1,4 +1,4 @@
-import { signal } from "@arachne/signals";
+import { signal } from "@arachnejs/signals";
 import {
 	Accordion,
 	Breadcrumb,

@@ -7,7 +7,7 @@
 		"types": ["bun"],
 		"strict": true,
 		"jsx": "react-jsx",
-		"jsxImportSource": "@arachne/render",
+		"jsxImportSource": "@arachnejs/render",
 		"allowImportingTsExtensions": true,
 		"noEmit": true,
 		"skipLibCheck": true

@@ -1,5 +1,5 @@
-import { render, Show } from "@arachne/render";
-import { signal } from "@arachne/signals";
+import { render, Show } from "@arachnejs/render";
+import { signal } from "@arachnejs/signals";
 import {
 	Accordion,
 	Button,

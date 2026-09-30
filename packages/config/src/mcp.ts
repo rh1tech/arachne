@@ -1,4 +1,4 @@
-import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp";
+import { defineMcpModule, jsonResult, textResult, toolName } from "@arachnejs/mcp";
 import { z } from "zod";
 import { ConfigError, c, loadConfig } from "./index.ts";
 

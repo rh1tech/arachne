@@ -2,7 +2,7 @@
  * Interactive showcase versions of components that would cover the page if
  * rendered open (portaled overlays) or that need a trigger to show anything.
  */
-import { signal } from "@arachne/signals";
+import { signal } from "@arachnejs/signals";
 import {
 	BottomSheet,
 	Button,

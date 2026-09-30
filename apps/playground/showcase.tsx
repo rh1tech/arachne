@@ -1,5 +1,5 @@
-import { Show } from "@arachne/render";
-import { effect, signal } from "@arachne/signals";
+import { Show } from "@arachnejs/render";
+import { effect, signal } from "@arachnejs/signals";
 import {
 	Alert,
 	applyPalette,
@@ -72,7 +72,7 @@ import {
 	TextArea,
 	TextInput,
 	Title,
-} from "@arachne/ui";
+} from "@arachnejs/ui";
 import { ComponentReference, referencePage, referenceSections } from "./catalog.tsx";
 
 export const showcaseSections: DocMenuSection[] = [
@@ -275,8 +275,8 @@ const SHOWCASE_PAGES: Record<string, () => unknown> = {
 			<DocExample
 				title="Quick start"
 				description="Import primitives and the token stylesheet."
-				code={`import { Button, Card, Stack, applyPalette } from "@arachne/ui";
-import "@arachne/ui/styles.css";
+				code={`import { Button, Card, Stack, applyPalette } from "@arachnejs/ui";
+import "@arachnejs/ui/styles.css";
 
 applyPalette("graphite");
 
@@ -304,7 +304,7 @@ applyPalette("graphite");
 			<DocExample
 				title="Apply a preset"
 				description="Writes --a-* variables on :root. Scoped theming uses paletteStyle on a subtree."
-				code={`import { applyPalette, applyRadius, paletteStyle } from "@arachne/ui";
+				code={`import { applyPalette, applyRadius, paletteStyle } from "@arachnejs/ui";
 
 applyPalette("graphite"); // default
 applyPalette("marina");

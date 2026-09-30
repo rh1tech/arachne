@@ -1,4 +1,4 @@
-import { ArachneError } from "@arachne/core";
+import { ArachneError } from "@arachnejs/core";
 
 export class ConfigError extends ArachneError {
 	override name = "ConfigError";

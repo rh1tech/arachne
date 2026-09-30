@@ -1,4 +1,4 @@
-import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp";
+import { defineMcpModule, jsonResult, textResult, toolName } from "@arachnejs/mcp";
 import { z } from "zod";
 import { cx } from "./cx.ts";
 
@@ -19,7 +19,7 @@ export const mcpModule = defineMcpModule({
 		},
 		{
 			name: toolName("ui", "api_summary"),
-			description: "Summarize @arachne/ui public API.",
+			description: "Summarize @arachnejs/ui public API.",
 			handler: () =>
 				textResult(
 					[
@@ -68,7 +68,7 @@ export const mcpModule = defineMcpModule({
 						"DocMenu (Bulma-style hierarchical docs/catalog sidebar)",
 						"DocPage + DocExample (title, description, live preview, code block)",
 						"Utils: m/mt/p/px/gap/textColor/bgColor/hidden/srOnly/util",
-						"Import styles: @arachne/ui/styles.css",
+						"Import styles: @arachnejs/ui/styles.css",
 					].join("\n"),
 				),
 		},

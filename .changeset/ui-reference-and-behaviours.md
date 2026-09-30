@@ -1,5 +1,5 @@
 ---
-"@arachne/ui": minor
+"@arachnejs/ui": minor
 ---
 
 Component reference, real implementations for promised behaviours, and duplicate clean-up.

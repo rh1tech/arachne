@@ -1,4 +1,4 @@
-import { signal } from "@arachne/signals";
+import { signal } from "@arachnejs/signals";
 import {
 	Autocomplete,
 	Checkbox,
@@ -514,7 +514,7 @@ export const examples: Example[] = [
 				language="tsx"
 				radius="lg"
 				code={
-					'import { Button } from "@arachne/ui";\n\nexport const Save = () => <Button>Save</Button>;'
+					'import { Button } from "@arachnejs/ui";\n\nexport const Save = () => <Button>Save</Button>;'
 				}
 			/>
 		),

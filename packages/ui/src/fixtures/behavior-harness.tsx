@@ -1,5 +1,5 @@
-import { For, render } from "@arachne/render";
-import { signal } from "@arachne/signals";
+import { For, render } from "@arachnejs/render";
+import { signal } from "@arachnejs/signals";
 import {
 	Button,
 	CommandBar,

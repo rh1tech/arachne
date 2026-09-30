@@ -1,4 +1,4 @@
-import { type AnySchema, parse, s, safeParse } from "@arachne/schema";
+import { type AnySchema, parse, s, safeParse } from "@arachnejs/schema";
 
 /** Storage class of a column. */
 export type SqlType = "text" | "integer" | "real" | "boolean" | "json" | "date";

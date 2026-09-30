@@ -1,6 +1,6 @@
-import { type Acl, createAcl, type GroupDef, type Subject } from "@arachne/acl";
-import { createIndexSQL, createTableSQL, type DbQueries, type InferRow } from "@arachne/db";
-import { s, safeParse } from "@arachne/schema";
+import { type Acl, createAcl, type GroupDef, type Subject } from "@arachnejs/acl";
+import { createIndexSQL, createTableSQL, type DbQueries, type InferRow } from "@arachnejs/db";
+import { s, safeParse } from "@arachnejs/schema";
 import { randomToken, sha256 } from "./crypto.ts";
 import { AuthError } from "./errors.ts";
 import { defaultTemplates } from "./mail.ts";
@@ -14,7 +14,7 @@ import type {
 	RequestMeta,
 } from "./types.ts";
 
-/** Permissions `@arachne/auth` checks for its own admin features. */
+/** Permissions `@arachnejs/auth` checks for its own admin features. */
 export const AUTH_PERMISSIONS = {
 	"users:read": "List and view users",
 	"users:block": "Block and unblock users",

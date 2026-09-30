@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { s } from "@arachne/schema";
+import { s } from "@arachnejs/schema";
 import { createServer, group, HttpError, json, route } from "./index.ts";
 
 const post = (path: string, body: unknown, headers: Record<string, string> = {}) =>

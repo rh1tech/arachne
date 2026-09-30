@@ -1,5 +1,5 @@
-import type { Condition, GroupDef } from "@arachne/acl";
-import type { DbQueries } from "@arachne/db";
+import type { Condition, GroupDef } from "@arachnejs/acl";
+import type { DbQueries } from "@arachnejs/db";
 
 /** A user as the application sees it (never includes secrets). */
 export interface AuthUser {
@@ -89,7 +89,7 @@ export interface AuthEvent {
 	data: Record<string, unknown> | null;
 }
 
-/** A message auth asks to send. `@arachne/mailer`'s `Mailer` satisfies {@link MailSender}. */
+/** A message auth asks to send. `@arachnejs/mailer`'s `Mailer` satisfies {@link MailSender}. */
 export interface AuthMail {
 	/** Recipient address. */
 	to: string;
@@ -101,7 +101,7 @@ export interface AuthMail {
 	text: string;
 }
 
-/** Anything that can send mail (structural; no dependency on `@arachne/mailer`). */
+/** Anything that can send mail (structural; no dependency on `@arachnejs/mailer`). */
 export interface MailSender {
 	/** Deliver a message. */
 	send: (message: AuthMail) => Promise<unknown>;

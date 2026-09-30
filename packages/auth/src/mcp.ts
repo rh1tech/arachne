@@ -1,5 +1,5 @@
-import { createDb } from "@arachne/db";
-import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp";
+import { createDb } from "@arachnejs/db";
+import { defineMcpModule, jsonResult, textResult, toolName } from "@arachnejs/mcp";
 import { z } from "zod";
 import { createAuth } from "./auth.ts";
 import { AUTH_PERMISSIONS, createCore, DEFAULT_GROUPS } from "./core.ts";
@@ -10,7 +10,7 @@ function describeAuth() {
 	return createAuth({ db, baseUrl: "https://example.test" });
 }
 
-/** MCP tools for exploring `@arachne/auth`. */
+/** MCP tools for exploring `@arachnejs/auth`. */
 export const mcpModule = defineMcpModule({
 	name: "auth",
 	version: "0.0.1",
@@ -72,7 +72,7 @@ export const mcpModule = defineMcpModule({
 		},
 		{
 			name: toolName("auth", "api_summary"),
-			description: "Summarize @arachne/auth.",
+			description: "Summarize @arachnejs/auth.",
 			handler: () =>
 				textResult(
 					[

@@ -1,4 +1,4 @@
-# ADR 0008: @arachne/schema — Standard Schema DSL
+# ADR 0008: @arachnejs/schema — Standard Schema DSL
 
 - **Status:** Accepted
 - **Date:** 2026-09-28
@@ -7,18 +7,18 @@
 ## Context
 
 README promises “one schema, many outputs” (DB, forms, admin, OpenAPI, search).
-`@arachne/config` already ships a thin Standard Schema–compatible DSL for boot
-config (ADR 0004) and must stay free of a `@arachne/schema` dependency.
+`@arachnejs/config` already ships a thin Standard Schema–compatible DSL for boot
+config (ADR 0004) and must stay free of a `@arachnejs/schema` dependency.
 
 ## Decision
 
-1. **`@arachne/schema`** owns the rich application schema DSL: `string`,
+1. **`@arachnejs/schema`** owns the rich application schema DSL: `string`,
    `number`, `boolean`, `literal`, `enum`, `object`, `array`, `optional`,
    `nullable`, `defaulted`, `union`, plus `parse` / `safeParse` and
    `Infer<S>` helpers.
 2. Schemas implement **Standard Schema V1** (`~standard.validate`).
 3. **Config keeps its own thin `c.*` DSL** for bootstrap; apps migrate
-   domain models to `s.*` from `@arachne/schema`.
+   domain models to `s.*` from `@arachnejs/schema`.
 4. Downstream packages (`db`, `forms`, `table`, `admin`, OpenAPI) consume
    Standard Schema values — not a proprietary AST — so third-party schemas
    (zod, valibot, arktype) remain usable where they expose `~standard`.

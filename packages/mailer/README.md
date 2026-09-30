@@ -1,11 +1,11 @@
-# @arachne/mailer
+# @arachnejs/mailer
 
 Email for Arachne: validated messages, typed templates, automatic plain-text
 alternatives, retries, and transports for SMTP (nodemailer), Resend, memory,
 `.eml` files and the console.
 
 ```ts
-import { createMailer, defineTemplate, mailHtml, smtpTransport } from "@arachne/mailer";
+import { createMailer, defineTemplate, mailHtml, smtpTransport } from "@arachnejs/mailer";
 
 const verifyEmail = defineTemplate((data: { name: string; url: string }) => ({
   subject: "Confirm your email",
@@ -52,7 +52,7 @@ Implement `MailTransport` (`{ name, send(message), close? }`) for other provider
 
 ## With auth
 
-`Mailer` satisfies `@arachne/auth`'s structural `MailSender`, so pass it
+`Mailer` satisfies `@arachnejs/auth`'s structural `MailSender`, so pass it
 straight to `createAuth({ mailer })`.
 
 ## MCP

@@ -5,13 +5,13 @@ import { Window } from "happy-dom";
 import { bunPlugin, vitePlugin } from "../src/index.ts";
 
 describe("vitePlugin", () => {
-	test("transforms jsx into @arachne/render imports", () => {
+	test("transforms jsx into @arachnejs/render imports", () => {
 		const plugin = vitePlugin({ hydratable: false });
 		const result = plugin.transform(
 			`export function Hi() { return <span class="x">hi</span>; }`,
 			"/tmp/Hi.tsx",
 		);
-		expect(result?.code).toContain("@arachne/render");
+		expect(result?.code).toContain("@arachnejs/render");
 		expect(result?.code).toContain("template");
 	});
 
@@ -47,17 +47,17 @@ describe("bunPlugin", () => {
 			target: "browser",
 			format: "esm",
 			plugins: [bunPlugin({ hydratable: false })],
-			external: ["@arachne/render", "@arachne/signals"],
+			external: ["@arachnejs/render", "@arachnejs/signals"],
 		});
 		expect(result.success).toBe(true);
 		const output = result.outputs[0];
 		expect(output).toBeDefined();
 		const code = await output?.text();
-		expect(code).toContain("@arachne/render");
+		expect(code).toContain("@arachnejs/render");
 		expect(code).toContain("template");
 	});
 
-	test("SSR builds resolve bare @arachne/render to the SSR runtime", async () => {
+	test("SSR builds resolve bare @arachnejs/render to the SSR runtime", async () => {
 		const entry = new URL("./fixtures/ssr-entry.tsx", import.meta.url);
 		const result = await Bun.build({
 			entrypoints: [entry.pathname],
@@ -76,7 +76,7 @@ describe("bunPlugin", () => {
 
 	test("vitePlugin aliases the bare runtime only for SSR", () => {
 		expect(vitePlugin({ target: "ssr" }).config()).toEqual({
-			resolve: { alias: [{ find: /^@arachne\/render$/, replacement: "@arachne/render/ssr" }] },
+			resolve: { alias: [{ find: /^@arachnejs\/render$/, replacement: "@arachnejs/render/ssr" }] },
 		});
 		expect(vitePlugin().config()).toBeUndefined();
 	});

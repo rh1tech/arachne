@@ -1,8 +1,8 @@
 /**
  * Ops / docs / team / billing widgets.
  */
-import { For, Show } from "@arachne/render";
-import { effect, signal } from "@arachne/signals";
+import { For, Show } from "@arachnejs/render";
+import { effect, signal } from "@arachnejs/signals";
 import { Button } from "./button.tsx";
 import { cx } from "./cx.ts";
 import { focusableIn, rovingToolbarKey, setToolbarStop, whenConnected } from "./focus.ts";

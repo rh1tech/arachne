@@ -3,7 +3,7 @@
  * `fixtures/contract-<group>-harness.tsx` lists cases; `contract.test.ts`
  * renders every case twice (styled / `unstyled`) and checks pass-through.
  */
-import { render } from "@arachne/render";
+import { render } from "@arachnejs/render";
 import type { Example } from "../../examples/types.ts";
 import { configureUI } from "../system.ts";
 

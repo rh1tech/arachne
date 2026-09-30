@@ -1,5 +1,5 @@
-import { defineServer } from "@arachne/kit";
-import { HttpError } from "@arachne/server";
+import { defineServer } from "@arachnejs/kit";
+import { HttpError } from "@arachnejs/server";
 import { findPost, posts } from "./content.ts";
 
 /**

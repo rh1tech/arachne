@@ -1,21 +1,21 @@
-# @arachne/schema
+# @arachnejs/schema
 
 Standard Schema V1 DSL for Arachne domain models — the “one schema, many
 outputs” layer (DB, forms, admin, OpenAPI).
 
-Boot config stays on `@arachne/config`’s thin `c.*` helpers ([ADR 0004](../../docs/adr/0004-config-loader.md)).
+Boot config stays on `@arachnejs/config`’s thin `c.*` helpers ([ADR 0004](../../docs/adr/0004-config-loader.md)).
 See [ADR 0008](../../docs/adr/0008-schema-dsl.md).
 
 ## Install
 
 ```bash
-bun add @arachne/schema
+bun add @arachnejs/schema
 ```
 
 ## Example
 
 ```ts
-import { s, parse, type Infer } from "@arachne/schema";
+import { s, parse, type Infer } from "@arachnejs/schema";
 
 const User = s.object({
   id: s.string({ min: 1 }),
@@ -77,8 +77,8 @@ in `InferInput<typeof S>`; `Infer<typeof S>` is the parsed output.
 ## JSON Schema / OpenAPI
 
 ```ts
-import { toJSONSchema } from "@arachne/schema";
-toJSONSchema(Signup); // JSON Schema 2020-12, used by @arachne/server's OpenAPI output
+import { toJSONSchema } from "@arachnejs/schema";
+toJSONSchema(Signup); // JSON Schema 2020-12, used by @arachnejs/server's OpenAPI output
 ```
 
 Foreign Standard Schemas (zod, valibot) validate fine but produce `{}`.

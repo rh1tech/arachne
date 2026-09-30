@@ -1,4 +1,4 @@
-# ADR 0003: @arachne/core kernel design
+# ADR 0003: @arachnejs/core kernel design
 
 - **Status:** Accepted
 - **Date:** 2026-09-27
@@ -12,7 +12,7 @@ databases, or UI.
 
 ## Decision
 
-`@arachne/core` provides:
+`@arachnejs/core` provides:
 
 1. **Tokens + Container** — symbol/string tokens, singleton and transient
    scopes, constructor and factory providers, child containers for request
@@ -28,8 +28,8 @@ databases, or UI.
 5. **App** — `createApp({ modules, logger? })` wires container + bus +
    lifecycle (`boot` / `dispose`).
 
-`@arachne/core` has **zero** runtime dependencies and must not import any other
-`@arachne/*` package.
+`@arachnejs/core` has **zero** runtime dependencies and must not import any other
+`@arachnejs/*` package.
 
 ## Alternatives considered
 

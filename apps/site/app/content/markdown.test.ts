@@ -7,8 +7,8 @@ const render = (md: string, highlight?: (code: string, lang?: string) => string 
 
 describe("renderMarkdown", () => {
 	test("takes the first h1 as the title and leaves it out of the body", () => {
-		const doc = render("<!-- generated -->\n# @arachne/router\n\nSignal-driven\nrouter.\n");
-		expect(doc.title).toBe("@arachne/router");
+		const doc = render("<!-- generated -->\n# @arachnejs/router\n\nSignal-driven\nrouter.\n");
+		expect(doc.title).toBe("@arachnejs/router");
 		expect(doc.html).not.toContain("<h1");
 		expect(doc.html).not.toContain("generated");
 		expect(doc.summary).toBe("Signal-driven router.");

@@ -1,4 +1,4 @@
-import { effect, signal } from "@arachne/signals";
+import { effect, signal } from "@arachnejs/signals";
 import {
 	Calendar,
 	Carousel,

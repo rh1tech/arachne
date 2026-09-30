@@ -6,7 +6,7 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { preview } from "@arachne/kit";
+import { preview } from "@arachnejs/kit";
 import { type Browser, chromium, type Page } from "playwright";
 import { ENTRIES } from "../app/nav.ts";
 
@@ -76,7 +76,7 @@ describe("desktop", () => {
 		});
 		await page.click(".sidebar >> text=router");
 		await page.waitForURL(/\/docs\/packages\/router$/);
-		await expect(page.title()).resolves.toBe("@arachne/router · Arachne");
+		await expect(page.title()).resolves.toBe("@arachnejs/router · Arachne");
 		await expect(
 			page.getAttribute(".sidebar a[href='/docs/packages/router']", "aria-current"),
 		).resolves.toBe("page");

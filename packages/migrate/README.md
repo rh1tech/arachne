@@ -1,17 +1,17 @@
-# @arachne/migrate
+# @arachnejs/migrate
 
-Versioned migrations for [`@arachne/db`](../db), plus a schema planner that
+Versioned migrations for [`@arachnejs/db`](../db), plus a schema planner that
 diffs your table definitions against the live database and writes the
 migration for you.
 
 ```ts
 // migrations/0001_users.ts
-import { createTable, defineMigration } from "@arachne/migrate";
+import { createTable, defineMigration } from "@arachnejs/migrate";
 import { users } from "../src/tables.ts";
 export default defineMigration({ id: "0001_users", ...createTable(users) });
 
 // migrations/0002_user_name.ts
-import { addColumn, defineMigration } from "@arachne/migrate";
+import { addColumn, defineMigration } from "@arachnejs/migrate";
 export default defineMigration({ id: "0002_user_name", ...addColumn(users, "name") });
 
 // migrations/0003_backfill.ts — hand-written steps get a transaction-scoped client
@@ -23,7 +23,7 @@ export default defineMigration({
 ```
 
 ```ts
-import { loadMigrations, migrate, migrationStatus, rollback } from "@arachne/migrate";
+import { loadMigrations, migrate, migrationStatus, rollback } from "@arachnejs/migrate";
 
 const migrations = await loadMigrations("./migrations");
 await migrate(db, migrations);              // → { applied: [...] }
@@ -43,7 +43,7 @@ Helpers: `createTable(table)`, `addColumn(table, name)`, `dropTable(name, recrea
 ## Planning
 
 ```ts
-import { planSchema, renderMigration } from "@arachne/migrate";
+import { planSchema, renderMigration } from "@arachnejs/migrate";
 
 const plan = await planSchema(db, { users, posts });
 // plan.statements: ALTER TABLE … ADD COLUMN …, CREATE INDEX …, CREATE TABLE …

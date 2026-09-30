@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
-import type { Signal } from "@arachne/signals";
+import type { Signal } from "@arachnejs/signals";
 import { formatTrend } from "./kit-extra.tsx";
 import { formatRelative, stringifyJson } from "./patterns.tsx";
 import { $, type Dom, type Mounted, mountHarness, press, setupDom } from "./test-utils/dom.ts";

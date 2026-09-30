@@ -1,4 +1,4 @@
-# @arachne/core
+# @arachnejs/core
 
 Kernel for the Arachne framework: dependency injection, module lifecycle,
 typed events, and a logger interface.
@@ -6,7 +6,7 @@ typed events, and a logger interface.
 ## Install
 
 ```bash
-bun add @arachne/core
+bun add @arachnejs/core
 ```
 
 ## Quick start
@@ -17,7 +17,7 @@ import {
   createToken,
   defineModule,
   type Logger,
-} from "@arachne/core";
+} from "@arachnejs/core";
 
 const Greeter = createToken<{ hello(): string }>("Greeter");
 

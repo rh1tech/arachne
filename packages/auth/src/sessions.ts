@@ -1,4 +1,4 @@
-import type { InferRow } from "@arachne/db";
+import type { InferRow } from "@arachnejs/db";
 import type { Core } from "./core.ts";
 import { randomToken, sha256 } from "./crypto.ts";
 import { AuthError } from "./errors.ts";

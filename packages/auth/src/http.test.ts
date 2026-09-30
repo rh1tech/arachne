@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { createServer, openapi, route } from "@arachne/server";
+import { createServer, openapi, route } from "@arachnejs/server";
 import { setup, verifiedUser } from "./fixtures/setup.ts";
 
 const PASSWORD = "correct horse battery";

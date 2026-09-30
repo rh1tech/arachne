@@ -251,8 +251,8 @@ Copies `value` to the clipboard. Renders a {@link Button}; `data-copied` while c
 
 ```tsx
 <Group gap="0.5rem">
-	<code>bun add @arachne/ui</code>
-	<CopyButton value="bun add @arachne/ui" />
+	<code>bun add @arachnejs/ui</code>
+	<CopyButton value="bun add @arachnejs/ui" />
 </Group>
 ```
 

@@ -1,17 +1,17 @@
-# @arachne/auth
+# @arachnejs/auth
 
 Accounts for Arachne apps: registration, email verification, login, password
 reset and change, email change, sessions, API tokens, TOTP two-factor,
 lockout, user blocking, groups and permissions (via
-[`@arachne/acl`](../acl)), an audit log, and ready-made HTTP routes with
+[`@arachnejs/acl`](../acl)), an audit log, and ready-made HTTP routes with
 CSRF protection. See [ADR 0015](../../docs/adr/0015-universal-framework.md).
 
 ```ts
-import { createAuth } from "@arachne/auth";
-import { createDb } from "@arachne/db";
-import { sqlite } from "@arachne/db-sqlite";
-import { createMailer, smtpTransport } from "@arachne/mailer";
-import { createServer, route } from "@arachne/server";
+import { createAuth } from "@arachnejs/auth";
+import { createDb } from "@arachnejs/db";
+import { sqlite } from "@arachnejs/db-sqlite";
+import { createMailer, smtpTransport } from "@arachnejs/mailer";
+import { createServer, route } from "@arachnejs/server";
 
 const db = createDb({ dialect: sqlite({ path: "app.db" }), tables: {} });
 const auth = createAuth({
@@ -140,7 +140,7 @@ default 20/min). All routes are schema-validated and appear in OpenAPI.
 ## Mail
 
 Pass any `{ send({ to, subject, html, text }) }` as `mailer`
-(`@arachne/mailer` fits). Override templates with
+(`@arachnejs/mailer` fits). Override templates with
 `templates: { verifyEmail, resetPassword, passwordChanged, emailChangeRequested, confirmEmailChange, signupAttempt }`;
 link paths with `links: { verifyEmail, resetPassword, confirmEmail }` (tokens go in `?token=`).
 
@@ -158,7 +158,7 @@ stored in `auth_events` and passed to `onEvent`.
 ## Tables and migrations
 
 `auth.tables` (or `authTables(prefix)`) holds the definitions; use them with
-`@arachne/migrate` (`createTable(auth.tables.users)`, …) instead of
+`@arachnejs/migrate` (`createTable(auth.tables.users)`, …) instead of
 `auth.setup()`'s create-if-missing when you manage schema changes yourself.
 
 ## MCP

@@ -1,6 +1,6 @@
 /** Components whose names promise behaviour must actually deliver it. */
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
-import type { Signal } from "@arachne/signals";
+import type { Signal } from "@arachnejs/signals";
 import { $, type Dom, type Mounted, mountHarness, press, setupDom } from "./test-utils/dom.ts";
 
 type Card = { id: string; title: string };

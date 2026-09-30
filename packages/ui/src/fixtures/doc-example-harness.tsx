@@ -1,4 +1,4 @@
-import { render } from "@arachne/render";
+import { render } from "@arachnejs/render";
 import { DocExample, DocPage } from "../index.ts";
 
 export function run(root: HTMLElement) {

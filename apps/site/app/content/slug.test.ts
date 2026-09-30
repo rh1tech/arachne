@@ -8,7 +8,7 @@ describe("slugify", () => {
 	});
 
 	test("drops punctuation but keeps one hyphen per space, like GitHub", () => {
-		expect(slugify("M11 — @arachne/kit (2026-09-30)")).toBe("m11--arachnekit-2026-09-30");
+		expect(slugify("M11 — @arachnejs/kit (2026-09-30)")).toBe("m11--arachnejskit-2026-09-30");
 		expect(slugify("What's new?")).toBe("whats-new");
 		expect(slugify("snake_case stays")).toBe("snake_case-stays");
 	});

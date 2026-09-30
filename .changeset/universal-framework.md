@@ -1,17 +1,17 @@
 ---
-"@arachne/schema": minor
-"@arachne/server": minor
-"@arachne/db": minor
-"@arachne/db-sqlite": minor
-"@arachne/router": minor
-"@arachne/render": minor
-"@arachne/migrate": minor
-"@arachne/acl": minor
-"@arachne/mailer": minor
-"@arachne/storage": minor
-"@arachne/auth": minor
-"@arachne/kit": minor
-"@arachne/mcp": patch
+"@arachnejs/schema": minor
+"@arachnejs/server": minor
+"@arachnejs/db": minor
+"@arachnejs/db-sqlite": minor
+"@arachnejs/router": minor
+"@arachnejs/render": minor
+"@arachnejs/migrate": minor
+"@arachnejs/acl": minor
+"@arachnejs/mailer": minor
+"@arachnejs/storage": minor
+"@arachnejs/auth": minor
+"@arachnejs/kit": minor
+"@arachnejs/mcp": patch
 ---
 
 Universal framework: static sites, server-rendered apps and API-only services.

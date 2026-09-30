@@ -1,4 +1,4 @@
-import { defineConfig } from "@arachne/kit";
+import { defineConfig } from "@arachnejs/kit";
 
 export default defineConfig({
 	// Pre-render every page to HTML; the client hydrates and routes without reloads.

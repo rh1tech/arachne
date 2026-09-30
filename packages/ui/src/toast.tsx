@@ -1,6 +1,6 @@
-import { For, omitProps, Portal, Show } from "@arachne/render";
-import type { Signal } from "@arachne/signals";
-import { signal } from "@arachne/signals";
+import { For, omitProps, Portal, Show } from "@arachnejs/render";
+import type { Signal } from "@arachnejs/signals";
+import { signal } from "@arachnejs/signals";
 import type { AlertTone } from "./feedback.tsx";
 import { createSlots, type SlotProps, withDefaults } from "./system.ts";
 

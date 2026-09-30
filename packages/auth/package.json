@@ -1,8 +1,21 @@
 {
-	"name": "@arachne/auth",
+	"name": "@arachnejs/auth",
 	"version": "0.0.1",
 	"description": "Accounts, sessions, API tokens, 2FA, blocking and access control for Arachne",
 	"license": "MIT OR Apache-2.0",
+	"author": "Mikhail Matveev (https://rh1.tech)",
+	"homepage": "https://arachne.rh1.tech/docs/packages/auth",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/rh1tech/arachne.git",
+		"directory": "packages/auth"
+	},
+	"bugs": {
+		"url": "https://github.com/rh1tech/arachne/issues"
+	},
+	"engines": {
+		"bun": ">=1.3.0"
+	},
 	"type": "module",
 	"exports": {
 		".": {
@@ -18,7 +31,13 @@
 	},
 	"files": [
 		"src",
-		"README.md"
+		"!src/**/*.test.ts",
+		"!src/**/*.test.tsx",
+		"!src/**/fixtures",
+		"!src/test-utils",
+		"README.md",
+		"LICENSE-APACHE",
+		"LICENSE-MIT"
 	],
 	"scripts": {
 		"test": "bun test",
@@ -26,16 +45,16 @@
 		"build": "bun run typecheck"
 	},
 	"dependencies": {
-		"@arachne/acl": "workspace:*",
-		"@arachne/db": "workspace:*",
-		"@arachne/mcp": "workspace:*",
-		"@arachne/schema": "workspace:*",
-		"@arachne/server": "workspace:*",
+		"@arachnejs/acl": "workspace:*",
+		"@arachnejs/db": "workspace:*",
+		"@arachnejs/mcp": "workspace:*",
+		"@arachnejs/schema": "workspace:*",
+		"@arachnejs/server": "workspace:*",
 		"zod": "3.25.76"
 	},
 	"devDependencies": {
-		"@arachne/db-sqlite": "workspace:*",
-		"@arachne/mailer": "workspace:*",
+		"@arachnejs/db-sqlite": "workspace:*",
+		"@arachnejs/mailer": "workspace:*",
 		"typescript": "^5.9.2"
 	},
 	"publishConfig": {

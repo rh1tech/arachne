@@ -1,4 +1,4 @@
-import { computed, renderEffect, root, untrack } from "@arachne/signals";
+import { computed, renderEffect, root, untrack } from "@arachnejs/signals";
 import { insert, NodeRange } from "./dom.ts";
 
 export type ShowProps<T> = {

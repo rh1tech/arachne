@@ -48,7 +48,7 @@ export interface PackageInfo {
 
 /** Page data for the home page. */
 export interface HomeData {
-	/** `@arachne/kit` version. */
+	/** `@arachnejs/kit` version. */
 	version: string;
 	/** Short commit hash the site was built from, when known. */
 	commit?: string | undefined;

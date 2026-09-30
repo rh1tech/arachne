@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { rmSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { col, createDb, defineTable } from "@arachne/db";
-import { s } from "@arachne/schema";
+import { col, createDb, defineTable } from "@arachnejs/db";
+import { s } from "@arachnejs/schema";
 import { sqlite } from "../src/index.ts";
 
 describe("sqlite dialect", () => {

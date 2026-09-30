@@ -1,4 +1,4 @@
-import { withoutEffects } from "@arachne/signals";
+import { withoutEffects } from "@arachnejs/signals";
 import {
 	createComponent,
 	createUniqueId,
@@ -10,7 +10,7 @@ import {
 	splitProps,
 } from "./core.ts";
 
-export { isServerRender, untrack } from "@arachne/signals";
+export { isServerRender, untrack } from "@arachnejs/signals";
 export { For, Show, Suspense } from "./control-flow-ssr.ts";
 export {
 	createComponent,

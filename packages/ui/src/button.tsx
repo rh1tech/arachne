@@ -1,4 +1,4 @@
-import { omitProps } from "@arachne/render";
+import { omitProps } from "@arachnejs/render";
 import { Icon } from "./icons.tsx";
 import { createSlots, type SlotProps, withDefaults } from "./system.ts";
 

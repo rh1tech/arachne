@@ -1,6 +1,6 @@
-import { delegateEvents, render } from "@arachne/render";
-import { signal } from "@arachne/signals";
-import { createToaster, DocMenu, Icon, ToastHost } from "@arachne/ui";
+import { delegateEvents, render } from "@arachnejs/render";
+import { signal } from "@arachnejs/signals";
+import { createToaster, DocMenu, Icon, ToastHost } from "@arachnejs/ui";
 import { flatShowcaseOptions, ShowcaseContent, showcaseSections } from "./showcase.tsx";
 
 const toaster = createToaster();

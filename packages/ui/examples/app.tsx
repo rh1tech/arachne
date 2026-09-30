@@ -1,5 +1,5 @@
-import { For, Show } from "@arachne/render";
-import { effect, signal } from "@arachne/signals";
+import { For, Show } from "@arachnejs/render";
+import { effect, signal } from "@arachnejs/signals";
 import {
 	Alert,
 	AnnouncementBar,
@@ -569,7 +569,7 @@ export const examples: Example[] = [
 		name: "Terminal",
 		render: (p) => (
 			<Terminal {...p} title="zsh">
-				{"$ bun add @arachne/ui\ninstalled @arachne/ui@2.4.0"}
+				{"$ bun add @arachnejs/ui\ninstalled @arachnejs/ui@2.4.0"}
 			</Terminal>
 		),
 	},

@@ -32,21 +32,21 @@ next steps" at the bottom, run `bun run ci` and `(cd packages/kit && bun run e2e
 | # | Milestone | Package(s) | Status |
 |---|-----------|------------|--------|
 | 1 | Plan + ADR + this log | docs | [x] |
-| 2 | Schema: formats, coercion, refine/transform, record, file, JSON Schema export | `@arachne/schema` | [x] |
-| 3 | Server: typed routes with validation, body/multipart parsing, errors, cookies, CORS, security headers, rate limit, static files, groups, OpenAPI | `@arachne/server` | [x] |
-| 4 | DB: update, operators, order/limit/offset, count, nullable/json columns, indexes, transactions | `@arachne/db`, `@arachne/db-sqlite` | [x] |
-| 5 | Migrations | `@arachne/migrate` | [x] |
-| 6 | Access control (core) | `@arachne/acl` | [x] |
-| 7 | Mail | `@arachne/mailer` | [x] |
-| 8 | File storage (disk, memory, S3) | `@arachne/storage` | [x] |
-| 9 | Auth: users, sessions, tokens, registration, verification, reset, blocking, groups, throttling, CSRF, HTTP routes | `@arachne/auth` | [x] |
-| 10 | Router: `Link`, click interception, lazy routes, layouts, head | `@arachne/router` | [x] |
-| 11 | Kit: config, SSR pages, static prerender build, dev server with hot reload, `arachne` CLI | `@arachne/kit` | [x] |
+| 2 | Schema: formats, coercion, refine/transform, record, file, JSON Schema export | `@arachnejs/schema` | [x] |
+| 3 | Server: typed routes with validation, body/multipart parsing, errors, cookies, CORS, security headers, rate limit, static files, groups, OpenAPI | `@arachnejs/server` | [x] |
+| 4 | DB: update, operators, order/limit/offset, count, nullable/json columns, indexes, transactions | `@arachnejs/db`, `@arachnejs/db-sqlite` | [x] |
+| 5 | Migrations | `@arachnejs/migrate` | [x] |
+| 6 | Access control (core) | `@arachnejs/acl` | [x] |
+| 7 | Mail | `@arachnejs/mailer` | [x] |
+| 8 | File storage (disk, memory, S3) | `@arachnejs/storage` | [x] |
+| 9 | Auth: users, sessions, tokens, registration, verification, reset, blocking, groups, throttling, CSRF, HTTP routes | `@arachnejs/auth` | [x] |
+| 10 | Router: `Link`, click interception, lazy routes, layouts, head | `@arachnejs/router` | [x] |
+| 11 | Kit: config, SSR pages, static prerender build, dev server with hot reload, `arachne` CLI | `@arachnejs/kit` | [x] |
 | 12 | Examples: static site, full-stack, API-only | `packages/kit/templates/*` | [x] |
-| 12b | Typed API client inferred from routes | `@arachne/server` (`/client`) | [x] |
-| 12c | Optional GraphQL adapter over the same schemas | `@arachne/graphql` | [ ] |
-| 12e | MCP-first apps: routes → MCP tools (with auth/ACL), `/mcp` endpoint | `@arachne/server`, `@arachne/kit` | [x] |
-| 12d | Binary codecs: CBOR in server (content negotiation); protobuf/Connect later | `@arachne/server` | [~] CBOR done |
+| 12b | Typed API client inferred from routes | `@arachnejs/server` (`/client`) | [x] |
+| 12c | Optional GraphQL adapter over the same schemas | `@arachnejs/graphql` | [ ] |
+| 12e | MCP-first apps: routes → MCP tools (with auth/ACL), `/mcp` endpoint | `@arachnejs/server`, `@arachnejs/kit` | [x] |
+| 12d | Binary codecs: CBOR in server (content negotiation); protobuf/Connect later | `@arachnejs/server` | [~] CBOR done |
 | 13 | Docs + README per package, root README update | docs | [x] |
 | 14 | Website (arachne.rh1.tech), built with Arachne from the repo's Markdown | `apps/site` | [x] |
 
@@ -64,7 +64,7 @@ next steps" at the bottom, run `bun run ci` and `(cd packages/kit && bun run e2e
 - `bun run test:scripts`: tests for repo scripts.
 - All three run in `bun run ci` and GitHub CI.
 
-### M2 — `@arachne/schema` (2026-09-30)
+### M2 — `@arachnejs/schema` (2026-09-30)
 
 - Files: `primitives.ts` (string + formats, number, integer, boolean,
   literal, enum, date, file, unknown), `composites.ts` (object with
@@ -79,7 +79,7 @@ next steps" at the bottom, run `bun run ci` and `(cd packages/kit && bun run e2e
   `record`.
 - Tests: `src/extended.test.ts`, `src/mcp.test.ts`.
 
-### M3 — `@arachne/server` (2026-09-30)
+### M3 — `@arachnejs/server` (2026-09-30)
 
 - `route()` (`route.ts`): params/query/headers/body/response schemas; params
   typed from the path when no schema; handler returns `Response` or a value;
@@ -92,18 +92,18 @@ next steps" at the bottom, run `bun run ci` and `(cd packages/kit && bun run e2e
   declaration merging (auth will add `user`, `permission`).
 - `body.ts`: JSON / multipart / urlencoded / codecs, streaming size limit,
   `formToObject` (nested keys, prototype-pollution guard).
-- `codec.ts` + `cbor.ts` (`@arachne/server/cbor`, cbor-x): Accept negotiation.
+- `codec.ts` + `cbor.ts` (`@arachnejs/server/cbor`, cbor-x): Accept negotiation.
 - Middleware: `cors.ts`, `security.ts` (CSP nonce), `rate-limit.ts`
   (pluggable `RateLimitStore`), `request-id.ts`, `static.ts` (`safeJoin`
   traversal guard, ETag, immutable hashed assets), `sse.ts`.
 - `openapi.ts`: OpenAPI 3.1 + `apiDocs()` (Scalar explorer with its own CSP).
-- `client.ts` (`@arachne/server/client`): `createClient<typeof routes>()`.
-- `@arachne/router/path` entry added so the server doesn't load the DOM router.
+- `client.ts` (`@arachnejs/server/client`): `createClient<typeof routes>()`.
+- `@arachnejs/router/path` entry added so the server doesn't load the DOM router.
 - MCP: `arachne_server_dispatch` (validating), `arachne_server_openapi`.
 - Tests: `route.test.ts`, `body.test.ts`, `middleware.test.ts`,
   `openapi.test.ts`, `mcp.test.ts`, `index.test.ts`.
 
-### M4 — `@arachne/db`, `@arachne/db-sqlite` (2026-09-30)
+### M4 — `@arachnejs/db`, `@arachnejs/db-sqlite` (2026-09-30)
 
 - `table.ts`: `col.text/integer/real/boolean/json/date`, options
   `primaryKey/autoIncrement/unique/notNull/default/references`; nullability
@@ -122,7 +122,7 @@ next steps" at the bottom, run `bun run ci` and `(cd packages/kit && bun run e2e
   instead of the old regex fake.
 - MCP: `arachne_db_table_sql`, `arachne_db_where_sql`, `arachne_db_simulate`.
 
-### M5 — `@arachne/migrate` (2026-09-30)
+### M5 — `@arachnejs/migrate` (2026-09-30)
 
 - `migration.ts`: `defineMigration`, helpers `sql`, `createTable`,
   `addColumn`, `dropTable`.
@@ -133,12 +133,12 @@ next steps" at the bottom, run `bun run ci` and `(cd packages/kit && bun run e2e
   warnings (drops, type changes, NOT NULL adds are never auto-planned);
   `renderMigration(id, plan)` → module source.
 - `load.ts`: `loadMigrations(dir)`.
-- `@arachne/db` gained public `columnSQL` and `tableFromSpec`/`TableSpec`
+- `@arachnejs/db` gained public `columnSQL` and `tableFromSpec`/`TableSpec`
   (moved from its MCP module); db MCP exports `tableSpecSchema`.
 - MCP: `arachne_migrate_plan`. Workspace MCP registry lists migrate, storage,
   mailer, kit.
 
-### M6 — `@arachne/acl` (2026-09-30)
+### M6 — `@arachnejs/acl` (2026-09-30)
 
 - `acl.ts`: `createAcl({ permissions?, conditions, groups })` → `can`,
   `assert` (`AccessDenied`), `explain`, `permissions`, `level`, `atLeast`,
@@ -148,7 +148,7 @@ next steps" at the bottom, run `bun run ci` and `(cd packages/kit && bun run e2e
 - Typed permissions when a registry is given (`const P`).
 - MCP: `arachne_acl_check` (with assumed conditions), `arachne_acl_permissions`.
 
-### M7 — `@arachne/mailer` (2026-09-30)
+### M7 — `@arachnejs/mailer` (2026-09-30)
 
 - `message.ts`: `prepareMessage` validates addresses (`"Name <a@b>"`,
   objects), single-line subject/headers (injection guard), derives `text`.
@@ -163,7 +163,7 @@ next steps" at the bottom, run `bun run ci` and `(cd packages/kit && bun run e2e
 - MCP: `arachne_mailer_preview`, `arachne_mailer_html_to_text`.
 - Boundary map: `mailer` may use `schema`.
 
-### M8 — `@arachne/storage` (2026-09-30)
+### M8 — `@arachnejs/storage` (2026-09-30)
 
 - `storage.ts`: `Storage` interface, `assertKey` (traversal/empty/control
   chars), `guessType`, `saveUpload` (UUID keys, size/type limits,
@@ -174,7 +174,7 @@ next steps" at the bottom, run `bun run ci` and `(cd packages/kit && bun run e2e
 - Same behavioural suite runs against all three drivers (`describe.each`).
 - MCP: `arachne_storage_check_key`.
 
-### M9 — `@arachne/auth` (2026-09-30)
+### M9 — `@arachnejs/auth` (2026-09-30)
 
 - Files: `core.ts` (shared helpers, DB-backed ACL, one-time tokens, events,
   mail), `accounts.ts` (register/verify/login/MFA step/reset/change/email
@@ -192,7 +192,7 @@ next steps" at the bottom, run `bun run ci` and `(cd packages/kit && bun run e2e
 - MCP: `arachne_auth_routes`, `arachne_auth_policy`, `arachne_auth_password_check`.
 - Boundary map: `auth` may use `server` and `schema`.
 
-### M10 — `@arachne/router` (2026-09-30)
+### M10 — `@arachnejs/router` (2026-09-30)
 
 - `router.ts`: nested layouts (`children`, index `path: ""`), `lazy` routes
   (resolved per definition, cached), `load(match)` data with `pending`,
@@ -206,7 +206,7 @@ next steps" at the bottom, run `bun run ci` and `(cd packages/kit && bun run e2e
 - Router tsconfig and `tsconfig.tests.json` gained JSX settings.
 - MCP: `arachne_router_resolve`.
 
-### M11 — `@arachne/kit` (2026-09-30)
+### M11 — `@arachnejs/kit` (2026-09-30)
 
 Project layout: `arachne.config.ts`, `app/routes.tsx` (pages),
 `app/server.ts` (`defineServer`: routes, middleware, loaders, paths, openapi,
@@ -227,7 +227,7 @@ db/tables, dispose), `public/`. Modes: static / server / api.
   statuses, boot data, nonce).
 - `prerender.ts` (static: pages, `_data`, `404.html`, `sitemap.xml`),
   `build.ts` (static; or `dist/client` + `dist/server/index.js` bundling
-  `@arachne/*`, app deps external), `app.ts` (`createAppServer`,
+  `@arachnejs/*`, app deps external), `app.ts` (`createAppServer`,
   `createProductionServer`), `preview.ts`.
 - `dev.ts` (`startDevServer` child: rebuild + WS reload / CSS swap / error
   overlay; restart via exit code 75 when `app/server.ts`'s import graph —
@@ -246,7 +246,7 @@ db/tables, dispose), `public/`. Modes: static / server / api.
 Framework fixes found by these tests: router error/404 pages render inside
 layouts; `initialError` so server-rendered error pages hydrate; dynamic
 `head()` skipped on errors and guarded; `withRouter`/`listRoutes` exported;
-`@arachne/render` gained dev walkers `getFirstChild`/`getNextSibling`
+`@arachnejs/render` gained dev walkers `getFirstChild`/`getNextSibling`
 (dev-mode compiles never worked before; they now warn on hydration
 mismatches); auth mail failures no longer fail the action (`mail.failed`
 event); `db` `update().set()` accepts `undefined` values (PATCH bodies).
@@ -265,7 +265,7 @@ event); `db` `update().set()` accepts `undefined` values (PATCH bodies).
 
 ### M12e — MCP-first apps (2026-09-30)
 
-- `@arachne/server` `mcpRoute({ name, version, routes, dispatch })`: stateless
+- `@arachnejs/server` `mcpRoute({ name, version, routes, dispatch })`: stateless
   MCP Streamable-HTTP JSON-RPC (`initialize`, `tools/list`, `tools/call`,
   `ping`, notifications → 202), Origin check (DNS rebinding). Routes with
   `mcp: true | { name, description }` become tools; input schema
@@ -346,9 +346,9 @@ light and dark. Fixes found on the way:
   component-state-preserving HMR); `arachne start` needs `node_modules` for
   the app's non-Arachne deps; no Node adapter (Bun only).
 - Repository: github.com/rh1tech/arachne (public, `origin`). Default branch
-  `master`; the site links repo files without a page to `…/blob/master/<path>`. Nothing is published to npm yet (check that the
-  `@arachne` scope can be claimed); the unscoped `arachne` package belongs
-  to someone else.
+  `master`; the site links repo files without a page to `…/blob/master/<path>`. Packages are published as `@arachnejs/*`
+  (`@arachne` belongs to another project; so does the unscoped `arachne`).
+  Releases: see `docs/releasing.md`.
 - Not started: 12c GraphQL adapter; protobuf/Connect; Postgres/MySQL
   dialects; OAuth/passkeys; job queue/outbox for mail; i18n.
 - Lint: new code adds ~9 `noExcessiveCognitiveComplexity` warnings (body

@@ -1,14 +1,14 @@
 /**
  * Live UI examples on the component reference pages. Loaded on demand (its
- * own chunk, with `@arachne/ui` and every example) by the doc page when the
+ * own chunk, with `@arachnejs/ui` and every example) by the doc page when the
  * page has `.ui-preview[data-example]` placeholders; the UI stylesheet is
  * added the first time.
  */
-import { For, Show } from "@arachne/render";
-// The DOM entry, not "@arachne/render": the kit's SSR bundle follows the doc
+import { For, Show } from "@arachnejs/render";
+// The DOM entry, not "@arachnejs/render": the kit's SSR bundle follows the doc
 // page's import() of this module, and the SSR runtime has no `render`.
-import { delegateEvents, render } from "@arachne/render/dom";
-import { signal, untrack } from "@arachne/signals";
+import { delegateEvents, render } from "@arachnejs/render/dom";
+import { signal, untrack } from "@arachnejs/signals";
 import { actionLog } from "../../../../packages/ui/examples/actions.ts";
 import { exampleGroups } from "../../../../packages/ui/examples/index.ts";
 

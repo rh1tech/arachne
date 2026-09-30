@@ -1,4 +1,4 @@
-import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp";
+import { defineMcpModule, jsonResult, textResult, toolName } from "@arachnejs/mcp";
 import { z } from "zod";
 import { memoryHistory } from "./history.ts";
 import { compilePath } from "./path.ts";
@@ -111,11 +111,11 @@ export const mcpModule = defineMcpModule({
 		},
 		{
 			name: toolName("router", "api_summary"),
-			description: "Summarize @arachne/router public API.",
+			description: "Summarize @arachnejs/router public API.",
 			handler: () =>
 				textResult(
 					[
-						"compilePath(pattern) — :param and *rest (also @arachne/router/path)",
+						"compilePath(pattern) — :param and *rest (also @arachnejs/router/path)",
 						"memoryHistory / browserHistory",
 						"createRouter({ routes, history, load, initialData, base, titleTemplate, fallback, error, scroll })",
 						"routes: { path, component | lazy, children (layout + index path ''), head }",

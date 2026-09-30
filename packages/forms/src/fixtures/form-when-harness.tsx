@@ -1,5 +1,5 @@
-import { clearDelegatedEvents, delegateEvents, render } from "@arachne/render";
-import { s } from "@arachne/schema";
+import { clearDelegatedEvents, delegateEvents, render } from "@arachnejs/render";
+import { s } from "@arachnejs/schema";
 import {
 	createForm,
 	Form,

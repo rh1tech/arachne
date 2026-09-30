@@ -1,11 +1,11 @@
-# @arachne/testing
+# @arachnejs/testing
 
 Shared test helpers for Arachne packages.
 
 ## Install
 
 ```bash
-bun add -d @arachne/testing
+bun add -d @arachnejs/testing
 ```
 
 ## Helpers

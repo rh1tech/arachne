@@ -1,6 +1,6 @@
-import { For, Show } from "@arachne/render";
-import { Link, type RouteProps } from "@arachne/router";
-import { effect, signal, untrack } from "@arachne/signals";
+import { For, Show } from "@arachnejs/render";
+import { Link, type RouteProps } from "@arachnejs/router";
+import { effect, signal, untrack } from "@arachnejs/signals";
 import { SECTIONS } from "../nav.ts";
 import { pathname } from "./Shell.tsx";
 

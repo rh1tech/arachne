@@ -1,4 +1,4 @@
-import { effect } from "@arachne/signals";
+import { effect } from "@arachnejs/signals";
 
 export type ClickOutsideOptions = {
 	/** Defaults to `pointerdown` (captures before focus changes). */

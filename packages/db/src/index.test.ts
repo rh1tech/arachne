@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { s } from "@arachne/schema";
+import { s } from "@arachnejs/schema";
 import { testDialect as memoryDialect } from "./fixtures/bun-sqlite.ts";
 import { col, createDb, createTableSQL, defineTable } from "./index.ts";
 

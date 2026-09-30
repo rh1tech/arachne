@@ -1,4 +1,4 @@
-import { s, safeParse } from "@arachne/schema";
+import { s, safeParse } from "@arachnejs/schema";
 import { htmlToText, type SafeHtml } from "./html.ts";
 
 /** An address: `"a@b.co"`, `"Ada <a@b.co>"` or `{ name, address }`. */

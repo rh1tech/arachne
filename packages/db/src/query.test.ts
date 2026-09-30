@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test } from "bun:test";
-import { s } from "@arachne/schema";
+import { s } from "@arachnejs/schema";
 import { testDialect } from "./fixtures/bun-sqlite.ts";
 import {
 	col,

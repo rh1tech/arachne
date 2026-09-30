@@ -1,8 +1,8 @@
-import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp";
+import { defineMcpModule, jsonResult, textResult, toolName } from "@arachnejs/mcp";
 import { z } from "zod";
 import { assertKey, guessType } from "./storage.ts";
 
-/** MCP tools for `@arachne/storage`. */
+/** MCP tools for `@arachnejs/storage`. */
 export const mcpModule = defineMcpModule({
 	name: "storage",
 	version: "0.0.1",
@@ -26,7 +26,7 @@ export const mcpModule = defineMcpModule({
 		},
 		{
 			name: toolName("storage", "api_summary"),
-			description: "Summarize @arachne/storage public API.",
+			description: "Summarize @arachnejs/storage public API.",
 			handler: () =>
 				textResult(
 					[

@@ -1,6 +1,6 @@
 {
 	"extends": "../../tsconfig.base.json",
-	"compilerOptions": { "jsx": "react-jsx", "jsxImportSource": "@arachne/render" },
+	"compilerOptions": { "jsx": "react-jsx", "jsxImportSource": "@arachnejs/render" },
 	"include": ["src/**/*.ts", "bin/**/*.ts", "scripts/**/*.ts"],
 	"exclude": ["src/**/*.test.ts", "src/fixtures/**"]
 }

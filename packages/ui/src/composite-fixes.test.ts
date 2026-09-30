@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
-import type { Signal } from "@arachne/signals";
+import type { Signal } from "@arachnejs/signals";
 import {
 	$,
 	click,

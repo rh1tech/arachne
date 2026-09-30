@@ -13,7 +13,7 @@ bun run arachne create apps/my-api  --template api      # API only
 bun install && cd apps/my-app && bun run dev
 ```
 
-> Pre-release: `@arachne/*` isn't on npm yet, and the unscoped `arachne`
+> Pre-release: `@arachnejs/*` isn't on npm yet, and the unscoped `arachne`
 > package on npm is unrelated. Run the CLI from a checkout with `bun run arachne`
 > (see [Getting started](../getting-started.md)).
 
@@ -27,15 +27,15 @@ bun install && cd apps/my-app && bun run dev
 ## How the pieces fit
 
 ```
-app/routes.tsx ──► @arachne/router (layouts, lazy routes, head, Link)
-                    └─ @arachne/render + @arachne/jsx (compiled JSX, SSR + hydration, signals)
-app/server.ts  ──► @arachne/server  (typed routes, validation, uploads, OpenAPI, MCP, middleware)
-                    ├─ @arachne/schema   (one schema: validation, JSON Schema, OpenAPI, forms)
-                    ├─ @arachne/db + db-sqlite + migrate
-                    ├─ @arachne/auth + acl  (accounts, sessions, tokens, 2FA, groups, permissions)
-                    ├─ @arachne/mailer   (SMTP, Resend, dev console)
-                    └─ @arachne/storage  (disk, S3/R2/MinIO)
-arachne.config.ts ─► @arachne/kit  (dev server + hot reload, builds, prerendering, CLI)
+app/routes.tsx ──► @arachnejs/router (layouts, lazy routes, head, Link)
+                    └─ @arachnejs/render + @arachnejs/jsx (compiled JSX, SSR + hydration, signals)
+app/server.ts  ──► @arachnejs/server  (typed routes, validation, uploads, OpenAPI, MCP, middleware)
+                    ├─ @arachnejs/schema   (one schema: validation, JSON Schema, OpenAPI, forms)
+                    ├─ @arachnejs/db + db-sqlite + migrate
+                    ├─ @arachnejs/auth + acl  (accounts, sessions, tokens, 2FA, groups, permissions)
+                    ├─ @arachnejs/mailer   (SMTP, Resend, dev console)
+                    └─ @arachnejs/storage  (disk, S3/R2/MinIO)
+arachne.config.ts ─► @arachnejs/kit  (dev server + hot reload, builds, prerendering, CLI)
 ```
 
 ## Guides by task

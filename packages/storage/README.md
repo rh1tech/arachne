@@ -1,11 +1,11 @@
-# @arachne/storage
+# @arachnejs/storage
 
 File storage for uploads and generated files: one `Storage` interface with
 memory, local-disk and S3 drivers. S3 uses Bun's built-in `S3Client`, so AWS
 S3, Cloudflare R2, MinIO, Backblaze B2 and DigitalOcean Spaces all work.
 
 ```ts
-import { diskStorage, s3Storage, saveUpload, toResponse } from "@arachne/storage";
+import { diskStorage, s3Storage, saveUpload, toResponse } from "@arachnejs/storage";
 
 const storage =
   process.env.NODE_ENV === "production"

@@ -1,28 +1,28 @@
-# Getting started with @arachne/ui
+# Getting started with @arachnejs/ui
 
-`@arachne/ui` is a component kit for Arachne: 330+ components built on `@arachne/render` (JSX) and `@arachne/signals`. They are accessible by default, they server-render, and you can restyle them without forking.
+`@arachnejs/ui` is a component kit for Arachne: 330+ components built on `@arachnejs/render` (JSX) and `@arachnejs/signals`. They are accessible by default, they server-render, and you can restyle them without forking.
 
 Guides: **getting started** · [customization](customization.md) · [theming](theming.md) · [accessibility](accessibility.md) · [SSR & hydration](ssr.md) · [component reference](components/README.md)
 
 ## Install
 
 ```sh
-bun add @arachne/ui @arachne/render @arachne/signals
-bun add -d @arachne/vite
+bun add @arachnejs/ui @arachnejs/render @arachnejs/signals
+bun add -d @arachnejs/vite
 ```
 
 The package ships TypeScript/JSX source. Your bundler compiles it together with your app through the Arachne JSX plugin, which handles `.tsx` files in `node_modules` too:
 
 ```ts
 // build.ts (Bun)
-import { bunPlugin } from "@arachne/vite";
+import { bunPlugin } from "@arachnejs/vite";
 
 await Bun.build({ entrypoints: ["./src/client.tsx"], outdir: "dist", plugins: [bunPlugin()] });
 ```
 
 ```ts
 // vite.config.ts
-import { vitePlugin } from "@arachne/vite";
+import { vitePlugin } from "@arachnejs/vite";
 
 export default { plugins: [vitePlugin()] };
 ```
@@ -30,7 +30,7 @@ export default { plugins: [vitePlugin()] };
 TypeScript needs the Arachne JSX runtime:
 
 ```json
-{ "compilerOptions": { "jsx": "react-jsx", "jsxImportSource": "@arachne/render" } }
+{ "compilerOptions": { "jsx": "react-jsx", "jsxImportSource": "@arachnejs/render" } }
 ```
 
 ## Stylesheet
@@ -38,7 +38,7 @@ TypeScript needs the Arachne JSX runtime:
 Import the stylesheet once, from your entry module or your HTML:
 
 ```ts
-import "@arachne/ui/styles.css";
+import "@arachnejs/ui/styles.css";
 ```
 
 All kit rules live in `@layer arachne.tokens, arachne.components`, so your own (unlayered) CSS always wins without specificity fights. See [customization](customization.md).
@@ -46,9 +46,9 @@ All kit rules live in `@layer arachne.tokens, arachne.components`, so your own (
 ## First component
 
 ```tsx
-import { render } from "@arachne/render";
-import { signal } from "@arachne/signals";
-import { Button, FormField, Stack, TextInput, Title } from "@arachne/ui";
+import { render } from "@arachnejs/render";
+import { signal } from "@arachnejs/signals";
+import { Button, FormField, Stack, TextInput, Title } from "@arachnejs/ui";
 
 function Profile() {
 	const name = signal("");

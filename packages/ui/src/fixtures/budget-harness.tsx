@@ -1,4 +1,4 @@
-import { render } from "@arachne/render";
+import { render } from "@arachnejs/render";
 import { Badge, Button, Card, Checkbox, Icon, Tabs, TextInput, Tooltip } from "../index.ts";
 
 /** Each case renders one component into its own root so DOM cost can be counted. */

@@ -1,5 +1,5 @@
 ---
-"@arachne/ui": minor
+"@arachnejs/ui": minor
 ---
 
 Customization system, redesign and accessibility pass across the whole kit. See ADR 0014.

@@ -1,11 +1,11 @@
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
-import { createAuth } from "@arachne/auth";
-import { createDb } from "@arachne/db";
-import { sqlite } from "@arachne/db-sqlite";
-import { defineServer, type LoaderArgs } from "@arachne/kit";
-import { consoleTransport, createMailer, smtpTransport } from "@arachne/mailer";
-import { HttpError } from "@arachne/server";
+import { createAuth } from "@arachnejs/auth";
+import { createDb } from "@arachnejs/db";
+import { sqlite } from "@arachnejs/db-sqlite";
+import { defineServer, type LoaderArgs } from "@arachnejs/kit";
+import { consoleTransport, createMailer, smtpTransport } from "@arachnejs/mailer";
+import { HttpError } from "@arachnejs/server";
 import { createApi } from "./api.ts";
 import { notes } from "./tables.ts";
 

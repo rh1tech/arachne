@@ -1,5 +1,5 @@
-import { render } from "@arachne/render";
-import { signal } from "@arachne/signals";
+import { render } from "@arachnejs/render";
+import { signal } from "@arachnejs/signals";
 import { addMonths, calendarKeyTarget } from "../data-widgets.tsx";
 import { Calendar, DatePicker, TransferList, Tree } from "../index.ts";
 

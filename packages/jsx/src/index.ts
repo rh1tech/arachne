@@ -8,7 +8,7 @@ export interface CompileOptions {
 	hydratable?: boolean;
 	dev?: boolean;
 	sourceMap?: boolean;
-	/** Override runtime module (default `@arachne/render` or `.../ssr`). */
+	/** Override runtime module (default `@arachnejs/render` or `.../ssr`). */
 	moduleName?: string;
 	builtIns?: string[];
 }
@@ -43,7 +43,7 @@ export function compile(source: string, options: CompileOptions = {}): CompileRe
 	const { isIsland, hydrateStrategy, code: stripped } = detectIsland(source);
 
 	const moduleName =
-		options.moduleName ?? (target === "ssr" ? "@arachne/render/ssr" : "@arachne/render");
+		options.moduleName ?? (target === "ssr" ? "@arachnejs/render/ssr" : "@arachnejs/render");
 
 	const transformOptions: TransformOptions = {
 		filename: options.filename ?? "unknown.tsx",

@@ -1,4 +1,4 @@
-import { type CompileOptions, compile } from "@arachne/jsx";
+import { type CompileOptions, compile } from "@arachnejs/jsx";
 import type { BunPlugin } from "bun";
 
 export type ArachneJsxPluginOptions = Pick<
@@ -8,8 +8,8 @@ export type ArachneJsxPluginOptions = Pick<
 
 const FILTER = /\.[jt]sx$/;
 /** Bare DOM runtime specifier, remapped to {@link SSR_RUNTIME} for `target: "ssr"`. */
-const BARE_RUNTIME = /^@arachne\/render$/;
-const SSR_RUNTIME = "@arachne/render/ssr";
+const BARE_RUNTIME = /^@arachnejs\/render$/;
+const SSR_RUNTIME = "@arachnejs/render/ssr";
 
 export function bunPlugin(options: ArachneJsxPluginOptions = {}): BunPlugin {
 	return {

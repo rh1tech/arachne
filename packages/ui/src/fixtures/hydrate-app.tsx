@@ -1,5 +1,5 @@
 /** Shared by the SSR and hydration builds of the hydration test. */
-import { signal } from "@arachne/signals";
+import { signal } from "@arachnejs/signals";
 import { Accordion, Button, FormField, Tabs, TextInput, Tooltip } from "../index.ts";
 
 export const tab = signal("a");

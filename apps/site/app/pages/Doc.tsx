@@ -1,6 +1,6 @@
-import { For, Show } from "@arachne/render";
-import { Link, type RouteProps } from "@arachne/router";
-import { effect } from "@arachne/signals";
+import { For, Show } from "@arachnejs/render";
+import { Link, type RouteProps } from "@arachnejs/router";
+import { effect } from "@arachnejs/signals";
 import { copyCode } from "../components/copy.ts";
 import type { DocData } from "../site.ts";
 
@@ -44,7 +44,7 @@ export function Doc(props: RouteProps) {
 							{doc().source}
 						</code>
 					</p>
-					<h1 classList={{ pkg: doc().title.startsWith("@arachne/") }}>{doc().title}</h1>
+					<h1 classList={{ pkg: doc().title.startsWith("@arachnejs/") }}>{doc().title}</h1>
 				</header>
 				<div
 					class="prose"

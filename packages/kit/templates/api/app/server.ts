@@ -1,13 +1,13 @@
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
-import { createAuth } from "@arachne/auth";
-import { createDb } from "@arachne/db";
-import { sqlite } from "@arachne/db-sqlite";
-import { defineServer } from "@arachne/kit";
-import { consoleTransport, createMailer } from "@arachne/mailer";
-import { s } from "@arachne/schema";
-import { cors, group, HttpError, rateLimit, route } from "@arachne/server";
-import { diskStorage, saveUpload, toResponse } from "@arachne/storage";
+import { createAuth } from "@arachnejs/auth";
+import { createDb } from "@arachnejs/db";
+import { sqlite } from "@arachnejs/db-sqlite";
+import { defineServer } from "@arachnejs/kit";
+import { consoleTransport, createMailer } from "@arachnejs/mailer";
+import { s } from "@arachnejs/schema";
+import { cors, group, HttpError, rateLimit, route } from "@arachnejs/server";
+import { diskStorage, saveUpload, toResponse } from "@arachnejs/storage";
 import { attachments, projects } from "./tables.ts";
 
 const Project = s.describe(

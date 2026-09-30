@@ -1,4 +1,4 @@
-import { hydrate } from "@arachne/render";
+import { hydrate } from "@arachnejs/render";
 import { App, clicks, tab } from "./hydrate-app.tsx";
 
 export function run(root: HTMLElement) {

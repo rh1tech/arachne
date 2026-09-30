@@ -1,14 +1,14 @@
-# @arachne/router
+# @arachnejs/router
 
 Signal-driven router for Arachne: nested layouts, code-split (lazy) routes,
 per-route data, head/title management, `<Link>` and link interception, base
 paths, scroll handling. Runs in the browser, on the server (SSR) and at build
 time (static prerendering) with the same route table. The path compiler is
-shared with `@arachne/server` (`@arachne/router/path`). See
+shared with `@arachnejs/server` (`@arachnejs/router/path`). See
 [ADR 0009](../../docs/adr/0009-router.md).
 
 ```tsx
-import { browserHistory, createRouter, Link } from "@arachne/router";
+import { browserHistory, createRouter, Link } from "@arachnejs/router";
 
 const routes = [
   {
@@ -72,5 +72,5 @@ render(() => <>{router.Outlet()}</>, document.getElementById("app")!);
 | `router.ready` | initial route loaded (SSR: await before rendering) |
 | `router.href(path)` · `resolve(path)` · `preload(path)` · `interceptLinks(root?)` · `back()` · `dispose()` | |
 | `memoryHistory(url)` · `browserHistory()` | history sources |
-| `compilePath(pattern)` · `parseLocation(url)` | path utilities (also `@arachne/router/path`) |
+| `compilePath(pattern)` · `parseLocation(url)` | path utilities (also `@arachnejs/router/path`) |
 | `mergeHeads` · `renderHead` · `applyHead` | head utilities |

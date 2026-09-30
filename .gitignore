@@ -14,3 +14,9 @@ apps/**/tmp/
 packages/**/.test-out/
 .arachne/
 .cursor/
+# Local state of the kit templates (their own ignore files ship as `gitignore`).
+packages/kit/templates/*/data/
+packages/kit/templates/*/openapi.json
+packages/*/LICENSE-MIT
+packages/*/LICENSE-APACHE
+.release/

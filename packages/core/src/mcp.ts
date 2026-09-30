@@ -1,4 +1,4 @@
-import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp";
+import { defineMcpModule, jsonResult, textResult, toolName } from "@arachnejs/mcp";
 import { z } from "zod";
 import { createApp, createToken, defineModule, type Module, ResolutionError } from "./index.ts";
 
@@ -64,7 +64,7 @@ export const mcpModule = defineMcpModule({
 		{
 			name: "arachne-core-readme",
 			uri: "arachne://core/readme",
-			description: "README for @arachne/core",
+			description: "README for @arachnejs/core",
 			mimeType: "text/markdown",
 			read: async () => ({
 				text: await Bun.file(new URL("../README.md", import.meta.url)).text(),
@@ -83,7 +83,7 @@ export const mcpModule = defineMcpModule({
 						role: "user",
 						content: {
 							type: "text",
-							text: `Create an @arachne/core defineModule named "${args["name"] ?? "example"}" with providers, setup, and dispose. Use createToken for services.`,
+							text: `Create an @arachnejs/core defineModule named "${args["name"] ?? "example"}" with providers, setup, and dispose. Use createToken for services.`,
 						},
 					},
 				],

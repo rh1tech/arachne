@@ -47,7 +47,7 @@ export type TemplateEnvelope = Omit<MailMessage, "subject" | "html" | "text">;
 
 type TemplateData<T, K extends keyof T> = T[K] extends MailTemplate<infer D> ? D : never;
 
-/** Sends mail. Structurally satisfies `@arachne/auth`'s `MailSender`. */
+/** Sends mail. Structurally satisfies `@arachnejs/auth`'s `MailSender`. */
 export interface Mailer<T extends Record<string, MailTemplate<never>> = Record<string, never>> {
 	/** Validate and deliver one message. */
 	send: (message: MailMessage) => Promise<SendResult>;

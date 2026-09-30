@@ -1,5 +1,5 @@
-import { For, Show } from "@arachne/render";
-import { signal } from "@arachne/signals";
+import { For, Show } from "@arachnejs/render";
+import { signal } from "@arachnejs/signals";
 import { watchClickOutside } from "./click-outside.ts";
 import { Checkbox, watchSelectValue } from "./controls.tsx";
 import { rovingIndex } from "./focus.ts";

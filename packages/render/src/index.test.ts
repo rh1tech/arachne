@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
-import { effect, signal } from "@arachne/signals";
+import { effect, signal } from "@arachnejs/signals";
 import { Window } from "happy-dom";
 import { For, Show, Suspense } from "../src/control-flow.ts";
 import {

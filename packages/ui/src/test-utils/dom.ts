@@ -12,8 +12,8 @@
 
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
-import { clearDelegatedEvents, delegateEvents } from "@arachne/render";
-import { bunPlugin } from "@arachne/vite";
+import { clearDelegatedEvents, delegateEvents } from "@arachnejs/render";
+import { bunPlugin } from "@arachnejs/vite";
 import { Window } from "happy-dom";
 
 const outdir = join(import.meta.dir, "../../.test-out");
@@ -80,7 +80,7 @@ function build(name: string): Promise<string> {
 				target: "browser",
 				format: "esm",
 				plugins: [bunPlugin({ hydratable: false })],
-				external: ["@arachne/render", "@arachne/signals"],
+				external: ["@arachnejs/render", "@arachnejs/signals"],
 			});
 			if (!result.success) throw new Error(result.logs.map(String).join("\n"));
 			const out = result.outputs[0];

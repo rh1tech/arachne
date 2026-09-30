@@ -1,14 +1,14 @@
-# @arachne/db
+# @arachnejs/db
 
 Schema-aware database client: every column pairs a storage class with an
-`@arachne/schema` schema, so writes and reads are validated and rows are typed.
-Drivers: [`@arachne/db-sqlite`](../db-sqlite). See
+`@arachnejs/schema` schema, so writes and reads are validated and rows are typed.
+Drivers: [`@arachnejs/db-sqlite`](../db-sqlite). See
 [ADR 0012](../../docs/adr/0012-db-dialects.md).
 
 ```ts
-import { col, createDb, defineTable } from "@arachne/db";
-import { sqlite } from "@arachne/db-sqlite";
-import { s } from "@arachne/schema";
+import { col, createDb, defineTable } from "@arachnejs/db";
+import { sqlite } from "@arachnejs/db-sqlite";
+import { s } from "@arachnejs/schema";
 
 export const users = defineTable(
   "users",
@@ -31,7 +31,7 @@ export const posts = defineTable("posts", {
 });
 
 const db = createDb({ dialect: sqlite({ path: "app.db" }), tables: { users, posts } });
-await db.sync(); // CREATE TABLE / INDEX IF NOT EXISTS — use @arachne/migrate for changes
+await db.sync(); // CREATE TABLE / INDEX IF NOT EXISTS — use @arachnejs/migrate for changes
 ```
 
 - **Nullability comes from the schema**: a column whose schema accepts `null` is nullable.

@@ -8,10 +8,10 @@
 		"preview": "arachne preview"
 	},
 	"dependencies": {
-		"@arachne/kit": "workspace:*",
-		"@arachne/render": "workspace:*",
-		"@arachne/router": "workspace:*",
-		"@arachne/server": "workspace:*",
-		"@arachne/signals": "workspace:*"
+		"@arachnejs/kit": "workspace:*",
+		"@arachnejs/render": "workspace:*",
+		"@arachnejs/router": "workspace:*",
+		"@arachnejs/server": "workspace:*",
+		"@arachnejs/signals": "workspace:*"
 	}
 }

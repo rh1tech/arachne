@@ -1,5 +1,5 @@
-import { For } from "@arachne/render";
-import { effect } from "@arachne/signals";
+import { For } from "@arachnejs/render";
+import { effect } from "@arachnejs/signals";
 import { type BaseProps, type InputPassThrough, type SlotProps, setup } from "./system.ts";
 
 /** Re-apply a controlled `checked` after the parent handled the change. */

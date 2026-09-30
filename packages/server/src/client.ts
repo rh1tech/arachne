@@ -4,7 +4,7 @@
  *
  * @example
  * ```ts
- * import { createClient } from "@arachne/server/client";
+ * import { createClient } from "@arachnejs/server/client";
  * import type { routes } from "../server/routes.ts";
  *
  * const api = createClient<typeof routes>({ baseUrl: "/api" });

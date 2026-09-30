@@ -5,9 +5,9 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, test } from "bun:test";
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
-import { clearDelegatedEvents, delegateEvents } from "@arachne/render";
-import type { Signal } from "@arachne/signals";
-import { bunPlugin } from "@arachne/vite";
+import { clearDelegatedEvents, delegateEvents } from "@arachnejs/render";
+import type { Signal } from "@arachnejs/signals";
+import { bunPlugin } from "@arachnejs/vite";
 import { type Dom, setupDom } from "./test-utils/dom.ts";
 
 const outdir = join(import.meta.dir, "../.test-out/hydrate");
@@ -24,8 +24,8 @@ async function build(entry: string, target: "ssr" | "dom"): Promise<string> {
 		// Runtime deps resolve from node_modules (bundling them twice per process trips Bun).
 		external:
 			target === "dom"
-				? ["@arachne/render", "@arachne/signals"]
-				: ["@arachne/signals", "alien-signals"],
+				? ["@arachnejs/render", "@arachnejs/signals"]
+				: ["@arachnejs/signals", "alien-signals"],
 	});
 	if (!result.success) throw new Error(result.logs.map(String).join("\n"));
 	return result.outputs[0]?.path ?? "";

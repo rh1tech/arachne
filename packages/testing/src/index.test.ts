@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { access } from "node:fs/promises";
-import { defineModule } from "@arachne/core";
+import { defineModule } from "@arachnejs/core";
 import {
 	createMockLogger,
 	createTestApp,

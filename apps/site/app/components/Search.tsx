@@ -1,6 +1,6 @@
-import { For, Show } from "@arachne/render";
-import { currentRouter } from "@arachne/router";
-import { computed, effect, signal } from "@arachne/signals";
+import { For, Show } from "@arachnejs/render";
+import { currentRouter } from "@arachnejs/router";
+import { computed, effect, signal } from "@arachnejs/signals";
 import { rank } from "../search.ts";
 import type { SearchRecord } from "../site.ts";
 

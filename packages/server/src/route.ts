@@ -1,4 +1,4 @@
-import type { Infer, InferInput, StandardSchemaV1 } from "@arachne/schema";
+import type { Infer, InferInput, StandardSchemaV1 } from "@arachnejs/schema";
 import { DEFAULT_BODY_LIMIT, parseBody, queryToObject } from "./body.ts";
 import { type Codec, negotiate } from "./codec.ts";
 import type { Context, HttpMethod, Middleware, RouteDefinition, RouteMeta } from "./context.ts";

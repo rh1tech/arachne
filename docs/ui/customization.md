@@ -1,6 +1,6 @@
 # Customization
 
-Every `@arachne/ui` component supports the same four customization layers, lightest first. A contract test enforces the per-instance guarantees for every component. See [ADR 0014](../adr/0014-ui-customization.md) for the design.
+Every `@arachnejs/ui` component supports the same four customization layers, lightest first. A contract test enforces the per-instance guarantees for every component. See [ADR 0014](../adr/0014-ui-customization.md) for the design.
 
 Guides: [getting started](getting-started.md) · **customization** · [theming](theming.md) · [accessibility](accessibility.md) · [SSR & hydration](ssr.md) · [component reference](components/README.md)
 
@@ -73,7 +73,7 @@ Many components take markup props instead of fixed markup: `start`/`end` on `But
 `configureUI` registers default props, slot classes and slot styles per component, for every instance in the app:
 
 ```ts
-import { configureUI } from "@arachne/ui";
+import { configureUI } from "@arachnejs/ui";
 
 configureUI({
 	components: {

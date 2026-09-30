@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { isAbsolute, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import type { SecurityHeadersOptions } from "@arachne/server";
+import type { SecurityHeadersOptions } from "@arachnejs/server";
 
 /**
  * What the app is built as:

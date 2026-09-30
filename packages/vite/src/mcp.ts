@@ -1,4 +1,4 @@
-import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp";
+import { defineMcpModule, jsonResult, textResult, toolName } from "@arachnejs/mcp";
 import { z } from "zod";
 import { bunPlugin, vitePlugin } from "./plugin.ts";
 
@@ -8,13 +8,13 @@ export const mcpModule = defineMcpModule({
 	tools: [
 		{
 			name: toolName("vite", "describe_plugins"),
-			description: "Describe @arachne/vite Bun and Vite plugin entrypoints.",
+			description: "Describe @arachnejs/vite Bun and Vite plugin entrypoints.",
 			handler: () =>
 				textResult(
 					[
 						"bunPlugin({ target?, hydratable?, moduleName? }) — Bun.build plugins",
 						"vitePlugin({ ... }) — Vite enforce:pre transform for .[jt]sx",
-						"Both compile via @arachne/jsx → @arachne/render",
+						"Both compile via @arachnejs/jsx → @arachnejs/render",
 					].join("\n"),
 				),
 		},

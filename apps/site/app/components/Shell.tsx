@@ -1,4 +1,4 @@
-import { currentRouter, Link, type RouteProps } from "@arachne/router";
+import { currentRouter, Link, type RouteProps } from "@arachnejs/router";
 import kit from "../../../../packages/kit/package.json" with { type: "json" };
 import { SITE } from "../site.ts";
 import { Mark } from "./Mark.tsx";

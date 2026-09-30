@@ -1,5 +1,5 @@
-import { Show } from "@arachne/render";
-import { effect } from "@arachne/signals";
+import { Show } from "@arachnejs/render";
+import { effect } from "@arachnejs/signals";
 import { ButtonGroup } from "./composite.tsx";
 import { Label } from "./layout.tsx";
 import { type BaseProps, createId, type SlotProps, setup } from "./system.ts";

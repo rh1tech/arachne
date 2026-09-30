@@ -1,5 +1,5 @@
-import { col, defineTable } from "@arachne/db";
-import { s } from "@arachne/schema";
+import { col, defineTable } from "@arachnejs/db";
+import { s } from "@arachnejs/schema";
 
 /** A note belongs to one user; deleting the user deletes their notes. */
 export const notes = defineTable(

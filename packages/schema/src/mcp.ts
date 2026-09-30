@@ -1,4 +1,4 @@
-import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp";
+import { defineMcpModule, jsonResult, textResult, toolName } from "@arachnejs/mcp";
 import { z } from "zod";
 import { toJSONSchema } from "./composites.ts";
 import { formatIssues, safeParse } from "./parse.ts";
@@ -55,7 +55,7 @@ export const mcpModule = defineMcpModule({
 		{
 			name: toolName("schema", "validate"),
 			description:
-				"Validate a JSON value against a SchemaSpec descriptor (Standard Schema via @arachne/schema).",
+				"Validate a JSON value against a SchemaSpec descriptor (Standard Schema via @arachnejs/schema).",
 			inputSchema: {
 				spec: schemaSpecSchema,
 				value: z.unknown(),
@@ -84,7 +84,7 @@ export const mcpModule = defineMcpModule({
 		},
 		{
 			name: toolName("schema", "api_summary"),
-			description: "Summarize @arachne/schema public API.",
+			description: "Summarize @arachnejs/schema public API.",
 			handler: () =>
 				textResult(
 					[
@@ -115,14 +115,14 @@ export const mcpModule = defineMcpModule({
 	prompts: [
 		{
 			name: "arachne_schema_model",
-			description: "Guide for defining domain models with @arachne/schema",
+			description: "Guide for defining domain models with @arachnejs/schema",
 			handler: () => ({
 				messages: [
 					{
 						role: "user",
 						content: {
 							type: "text",
-							text: "Define domain models with @arachne/schema (s.object / s.array / …). Prefer Standard Schema (~standard) over ad-hoc validators. Keep @arachne/config’s c.* DSL for boot config only.",
+							text: "Define domain models with @arachnejs/schema (s.object / s.array / …). Prefer Standard Schema (~standard) over ad-hoc validators. Keep @arachnejs/config’s c.* DSL for boot config only.",
 						},
 					},
 				],

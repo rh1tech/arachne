@@ -1,4 +1,4 @@
-# @arachne/ui documentation
+# @arachnejs/ui documentation
 
 - [Getting started](getting-started.md): install, bundler setup, the first component.
 - [Customization](customization.md): shared props, slots, `unstyled` and `configureUI`.

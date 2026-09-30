@@ -1,4 +1,4 @@
-import { HttpError } from "@arachne/server";
+import { HttpError } from "@arachnejs/server";
 
 /** Machine-readable auth error codes (also the `error.code` in HTTP responses). */
 export type AuthErrorCode =

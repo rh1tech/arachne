@@ -1,4 +1,4 @@
-import { renderToString } from "@arachne/render/ssr";
+import { renderToString } from "@arachnejs/render/ssr";
 import { usesShow } from "./uses-show.ts";
 
 export const html = renderToString(() => (

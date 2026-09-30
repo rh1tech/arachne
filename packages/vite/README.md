@@ -1,12 +1,12 @@
-# @arachne/vite
+# @arachnejs/vite
 
-Bundler plugins that compile `.tsx` / `.jsx` through `@arachne/jsx` into
-`@arachne/render` calls ([ADR 0011](../../docs/adr/0011-vite-jsx-plugins.md)).
+Bundler plugins that compile `.tsx` / `.jsx` through `@arachnejs/jsx` into
+`@arachnejs/render` calls ([ADR 0011](../../docs/adr/0011-vite-jsx-plugins.md)).
 
 ## Bun
 
 ```ts
-import { bunPlugin } from "@arachne/vite";
+import { bunPlugin } from "@arachnejs/vite";
 
 await Bun.build({
   entrypoints: ["./app.tsx"],
@@ -18,7 +18,7 @@ await Bun.build({
 
 ```ts
 import { defineConfig } from "vite";
-import { vitePlugin } from "@arachne/vite";
+import { vitePlugin } from "@arachnejs/vite";
 
 export default defineConfig({
   plugins: [vitePlugin()],

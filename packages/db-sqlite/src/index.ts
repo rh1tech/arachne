@@ -1,5 +1,5 @@
 import { Database } from "bun:sqlite";
-import type { Dialect } from "@arachne/db";
+import type { Dialect } from "@arachnejs/db";
 
 /** Options for {@link sqlite}. */
 export interface SqliteOptions {

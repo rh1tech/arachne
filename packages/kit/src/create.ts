@@ -1,5 +1,5 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { cp, readFile, writeFile } from "node:fs/promises";
+import { cp, readFile, rename, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 
 /** Project templates shipped with the kit. */
@@ -17,8 +17,8 @@ export function templatesDir(): string {
 
 /**
  * Copy a template into `target` (which must be empty or missing), naming the
- * package after the directory and pinning `workspace:*` dependencies to the
- * kit's version.
+ * package after the directory, pinning `workspace:*` dependencies to the
+ * kit's version, and restoring the template's `gitignore` as `.gitignore`.
  */
 export async function createProject(target: string, template: TemplateName): Promise<string> {
 	if (!TEMPLATES.includes(template))
@@ -35,6 +35,10 @@ export async function createProject(target: string, template: TemplateName): Pro
 			version: string;
 		}
 	).version;
+	// npm leaves .gitignore out of package tarballs, so templates ship it as `gitignore`.
+	if (existsSync(join(target, "gitignore"))) {
+		await rename(join(target, "gitignore"), join(target, ".gitignore"));
+	}
 	const pkgFile = join(target, "package.json");
 	const pkg = JSON.parse(await readFile(pkgFile, "utf8")) as {
 		name: string;

@@ -1,5 +1,5 @@
-import { For } from "@arachne/render";
-import { Link, type RouteProps } from "@arachne/router";
+import { For } from "@arachnejs/render";
+import { Link, type RouteProps } from "@arachnejs/router";
 import { copyCode } from "../components/copy.ts";
 import type { HomeData } from "../site.ts";
 
@@ -142,7 +142,7 @@ export function Home(props: RouteProps) {
 									<For each={group.packages}>
 										{(pkg) => (
 											<li>
-												<Link href={pkg.path}>@arachne/{pkg.name}</Link>
+												<Link href={pkg.path}>@arachnejs/{pkg.name}</Link>
 												<span>{pkg.description}</span>
 											</li>
 										)}

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { s } from "@arachne/schema";
+import { s } from "@arachnejs/schema";
 import { createForm } from "../src/create-form.ts";
 
 describe("createForm", () => {

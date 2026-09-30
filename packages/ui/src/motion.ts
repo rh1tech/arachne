@@ -1,4 +1,4 @@
-import { effect, signal, untrack } from "@arachne/signals";
+import { effect, signal, untrack } from "@arachnejs/signals";
 
 export type PresenceState = "open" | "closed";
 

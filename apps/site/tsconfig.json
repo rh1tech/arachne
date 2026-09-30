@@ -2,7 +2,7 @@
 	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
 		"jsx": "react-jsx",
-		"jsxImportSource": "@arachne/render",
+		"jsxImportSource": "@arachnejs/render",
 		"declaration": false,
 		"declarationMap": false
 	},

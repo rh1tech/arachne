@@ -1,4 +1,4 @@
-import { Show } from "@arachne/render";
+import { Show } from "@arachnejs/render";
 import { Prose } from "./kit-more.tsx";
 import { type BaseProps, type SlotProps, setup } from "./system.ts";
 

@@ -1,6 +1,6 @@
 # Accessibility
 
-`@arachne/ui` targets WCAG 2.2 AA. Every showcase page is audited with axe in light and dark themes, and the customization contract test checks every component. This guide covers what the kit guarantees and what is still up to you.
+`@arachnejs/ui` targets WCAG 2.2 AA. Every showcase page is audited with axe in light and dark themes, and the customization contract test checks every component. This guide covers what the kit guarantees and what is still up to you.
 
 Guides: [getting started](getting-started.md) · [customization](customization.md) · [theming](theming.md) · **accessibility** · [SSR & hydration](ssr.md) · [component reference](components/README.md)
 

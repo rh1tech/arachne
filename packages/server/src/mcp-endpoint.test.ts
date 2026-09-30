@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { s } from "@arachne/schema";
+import { s } from "@arachnejs/schema";
 import { createServer, HttpError, mcpRoute, route } from "./index.ts";
 
 const notes = [{ id: "1", title: "Hello" }];

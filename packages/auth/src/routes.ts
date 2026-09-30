@@ -1,4 +1,4 @@
-import { s } from "@arachne/schema";
+import { s } from "@arachnejs/schema";
 import {
 	type AnyRoute,
 	type Context,
@@ -6,7 +6,7 @@ import {
 	type Middleware,
 	rateLimit,
 	route,
-} from "@arachne/server";
+} from "@arachnejs/server";
 import type { Accounts } from "./accounts.ts";
 import type { Admin } from "./admin.ts";
 import type { Core } from "./core.ts";

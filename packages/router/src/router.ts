@@ -1,5 +1,5 @@
-import { createComponent } from "@arachne/render";
-import { computed, effect, signal, untrack } from "@arachne/signals";
+import { createComponent } from "@arachnejs/render";
+import { computed, effect, signal, untrack } from "@arachnejs/signals";
 import { applyHead, type Head, type HeadInput, mergeHeads } from "./head.ts";
 import { type HistoryLocation, memoryHistory, type RouterHistory } from "./history.ts";
 import { shouldIntercept } from "./links.ts";

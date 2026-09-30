@@ -1,8 +1,8 @@
 /**
  * App-shell / commerce / content widgets.
  */
-import { For, Show } from "@arachne/render";
-import { effect, signal } from "@arachne/signals";
+import { For, Show } from "@arachnejs/render";
+import { effect, signal } from "@arachnejs/signals";
 import { Button } from "./button.tsx";
 import { focusableIn, rovingToolbarKey, setToolbarStop, whenConnected } from "./focus.ts";
 import { Icon, type IconName } from "./icons.tsx";

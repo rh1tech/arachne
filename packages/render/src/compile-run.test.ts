@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
-import { compile } from "@arachne/jsx";
-import { signal } from "@arachne/signals";
+import { compile } from "@arachnejs/jsx";
+import { signal } from "@arachnejs/signals";
 import { Window } from "happy-dom";
 import * as render from "../src/index.ts";
 import * as ssr from "../src/ssr.ts";
@@ -25,14 +25,14 @@ export function App(props) {
 
 function loadCompiled(
 	code: string,
-	moduleSpecifier: "@arachne/render" | "@arachne/render/ssr",
+	moduleSpecifier: "@arachnejs/render" | "@arachnejs/render/ssr",
 	runtime: Record<string, unknown>,
 ): { App: (props: { show: () => boolean; items: () => number[] }) => unknown } {
 	const imports: Array<{ name: string; alias: string }> = [];
 	const re =
-		moduleSpecifier === "@arachne/render"
-			? /import\s*\{([^}]+)\}\s*from\s*"@arachne\/render"\s*;?/g
-			: /import\s*\{([^}]+)\}\s*from\s*"@arachne\/render\/ssr"\s*;?/g;
+		moduleSpecifier === "@arachnejs/render"
+			? /import\s*\{([^}]+)\}\s*from\s*"@arachnejs\/render"\s*;?/g
+			: /import\s*\{([^}]+)\}\s*from\s*"@arachnejs\/render\/ssr"\s*;?/g;
 
 	let match: RegExpExecArray | null = re.exec(code);
 	while (match) {
@@ -92,7 +92,7 @@ describe("compile-run Show/For/Suspense", () => {
 
 		const { App } = loadCompiled(
 			code,
-			"@arachne/render",
+			"@arachnejs/render",
 			render as unknown as Record<string, unknown>,
 		);
 
@@ -124,7 +124,7 @@ describe("compile-run Show/For/Suspense", () => {
 		);
 		const { App } = loadCompiled(
 			code,
-			"@arachne/render",
+			"@arachnejs/render",
 			render as unknown as Record<string, unknown>,
 		);
 		const show = signal(false);
@@ -159,7 +159,7 @@ describe("compile-run Show/For/Suspense", () => {
 
 		const { App } = loadCompiled(
 			code,
-			"@arachne/render",
+			"@arachnejs/render",
 			render as unknown as Record<string, unknown>,
 		);
 		const root = document.createElement("div");
@@ -183,7 +183,7 @@ describe("compile-run Show/For/Suspense", () => {
 
 		const { App } = loadCompiled(
 			code,
-			"@arachne/render/ssr",
+			"@arachnejs/render/ssr",
 			ssr as unknown as Record<string, unknown>,
 		);
 
@@ -217,7 +217,7 @@ describe("compile-run Show/For/Suspense", () => {
 		);
 		const { App } = loadCompiled(
 			code,
-			"@arachne/render/ssr",
+			"@arachnejs/render/ssr",
 			ssr as unknown as Record<string, unknown>,
 		);
 		const off = ssr.renderToString(
@@ -251,7 +251,7 @@ describe("compile-run Show/For/Suspense", () => {
 		);
 		const { App } = loadCompiled(
 			code,
-			"@arachne/render/ssr",
+			"@arachnejs/render/ssr",
 			ssr as unknown as Record<string, unknown>,
 		);
 		const html = ssr.renderToString(
@@ -266,7 +266,7 @@ describe("compile-run Show/For/Suspense", () => {
 
 	test("DOM compile applies element and component spreads reactively", () => {
 		const { code } = compile(
-			`import { splitProps } from "@arachne/render";
+			`import { splitProps } from "@arachnejs/render";
 			function Box(props) {
 				const [own, rest] = splitProps(props, ["tone"]);
 				return <div class={"box " + own.tone} {...rest} data-fixed="1">{props.children}</div>;
@@ -278,7 +278,7 @@ describe("compile-run Show/For/Suspense", () => {
 		);
 		const { App } = loadCompiled(
 			code,
-			"@arachne/render",
+			"@arachnejs/render",
 			render as unknown as Record<string, unknown>,
 		) as unknown as {
 			App: (p: { title: () => string; onClick: () => void }) => Node;
@@ -314,7 +314,7 @@ describe("compile-run Show/For/Suspense", () => {
 		);
 		const { App } = loadCompiled(
 			code,
-			"@arachne/render",
+			"@arachnejs/render",
 			render as unknown as Record<string, unknown>,
 		) as unknown as {
 			App: (p: { seen: (el: Element) => void }) => Node;
@@ -386,7 +386,7 @@ describe("compile-run Show/For/Suspense", () => {
 		);
 		const { App } = loadCompiled(
 			code,
-			"@arachne/render/ssr",
+			"@arachnejs/render/ssr",
 			ssr as unknown as Record<string, unknown>,
 		) as unknown as {
 			App: (p: Record<string, unknown>) => ssr.SSRPayload;
@@ -422,14 +422,14 @@ describe("compile-run Show/For/Suspense", () => {
 		const client = compile(src, { filename: "H.tsx", target: "dom", hydratable: true });
 		const { App: ServerApp } = loadCompiled(
 			server.code,
-			"@arachne/render/ssr",
+			"@arachnejs/render/ssr",
 			ssr as unknown as Record<string, unknown>,
 		) as unknown as {
 			App: (p: Record<string, unknown>) => ssr.SSRPayload;
 		};
 		const { App: ClientApp } = loadCompiled(
 			client.code,
-			"@arachne/render",
+			"@arachnejs/render",
 			render as unknown as Record<string, unknown>,
 		) as unknown as {
 			App: (p: Record<string, unknown>) => Node;
@@ -475,7 +475,7 @@ describe("compile-run Show/For/Suspense", () => {
 		);
 		const { App } = loadCompiled(
 			code,
-			"@arachne/render/ssr",
+			"@arachnejs/render/ssr",
 			ssr as unknown as Record<string, unknown>,
 		) as unknown as {
 			App: (p: Record<string, unknown>) => ssr.SSRPayload;
@@ -513,7 +513,7 @@ export function App(props) {
 		const { code } = compile(source, { filename: "Toggle.tsx", target: "dom", hydratable: false });
 		const { App } = loadCompiled(
 			code,
-			"@arachne/render",
+			"@arachnejs/render",
 			render as unknown as Record<string, unknown>,
 		) as unknown as {
 			App: (props: Record<string, unknown>) => unknown;

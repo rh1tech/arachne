@@ -1,0 +1,57 @@
+name: Release
+
+# On master: with pending changesets, open/update the "Version packages" PR;
+# once that PR is merged, publish every @arachnejs/* version not yet on npm.
+on:
+  push:
+    branches: [master]
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write # version commits and tags
+  pull-requests: write # the "Version packages" PR
+  id-token: write # npm provenance and trusted publishing (OIDC)
+
+jobs:
+  release:
+    name: version or publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.13
+
+      # npm >= 11.5.1 for trusted publishing; the tarballs are published with npm.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      - name: Update npm
+        run: npm install -g npm@latest
+
+      - name: Install
+        run: bun install --frozen-lockfile
+
+      - name: Checks
+        run: bun run ci
+
+      - name: Version PR or publish
+        uses: changesets/action@v1
+        with:
+          version: bun run version-packages
+          publish: bun run release
+          title: "chore: version packages"
+          commit: "chore: version packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # First releases: an npm automation token. Once trusted publishing is
+          # configured for every package on npmjs.com, delete the NPM_TOKEN secret.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: "true"

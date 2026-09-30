@@ -1,4 +1,4 @@
-import { defineConfig } from "@arachne/kit";
+import { defineConfig } from "@arachnejs/kit";
 
 export default defineConfig({
 	// SSR pages + API + accounts on a Bun server.

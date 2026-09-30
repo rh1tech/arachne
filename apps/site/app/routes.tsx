@@ -1,4 +1,4 @@
-import type { RouteDefinition } from "@arachne/router";
+import type { RouteDefinition } from "@arachnejs/router";
 import { DocsLayout } from "./components/DocsLayout.tsx";
 import { Shell } from "./components/Shell.tsx";
 import { Doc } from "./pages/Doc.tsx";

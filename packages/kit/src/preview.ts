@@ -1,6 +1,6 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { createServer, serveStatic } from "@arachne/server";
+import { createServer, serveStatic } from "@arachnejs/server";
 import { normalizeBase } from "./config.ts";
 
 /** Options for {@link preview}. */

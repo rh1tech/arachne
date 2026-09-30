@@ -1,4 +1,4 @@
-import { effect } from "@arachne/signals";
+import { effect } from "@arachnejs/signals";
 
 type Layer = { onEscape: () => void };
 

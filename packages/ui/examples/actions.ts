@@ -3,7 +3,7 @@
  * the call so the showcase can show that the callback fired. The generated
  * docs show these as plain `() => {}` handlers.
  */
-import { signal } from "@arachne/signals";
+import { signal } from "@arachnejs/signals";
 
 export type ActionEntry = { id: number; name: string; args: string };
 

@@ -1,5 +1,5 @@
-import { s } from "@arachne/schema";
-import { HttpError, route } from "@arachne/server";
+import { s } from "@arachnejs/schema";
+import { HttpError, route } from "@arachnejs/server";
 import { defineServer } from "../../../index.ts";
 
 const notes = [

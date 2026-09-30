@@ -13,13 +13,13 @@ export function Counter(props: { start?: number }) {
 `;
 
 describe("compile dom", () => {
-	test("emits template + runtime imports from @arachne/render", () => {
+	test("emits template + runtime imports from @arachnejs/render", () => {
 		const { code, isIsland } = compile(counterSrc, {
 			filename: "Counter.tsx",
 			target: "dom",
 		});
 		expect(isIsland).toBe(false);
-		expect(code).toContain('from "@arachne/render"');
+		expect(code).toContain('from "@arachnejs/render"');
 		expect(code).toContain("template");
 		expect(code).toContain("getNextElement");
 		expect(code).toContain("setAttribute");
@@ -27,12 +27,12 @@ describe("compile dom", () => {
 });
 
 describe("compile ssr", () => {
-	test("emits ssr helpers from @arachne/render/ssr", () => {
+	test("emits ssr helpers from @arachnejs/render/ssr", () => {
 		const { code } = compile(counterSrc, {
 			filename: "Counter.tsx",
 			target: "ssr",
 		});
-		expect(code).toContain('from "@arachne/render/ssr"');
+		expect(code).toContain('from "@arachnejs/render/ssr"');
 		expect(code).toContain("ssr(");
 		expect(code).toContain("escape");
 	});

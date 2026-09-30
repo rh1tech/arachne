@@ -1,4 +1,4 @@
-# @arachne/server
+# @arachnejs/server
 
 HTTP server for Arachne: typed, schema-validated routes, uploads, OpenAPI 3.1,
 a typed client, and the middleware an API needs. Runs on `Bun.serve`; `fetch`
@@ -6,14 +6,14 @@ works in tests without a port. See [ADR 0010](../../docs/adr/0010-server.md)
 and [ADR 0015](../../docs/adr/0015-universal-framework.md).
 
 ```bash
-bun add @arachne/server @arachne/schema
+bun add @arachnejs/server @arachnejs/schema
 ```
 
 ## Routes
 
 ```ts
-import { s } from "@arachne/schema";
-import { createServer, group, HttpError, route } from "@arachne/server";
+import { s } from "@arachnejs/schema";
+import { createServer, group, HttpError, route } from "@arachnejs/server";
 
 const Order = s.describe(
   s.object({ id: s.uuid(), email: s.email(), total: s.number() }),
@@ -66,7 +66,7 @@ createServer({ routes }).listen(3000);
 | `application/json`, `*+json` | JSON |
 | `multipart/form-data` | object; files are `File` (validate with `s.file({ maxSize, types })`) |
 | `application/x-www-form-urlencoded` | object |
-| `application/cbor` | CBOR, with `codecs: [cbor()]` from `@arachne/server/cbor` |
+| `application/cbor` | CBOR, with `codecs: [cbor()]` from `@arachnejs/server/cbor` |
 
 Form keys nest: `items[0][qty]`, `address.city`, `tags[]`; repeated keys become
 arrays; `__proto__`/`constructor`/`prototype` keys are dropped. Use
@@ -82,7 +82,7 @@ Responses use the codec picked from `Accept` (JSON by default).
 `ctx.nonce` · `ctx.status()` · `ctx.header()`.
 
 ```ts
-declare module "@arachne/server" {
+declare module "@arachnejs/server" {
   interface ContextState { user?: { id: string } }
   interface RouteMeta { permission?: string }
 }
@@ -110,7 +110,7 @@ responses. Headers on a `Response` a handler returns take precedence.
 ## OpenAPI and the typed client
 
 ```ts
-import { apiDocs, openapi } from "@arachne/server";
+import { apiDocs, openapi } from "@arachnejs/server";
 createServer({ routes: [...routes, ...apiDocs({ info: { title: "Shop", version: "1" }, routes })] });
 // GET /openapi.json (3.1) · GET /docs (Scalar explorer; pass explorerScript to self-host)
 ```
@@ -120,7 +120,7 @@ bodies containing `s.file()` are documented as `multipart/form-data`;
 `openapi: false` hides a route.
 
 ```ts
-import { createClient } from "@arachne/server/client"; // browser-safe
+import { createClient } from "@arachnejs/server/client"; // browser-safe
 import type { routes } from "./routes.ts";
 
 const api = createClient<typeof routes>({ baseUrl: "https://shop.example" });

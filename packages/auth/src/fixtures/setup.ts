@@ -1,6 +1,6 @@
-import { createDb } from "@arachne/db";
-import { sqlite } from "@arachne/db-sqlite";
-import { createMailer, memoryTransport } from "@arachne/mailer";
+import { createDb } from "@arachnejs/db";
+import { sqlite } from "@arachnejs/db-sqlite";
+import { createMailer, memoryTransport } from "@arachnejs/mailer";
 import { type AuthOptions, createAuth } from "../index.ts";
 
 /** A fresh auth instance over in-memory SQLite, a memory mailbox and a controllable clock. */

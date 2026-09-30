@@ -1,5 +1,5 @@
 ---
-"@arachne/forms": minor
+"@arachnejs/forms": minor
 ---
 
 Form ids and submit handling.

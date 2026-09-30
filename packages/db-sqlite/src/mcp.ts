@@ -1,6 +1,6 @@
-import { col, createDb, defineTable } from "@arachne/db";
-import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp";
-import { s } from "@arachne/schema";
+import { col, createDb, defineTable } from "@arachnejs/db";
+import { defineMcpModule, jsonResult, textResult, toolName } from "@arachnejs/mcp";
+import { s } from "@arachnejs/schema";
 import { z } from "zod";
 import { sqlite } from "./index.ts";
 
@@ -36,7 +36,7 @@ export const mcpModule = defineMcpModule({
 		},
 		{
 			name: toolName("db_sqlite", "api_summary"),
-			description: "Summarize @arachne/db-sqlite public API.",
+			description: "Summarize @arachnejs/db-sqlite public API.",
 			handler: () => textResult("sqlite({ path?: string }) → Dialect for createDb (bun:sqlite)"),
 		},
 	],

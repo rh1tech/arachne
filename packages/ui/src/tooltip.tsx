@@ -1,5 +1,5 @@
-import { omitProps, Show } from "@arachne/render";
-import { effect, signal } from "@arachne/signals";
+import { omitProps, Show } from "@arachnejs/render";
+import { effect, signal } from "@arachnejs/signals";
 import { autoPosition } from "./floating.ts";
 import { whenConnected } from "./focus.ts";
 import { watchEscape } from "./layers.ts";

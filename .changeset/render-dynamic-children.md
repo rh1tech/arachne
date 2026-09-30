@@ -1,5 +1,5 @@
 ---
-"@arachne/render": patch
+"@arachnejs/render": patch
 ---
 
 Fix three reactivity bugs that made interactive UI look dead:

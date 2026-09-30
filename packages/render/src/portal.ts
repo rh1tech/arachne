@@ -1,4 +1,4 @@
-import { renderEffect } from "@arachne/signals";
+import { renderEffect } from "@arachnejs/signals";
 import { insert } from "./dom.ts";
 
 export type PortalProps = {

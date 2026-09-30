@@ -1,4 +1,4 @@
-# ADR 0005: @arachne/testing harness
+# ADR 0005: @arachnejs/testing harness
 
 - **Status:** Accepted
 - **Date:** 2026-09-27
@@ -11,9 +11,9 @@ or DB drivers into every unit test.
 
 ## Decision
 
-Phase 0 ships a thin `@arachne/testing` with:
+Phase 0 ships a thin `@arachnejs/testing` with:
 
-1. **`createTestApp`** — boots `@arachne/core` modules and returns
+1. **`createTestApp`** — boots `@arachnejs/core` modules and returns
    `{ app, container, bus, dispose }` with automatic dispose.
 2. **`factory`** — typed object factory with overrides and sequences.
 3. **`tempDir`** — creates and cleans a temporary directory.
@@ -24,7 +24,7 @@ Later phases extend this package (DB fixtures, render helpers, Playwright
 fixtures) without breaking these primitives. Optional peer deps are declared
 when those helpers land.
 
-Depends on `@arachne/core` only.
+Depends on `@arachnejs/core` only.
 
 ## Alternatives considered
 

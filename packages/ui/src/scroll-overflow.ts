@@ -1,4 +1,4 @@
-import { effect, type Signal, signal } from "@arachne/signals";
+import { effect, type Signal, signal } from "@arachnejs/signals";
 import { prefersReducedMotion } from "./motion.ts";
 
 /** Element, or an element id to look up. */

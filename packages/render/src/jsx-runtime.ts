@@ -1,4 +1,4 @@
-/** Lightweight DOM JSX runtime for Bun/tsc paths that don't use @arachne/jsx. */
+/** Lightweight DOM JSX runtime for Bun/tsc paths that don't use @arachnejs/jsx. */
 
 export function Fragment(props: { children?: unknown }): unknown {
 	return props.children;

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import { insert, render } from "@arachne/render";
+import { insert, render } from "@arachnejs/render";
 import { Window } from "happy-dom";
 import { createRouter, memoryHistory, type RouteDefinition, type RouteProps } from "./index.ts";
 

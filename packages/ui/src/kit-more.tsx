@@ -1,5 +1,5 @@
-import { For, Show } from "@arachne/render";
-import { effect, isServerRender, signal } from "@arachne/signals";
+import { For, Show } from "@arachnejs/render";
+import { effect, isServerRender, signal } from "@arachnejs/signals";
 import { Button } from "./button.tsx";
 import { Icon, type IconName } from "./icons.tsx";
 import { TextInput } from "./input.tsx";

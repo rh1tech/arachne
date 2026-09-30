@@ -1,4 +1,4 @@
-# ADR 0004: @arachne/config typed loader
+# ADR 0004: @arachnejs/config typed loader
 
 - **Status:** Accepted
 - **Date:** 2026-09-27
@@ -12,12 +12,12 @@ errors.
 
 ## Decision
 
-`@arachne/config` provides:
+`@arachnejs/config` provides:
 
 1. A **schema** built from plain TypeScript validators (Standard Schema–
    compatible shape: `{ "~standard": { validate, version, vendor } }`) plus a
    small built-in schema DSL (`string`, `number`, `boolean`, `object`,
-   `optional`, `defaulted`) so Phase 0 does not depend on `@arachne/schema`.
+   `optional`, `defaulted`) so Phase 0 does not depend on `@arachnejs/schema`.
 2. **Load order** (later wins): defaults → config file → env (`ARACHNE_*` or
    custom prefix, nested via `__`) → explicit overrides / CLI.
 3. **Fail-fast**: invalid config throws `ConfigError` with a path-keyed
@@ -25,7 +25,7 @@ errors.
 4. **Runtime-agnostic** file loading via injected `readFile` / `importConfig`
    hooks so Bun, Node, and tests share one path.
 
-Depends only on `@arachne/core` (for `ConfigError` base / logger optional).
+Depends only on `@arachnejs/core` (for `ConfigError` base / logger optional).
 
 ## Alternatives considered
 
@@ -36,5 +36,5 @@ Depends only on `@arachne/core` (for `ConfigError` base / logger optional).
 ## Consequences
 
 - Apps call `loadConfig(schema, options)` once at boot.
-- `@arachne/schema` will later implement the richer DSL; config keeps its thin
+- `@arachnejs/schema` will later implement the richer DSL; config keeps its thin
   built-in validators for bootstrap.

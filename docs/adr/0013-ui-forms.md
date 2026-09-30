@@ -1,4 +1,4 @@
-# ADR 0013: @arachne/ui + @arachne/forms
+# ADR 0013: @arachnejs/ui + @arachnejs/forms
 
 - **Status:** Accepted
 - **Date:** 2026-09-28
@@ -12,7 +12,7 @@ component model.
 
 ## Decision
 
-1. **`@arachne/ui`** — headless-ish primitives compiled as Arachne JSX:
+1. **`@arachnejs/ui`** — headless-ish primitives compiled as Arachne JSX:
    inputs (`Button`, `TextInput`, `TextArea`, `Select`, `Checkbox`, `Switch`,
    `RadioGroup`, `FileInput`, `InputGroup`, `SearchInput`, `NumberInput`,
    `Slider`, plus password/pin/color/date/time/json/native-select/chips/rating/
@@ -32,11 +32,11 @@ component model.
    `Breadcrumb`, `Pagination`, `Accordion`, `Tooltip`), flow (`Steps`,
    `Segmented`), and shell (`createNavbarController` + recursive `Navbar`,
    `AppShell`, `SidebarNav`). Token sheet (`--a-*`) lives in `styles.css`.
-2. **`@arachne/forms`** — `createForm({ schema, initial, onSubmit })` holds
+2. **`@arachnejs/forms`** — `createForm({ schema, initial, onSubmit })` holds
    signal-backed values/errors; field binders (`TextField`, `TextAreaField`,
    `SelectField`, `CheckboxField`, `SwitchField`, `RadioField`) plus layout/
    relationship helpers (`Form`, `FormWhen` with `match`, `FormColumns`/`FormColumn`,
-   `FormSection`, `FormArea`) bind UI to `@arachne/schema` validation on submit.
+   `FormSection`, `FormArea`) bind UI to `@arachnejs/schema` validation on submit.
 3. UI depends on `render` (runtime) as well as `signals` / `jsx`. Boundaries
    updated accordingly.
 4. No design-system megakit in Phase 0 — enough to build real screens and
@@ -49,5 +49,5 @@ component model.
 
 ## Consequences
 
-- Apps import `@arachne/ui/styles.css` (or copy tokens).
+- Apps import `@arachnejs/ui/styles.css` (or copy tokens).
 - Form state is Arachne signals — works with the existing reactivity model.

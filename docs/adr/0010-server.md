@@ -1,4 +1,4 @@
-# ADR 0010: @arachne/server — Bun HTTP kernel
+# ADR 0010: @arachnejs/server — Bun HTTP kernel
 
 - **Status:** Accepted
 - **Date:** 2026-09-28
@@ -6,16 +6,16 @@
 
 ## Context
 
-Client routing landed in `@arachne/router`. Apps still need a server that can
+Client routing landed in `@arachnejs/router`. Apps still need a server that can
 match the same path language, speak Request/Response, and boot under Bun
 without pulling in Express/Hono as the public API.
 
 ## Decision
 
-1. **`@arachne/server`** wraps `Bun.serve` with a small route table:
+1. **`@arachnejs/server`** wraps `Bun.serve` with a small route table:
    `{ method, path, handler }`, plus optional middleware and a fallback
    handler (SPA / 404).
-2. **Path matching reuses `compilePath` from `@arachne/router`** so
+2. **Path matching reuses `compilePath` from `@arachnejs/router`** so
    `:param` / `*rest` mean the same on client and server.
 3. Handlers receive a **Context** (`request`, `params`, `query`, `url`) and
    return a Web `Response`. Helpers: `json`, `text`, `html`.
@@ -31,5 +31,5 @@ without pulling in Express/Hono as the public API.
 
 ## Consequences
 
-- Playground can migrate onto `@arachne/server`.
+- Playground can migrate onto `@arachnejs/server`.
 - Future SSR will plug `renderToString` into route handlers.

@@ -5,7 +5,7 @@ import {
 	type DbQueries,
 	quoteIdent,
 	type TableDef,
-} from "@arachne/db";
+} from "@arachnejs/db";
 
 /** A step that changes the database. `up`/`down` run inside a transaction. */
 export interface Migration {

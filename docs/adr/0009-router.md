@@ -1,4 +1,4 @@
-# ADR 0009: @arachne/router — signal-driven client router
+# ADR 0009: @arachnejs/router — signal-driven client router
 
 - **Status:** Accepted
 - **Date:** 2026-09-28
@@ -6,20 +6,20 @@
 
 ## Context
 
-Phase 1 UI needs URL-driven views. Server routing arrives with `@arachne/server`;
+Phase 1 UI needs URL-driven views. Server routing arrives with `@arachnejs/server`;
 the client still needs a first-class router that speaks signals and the
-`@arachne/render` component model.
+`@arachnejs/render` component model.
 
 ## Decision
 
-1. **`@arachne/router`** owns client routing: path patterns (`:param`, `*rest`),
+1. **`@arachnejs/router`** owns client routing: path patterns (`:param`, `*rest`),
    nested route tables, `navigate` / `back`, and an `Outlet` that renders the
-   matched route component via `@arachne/render`.
+   matched route component via `@arachnejs/render`.
 2. **Location is a signal** (path + search + params). Route components read
    params from router context / props — no VDOM router abstractions.
 3. **History adapters**: `memoryHistory` (tests / SSR prep) and
    `browserHistory` (`pushState` / `popstate`). Server URL matching is deferred
-   to `@arachne/server` and will share the same path compiler.
+   to `@arachnejs/server` and will share the same path compiler.
 4. Depends on `signals`, `render`, `jsx` (boundaries), and `mcp`.
 
 ## Alternatives considered

@@ -1,6 +1,6 @@
-# @arachne/mcp
+# @arachnejs/mcp
 
-Model Context Protocol kernel for Arachne. Every `@arachne/*` package exports
+Model Context Protocol kernel for Arachne. Every `@arachnejs/*` package exports
 `./mcp`; this package composes them into stdio or Streamable HTTP servers.
 
 ```bash

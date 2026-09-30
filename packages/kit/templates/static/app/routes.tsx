@@ -1,5 +1,5 @@
-import { For } from "@arachne/render";
-import { Link, type RouteDefinition, type RouteProps } from "@arachne/router";
+import { For } from "@arachnejs/render";
+import { Link, type RouteDefinition, type RouteProps } from "@arachnejs/router";
 import type { Post } from "./content.ts";
 
 const formatDate = (iso: string) =>

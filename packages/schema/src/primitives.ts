@@ -199,7 +199,7 @@ function typeAllowed(type: string, allowed: readonly string[]): boolean {
 
 /**
  * An uploaded `File` (or any `Blob`), optionally limited by size and MIME
- * type. Pairs with multipart parsing in `@arachne/server`.
+ * type. Pairs with multipart parsing in `@arachnejs/server`.
  */
 export function file(options: FileOptions = {}): Schema<File> {
 	return makeSchema<File, File>(
