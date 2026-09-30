@@ -13,3 +13,4 @@ apps/**/tmp/
 *.tgz
 packages/**/.test-out/
 .arachne/
+.cursor/

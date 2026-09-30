@@ -36,8 +36,13 @@ bun run mcp         # stdio MCP server (all package modules)
 bun run mcp:http    # Streamable HTTP on :3921/mcp
 ```
 
-Cursor: see [`.cursor/mcp.json`](.cursor/mcp.json). Every `@arachne/*` package
-exports `./mcp` ([ADR 0007](docs/adr/0007-mcp-everywhere.md)).
+Every `@arachne/*` package exports `./mcp`
+([ADR 0007](docs/adr/0007-mcp-everywhere.md)). To use them from an editor or
+agent, add a stdio server to its MCP config (run from the repository root):
+
+```json
+{ "mcpServers": { "arachne": { "command": "bun", "args": ["run", "packages/mcp/bin/arachne-mcp.ts"] } } }
+```
 
 App kit and CLI: [`@arachne/kit`](packages/kit) ([ADR 0015](docs/adr/0015-universal-framework.md)).
 Accounts and permissions: [`@arachne/auth`](packages/auth) + [`@arachne/acl`](packages/acl).

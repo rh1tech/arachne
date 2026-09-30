@@ -41,6 +41,6 @@ the framework as packages land—not as an afterthought.
 ## Consequences
 
 - Phase 1 packages (`signals`, `jsx`, `render`, …) ship MCP tools immediately.
-- Cursor / Claude Desktop connect via `.cursor/mcp.json` → `bun run mcp`.
+- Editors and agents (Cursor, Claude Desktop, …) connect with a stdio MCP config entry → `bun run mcp` (see the root README).
 - CI may smoke-test that each package’s `./mcp` export loads and registers ≥1
   tool or resource.
