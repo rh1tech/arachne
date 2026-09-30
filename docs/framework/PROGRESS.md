@@ -37,7 +37,7 @@ logout, email verification, password reset, email sending, access levels
 | 7 | Mail | `@arachne/mailer` | [x] |
 | 8 | File storage (disk, memory, S3) | `@arachne/storage` | [x] |
 | 9 | Auth: users, sessions, tokens, registration, verification, reset, blocking, groups, throttling, CSRF, HTTP routes | `@arachne/auth` | [x] |
-| 10 | Router: `Link`, click interception, lazy routes, layouts, head | `@arachne/router` | [ ] |
+| 10 | Router: `Link`, click interception, lazy routes, layouts, head | `@arachne/router` | [x] |
 | 11 | Kit: `defineApp`, SSR pages, static prerender build, dev server with hot reload, `arachne` CLI | `@arachne/kit` | [ ] |
 | 12 | Examples: static site, full-stack, API-only | `apps/examples/*` | [ ] |
 | 12b | Typed API client inferred from routes | `@arachne/server` (`/client`) | [x] |
@@ -187,6 +187,20 @@ logout, email verification, password reset, email sending, access levels
   memory mailbox, controllable clock via `fixtures/setup.ts`), `mcp.test.ts`.
 - MCP: `arachne_auth_routes`, `arachne_auth_policy`, `arachne_auth_password_check`.
 - Boundary map: `auth` may use `server` and `schema`.
+
+### M10 — `@arachne/router` (2026-09-30)
+
+- `router.ts`: nested layouts (`children`, index `path: ""`), `lazy` routes
+  (resolved per definition, cached), `load(match)` data with `pending`,
+  race-safe navigation (latest wins; URL + view switch together), `error`
+  component, `initialData` for hydration, `ready`, `base` path, `href`,
+  `resolve`, `preload`, `interceptLinks`, scroll top/hash/restore,
+  `View` component form. Sync behaviour kept when nothing is async (old tests).
+- `head.ts`: `mergeHeads`, `renderHead` (escaped), `applyHead` (client).
+- `links.ts`: `shouldIntercept`. `link.tsx`: `Link` (compiled for SSR and
+  DOM — verified via a real SSR build; tests use the JSX runtime + happy-dom).
+- Router tsconfig and `tsconfig.tests.json` gained JSX settings.
+- MCP: `arachne_router_resolve`.
 
 ## Known gaps / next steps
 

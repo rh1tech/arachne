@@ -1,11 +1,17 @@
+/** Params captured from a path (`{ id: "42" }`). */
 export type PathParams = Record<string, string>;
 
+/** Result of a successful {@link CompiledPath.match}. */
 export interface PathMatch {
+	/** Captured params. */
 	params: PathParams;
+	/** Normalised pathname that matched. */
 	pathname: string;
 }
 
+/** A compiled path pattern (shared by client router and server). */
 export interface CompiledPath {
+	/** Normalised pattern. */
 	pattern: string;
 	/** Match pathname (no query). Returns null if no match. */
 	match: (pathname: string) => PathMatch | null;
@@ -13,6 +19,7 @@ export interface CompiledPath {
 	build: (params?: PathParams) => string;
 }
 
+/** Ensure a leading slash and drop a trailing one (`"a/"` → `"/a"`). */
 function normalizePathname(pathname: string): string {
 	if (!pathname) return "/";
 	const withSlash = pathname.startsWith("/") ? pathname : `/${pathname}`;
@@ -86,6 +93,7 @@ function buildSegment(segment: string, params: PathParams): string {
 	return splat ? value.replace(/^\//, "") : encodeURIComponent(value);
 }
 
+/** Split a URL path into pathname, search and hash. */
 export function parseLocation(url: string): { pathname: string; search: string; hash: string } {
 	const hashIndex = url.indexOf("#");
 	const hash = hashIndex >= 0 ? url.slice(hashIndex) : "";

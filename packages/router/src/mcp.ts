@@ -2,7 +2,7 @@ import { defineMcpModule, jsonResult, textResult, toolName } from "@arachne/mcp"
 import { z } from "zod";
 import { memoryHistory } from "./history.ts";
 import { compilePath } from "./path.ts";
-import { createRouter } from "./router.ts";
+import { createRouter, type RouteDefinition } from "./router.ts";
 
 export const mcpModule = defineMcpModule({
 	name: "router",
@@ -74,16 +74,54 @@ export const mcpModule = defineMcpModule({
 			},
 		},
 		{
+			name: toolName("router", "resolve"),
+			description:
+				"Resolve a path against a route tree (paths, children, titles) and report the matched chain, params and final title.",
+			inputSchema: {
+				routes: z.array(z.record(z.unknown())),
+				path: z.string(),
+				titleTemplate: z.string().optional(),
+			},
+			handler: (args) => {
+				type Spec = { path: string; title?: string; children?: Spec[] };
+				const toRoutes = (specs: Spec[]): RouteDefinition[] =>
+					specs.map((spec) => ({
+						path: spec.path,
+						component: () => spec.path,
+						...(spec.title ? { head: { title: spec.title } } : {}),
+						...(spec.children ? { children: toRoutes(spec.children) } : {}),
+					}));
+				const router = createRouter({
+					routes: toRoutes(args["routes"] as Spec[]),
+					history: memoryHistory(String(args["path"])),
+					...(args["titleTemplate"] ? { titleTemplate: String(args["titleTemplate"]) } : {}),
+				});
+				const match = router.matched();
+				const result = match
+					? {
+							pattern: match.pattern,
+							chain: match.chain.map((r) => r.path),
+							params: match.params,
+							title: router.head().title ?? null,
+						}
+					: { pattern: null };
+				router.dispose();
+				return jsonResult(result);
+			},
+		},
+		{
 			name: toolName("router", "api_summary"),
 			description: "Summarize @arachne/router public API.",
 			handler: () =>
 				textResult(
 					[
-						"compilePath(pattern) — :param and *rest",
+						"compilePath(pattern) — :param and *rest (also @arachne/router/path)",
 						"memoryHistory / browserHistory",
-						"createRouter({ routes, history?, fallback? })",
-						"router.location / .params / .matched (signals)",
-						"router.navigate / .back / .Outlet / .dispose",
+						"createRouter({ routes, history, load, initialData, base, titleTemplate, fallback, error, scroll })",
+						"routes: { path, component | lazy, children (layout + index path ''), head }",
+						"router.location / params / matched / data / pending / error / head (signals) · ready",
+						"router.navigate / back / href / resolve / preload / interceptLinks / Outlet / View / dispose",
+						"<Link href activeClass exact replace prefetch> · renderHead(head) for SSR",
 					].join("\n"),
 				),
 		},

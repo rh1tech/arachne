@@ -1,18 +1,28 @@
 import { parseLocation } from "./path.ts";
 
+/** A location as the router sees it. */
 export interface HistoryLocation {
+	/** Path without query or hash. */
 	pathname: string;
+	/** Query string including `?`, or `""`. */
 	search: string;
+	/** Hash including `#`, or `""`. */
 	hash: string;
 	/** Full path including search + hash. */
 	href: string;
 }
 
+/** A source of locations: memory (tests, SSR) or the browser. */
 export interface RouterHistory {
+	/** Current location. */
 	readonly location: HistoryLocation;
+	/** Subscribe to changes; returns an unsubscribe. */
 	listen: (listener: (location: HistoryLocation) => void) => () => void;
+	/** Add an entry. */
 	push: (to: string) => void;
+	/** Replace the current entry. */
 	replace: (to: string) => void;
+	/** Go back one entry. */
 	back: () => void;
 }
 
@@ -21,6 +31,7 @@ function toLocation(url: string): HistoryLocation {
 	return { pathname, search, hash, href: `${pathname}${search}${hash}` };
 }
 
+/** In-memory history (tests, SSR, prerendering). */
 export function memoryHistory(initial = "/"): RouterHistory {
 	let current = toLocation(initial);
 	const stack: HistoryLocation[] = [current];
@@ -62,6 +73,7 @@ export function memoryHistory(initial = "/"): RouterHistory {
 	};
 }
 
+/** Browser history (`pushState` / `popstate`). */
 export function browserHistory(win: Window = globalThis.window): RouterHistory {
 	const listeners = new Set<(location: HistoryLocation) => void>();
 

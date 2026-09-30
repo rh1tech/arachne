@@ -10,6 +10,7 @@
 		"acl",
 		"mailer",
 		"storage",
-		"auth"
+		"auth",
+		"router"
 	]
 }
