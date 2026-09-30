@@ -1,6 +1,6 @@
 {
 	"name": "@arachnejs/storage",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"description": "File storage for Arachne: memory, local disk and S3 drivers",
 	"license": "MIT OR Apache-2.0",
 	"author": "Mikhail Matveev (https://rh1.tech)",
