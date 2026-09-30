@@ -136,6 +136,26 @@ describe("lazy routes and data", () => {
 		expect(calls).toBe(0);
 	});
 
+	test("initialNotFound hydrates a static 404 page served at a URL a route would match", async () => {
+		let calls = 0;
+		const router = createRouter({
+			history: memoryHistory("/docs/missing"),
+			routes: [{ path: "/docs/*slug", component: () => "doc" }],
+			load: () => {
+				calls += 1;
+			},
+			initialData: null,
+			initialNotFound: true,
+			fallback: () => "no such page",
+		});
+		await router.ready;
+		expect(text(router.Outlet())).toBe("no such page");
+		expect(router.matched()).toBeNull();
+		expect(calls).toBe(0);
+		await router.navigate("/docs/real");
+		expect(text(router.Outlet())).toBe("doc");
+	});
+
 	test("loader errors reach the error component", async () => {
 		const router = createRouter({
 			history: memoryHistory("/"),

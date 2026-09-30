@@ -1,5 +1,5 @@
 import { createComponent } from "@arachne/render";
-import { computed, effect, signal } from "@arachne/signals";
+import { computed, effect, signal, untrack } from "@arachne/signals";
 import { applyHead, type Head, type HeadInput, mergeHeads } from "./head.ts";
 import { type HistoryLocation, memoryHistory, type RouterHistory } from "./history.ts";
 import { shouldIntercept } from "./links.ts";
@@ -92,6 +92,11 @@ export interface CreateRouterOptions {
 	initialData?: unknown;
 	/** Loader error the server rendered for the first route (hydration of error pages). */
 	initialError?: unknown;
+	/**
+	 * The HTML being hydrated is the not-found page (a static host's `404.html`
+	 * served at a URL a dynamic route would match): render `fallback` first.
+	 */
+	initialNotFound?: boolean;
 	/** Path prefix the app is mounted at (`/docs` for `site.com/docs/*`). */
 	base?: string | undefined;
 	/** Title template, e.g. `"%s · Site"`. */
@@ -305,7 +310,7 @@ export function createRouter(options: CreateRouterOptions): Router {
 	const initialLocation = strip(history.location);
 	const state = signal<State>({
 		location: initialLocation,
-		match: match(initialLocation),
+		match: options.initialNotFound ? null : match(initialLocation),
 		data: options.initialData,
 		error: undefined,
 	});
@@ -412,15 +417,6 @@ export function createRouter(options: CreateRouterOptions): Router {
 	});
 	const stopHead = inBrowser ? effect(() => applyHead(document, head())) : () => {};
 
-	// Layouts wrapping a node, innermost first (skips chain entries without components).
-	const wrap = (node: unknown, layouts: RouteDefinition[], props: Omit<RouteProps, "children">) => {
-		let out = node;
-		for (let i = layouts.length - 1; i >= 0; i -= 1) {
-			const component = componentOf(layouts[i] as RouteDefinition);
-			if (component) out = createComponent(component, { ...props, children: out });
-		}
-		return out;
-	};
 	// Top-level layouts (`/` routes with children) frame the not-found page.
 	const rootLayouts = options.routes.filter(
 		(route) =>
@@ -429,28 +425,73 @@ export function createRouter(options: CreateRouterOptions): Router {
 			(route.component || route.lazy),
 	);
 
-	const render = (): unknown => {
+	/**
+	 * What to render: the layouts around the page (outermost first) and the
+	 * page itself. Layouts are keyed by their route definition.
+	 */
+	type Frames = { layouts: RouteDefinition[]; page: () => unknown };
+	const withComponent = (chain: RouteDefinition[]) => chain.filter((r) => componentOf(r));
+	const frames = computed((): Frames => {
 		const { match: m, location, data, error } = state();
 		if (error !== undefined && options.error) {
+			const errorPage = options.error;
 			const props = { params: m?.params ?? {}, location, data };
-			const page = createComponent(options.error, { ...props, error });
-			return wrap(page, m ? m.chain.slice(0, -1) : [], props);
+			return {
+				layouts: withComponent(m ? m.chain.slice(0, -1) : []),
+				page: () => createComponent(errorPage, { ...props, error }),
+			};
 		}
 		if (!m) {
-			if (!options.fallback) return null;
-			const props = { params: {}, location };
-			return wrap(createComponent(options.fallback, props), rootLayouts, props);
+			const fallback = options.fallback;
+			if (!fallback) return { layouts: [], page: () => null };
+			return {
+				layouts: withComponent(rootLayouts),
+				page: () => createComponent(fallback, { params: {}, location }),
+			};
 		}
-		let node: unknown;
-		for (let i = m.chain.length - 1; i >= 0; i -= 1) {
-			const component = componentOf(m.chain[i] as RouteDefinition);
-			if (!component) continue;
-			const props: RouteProps = { params: m.params, location, data };
-			if (node !== undefined) props.children = node;
-			node = createComponent(component, props);
-		}
-		return node ?? null;
+		const chain = withComponent(m.chain);
+		const leaf = chain[chain.length - 1];
+		const component = leaf && componentOf(leaf);
+		return {
+			layouts: chain.slice(0, -1),
+			page: () =>
+				component ? createComponent(component, { params: m.params, location, data }) : null,
+		};
+	});
+
+	// Props for a mounted layout: live getters, since the layout isn't
+	// re-created while its children change.
+	const layoutProps = (children: () => unknown): RouteProps => ({
+		get params() {
+			return state().match?.params ?? {};
+		},
+		get location() {
+			return state().location;
+		},
+		get data() {
+			return state().data;
+		},
+		children,
+	});
+
+	/**
+	 * The view from chain depth `depth` down. A layout is created once and
+	 * stays mounted while the same route definition is at its depth (its DOM,
+	 * scroll positions and local state survive navigations between its
+	 * children); only the part below it re-renders. The page is re-created on
+	 * every navigation.
+	 */
+	const level = (depth: number): (() => unknown) => {
+		const layout = computed(() => frames().layouts[depth]);
+		return () => {
+			const definition = layout();
+			if (!definition) return frames().page();
+			const component = componentOf(definition) as RouteComponent;
+			return untrack(() => createComponent(component, layoutProps(level(depth + 1))));
+		};
 	};
+
+	const render = (): unknown => level(0)();
 
 	const router: Router = {
 		location: () => state().location,

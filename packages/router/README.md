@@ -43,7 +43,10 @@ render(() => <>{router.Outlet()}</>, document.getElementById("app")!);
 ```
 
 - **Layouts**: a route with `children` renders its `component` around the
-  matched child (`props.children`); `path: ""` is the index child.
+  matched child (`props.children`); `path: ""` is the index child. A layout
+  stays mounted while you navigate between its children (its DOM, scroll
+  positions and local state survive); its `params`/`location`/`data` props
+  update in place. Pages are re-created on every navigation.
 - **Lazy routes**: `lazy: () => import("./Page.tsx")` (default export or the
   component) loads before the route commits; `router.preload(path)` warms it.
 - **Data**: `load(match)` runs for every navigation; the URL and view switch
@@ -61,7 +64,7 @@ render(() => <>{router.Outlet()}</>, document.getElementById("app")!);
 - `router.Outlet()` in a JSX expression is reactive; `<router.View />` is the
   component form.
 
-| API | |
+| API | Description |
 |---|---|
 | `createRouter(options)` | `routes`, `history`, `load`, `initialData`, `base`, `titleTemplate`, `fallback`, `error`, `scroll` |
 | `router.navigate(to, { replace })` | resolves after the route renders |
