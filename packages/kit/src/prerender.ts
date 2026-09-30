@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { cp, mkdir, rm, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
+import { buildIdOf } from "./build-id.ts";
 import type { ClientBuild, SsrModule } from "./bundle.ts";
 import type { ResolvedConfig } from "./config.ts";
 import { renderDocument, serializeJson } from "./document.ts";
@@ -87,6 +88,7 @@ export async function prerender(
 	const urls = await urlsFor(ssr, server, skipped);
 	const loaders = server.loaders ?? {};
 	const base = config.base === "/" ? undefined : config.base.slice(0, -1);
+	const build = buildIdOf(client);
 	const page = async (url: string, data: unknown) => {
 		const result = await ssr.render(url, {
 			load: () => data,
@@ -103,8 +105,10 @@ export async function prerender(
 				data: result.data ?? null,
 				base: config.base,
 				mode: "static",
+				build,
 				titleTemplate: config.titleTemplate,
 				loaders: Object.keys(loaders),
+				...(result.matched ? {} : { notFound: true }),
 			},
 			body: result.html,
 		});
@@ -128,7 +132,7 @@ export async function prerender(
 		const { html } = await page(url, data);
 		const file = htmlFile(outDir, url);
 		await write(file, html);
-		if (loader) await write(dataFile(outDir, url), serializeJson({ data: data ?? null }));
+		if (loader) await write(dataFile(outDir, url), serializeJson({ data: data ?? null, build }));
 		pages.push({ url, file, status: 200 });
 	}
 	const notFound = await page("/__arachne-not-found__", undefined);

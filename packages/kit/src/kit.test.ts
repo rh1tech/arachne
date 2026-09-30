@@ -93,9 +93,12 @@ describe("server mode", () => {
 
 	test("client navigations fetch loader data as JSON", async () => {
 		const res = await app.fetch(new Request("http://notes.test/__arachne/data/notes/2"));
-		expect(await res.json()).toEqual({
-			data: { id: "2", title: "Second note", body: "Another one." },
-		});
+		const body = (await res.json()) as { data: unknown; build: string };
+		expect(body.data).toEqual({ id: "2", title: "Second note", body: "Another one." });
+		// The build the data belongs to: the client reloads when it isn't its own.
+		const page = await (await app.fetch(new Request("http://notes.test/notes/2"))).text();
+		expect(body.build).toMatch(/^[a-z0-9]+$/);
+		expect(page).toContain(`"build":"${body.build}"`);
 		expect((await app.fetch(new Request("http://notes.test/__arachne/data/nope"))).status).toBe(
 			404,
 		);
@@ -136,10 +139,17 @@ describe("static build", () => {
 		expect(readFileSync(join(outDir, "notes/1/index.html"), "utf8")).toContain(
 			"<h1>First &lt;note&gt;</h1>",
 		);
-		expect(JSON.parse(readFileSync(join(outDir, "_data/notes/2.json"), "utf8"))).toEqual({
-			data: { id: "2", title: "Second note", body: "Another one." },
-		});
-		expect(readFileSync(join(outDir, "404.html"), "utf8")).toContain("Nothing here");
+		const data = JSON.parse(readFileSync(join(outDir, "_data/notes/2.json"), "utf8"));
+		expect(data.data).toEqual({ id: "2", title: "Second note", body: "Another one." });
+		expect(data.build).toMatch(/^[a-z0-9]+$/);
+		expect(readFileSync(join(outDir, "notes/2/index.html"), "utf8")).toContain(
+			`"build":"${data.build}"`,
+		);
+		const notFound = readFileSync(join(outDir, "404.html"), "utf8");
+		expect(notFound).toContain("Nothing here");
+		// Hosts serve 404.html at any URL, including ones a dynamic route matches.
+		expect(notFound).toContain('"notFound":true');
+		expect(index).not.toContain('"notFound"');
 		expect(readFileSync(join(outDir, "robots.txt"), "utf8")).toContain("User-agent");
 		const sitemap = readFileSync(join(outDir, "sitemap.xml"), "utf8");
 		expect(sitemap).toContain("<loc>https://notes.test/notes/1</loc>");

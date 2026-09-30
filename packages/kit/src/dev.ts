@@ -1,9 +1,9 @@
-import { type FSWatcher, watch } from "node:fs";
+import { existsSync, type FSWatcher, watch } from "node:fs";
 import { join, relative, resolve, sep } from "node:path";
 import { bunPlugin } from "@arachne/vite";
 import type { ServerWebSocket } from "bun";
 import { type AppServer, createAppServer } from "./app.ts";
-import { resolveConfig } from "./config.ts";
+import { ROUTES_FILES, resolveConfig, SERVER_FILES } from "./config.ts";
 
 /** Exit code the dev server uses to ask the supervisor for a restart. */
 export const RESTART_CODE = 75;
@@ -115,6 +115,11 @@ export async function startDevServer(options: DevServerOptions): Promise<DevServ
 	const configFiles = new Set(
 		["arachne.config.ts", "arachne.config.js", "package.json"].map((f) => join(config.root, f)),
 	);
+	// Entry files decide the mode: creating or deleting one needs a fresh process.
+	const entryFiles = [...ROUTES_FILES, ...SERVER_FILES].map((f) => join(config.appDir, f));
+	const inUse = new Set([config.routesFile, config.serverFile]);
+	const entryChanged = (file: string) =>
+		entryFiles.includes(file) && existsSync(file) !== inUse.has(file);
 
 	const server = Bun.serve({
 		port: options.port ?? config.port,
@@ -154,8 +159,9 @@ export async function startDevServer(options: DevServerOptions): Promise<DevServ
 	const flush = () => {
 		const files = [...pending];
 		pending = new Set();
-		if (files.some((file) => serverFiles.has(file) || configFiles.has(file)) || !app)
-			return restart(files);
+		const needsRestart = (file: string) =>
+			serverFiles.has(file) || configFiles.has(file) || entryChanged(file);
+		if (files.some(needsRestart) || !app) return restart(files);
 		const current = app;
 		building = building.then(async () => {
 			try {

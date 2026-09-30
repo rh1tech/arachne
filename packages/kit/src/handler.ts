@@ -14,6 +14,7 @@ import {
 	serveStatic,
 	toRoute,
 } from "@arachne/server";
+import { buildIdOf } from "./build-id.ts";
 import type { ClientBuild, SsrModule } from "./bundle.ts";
 import type { ResolvedConfig } from "./config.ts";
 import { renderDocument } from "./document.ts";
@@ -107,8 +108,10 @@ export function createHandler(parts: () => HandlerParts): ArachneServer {
 				data: result.data ?? null,
 				base,
 				mode: config.mode,
+				build: buildIdOf({ entry, styles }),
 				titleTemplate: config.titleTemplate,
 				loaders: Object.keys(current.server.loaders ?? {}),
+				...(result.matched ? {} : { notFound: true }),
 				// The client hydrates the same error page the server rendered.
 				...(result.error !== undefined
 					? {
@@ -132,7 +135,13 @@ export function createHandler(parts: () => HandlerParts): ArachneServer {
 		const matched = ssr?.match(`/${rest}${ctx.url.search}`);
 		if (!matched) throw new HttpError(404, "No such page", { code: "not_found" });
 		const data = await runLoader(matched.id, matched.params, ctx);
-		return json({ data: data ?? null }, { headers: { "cache-control": "no-cache" } });
+		const client = parts().client;
+		const build = buildIdOf(
+			client?.kind === "memory"
+				? client.build
+				: { entry: client?.entry, styles: client?.styles ?? [] },
+		);
+		return json({ data: data ?? null, build }, { headers: { "cache-control": "no-cache" } });
 	};
 	const dataPrefix = `${base}__arachne/data`;
 	const dataRoutes: AnyRoute[] = [

@@ -42,6 +42,12 @@ async function load(match) {
 	const response = await fetch(url, { headers: { accept: "application/json" } });
 	const body = await response.json().catch(() => ({}));
 	if (!response.ok) throw Object.assign(new Error(body?.error?.message ?? \`HTTP \${response.status}\`), { status: response.status });
+	// Data from another build (a deploy while this tab was open): load the page
+	// in full so code, styles and data match.
+	if (boot.build && body.build && body.build !== boot.build) {
+		location.assign(base + match.pathname + (match.search ?? ""));
+		return new Promise(() => {});
+	}
 	return body.data;
 }
 
@@ -52,6 +58,7 @@ const router = createRouter({
 	titleTemplate: boot.titleTemplate,
 	initialData: boot.data ?? null,
 	initialError: boot.error,
+	initialNotFound: boot.notFound === true,
 	load,
 	fallback: app.NotFound,
 	error: app.ErrorPage,

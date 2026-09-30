@@ -125,6 +125,12 @@ export function defineConfig(config: KitConfig): KitConfig {
 	return config;
 }
 
+/** Page entry candidates in the app directory, in lookup order. */
+export const ROUTES_FILES = ["routes.tsx", "routes.ts", "routes.jsx"];
+
+/** Server entry candidates in the app directory, in lookup order. */
+export const SERVER_FILES = ["server.ts", "server.tsx", "server.js"];
+
 function firstExisting(dir: string, names: string[]): string | undefined {
 	for (const name of names) {
 		const path = join(dir, name);
@@ -152,8 +158,8 @@ export async function resolveConfig(
 	const config: KitConfig = { ...fromFile, ...overrides };
 	const at = (path: string) => (isAbsolute(path) ? path : join(absoluteRoot, path));
 	const appDir = at(config.appDir ?? "app");
-	const routesFile = firstExisting(appDir, ["routes.tsx", "routes.ts", "routes.jsx"]);
-	const serverFile = firstExisting(appDir, ["server.ts", "server.tsx", "server.js"]);
+	const routesFile = firstExisting(appDir, ROUTES_FILES);
+	const serverFile = firstExisting(appDir, SERVER_FILES);
 	const mode: AppMode = config.mode ?? (!routesFile ? "api" : serverFile ? "server" : "static");
 	const mcp = config.mcp
 		? {

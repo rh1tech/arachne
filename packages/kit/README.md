@@ -5,9 +5,13 @@ from one project layout, with a dev server that reloads as you type. See
 [ADR 0015](../../docs/adr/0015-universal-framework.md).
 
 ```bash
-bunx arachne create my-app --template server   # or static | api
-cd my-app && bun install && bun run dev
+bun run arachne create apps/my-app --template server   # or static | api
+cd apps/my-app && bun install && bun run dev
 ```
+
+> Pre-release: `@arachne/*` isn't on npm yet, and the unscoped `arachne`
+> package on npm is unrelated. Run the CLI from a checkout with `bun run arachne`
+> (see [Getting started](../../docs/getting-started.md)).
 
 ## Project layout
 
@@ -46,7 +50,9 @@ export const routes: RouteDefinition[] = [
 
 Pages are rendered on the server (or at build time), then hydrated: the
 browser adopts the HTML, and `<Link>`s / plain `<a href>`s navigate on the
-client, fetching each page's data as JSON.
+client, fetching each page's data as JSON. Page data carries the build it came from:
+after a deploy, a tab still running the previous build loads the next page
+in full instead of mixing old code with new data.
 
 ## Server
 
@@ -107,8 +113,15 @@ default in server mode.
   browser; CSS edits swap stylesheets in place; build errors show an overlay
   and recover on the next save.
 - Edits to anything `app/server.ts` imports (or the config) restart the
-  server process; the browser reconnects and reloads.
+  server process; the browser reconnects and reloads. So does creating or
+  deleting `app/server.ts` or `app/routes.tsx`, which changes the mode.
 - Dev builds warn in the console about hydration mismatches.
+
+Build errors name the file, line and column.
+
+Stylesheets can point at files in `public/` with root URLs
+(`url("/fonts/body.woff2")`); those are left as written. Other absolute
+URLs that don't exist fail the build.
 
 ## Build and deploy
 
@@ -124,7 +137,7 @@ The server bundle inlines `@arachne/*`; the app's other dependencies stay in
 
 ## CLI
 
-| Command | |
+| Command | Description |
 |---|---|
 | `arachne dev [--port]` | dev server with hot reload |
 | `arachne build [--mode] [--out] [--base]` | production build |

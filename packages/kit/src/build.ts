@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { cp, mkdir, rm, writeFile } from "node:fs/promises";
 import { join, relative } from "node:path";
 import { bunPlugin } from "@arachne/vite";
-import { buildClient, buildSsr } from "./bundle.ts";
+import { buildClient, buildSsr, bundle } from "./bundle.ts";
 import { type KitConfig, type ResolvedConfig, resolveConfig } from "./config.ts";
 import { writeEntries } from "./entries.ts";
 import { type PrerenderResult, prerender } from "./prerender.ts";
@@ -66,7 +66,7 @@ async function buildServerBundle(config: ResolvedConfig, outDir: string): Promis
 	const entry = join(config.cacheDir, "server-entry.ts");
 	await mkdir(config.cacheDir, { recursive: true });
 	await writeFile(entry, serverEntrySource(config, ssr));
-	const result = await Bun.build({
+	await bundle("server", {
 		entrypoints: [entry],
 		root: config.root,
 		outdir: join(outDir, "server"),
@@ -78,8 +78,6 @@ async function buildServerBundle(config: ResolvedConfig, outDir: string): Promis
 		plugins: [bunPlugin({ target: "ssr", hydratable: true })],
 		external: externalDependencies(config.root),
 	});
-	if (!result.success)
-		throw new Error(`server build failed:\n${result.logs.map(String).join("\n")}`);
 	return join(outDir, "server", "index.js");
 }
 

@@ -1,8 +1,10 @@
+import { existsSync } from "node:fs";
 import { readdir, rm } from "node:fs/promises";
 import { dirname, join, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import type { MatchedRoute } from "@arachne/router";
 import { bunPlugin } from "@arachne/vite";
+import type { BunPlugin } from "bun";
 import type { ResolvedConfig } from "./config.ts";
 import { writeEntries } from "./entries.ts";
 
@@ -86,14 +88,67 @@ function typeOf(path: string): string {
 	return TYPES[ext] ?? "application/octet-stream";
 }
 
+interface BuildLog {
+	message?: string;
+	position?: { file: string; line: number; column: number; lineText?: string } | null;
+}
+
+/** One bundler message as `file:line:column: message` plus the source line. */
+function formatLog(log: unknown): string {
+	const { message, position } = (log ?? {}) as BuildLog;
+	if (!position || !message) return String(log);
+	const where = `${position.file}:${position.line}:${position.column}`;
+	return `${where}: ${message}${position.lineText ? `\n    ${position.lineText.trim()}` : ""}`;
+}
+
 function failure(label: string, logs: readonly unknown[]): Error {
-	return new Error(`${label} build failed:\n${logs.map(String).join("\n")}`);
+	return new Error(`${label} build failed:\n${logs.map(formatLog).join("\n")}`);
+}
+
+/**
+ * `Bun.build` that fails with the bundler's messages (file, line, cause).
+ * Bun either resolves with `success: false` or rejects with an
+ * `AggregateError` whose own message is only "Bundle failed".
+ */
+export async function bundle(
+	label: string,
+	options: Parameters<typeof Bun.build>[0],
+): Promise<Awaited<ReturnType<typeof Bun.build>>> {
+	let result: Awaited<ReturnType<typeof Bun.build>>;
+	try {
+		result = await Bun.build(options);
+	} catch (error) {
+		if (error instanceof AggregateError) throw failure(label, error.errors);
+		throw error;
+	}
+	if (!result.success) throw failure(label, result.logs);
+	return result;
 }
 
 /** Absolute input paths listed in a Bun metafile. */
 function inputsOf(root: string, metafile: unknown): string[] {
 	const inputs = (metafile as { inputs?: Record<string, unknown> } | undefined)?.inputs ?? {};
 	return Object.keys(inputs).map((path) => resolve(root, path));
+}
+
+/**
+ * Leaves `url("/…")` in CSS alone when the file exists in `public/`: those
+ * files are served from the site root as they are, so there is nothing to
+ * bundle. Other absolute paths still fail to resolve.
+ */
+function publicUrls(publicDir: string): BunPlugin {
+	return {
+		name: "arachne-public-urls",
+		setup(build) {
+			build.onResolve({ filter: /^\/[^/]/ }, (args) => {
+				if (!args.importer.endsWith(".css")) return undefined;
+				const file = join(publicDir, args.path.split(/[?#]/)[0] ?? "");
+				return file.startsWith(publicDir) && existsSync(file)
+					? { path: args.path, external: true }
+					: undefined;
+			});
+		},
+	};
 }
 
 /**
@@ -109,7 +164,7 @@ export async function buildClient(
 	const entrypoints = [...(hydrate ? [client] : []), ...config.styles];
 	const files = new Map<string, Asset>();
 	if (entrypoints.length === 0) return { files, entry: undefined, styles: [], inputs: [] };
-	const result = await Bun.build({
+	const result = await bundle("client", {
 		entrypoints,
 		root: config.root,
 		target: "browser",
@@ -120,14 +175,18 @@ export async function buildClient(
 		publicPath: `${config.base}assets/`,
 		naming: {
 			entry: "[name]-[hash].[ext]",
-			chunk: "chunks/[name]-[hash].[ext]",
+			// Flat: Bun drops a chunk sub-directory from chunk-to-chunk imports
+			// (a lazy chunk importing a shared one would 404). See chunks.test.ts.
+			chunk: "chunk-[name]-[hash].[ext]",
 			asset: "[name]-[hash].[ext]",
 		},
 		define: { "process.env.NODE_ENV": JSON.stringify(options.dev ? "development" : "production") },
-		plugins: [bunPlugin({ target: "dom", hydratable: true, dev: options.dev })],
+		plugins: [
+			publicUrls(config.publicDir),
+			bunPlugin({ target: "dom", hydratable: true, dev: options.dev }),
+		],
 		metafile: true,
 	} as Parameters<typeof Bun.build>[0]);
-	if (!result.success) throw failure("client", result.logs);
 	let entry: string | undefined;
 	const styles: string[] = [];
 	for (const output of result.outputs) {
@@ -136,7 +195,7 @@ export async function buildClient(
 		files.set(url, { bytes: new Uint8Array(await output.arrayBuffer()), type: typeOf(name) });
 		// Bun reports CSS entries as "asset"; link every top-level stylesheet
 		// (style entries and CSS imported by components), not per-chunk CSS.
-		if (name.endsWith(".css") && !name.startsWith("chunks/")) styles.push(url);
+		if (name.endsWith(".css") && !name.startsWith("chunk-")) styles.push(url);
 		else if (output.kind === "entry-point" && name.endsWith(".js")) entry = url;
 	}
 	return {
@@ -170,7 +229,7 @@ export async function buildSsr(
 	const { ssr } = await writeEntries(config);
 	ssrBuilds += 1;
 	const outdir = join(config.cacheDir, "ssr", `${Date.now().toString(36)}-${ssrBuilds}`);
-	const result = await Bun.build({
+	const result = await bundle("ssr", {
 		entrypoints: [ssr],
 		root: config.cacheDir,
 		outdir,
@@ -181,7 +240,6 @@ export async function buildSsr(
 		external: ["@arachne/signals", "alien-signals"],
 		metafile: true,
 	} as Parameters<typeof Bun.build>[0]);
-	if (!result.success) throw failure("ssr", result.logs);
 	const file = result.outputs.find((output) => output.kind === "entry-point")?.path;
 	if (!file) throw new Error("ssr build produced no entry");
 	const module = (await import(pathToFileURL(file).href)) as SsrModule;

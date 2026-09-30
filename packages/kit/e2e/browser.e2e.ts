@@ -4,7 +4,7 @@
  * Run: bun run e2e (in packages/kit).
  */
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { rmSync } from "node:fs";
+import { readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { type Browser, chromium, type Page } from "playwright";
 import { build, createAppServer, type DevServer, preview, startDevServer } from "../src/index.ts";
@@ -76,9 +76,34 @@ describe("static build in a browser", () => {
 	test("hydrates, routes on the client and loads prerendered data", async () => {
 		const page = await browser.newPage();
 		await journey(page, site.url);
+		// A deploy while the tab is open: data from another build means a full
+		// page load (fresh code and CSS), not new data under old code.
+		const file = join(outDir, "_data/notes/1.json");
+		const original = readFileSync(file, "utf8");
+		writeFileSync(file, original.replace(/"build":"[a-z0-9]+"/, '"build":"newer"'));
+		await page.goto(`${site.url}/about`);
+		await page.evaluate(() => {
+			(window as unknown as { marker: number }).marker = 7;
+		});
+		await page.click("nav >> text=First note");
+		await page.waitForURL(`${site.url}/notes/1`);
+		await page.waitForLoadState("load");
+		await expect(page.textContent("main h1")).resolves.toBe("First <note>");
+		await expect(
+			page.evaluate(() => (window as unknown as { marker?: number }).marker),
+		).resolves.toBeUndefined();
+		writeFileSync(file, original);
 		const missing = await page.goto(`${site.url}/nope`);
 		expect(missing?.status()).toBe(404);
 		await expect(page.textContent("h1")).resolves.toBe("Nothing here");
+		// 404.html at a URL the dynamic route matches: hydrates as not-found, no errors.
+		const errors: string[] = [];
+		page.on("pageerror", (error) => errors.push(error.message));
+		const unknown = await page.goto(`${site.url}/notes/999`);
+		expect(unknown?.status()).toBe(404);
+		await page.waitForLoadState("networkidle");
+		await expect(page.textContent("h1")).resolves.toBe("Nothing here");
+		expect(errors).toEqual([]);
 		await page.close();
 	}, 30_000);
 });
