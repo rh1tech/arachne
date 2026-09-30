@@ -115,6 +115,34 @@ describe("compile-run Show/For/Suspense", () => {
 		expect(root.textContent).not.toContain("1");
 	});
 
+	test("classList toggles classes next to a static class, and keeps other classes", () => {
+		const { code } = compile(
+			`export function App(props) {
+				return <div class="docs" classList={{ "menu-open": props.show(), wide: props.items().length > 1 }} aria-expanded={props.show()} />;
+			}`,
+			{ filename: "ClassList.tsx", target: "dom", hydratable: false },
+		);
+		const { App } = loadCompiled(
+			code,
+			"@arachne/render",
+			render as unknown as Record<string, unknown>,
+		);
+		const show = signal(false);
+		const items = signal([1, 2]);
+		const root = document.createElement("div");
+		render.render(() => App({ show, items }) as Node, root);
+		const el = root.firstElementChild as Element;
+		expect(el.className).toBe("docs wide");
+		expect(el.hasAttribute("classlist")).toBe(false);
+		show.set(true);
+		expect(el.className).toBe("docs wide menu-open");
+		expect(el.getAttribute("aria-expanded")).toBe("true");
+		el.classList.add("external");
+		items.set([1]);
+		show.set(false);
+		expect(el.className).toBe("docs external");
+	});
+
 	test("DOM compile renders anchor tags via claimElement", () => {
 		const { code } = compile(
 			`export function App() {
@@ -173,6 +201,67 @@ describe("compile-run Show/For/Suspense", () => {
 		expect(html).toContain("2");
 		expect(html).toContain("ready");
 		expect(html).not.toContain("&lt;");
+	});
+
+	test("SSR omits boolean attributes that are false, like the DOM does", () => {
+		const { code } = compile(
+			`export function App(props) {
+				return (
+					<details open={props.show()} data-on={props.show()} aria-expanded={props.show()}>
+						<button disabled={props.show()}>b</button>
+						<input checked={!props.show()} />
+					</details>
+				);
+			}`,
+			{ filename: "Booleans.tsx", target: "ssr", hydratable: true },
+		);
+		const { App } = loadCompiled(
+			code,
+			"@arachne/render/ssr",
+			ssr as unknown as Record<string, unknown>,
+		);
+		const off = ssr.renderToString(
+			() => App({ show: () => false, items: () => [] }) as ssr.SSRPayload,
+		);
+		expect(off).not.toContain("open");
+		expect(off).not.toContain("disabled");
+		expect(off).not.toContain("data-on");
+		expect(off).toContain('aria-expanded="false"');
+		expect(off).toMatch(/<input[^>]* checked[ >]/);
+		const on = ssr.renderToString(
+			() => App({ show: () => true, items: () => [] }) as ssr.SSRPayload,
+		);
+		expect(on).toMatch(/<details[^>]* open[ >]/);
+		expect(on).toMatch(/<button[^>]* disabled[ >]/);
+		expect(on).toContain('aria-expanded="true"');
+		expect(on).not.toContain('="false"');
+	});
+
+	test("SSR classList merges into the element's class attribute", () => {
+		const { code } = compile(
+			`export function App(props) {
+				return (
+					<ul class="docs" classList={{ "menu-open": props.show(), wide: true }}>
+						<li classList={{ sub: props.show() }}>a</li>
+						<li classList={{ sub: false }} title="x">b</li>
+					</ul>
+				);
+			}`,
+			{ filename: "ClassList.tsx", target: "ssr", hydratable: true },
+		);
+		const { App } = loadCompiled(
+			code,
+			"@arachne/render/ssr",
+			ssr as unknown as Record<string, unknown>,
+		);
+		const html = ssr.renderToString(
+			() => App({ show: () => true, items: () => [] }) as ssr.SSRPayload,
+		);
+		expect(html).toMatch(/<ul[^>]* class="docs menu-open wide"[^>]*>/);
+		expect(html).toMatch(/<li[^>]* class="sub"[^>]*>a<\/li>/);
+		expect(html).toMatch(/<li(?![^>]*class)[^>]*title="x"[^>]*>b<\/li>/);
+		expect(html.toLowerCase()).not.toContain("classlist");
+		expect(html).not.toContain("\uE000");
 	});
 
 	test("DOM compile applies element and component spreads reactively", () => {

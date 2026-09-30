@@ -70,8 +70,11 @@ export function escape(s: unknown, attr = false): unknown {
 	if (!attr && t === "function") return escape((s as () => unknown)());
 	if (!attr && Array.isArray(s)) return (s as unknown[]).map((item) => escape(item));
 	if (attr) {
-		if (t === "boolean") return String(s);
-		if (s == null || t === "number") return s;
+		// Booleans stay booleans: ssrAttribute renders `true` as a bare attribute
+		// and drops `false` (aria-* get "true"/"false"), as the DOM runtime does.
+		if (s == null || t === "number" || t === "boolean") return s;
+		// `classList` maps: ssrAttribute escapes the class names it keeps.
+		if (t === "object" && !Array.isArray(s)) return s;
 		return escape(String(s), attr);
 	}
 	return s;
@@ -104,6 +107,7 @@ export function getHydrationKey(): string {
  * attribute-escaped by the compiler, so it is not escaped again here.
  */
 export function ssrAttribute(key: string, value: unknown, isBoolean = false): string {
+	if (key === "classList") return classListMark(value);
 	if (typeof value === "boolean" && key.startsWith("aria-")) return ` ${key}="${value}"`;
 	if (value == null || value === false) return "";
 	if (isBoolean || value === true) return ` ${key}`;
@@ -137,6 +141,37 @@ export function ssrGroup(fn: () => unknown[], _count: number): SSRGroup {
 	return { [GROUP]: true, values: fn(), index: 0 } as SSRGroup;
 }
 
+/**
+ * `classList={{ … }}` holes become a marked class value; `ssr()` merges it
+ * into the element's `class` attribute (an element may have only one).
+ */
+const CLASS_MARK = "\uE000";
+
+function classListMark(value: unknown): string {
+	const map = (value ?? {}) as Record<string, unknown>;
+	const names = Object.keys(map).filter((name) => map[name]);
+	return `${CLASS_MARK}"${escape(names.join(" "), true) as string}"`;
+}
+
+/** Merge marked classList values into one `class` attribute per opening tag. */
+function mergeClassLists(html: string): string {
+	return html.replace(
+		/<([a-zA-Z][\w-]*)([^<>]*\uE000[^<>]*)>/g,
+		(_tag, name: string, attrs: string) => {
+			const classes: string[] = [];
+			const rest = attrs.replace(
+				/ class="([^"]*)"|\uE000"([^"]*)"/g,
+				(_m, own?: string, listed?: string) => {
+					const value = own ?? listed;
+					if (value) classes.push(value);
+					return "";
+				},
+			);
+			return `<${name}${classes.length ? ` class="${classes.join(" ")}"` : ""}${rest}>`;
+		},
+	);
+}
+
 /** Template + hole interpolations. Holes arrive already escaped by the compiler. */
 export function ssr(templates: string[] | string, ...values: SSRPayload[]): SSRNode {
 	if (typeof templates === "string") {
@@ -148,7 +183,7 @@ export function ssr(templates: string[] | string, ...values: SSRPayload[]): SSRN
 		out += resolveSSRNode(isGroup(value) ? value.values[value.index++] : value);
 		out += templates[i + 1] ?? "";
 	}
-	return { t: out };
+	return { t: out.includes(CLASS_MARK) ? mergeClassLists(out) : out };
 }
 
 const cssName = (name: string) =>

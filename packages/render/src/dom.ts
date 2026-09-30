@@ -164,7 +164,16 @@ export function getNextMarker(start: ChildNode | null): [ChildNode | null, Child
 	return [end, current];
 }
 
+/** The last `classList` object applied to each element (diffed on the next update). */
+const classLists = new WeakMap<Element, unknown>();
+
 export function setAttribute(node: Element, name: string, value: unknown): void {
+	// The compiler emits `classList={{ a: on() }}` as an attribute; toggle the classes instead.
+	if (name === "classList") {
+		assignClassList(node, value, classLists.get(node));
+		classLists.set(node, value);
+		return;
+	}
 	// ARIA states are enumerated strings: `aria-expanded="false"` is meaningful.
 	if (typeof value === "boolean" && name.startsWith("aria-")) {
 		node.setAttribute(name, String(value));
