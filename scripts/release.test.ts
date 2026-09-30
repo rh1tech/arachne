@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { type Manifest, releasePlan, resolveWorkspaceRanges } from "./release.ts";
+import { alreadyPublished, type Manifest, releasePlan, resolveWorkspaceRanges } from "./release.ts";
 
 const pkg = (name: string, deps: string[] = [], extra: Partial<Manifest> = {}): Manifest => ({
 	name,
@@ -57,4 +57,14 @@ test("workspace ranges become the workspace packages' own versions", () => {
 	expect(() => resolveWorkspaceRanges({ "@arachnejs/nope": "workspace:*" }, versions)).toThrow(
 		"@arachnejs/nope",
 	);
+});
+
+test("recognises npm's 'version already exists' error", () => {
+	expect(
+		alreadyPublished(
+			"npm error code E403\nnpm error 403 403 Forbidden - PUT https://registry.npmjs.org/@arachnejs%2fmcp - You cannot publish over the previously published versions: 0.1.0.",
+		),
+	).toBe(true);
+	expect(alreadyPublished("npm error code EPUBLISHCONFLICT")).toBe(true);
+	expect(alreadyPublished("npm error code EOTP")).toBe(false);
 });

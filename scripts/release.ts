@@ -135,6 +135,13 @@ function pack(manifest: Manifest, outDir: string, versions: ReadonlyMap<string, 
 	}
 }
 
+/** npm's answer when the version exists (EPUBLISHCONFLICT / "previously published"). */
+export function alreadyPublished(npmOutput: string): boolean {
+	return /EPUBLISHCONFLICT|cannot publish over the previously published versions|You cannot publish over/i.test(
+		npmOutput,
+	);
+}
+
 /** The packed manifest must name this version and the current versions of internal dependencies. */
 function checkPacked(
 	tarball: string,
@@ -177,7 +184,12 @@ if (import.meta.main) {
 		];
 		const result = run(args);
 		console.info(result.out.trim());
-		if (!result.ok) throw new Error(`publishing ${manifest.name}@${manifest.version} failed`);
+		if (!result.ok && alreadyPublished(result.out)) {
+			// The registry's metadata can lag behind a publish (npm view said no).
+			console.info(`${manifest.name}@${manifest.version} is already on npm`);
+		} else if (!result.ok) {
+			throw new Error(`publishing ${manifest.name}@${manifest.version} failed`);
+		}
 		if (dryRun) {
 			console.info(`would publish ${manifest.name}@${manifest.version}`);
 			continue;

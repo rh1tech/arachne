@@ -42,7 +42,7 @@ jobs:
           registry-url: https://registry.npmjs.org
 
       - name: Update npm
-        run: npm install -g npm@latest
+        run: npm install -g npm@^11.5.1
 
       - name: Install
         run: bun install --frozen-lockfile
