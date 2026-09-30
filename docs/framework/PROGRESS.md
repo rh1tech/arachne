@@ -354,6 +354,11 @@ light and dark. Fixes found on the way:
 - site: previews no longer clip overflow (Safari clipped a SplitButton's
   menu with `overflow-x: clip` alone); every component page is checked at
   375px in e2e.
+- kit: the long-standing "EISDIR reading file" CI flake was overlapping
+  build steps in one process (the client and SSR builds of `rebuild()`).
+  Reproduced on rbx1 (6–8 of 40 runs of the server-template e2e); build steps
+  now run one at a time (`exclusive()` in bundle.ts) and entry files are only
+  rewritten when they change: 0 of 40.
 
 ## Known gaps / next steps
 

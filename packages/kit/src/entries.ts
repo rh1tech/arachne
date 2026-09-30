@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join, relative } from "node:path";
 import type { ResolvedConfig } from "./config.ts";
 
@@ -138,7 +138,17 @@ export async function writeEntries(
 	await mkdir(config.cacheDir, { recursive: true });
 	const client = join(config.cacheDir, "client.tsx");
 	const ssr = join(config.cacheDir, "ssr.tsx");
-	await writeFile(client, clientEntrySource(config));
-	await writeFile(ssr, ssrEntrySource(config));
+	await writeIfChanged(client, clientEntrySource(config));
+	await writeIfChanged(ssr, ssrEntrySource(config));
 	return { client, ssr };
+}
+
+/**
+ * Rewrite `file` only when its content changes: the client and SSR builds
+ * each call writeEntries, and truncating a file that a running Bun.build is
+ * reading makes it fail ("EISDIR reading file", seen on Linux).
+ */
+async function writeIfChanged(file: string, content: string): Promise<void> {
+	const current = await readFile(file, "utf8").catch(() => undefined);
+	if (current !== content) await writeFile(file, content);
 }

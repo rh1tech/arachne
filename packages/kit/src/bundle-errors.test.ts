@@ -1,8 +1,8 @@
 import { afterAll, describe, expect, test } from "bun:test";
-import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { bundle } from "./bundle.ts";
-import { build } from "./index.ts";
+import { exclusive } from "./bundle.ts";
+import { build, resolveConfig, writeEntries } from "./index.ts";
 
 const root = join(import.meta.dir, `fixtures/broken-${Date.now().toString(36)}`);
 
@@ -64,44 +64,39 @@ test("a CSS url() to a missing absolute path is still an error", async () => {
 	await expect(build(site)).rejects.toThrow("nope.png");
 });
 
-describe("Bun's spurious EISDIR", () => {
-	const file = join(import.meta.dir, "index.ts"); // a regular file
-	const eisdir = (path: string) =>
-		new AggregateError(
-			[{ message: `EISDIR reading file: "${path}"`, position: null }],
-			"Bundle failed",
-		);
-	const ok = { success: true, outputs: [], logs: [] } as unknown as Awaited<
-		ReturnType<typeof Bun.build>
-	>;
-
-	test("is retried when the path is a regular file", async () => {
-		let calls = 0;
-		const result = await bundle("client", { entrypoints: [] }, async () => {
-			calls += 1;
-			if (calls < 3) throw eisdir(file);
-			return ok;
-		});
-		expect(result).toBe(ok);
-		expect(calls).toBe(3);
+describe("build steps", () => {
+	test("run one at a time (overlapping builds race on Linux: spurious EISDIR)", async () => {
+		const events: string[] = [];
+		const step = (name: string) => async () => {
+			events.push(`${name} start`);
+			await Bun.sleep(20);
+			events.push(`${name} end`);
+			return name;
+		};
+		expect(await Promise.all([exclusive(step("client")), exclusive(step("ssr"))])).toEqual([
+			"client",
+			"ssr",
+		]);
+		expect(events).toEqual(["client start", "client end", "ssr start", "ssr end"]);
 	});
 
-	test("gives up after two retries, and never retries other errors", async () => {
-		let calls = 0;
-		await expect(
-			bundle("client", { entrypoints: [] }, async () => {
-				calls += 1;
-				throw eisdir(file);
-			}),
-		).rejects.toThrow("EISDIR");
-		expect(calls).toBe(3);
-		calls = 0;
-		await expect(
-			bundle("client", { entrypoints: [] }, async () => {
-				calls += 1;
-				throw eisdir(import.meta.dir); // really a directory: a real error
-			}),
-		).rejects.toThrow("EISDIR");
-		expect(calls).toBe(1);
+	test("a failed step doesn't block the next one", async () => {
+		await expect(exclusive(async () => Promise.reject(new Error("boom")))).rejects.toThrow("boom");
+		expect(await exclusive(async () => "next")).toBe("next");
 	});
+});
+
+test("writeEntries leaves unchanged entry files alone (no rewrite under a running build)", async () => {
+	const site = join(root, "entries");
+	mkdirSync(join(site, "app"), { recursive: true });
+	writeFileSync(
+		join(site, "app/routes.tsx"),
+		`export const routes = [{ path: "/", component: () => <p>Hi</p> }];\n`,
+	);
+	const config = await resolveConfig(site);
+	const { client, ssr } = await writeEntries(config);
+	const before = [statSync(client).mtimeMs, statSync(ssr).mtimeMs];
+	await Bun.sleep(20);
+	await writeEntries(config);
+	expect([statSync(client).mtimeMs, statSync(ssr).mtimeMs]).toEqual(before);
 });

@@ -1,4 +1,4 @@
-import { existsSync, statSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { readdir, rm } from "node:fs/promises";
 import { dirname, join, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -105,55 +105,40 @@ function failure(label: string, logs: readonly unknown[]): Error {
 	return new Error(`${label} build failed:\n${logs.map(formatLog).join("\n")}`);
 }
 
-/** How often a build is retried after Bun's spurious EISDIR (see {@link bundle}). */
-const EISDIR_RETRIES = 2;
+/** The build step in progress (see {@link exclusive}). */
+let queue: Promise<unknown> = Promise.resolve();
 
 /**
- * Bun on Linux sometimes fails a build with "EISDIR reading file" for a path
- * that is a regular file (seen in CI and on servers; not reproducible in
- * isolation). Only that case is retried: the path must exist as a file.
+ * Run `step` after the build steps already queued. Client and SSR builds are
+ * whole steps (Bun.build plus reading its outputs or importing the result):
+ * overlapping them in one process makes Bun on Linux fail with "EISDIR
+ * reading file" for regular files (5–8 of 40 runs; 0 of 40 in sequence).
  */
-function spuriousEisdir(errors: readonly unknown[]): boolean {
-	return (
-		errors.length > 0 &&
-		errors.every((error) => {
-			const path = /EISDIR reading file: "([^"]+)"/.exec(
-				String((error as BuildLog).message ?? error),
-			)?.[1];
-			if (!path) return false;
-			try {
-				return statSync(path).isFile();
-			} catch {
-				return false;
-			}
-		})
-	);
+export function exclusive<T>(step: () => Promise<T>): Promise<T> {
+	const run = queue.then(step);
+	queue = run.catch(() => undefined);
+	return run;
 }
 
 /**
  * `Bun.build` that fails with the bundler's messages (file, line, cause).
  * Bun either resolves with `success: false` or rejects with an
- * `AggregateError` whose own message is only "Bundle failed". Bun's
- * spurious EISDIR on a regular file is retried twice.
+ * `AggregateError` whose own message is only "Bundle failed".
  */
 export async function bundle(
 	label: string,
 	options: Parameters<typeof Bun.build>[0],
 	build: typeof Bun.build = Bun.build,
 ): Promise<Awaited<ReturnType<typeof Bun.build>>> {
-	for (let attempt = 0; ; attempt += 1) {
-		let result: Awaited<ReturnType<typeof Bun.build>>;
-		try {
-			result = await build(options);
-		} catch (error) {
-			if (!(error instanceof AggregateError)) throw error;
-			if (attempt < EISDIR_RETRIES && spuriousEisdir(error.errors)) continue;
-			throw failure(label, error.errors);
-		}
-		if (result.success) return result;
-		if (attempt < EISDIR_RETRIES && spuriousEisdir(result.logs)) continue;
-		throw failure(label, result.logs);
+	let result: Awaited<ReturnType<typeof Bun.build>>;
+	try {
+		result = await build(options);
+	} catch (error) {
+		if (error instanceof AggregateError) throw failure(label, error.errors);
+		throw error;
 	}
+	if (!result.success) throw failure(label, result.logs);
+	return result;
 }
 
 /** Absolute input paths listed in a Bun metafile. */
@@ -190,51 +175,55 @@ export async function buildClient(
 	config: ResolvedConfig,
 	options: ClientBuildOptions,
 ): Promise<ClientBuild> {
-	const { client } = await writeEntries(config);
-	const hydrate = config.hydrate && config.routesFile !== undefined;
-	const entrypoints = [...(hydrate ? [client] : []), ...config.styles];
-	const files = new Map<string, Asset>();
-	if (entrypoints.length === 0) return { files, entry: undefined, styles: [], inputs: [] };
-	const result = await bundle("client", {
-		entrypoints,
-		root: config.root,
-		target: "browser",
-		format: "esm",
-		splitting: true,
-		minify: !options.dev,
-		sourcemap: options.dev ? "inline" : "none",
-		publicPath: `${config.base}assets/`,
-		naming: {
-			entry: "[name]-[hash].[ext]",
-			// Flat: Bun drops a chunk sub-directory from chunk-to-chunk imports
-			// (a lazy chunk importing a shared one would 404). See chunks.test.ts.
-			chunk: "chunk-[name]-[hash].[ext]",
-			asset: "[name]-[hash].[ext]",
-		},
-		define: { "process.env.NODE_ENV": JSON.stringify(options.dev ? "development" : "production") },
-		plugins: [
-			publicUrls(config.publicDir),
-			bunPlugin({ target: "dom", hydratable: true, dev: options.dev }),
-		],
-		metafile: true,
-	} as Parameters<typeof Bun.build>[0]);
-	let entry: string | undefined;
-	const styles: string[] = [];
-	for (const output of result.outputs) {
-		const name = output.path.replace(/^\.\//, "").split("\\").join("/");
-		const url = `${config.base}assets/${name}`;
-		files.set(url, { bytes: new Uint8Array(await output.arrayBuffer()), type: typeOf(name) });
-		// Bun reports CSS entries as "asset"; link every top-level stylesheet
-		// (style entries and CSS imported by components), not per-chunk CSS.
-		if (name.endsWith(".css") && !name.startsWith("chunk-")) styles.push(url);
-		else if (output.kind === "entry-point" && name.endsWith(".js")) entry = url;
-	}
-	return {
-		files,
-		entry,
-		styles,
-		inputs: inputsOf(config.root, (result as { metafile?: unknown }).metafile),
-	};
+	return exclusive(async () => {
+		const { client } = await writeEntries(config);
+		const hydrate = config.hydrate && config.routesFile !== undefined;
+		const entrypoints = [...(hydrate ? [client] : []), ...config.styles];
+		const files = new Map<string, Asset>();
+		if (entrypoints.length === 0) return { files, entry: undefined, styles: [], inputs: [] };
+		const result = await bundle("client", {
+			entrypoints,
+			root: config.root,
+			target: "browser",
+			format: "esm",
+			splitting: true,
+			minify: !options.dev,
+			sourcemap: options.dev ? "inline" : "none",
+			publicPath: `${config.base}assets/`,
+			naming: {
+				entry: "[name]-[hash].[ext]",
+				// Flat: Bun drops a chunk sub-directory from chunk-to-chunk imports
+				// (a lazy chunk importing a shared one would 404). See chunks.test.ts.
+				chunk: "chunk-[name]-[hash].[ext]",
+				asset: "[name]-[hash].[ext]",
+			},
+			define: {
+				"process.env.NODE_ENV": JSON.stringify(options.dev ? "development" : "production"),
+			},
+			plugins: [
+				publicUrls(config.publicDir),
+				bunPlugin({ target: "dom", hydratable: true, dev: options.dev }),
+			],
+			metafile: true,
+		} as Parameters<typeof Bun.build>[0]);
+		let entry: string | undefined;
+		const styles: string[] = [];
+		for (const output of result.outputs) {
+			const name = output.path.replace(/^\.\//, "").split("\\").join("/");
+			const url = `${config.base}assets/${name}`;
+			files.set(url, { bytes: new Uint8Array(await output.arrayBuffer()), type: typeOf(name) });
+			// Bun reports CSS entries as "asset"; link every top-level stylesheet
+			// (style entries and CSS imported by components), not per-chunk CSS.
+			if (name.endsWith(".css") && !name.startsWith("chunk-")) styles.push(url);
+			else if (output.kind === "entry-point" && name.endsWith(".js")) entry = url;
+		}
+		return {
+			files,
+			entry,
+			styles,
+			inputs: inputsOf(config.root, (result as { metafile?: unknown }).metafile),
+		};
+	});
 }
 
 /** Output of {@link buildSsr}. */
@@ -257,28 +246,30 @@ export async function buildSsr(
 	config: ResolvedConfig,
 	options: ClientBuildOptions,
 ): Promise<SsrBuild> {
-	const { ssr } = await writeEntries(config);
-	ssrBuilds += 1;
-	const outdir = join(config.cacheDir, "ssr", `${Date.now().toString(36)}-${ssrBuilds}`);
-	const result = await bundle("ssr", {
-		entrypoints: [ssr],
-		root: config.cacheDir,
-		outdir,
-		target: "bun",
-		format: "esm",
-		plugins: [bunPlugin({ target: "ssr", hydratable: true, dev: options.dev })],
-		// Resolved from node_modules at runtime: one signals instance per process.
-		external: ["@arachnejs/signals", "alien-signals"],
-		metafile: true,
-	} as Parameters<typeof Bun.build>[0]);
-	const file = result.outputs.find((output) => output.kind === "entry-point")?.path;
-	if (!file) throw new Error("ssr build produced no entry");
-	const module = (await import(pathToFileURL(file).href)) as SsrModule;
-	return {
-		module,
-		inputs: inputsOf(config.cacheDir, (result as { metafile?: unknown }).metafile),
-		file,
-	};
+	return exclusive(async () => {
+		const { ssr } = await writeEntries(config);
+		ssrBuilds += 1;
+		const outdir = join(config.cacheDir, "ssr", `${Date.now().toString(36)}-${ssrBuilds}`);
+		const result = await bundle("ssr", {
+			entrypoints: [ssr],
+			root: config.cacheDir,
+			outdir,
+			target: "bun",
+			format: "esm",
+			plugins: [bunPlugin({ target: "ssr", hydratable: true, dev: options.dev })],
+			// Resolved from node_modules at runtime: one signals instance per process.
+			external: ["@arachnejs/signals", "alien-signals"],
+			metafile: true,
+		} as Parameters<typeof Bun.build>[0]);
+		const file = result.outputs.find((output) => output.kind === "entry-point")?.path;
+		if (!file) throw new Error("ssr build produced no entry");
+		const module = (await import(pathToFileURL(file).href)) as SsrModule;
+		return {
+			module,
+			inputs: inputsOf(config.cacheDir, (result as { metafile?: unknown }).metafile),
+			file,
+		};
+	});
 }
 
 /** Remove SSR builds except the one in use. */

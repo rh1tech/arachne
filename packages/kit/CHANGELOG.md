@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- 25609f1: Builds retry (twice) when Bun reports "EISDIR reading file" for a path that is a regular file, an intermittent Bun failure on Linux. Build log entries without a source position now show their message.
+- Client and SSR builds run one at a time, and generated entry files are only rewritten when they change: overlapping builds in one process made Bun on Linux fail intermittently with "EISDIR reading file" for regular files. Build log entries without a source position now show their message.
 - Updated dependencies [b6e210c]
   - @arachnejs/render@0.1.1
   - @arachnejs/router@0.1.1
