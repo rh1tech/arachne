@@ -1,0 +1,240 @@
+/* The home page: one column, sections separated by space alone. */
+
+.home {
+	width: 100%;
+	max-width: 72rem;
+	margin: 0 auto;
+	padding: 0 var(--gutter) 2rem;
+}
+
+.man-strip {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+	margin: 0;
+	padding: 0.9rem 0;
+	color: var(--ink-3);
+	font: 400 var(--text-xs) / 1.4 var(--font-mono);
+	letter-spacing: 0.02em;
+}
+
+.man-strip-end {
+	margin-top: 2.5rem;
+	border-top: 1px solid var(--rule);
+}
+
+.home-section {
+	min-width: 0;
+	padding: clamp(1.25rem, 2.5vw, 2rem) 0;
+}
+
+.home-section.name {
+	padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(1rem, 2vw, 1.5rem);
+}
+
+.home-section > p {
+	max-width: 68ch;
+	margin: 0 0 1rem;
+	font-size: var(--text-lead);
+	line-height: 1.65;
+}
+
+.home-section > p:last-child {
+	margin-bottom: 0;
+}
+
+.home-section code {
+	font-size: 0.9em;
+}
+
+/* The headline gets the scale: it is the one sentence people read. */
+.headline {
+	max-width: 27ch;
+	margin: 0;
+	font-size: var(--text-hero);
+	font-weight: 600;
+	letter-spacing: -0.025em;
+	line-height: 1.08;
+	text-wrap: balance;
+}
+
+.headline-name {
+	color: var(--accent);
+}
+
+/* SYNOPSIS: the one dark surface on the page. */
+.terminal {
+	max-width: 50rem;
+	margin: 0 0 1rem;
+	border-color: var(--terminal);
+	background: var(--terminal);
+	color: var(--terminal-ink);
+	box-shadow: 0.35rem 0.35rem 0 var(--rule);
+}
+
+.terminal pre {
+	padding: 1.1rem 1.25rem;
+	font-size: var(--text-sm);
+	line-height: 1.8;
+}
+
+.terminal .cmd::before {
+	content: "$ ";
+	color: var(--terminal-dim);
+	user-select: none;
+}
+
+.terminal .copy {
+	border-color: oklch(45% 0.01 60);
+	background: transparent;
+	color: var(--terminal-dim);
+}
+
+.home-section > p.note {
+	color: var(--ink-2);
+	font-size: var(--text-sm);
+}
+
+/* MODES: an option list. */
+.options {
+	display: grid;
+	grid-template-columns: 13rem minmax(0, 1fr);
+	gap: 1rem 1.5rem;
+	max-width: 62rem;
+	margin: 0;
+}
+
+.options dt code {
+	color: var(--ink);
+	font-size: 0.9375rem;
+	font-weight: 600;
+}
+
+.options dd {
+	max-width: 62ch;
+	margin: 0;
+	color: var(--ink-2);
+}
+
+/* EXAMPLE: two files side by side on wide screens. */
+.example {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 40rem), 1fr));
+	gap: 1rem;
+	margin-top: 1.25rem;
+}
+
+.example .code {
+	margin: 0;
+	background: var(--paper);
+}
+
+.example figcaption {
+	padding: 0.45rem 1.1rem;
+	border-bottom: 1px solid var(--rule);
+	background: var(--paper-2);
+	color: var(--ink-2);
+	font: 400 var(--text-xs) / 1.6 var(--font-mono);
+}
+
+.example .copy {
+	top: 0.3rem;
+}
+
+/* PACKAGES: a dense index. */
+.package-groups {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 25rem), 1fr));
+	gap: 2rem 3rem;
+}
+
+.package-group h2 {
+	margin: 0 0 0.25rem;
+	padding-bottom: 0.4rem;
+	border-bottom: 1px solid var(--ink);
+	color: var(--ink);
+	font: 600 var(--text-xs) / 1.4 var(--font-mono);
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.packages {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.packages li {
+	display: grid;
+	grid-template-columns: 9.5rem minmax(0, 1fr);
+	gap: 1rem;
+	padding: 0.45rem 0;
+	border-bottom: 1px dotted var(--rule-strong);
+	font-size: var(--text-sm);
+	line-height: 1.5;
+}
+
+.packages a {
+	font-family: var(--font-mono);
+	font-size: 0.8125rem;
+	text-decoration: none;
+}
+
+.packages a:hover {
+	text-decoration: underline;
+}
+
+.packages span {
+	color: var(--ink-2);
+}
+
+.home-section > p.lead-in {
+	margin-bottom: 0.4rem;
+	color: var(--ink-2);
+}
+
+.defaults {
+	max-width: 68ch;
+	margin: 0;
+	padding-left: 1.1rem;
+	font-size: var(--text-lead);
+}
+
+.defaults li {
+	padding-left: 0.35rem;
+	margin: 0.2rem 0;
+}
+
+.defaults li::marker {
+	content: "–";
+	color: var(--ink-3);
+}
+
+.home-section > p.see-also {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem 1.25rem;
+	font-family: var(--font-mono);
+	font-size: var(--text-sm);
+}
+
+@media (max-width: 760px) {
+	.options {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 0.25rem;
+	}
+	.options dd {
+		margin-bottom: 0.9rem;
+	}
+	.packages li {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 0;
+	}
+	.terminal {
+		box-shadow: none;
+	}
+}
+
+.see-also > span {
+	color: var(--ink-3);
+}

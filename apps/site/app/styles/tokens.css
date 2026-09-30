@@ -1,0 +1,115 @@
+/* Layer order: site element defaults, then the UI kit (ui.css, component pages only). */
+@layer site-base, arachne.tokens, arachne.components;
+
+/* Fonts: IBM Plex, self-hosted (copied from @fontsource by scripts/prepare.ts). */
+@font-face {
+	font-family: "Plex Sans";
+	src: url("/fonts/plex-sans-400.woff2") format("woff2");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: "Plex Sans";
+	src: url("/fonts/plex-sans-400-italic.woff2") format("woff2");
+	font-weight: 400;
+	font-style: italic;
+	font-display: swap;
+}
+@font-face {
+	font-family: "Plex Sans";
+	src: url("/fonts/plex-sans-600.woff2") format("woff2");
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: "Plex Mono";
+	src: url("/fonts/plex-mono-400.woff2") format("woff2");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: "Plex Mono";
+	src: url("/fonts/plex-mono-600.woff2") format("woff2");
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+}
+
+/*
+ * Ink on warm paper, one vermilion accent. Text tones are picked for WCAG AA
+ * on both --paper and --paper-2: --ink-3 is the lightest text colour allowed.
+ */
+:root {
+	--paper: oklch(97.6% 0.006 85);
+	--paper-2: oklch(94.8% 0.009 85);
+	--ink: oklch(21% 0.012 60);
+	--ink-2: oklch(37% 0.012 60);
+	--ink-3: oklch(46% 0.012 60);
+	--rule: oklch(87% 0.012 80);
+	--rule-strong: oklch(74% 0.012 70);
+	--accent: oklch(47% 0.17 33);
+	--accent-bright: oklch(60% 0.19 36);
+	--terminal: oklch(21% 0.012 60);
+	--terminal-ink: oklch(94% 0.01 85);
+	--terminal-dim: oklch(72% 0.01 70);
+	--scrim: oklch(20% 0.01 60 / 0.45);
+	--shadow: 0 1.5rem 3.5rem -1.25rem oklch(20% 0.02 60 / 0.35);
+
+	--hl-foreground: var(--ink);
+	--hl-background: transparent;
+	--hl-token-keyword: oklch(45% 0.16 30);
+	--hl-token-string: oklch(43% 0.1 145);
+	--hl-token-string-expression: oklch(43% 0.1 145);
+	--hl-token-function: oklch(43% 0.13 255);
+	--hl-token-constant: oklch(44% 0.14 305);
+	--hl-token-parameter: var(--ink);
+	--hl-token-punctuation: var(--ink-2);
+	--hl-token-comment: var(--ink-3);
+	--hl-token-link: var(--accent);
+
+	--font-sans: "Plex Sans", ui-sans-serif, system-ui, sans-serif;
+	--font-mono: "Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+	--text-xs: 0.75rem;
+	--text-sm: 0.875rem;
+	--text-base: 1rem;
+	--text-lead: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+	--text-h1: clamp(2rem, 1.5rem + 2vw, 2.75rem);
+	--text-hero: clamp(1.9rem, 1.1rem + 3.2vw, 3.4rem);
+
+	--gutter: clamp(1rem, 3vw, 2rem);
+	--radius: 4px;
+	--duration-fast: 120ms;
+	--duration-normal: 240ms;
+	--ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+	color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--paper: oklch(18.5% 0.006 60);
+		--paper-2: oklch(22.5% 0.007 60);
+		--ink: oklch(93% 0.008 85);
+		--ink-2: oklch(80% 0.008 80);
+		--ink-3: oklch(68% 0.008 75);
+		--rule: oklch(31% 0.008 60);
+		--rule-strong: oklch(45% 0.008 60);
+		--accent: oklch(74% 0.14 42);
+		--accent-bright: oklch(70% 0.17 38);
+		--terminal: oklch(13% 0.006 60);
+		--terminal-ink: oklch(93% 0.008 85);
+		--terminal-dim: oklch(68% 0.008 75);
+		--scrim: oklch(5% 0 0 / 0.6);
+		--shadow: 0 1.5rem 3.5rem -1rem oklch(0% 0 0 / 0.7);
+
+		--hl-token-keyword: oklch(76% 0.13 40);
+		--hl-token-string: oklch(79% 0.11 145);
+		--hl-token-string-expression: oklch(79% 0.11 145);
+		--hl-token-function: oklch(79% 0.1 245);
+		--hl-token-constant: oklch(79% 0.1 310);
+	}
+}

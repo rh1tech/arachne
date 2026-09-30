@@ -1,0 +1,518 @@
+/* Documentation: sidebar · page · outline. */
+
+.docs {
+	display: grid;
+	grid-template-columns: 16rem minmax(0, 1fr) 14rem;
+	width: 100%;
+	max-width: 92rem;
+	margin: 0 auto;
+}
+
+.menu-toggle,
+.scrim {
+	display: none;
+}
+
+.sidebar {
+	position: sticky;
+	top: 0;
+	align-self: start;
+	max-height: 100vh;
+	overflow-y: auto;
+	padding: 1.75rem 1.25rem 3rem var(--gutter);
+	border-right: 1px solid var(--rule);
+	overscroll-behavior: contain;
+}
+
+.nav-section {
+	margin-bottom: 1.1rem;
+}
+
+.nav-section summary {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.2rem 0;
+	color: var(--ink);
+	font: 600 var(--text-xs) / 1.5 var(--font-mono);
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	cursor: pointer;
+	list-style: none;
+}
+
+.nav-section summary::-webkit-details-marker {
+	display: none;
+}
+
+.nav-section summary::after {
+	content: "+";
+	color: var(--ink-3);
+	font-weight: 400;
+}
+
+.nav-section[open] summary::after {
+	content: "−";
+}
+
+.nav-section ul {
+	margin: 0.3rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.nav-section a {
+	display: block;
+	margin-left: -0.65rem;
+	padding: 0.22rem 0.65rem;
+	border-left: 2px solid transparent;
+	color: var(--ink-2);
+	font-size: 0.9rem;
+	line-height: 1.45;
+	text-decoration: none;
+}
+
+.nav-section a.pkg {
+	font-family: var(--font-mono);
+	font-size: 0.8125rem;
+}
+
+.nav-section a:hover {
+	background: var(--paper-2);
+	color: var(--ink);
+}
+
+.nav-section a[aria-current="page"] {
+	border-left-color: var(--accent-bright);
+	background: var(--paper-2);
+	color: var(--ink);
+	font-weight: 600;
+}
+
+/* ── Page ───────────────────────────────────────────────── */
+
+.doc {
+	min-width: 0;
+	max-width: 50rem;
+	padding: 2.25rem clamp(1.25rem, 4vw, 3.5rem) 4rem;
+}
+
+.doc-meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem 1rem;
+	margin: 0;
+	color: var(--ink-3);
+	font: 400 var(--text-xs) / 1.5 var(--font-mono);
+	letter-spacing: 0.02em;
+}
+
+.doc-source {
+	padding: 0.1rem 0.45rem;
+	border: 1px solid var(--rule);
+	border-radius: 3px;
+	background: var(--paper-2);
+	color: var(--ink-2);
+}
+
+.doc-header h1 {
+	margin: 0.6rem 0 1.5rem;
+	font-size: var(--text-h1);
+	font-weight: 600;
+	letter-spacing: -0.02em;
+	line-height: 1.12;
+	overflow-wrap: anywhere;
+}
+
+.doc-header h1.pkg {
+	font-family: var(--font-mono);
+	letter-spacing: -0.04em;
+}
+
+/* ── Prose (rendered Markdown) ──────────────────────────── */
+/* Stops at live UI examples: the kit styles those (see ui/previews.tsx). */
+
+@scope (.prose) to (.ui-preview) {
+	:scope {
+		font-size: var(--text-base);
+		line-height: 1.7;
+	}
+
+	:scope > :first-child {
+		margin-top: 0;
+	}
+
+	p,
+	ul,
+	ol {
+		margin: 0 0 1rem;
+	}
+
+	h2,
+	h3,
+	h4 {
+		scroll-margin-top: 1.5rem;
+		font-weight: 600;
+		line-height: 1.25;
+	}
+
+	h2 {
+		margin: 2.75rem 0 0.9rem;
+		padding-top: 1.4rem;
+		border-top: 1px solid var(--rule);
+		font-size: 1.45rem;
+		letter-spacing: -0.012em;
+	}
+
+	h3 {
+		margin: 2rem 0 0.6rem;
+		font-size: 1.125rem;
+	}
+
+	h4 {
+		margin: 1.5rem 0 0.5rem;
+		font-size: 1rem;
+	}
+
+	.anchor {
+		margin-left: 0.2rem;
+		color: var(--ink-3);
+		font-weight: 400;
+		text-decoration: none;
+		opacity: 0;
+		transition: opacity var(--duration-fast);
+	}
+
+	:is(h2, h3, h4):hover .anchor,
+	.anchor:focus-visible {
+		opacity: 1;
+	}
+
+	ul,
+	ol {
+		padding-left: 1.3rem;
+	}
+
+	li {
+		margin: 0.3rem 0;
+	}
+
+	li::marker {
+		color: var(--ink-3);
+	}
+
+	li > p {
+		margin: 0;
+	}
+
+	:not(pre) > code {
+		padding: 0.05em 0.3em;
+		border: 1px solid var(--rule);
+		border-radius: 3px;
+		background: var(--paper-2);
+		font-size: 0.85em;
+		/* break-word, not anywhere: long identifiers may break, but table
+		 * columns aren't squeezed until words like `boolean` split. */
+		overflow-wrap: break-word;
+	}
+
+	a code {
+		color: inherit;
+	}
+
+	blockquote {
+		margin: 1.5rem 0;
+		padding: 0.8rem 1.1rem;
+		border-left: 3px solid var(--accent-bright);
+		background: var(--paper-2);
+		color: var(--ink-2);
+	}
+
+	blockquote > :last-child {
+		margin-bottom: 0;
+	}
+
+	hr {
+		margin: 2.5rem 0;
+		border: 0;
+		border-top: 1px solid var(--rule);
+	}
+
+	.table-scroll {
+		margin: 1.25rem 0 1.5rem;
+		overflow-x: auto;
+	}
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 0.9rem;
+		line-height: 1.5;
+	}
+
+	th {
+		padding: 0.4rem 1rem 0.4rem 0;
+		border-bottom: 1.5px solid var(--ink);
+		font-weight: 600;
+		text-align: left;
+		white-space: nowrap;
+	}
+
+	td {
+		padding: 0.5rem 1rem 0.5rem 0;
+		border-bottom: 1px solid var(--rule);
+		vertical-align: top;
+	}
+
+	td:first-child code {
+		white-space: nowrap;
+	}
+}
+
+/* ── Live UI examples (component pages) ────────────────── */
+
+.ui-preview {
+	position: relative;
+	margin: 1.25rem 0 0;
+	min-height: 5.5rem;
+	border: 1px solid var(--rule);
+	border-bottom: 0;
+	border-radius: var(--radius) var(--radius) 0 0;
+	/* The kit's surface and ink once ui.css loads; the site's until then. */
+	background: var(--a-paper, var(--paper));
+	color: var(--a-ink, var(--ink));
+}
+
+.ui-preview + .code {
+	margin-top: 0;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+
+.ui-preview::before {
+	content: "Live";
+	position: absolute;
+	top: 0.45rem;
+	right: 0.55rem;
+	z-index: 2;
+	color: var(--ink-3);
+	font: 400 var(--text-xs) / 1.5 var(--font-mono);
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	pointer-events: none;
+}
+
+.ui-preview-status {
+	margin: 0;
+	padding: 1.9rem 1.35rem;
+	color: var(--ink-3);
+	font-size: var(--text-sm);
+}
+
+.ui-preview-stage {
+	position: relative;
+	/* Dropdowns paint above the code block that follows. */
+	z-index: 1;
+	padding: 1.9rem 1.35rem 1.5rem;
+	overflow-x: clip;
+	/* A containing block for position: fixed demos (FAB, banners, bottom nav). */
+	transform: translateZ(0);
+	font-family: var(--a-font, var(--font-sans));
+	font-size: var(--text-sm);
+	line-height: 1.5;
+}
+
+.ui-preview-log {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.35rem 0.6rem;
+	padding: 0.55rem 1.35rem;
+	border-top: 1px dashed var(--rule);
+	color: var(--ink-3);
+	font-size: var(--text-xs);
+}
+
+.ui-preview-log code {
+	color: var(--ink-2);
+	font-size: var(--text-xs);
+}
+
+/* ── Pager ──────────────────────────────────────────────── */
+
+.pager {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1rem;
+	margin-top: 4rem;
+	padding-top: 1.5rem;
+	border-top: 1px solid var(--rule);
+}
+
+.pager a {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+	padding: 0.85rem 1.1rem;
+	border: 1px solid var(--rule);
+	border-radius: var(--radius);
+	color: var(--ink);
+	font-weight: 600;
+	text-decoration: none;
+	transition:
+		border-color var(--duration-fast),
+		transform var(--duration-fast) var(--ease-out);
+}
+
+.pager a:hover {
+	border-color: var(--ink);
+}
+
+.pager span {
+	color: var(--ink-3);
+	font: 400 var(--text-xs) / 1.4 var(--font-mono);
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+.pager-prev:hover {
+	transform: translateX(-2px);
+}
+
+.pager-next {
+	grid-column: 2;
+	text-align: right;
+}
+
+.pager-next:hover {
+	transform: translateX(2px);
+}
+
+/* ── Outline ────────────────────────────────────────────── */
+
+.toc {
+	position: sticky;
+	top: 0;
+	align-self: start;
+	max-height: 100vh;
+	overflow-y: auto;
+	padding: 2.4rem var(--gutter) 3rem 0.5rem;
+	font-size: 0.8125rem;
+	line-height: 1.45;
+}
+
+.toc-title {
+	margin: 0 0 0.6rem;
+	color: var(--ink);
+	font: 600 var(--text-xs) / 1.5 var(--font-mono);
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.toc ul {
+	margin: 0;
+	padding: 0 0 0 0.8rem;
+	border-left: 1px solid var(--rule);
+	list-style: none;
+}
+
+.toc li {
+	margin: 0.35rem 0;
+}
+
+.toc li.sub {
+	padding-left: 0.75rem;
+}
+
+.toc a {
+	color: var(--ink-3);
+	text-decoration: none;
+}
+
+.toc a:hover {
+	color: var(--ink);
+}
+
+/* ── Narrower screens ───────────────────────────────────── */
+
+@media (max-width: 1240px) {
+	.docs {
+		grid-template-columns: 15rem minmax(0, 1fr);
+	}
+	.toc {
+		display: none;
+	}
+}
+
+@media (max-width: 900px) {
+	.docs {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.menu-toggle {
+		position: sticky;
+		top: 0;
+		z-index: 30;
+		display: block;
+		width: 100%;
+		padding: 0.6rem var(--gutter);
+		border: 0;
+		border-bottom: 1px solid var(--rule);
+		background: var(--paper);
+		color: var(--ink);
+		font: 600 var(--text-xs) / 1.5 var(--font-mono);
+		letter-spacing: 0.06em;
+		text-align: left;
+		text-transform: uppercase;
+	}
+
+	.menu-toggle::before {
+		content: "≡ ";
+		color: var(--accent);
+	}
+
+	.sidebar {
+		position: fixed;
+		inset: 0 auto 0 0;
+		z-index: 40;
+		width: min(20rem, 86vw);
+		/* The desktop rule's align-self: start would shrink the drawer to its
+		 * content (alignment applies to fixed boxes too); stretch it to the
+		 * viewport so it scrolls. */
+		align-self: stretch;
+		max-height: 100dvh;
+		background: var(--paper);
+		box-shadow: var(--shadow);
+		transform: translateX(-102%);
+		transition: transform var(--duration-normal) var(--ease-out);
+		visibility: hidden;
+	}
+
+	.menu-open .sidebar {
+		transform: none;
+		visibility: visible;
+	}
+
+	.scrim {
+		position: fixed;
+		inset: 0;
+		z-index: 35;
+		display: block;
+		border: 0;
+		background: var(--scrim);
+	}
+
+	.doc {
+		padding-top: 1.5rem;
+	}
+
+	.pager {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.pager-next {
+		grid-column: 1;
+	}
+}

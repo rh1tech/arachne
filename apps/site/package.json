@@ -1,0 +1,30 @@
+{
+	"name": "@arachne/site",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"prepare-site": "bun run scripts/prepare.ts",
+		"dev": "bun run scripts/prepare.ts && arachne dev",
+		"build": "bun run scripts/prepare.ts && arachne build",
+		"preview": "arachne preview",
+		"test": "bun test app",
+		"typecheck": "tsc -p tsconfig.json --noEmit",
+		"e2e": "bun test ./e2e/site.e2e.ts"
+	},
+	"dependencies": {
+		"@arachne/kit": "workspace:*",
+		"@arachne/render": "workspace:*",
+		"@arachne/router": "workspace:*",
+		"@arachne/server": "workspace:*",
+		"@arachne/signals": "workspace:*",
+		"@arachne/ui": "workspace:*",
+		"@fontsource/ibm-plex-mono": "^5.3.0",
+		"@fontsource/ibm-plex-sans": "^5.3.0",
+		"shiki": "^4.4.3"
+	},
+	"devDependencies": {
+		"axe-core": "^4.13.0",
+		"playwright": "^1.63.0"
+	}
+}

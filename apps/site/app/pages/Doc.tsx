@@ -1,0 +1,92 @@
+import { For, Show } from "@arachne/render";
+import { Link, type RouteProps } from "@arachne/router";
+import { effect } from "@arachne/signals";
+import { copyCode } from "../components/copy.ts";
+import type { DocData } from "../site.ts";
+
+/** One documentation page rendered from repository Markdown. */
+export function Doc(props: RouteProps) {
+	const doc = () => props.data as DocData;
+	let prose: HTMLElement | undefined;
+
+	// Component pages: mount the live UI examples (their own chunk) once the
+	// page's HTML is in place; unmount them before it is replaced.
+	effect(() => {
+		if (!doc().previews) return;
+		let stopped = false;
+		let unmount: (() => void) | undefined;
+		queueMicrotask(() => {
+			import("../ui/previews.tsx").then(
+				(module) => {
+					if (!stopped && prose) unmount = module.mountPreviews(prose);
+				},
+				(error: unknown) => {
+					console.error("[site] live examples failed to load", error);
+					for (const status of prose?.querySelectorAll(".ui-preview-status") ?? []) {
+						status.textContent = "The live example didn't load. Reload the page to try again.";
+					}
+				},
+			);
+		});
+		return () => {
+			stopped = true;
+			unmount?.();
+		};
+	});
+
+	return (
+		<>
+			<article class="doc">
+				<header class="doc-header">
+					<p class="doc-meta">
+						<span>{doc().section}</span>
+						<code class="doc-source" title="Source file in the repository">
+							{doc().source}
+						</code>
+					</p>
+					<h1 classList={{ pkg: doc().title.startsWith("@arachne/") }}>{doc().title}</h1>
+				</header>
+				<div
+					class="prose"
+					innerHTML={doc().html}
+					ref={(el: HTMLElement) => {
+						prose = el;
+						el.addEventListener("click", copyCode);
+					}}
+				/>
+				<nav class="pager" aria-label="Previous and next page">
+					<Show when={doc().prev}>
+						{(prev: { title: string; path: string }) => (
+							<Link href={prev.path} class="pager-prev">
+								<span>Previous</span>
+								{prev.title}
+							</Link>
+						)}
+					</Show>
+					<Show when={doc().next}>
+						{(next: { title: string; path: string }) => (
+							<Link href={next.path} class="pager-next">
+								<span>Next</span>
+								{next.title}
+							</Link>
+						)}
+					</Show>
+				</nav>
+			</article>
+			<aside class="toc" aria-label="On this page">
+				<Show when={doc().headings.length > 1}>
+					<p class="toc-title">On this page</p>
+					<ul>
+						<For each={doc().headings}>
+							{(heading) => (
+								<li classList={{ sub: heading.level === 3 }}>
+									<a href={`#${heading.id}`}>{heading.text}</a>
+								</li>
+							)}
+						</For>
+					</ul>
+				</Show>
+			</aside>
+		</>
+	);
+}

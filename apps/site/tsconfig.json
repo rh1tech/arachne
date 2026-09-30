@@ -1,0 +1,10 @@
+{
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"jsx": "react-jsx",
+		"jsxImportSource": "@arachne/render",
+		"declaration": false,
+		"declarationMap": false
+	},
+	"include": ["app/**/*", "scripts/**/*", "e2e/**/*", "arachne.config.ts"]
+}

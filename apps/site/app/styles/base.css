@@ -1,0 +1,434 @@
+/*
+ * Element defaults sit in a layer below the UI kit's layers (declared in
+ * tokens.css), so the live examples on component pages keep the kit's look.
+ */
+@layer site-base {
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+
+	html {
+		-webkit-text-size-adjust: 100%;
+		text-size-adjust: 100%;
+	}
+
+	body {
+		margin: 0;
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+		background: var(--paper);
+		color: var(--ink);
+		font: 400 var(--text-base) / 1.65 var(--font-sans);
+		font-kerning: normal;
+		-webkit-font-smoothing: antialiased;
+	}
+
+	#app {
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+	}
+
+	::selection {
+		background: color-mix(in oklch, var(--accent-bright) 28%, transparent);
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--accent-bright);
+		outline-offset: 2px;
+	}
+
+	a {
+		color: var(--accent);
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.18em;
+	}
+
+	a:hover {
+		text-decoration-thickness: 2px;
+	}
+
+	code,
+	kbd,
+	pre {
+		font-family: var(--font-mono);
+	}
+
+	kbd {
+		display: inline-block;
+		min-width: 1.5em;
+		padding: 0 0.35em;
+		border: 1px solid var(--rule-strong);
+		border-bottom-width: 2px;
+		border-radius: 3px;
+		background: var(--paper);
+		color: var(--ink-2);
+		font-size: var(--text-xs);
+		line-height: 1.6;
+		text-align: center;
+	}
+
+	button {
+		font: inherit;
+		color: inherit;
+		cursor: pointer;
+	}
+}
+
+.skip {
+	position: absolute;
+	left: -999px;
+	top: 0.75rem;
+	z-index: 100;
+	padding: 0.5rem 0.75rem;
+	background: var(--ink);
+	color: var(--paper);
+	border-radius: var(--radius);
+}
+
+.skip:focus {
+	left: 0.75rem;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+
+.site-header {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem 1.5rem;
+	padding: 0.7rem var(--gutter);
+	border-bottom: 1px solid var(--rule);
+}
+
+.wordmark {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.55rem;
+	color: var(--ink);
+	font: 600 1.0625rem / 1 var(--font-mono);
+	letter-spacing: -0.01em;
+	text-decoration: none;
+}
+
+.mark {
+	flex: none;
+	transition: transform var(--duration-normal) var(--ease-out);
+}
+
+.mark-spider {
+	fill: var(--accent-bright);
+}
+
+.wordmark:hover .mark {
+	transform: rotate(22.5deg);
+}
+
+.version {
+	color: var(--ink-3);
+	font: 400 var(--text-xs) / 1 var(--font-mono);
+	white-space: nowrap;
+}
+
+.site-nav {
+	display: flex;
+	gap: 1.25rem;
+	margin-left: auto;
+}
+
+.site-nav a {
+	padding: 0.3rem 0;
+	border-bottom: 2px solid transparent;
+	color: var(--ink-2);
+	font-size: 0.9375rem;
+	text-decoration: none;
+}
+
+.site-nav a:hover {
+	color: var(--ink);
+	border-bottom-color: var(--rule-strong);
+}
+
+.site-nav a[aria-current="page"] {
+	color: var(--ink);
+	border-bottom-color: var(--accent-bright);
+}
+
+.search-trigger {
+	display: inline-flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 2.5rem;
+	padding: 0.3rem 0.4rem 0.3rem 0.7rem;
+	border: 1px solid var(--rule);
+	border-radius: var(--radius);
+	background: var(--paper-2);
+	color: var(--ink-3);
+	font-size: var(--text-sm);
+	transition:
+		border-color var(--duration-fast),
+		color var(--duration-fast);
+}
+
+.search-trigger:hover {
+	border-color: var(--rule-strong);
+	color: var(--ink);
+}
+
+.search-trigger:active,
+.copy:active,
+.menu-toggle:active {
+	transform: translateY(1px);
+}
+
+/* ── Search dialog ──────────────────────────────────────── */
+
+.search {
+	width: min(40rem, calc(100vw - 2rem));
+	margin: 12vh auto auto;
+	padding: 0;
+	border: 1px solid var(--rule-strong);
+	border-radius: 6px;
+	background: var(--paper);
+	color: var(--ink);
+	box-shadow: var(--shadow);
+}
+
+.search::backdrop {
+	background: var(--scrim);
+}
+
+.search[open] {
+	animation: rise var(--duration-normal) var(--ease-out);
+}
+
+@keyframes rise {
+	from {
+		opacity: 0;
+		transform: translateY(0.5rem);
+	}
+}
+
+.search-box {
+	display: flex;
+	align-items: center;
+	border-bottom: 1px solid var(--rule);
+}
+
+.search-box input {
+	flex: 1;
+	min-width: 0;
+	padding: 1rem 1.1rem;
+	border: 0;
+	background: transparent;
+	color: var(--ink);
+	font: 400 1.0625rem / 1.3 var(--font-sans);
+}
+
+.search-box input:focus {
+	outline: none;
+}
+
+.search-close {
+	margin: 0 0.8rem;
+	padding: 0.1rem 0.4rem;
+	border: 1px solid var(--rule-strong);
+	border-radius: 3px;
+	background: var(--paper-2);
+	color: var(--ink-2);
+	font: 400 var(--text-xs) / 1.5 var(--font-mono);
+}
+
+#search-results {
+	max-height: min(55vh, 28rem);
+	overflow-y: auto;
+	margin: 0;
+	padding: 0.35rem;
+	list-style: none;
+}
+
+#search-results:empty {
+	display: none;
+}
+
+#search-results a {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 0.55rem 0.75rem;
+	border-radius: var(--radius);
+	color: var(--ink);
+	text-decoration: none;
+}
+
+#search-results [aria-selected="true"] a {
+	background: var(--paper-2);
+	box-shadow: inset 2px 0 var(--accent-bright);
+}
+
+.hit-where {
+	overflow: hidden;
+	max-width: 55%;
+	color: var(--ink-3);
+	font: 400 var(--text-xs) / 1.4 var(--font-mono);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.search-note {
+	margin: 0;
+	padding: 0.85rem 1.1rem;
+	color: var(--ink-3);
+	font-size: var(--text-sm);
+}
+
+/* ── Code blocks (docs and home) ────────────────────────── */
+
+.code {
+	position: relative;
+	margin: 1.25rem 0;
+	border: 1px solid var(--rule);
+	border-radius: var(--radius);
+	background: var(--paper-2);
+}
+
+.code pre {
+	margin: 0;
+	padding: 0.9rem 1.1rem;
+	overflow-x: auto;
+	font-size: 0.8125rem;
+	line-height: 1.65;
+	tab-size: 2;
+}
+
+.code pre code {
+	font: inherit;
+}
+
+.copy {
+	position: absolute;
+	top: 0.45rem;
+	right: 0.45rem;
+	padding: 0.1rem 0.45rem;
+	border: 1px solid var(--rule-strong);
+	border-radius: 3px;
+	background: var(--paper);
+	color: var(--ink-2);
+	font: 400 var(--text-xs) / 1.5 var(--font-mono);
+	opacity: 0;
+	transition: opacity var(--duration-fast);
+}
+
+.code:hover .copy,
+.copy:focus-visible {
+	opacity: 1;
+}
+
+@media (hover: none) {
+	.copy {
+		opacity: 1;
+	}
+}
+
+/* ── Footer ─────────────────────────────────────────────── */
+
+.site-main {
+	flex: 1;
+}
+
+.site-footer {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: 0.4rem 2rem;
+	padding: 1.1rem var(--gutter);
+	border-top: 1px solid var(--rule);
+	color: var(--ink-3);
+	font: 400 var(--text-xs) / 1.5 var(--font-mono);
+}
+
+/* ── 404 ────────────────────────────────────────────────── */
+
+.not-found {
+	max-width: 46rem;
+	margin: 0 auto;
+	padding: clamp(3rem, 10vh, 6rem) var(--gutter);
+}
+
+.not-found h1 {
+	margin: 0.5rem 0 1rem;
+	font-size: var(--text-h1);
+	font-weight: 600;
+	letter-spacing: -0.02em;
+	line-height: 1.15;
+	overflow-wrap: anywhere;
+}
+
+.terminal-line {
+	margin: 0;
+	color: var(--ink-3);
+	font-size: var(--text-sm);
+}
+
+.prompt {
+	color: var(--accent);
+}
+
+@media (max-width: 720px) {
+	.version {
+		display: none;
+	}
+	.site-nav {
+		gap: 0.9rem;
+	}
+	.search-trigger {
+		gap: 0.5rem;
+	}
+}
+
+@media (max-width: 520px) {
+	.site-header {
+		flex-wrap: wrap;
+	}
+	.site-nav {
+		order: 3;
+		width: 100%;
+		margin-left: 0;
+	}
+	.search-trigger {
+		margin-left: auto;
+	}
+	.search-trigger kbd {
+		display: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+
+/* The dialog has its own Esc button; drop the browser's clear control. */
+.search-box input::-webkit-search-cancel-button {
+	display: none;
+}
+
+.site-footer a {
+	color: inherit;
+}
+
+.site-footer a:hover {
+	color: var(--ink);
+}
+
+.site-nav a.nav-external::after {
+	content: " ↗";
+	color: var(--ink-3);
+}

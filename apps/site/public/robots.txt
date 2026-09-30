@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://arachne.rh1.tech/sitemap.xml
