@@ -7,6 +7,7 @@ export type {
 	InsertBuilder,
 	SelectBuilder,
 	UpdateBuilder,
+	UpdateValues,
 } from "./query.ts";
 export { type ColumnSpec, type TableSpec, tableFromSpec } from "./spec.ts";
 export {

@@ -1,0 +1,17 @@
+{
+	"name": "arachne-static-site",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "arachne dev",
+		"build": "arachne build",
+		"preview": "arachne preview"
+	},
+	"dependencies": {
+		"@arachne/kit": "workspace:*",
+		"@arachne/render": "workspace:*",
+		"@arachne/router": "workspace:*",
+		"@arachne/server": "workspace:*",
+		"@arachne/signals": "workspace:*"
+	}
+}

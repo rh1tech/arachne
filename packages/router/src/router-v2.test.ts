@@ -119,6 +119,23 @@ describe("lazy routes and data", () => {
 		expect(calls).toBe(1);
 	});
 
+	test("initialError hydrates a server-rendered error page without loading", async () => {
+		let calls = 0;
+		const router = createRouter({
+			history: memoryHistory("/private"),
+			routes: [{ path: "/private", component: () => "secret" }],
+			load: () => {
+				calls += 1;
+			},
+			initialData: null,
+			initialError: { status: 401, message: "Sign in" },
+			error: (p) => `error: ${(p.error as { message: string }).message}`,
+		});
+		await router.ready;
+		expect(text(router.Outlet())).toBe("error: Sign in");
+		expect(calls).toBe(0);
+	});
+
 	test("loader errors reach the error component", async () => {
 		const router = createRouter({
 			history: memoryHistory("/"),
@@ -133,6 +150,33 @@ describe("lazy routes and data", () => {
 		});
 		await router.navigate("/broken");
 		expect(text(router.Outlet())).toBe("error: database down");
+	});
+});
+
+describe("error and not-found pages keep the layout", () => {
+	test("errors render inside the page's layouts; 404s inside the root layout", async () => {
+		const router = createRouter({
+			history: memoryHistory("/"),
+			routes: [
+				{
+					path: "/",
+					component: (p: RouteProps) => `<shell>${text(p.children)}</shell>`,
+					children: [
+						{ path: "", component: () => "home" },
+						{ path: "private", component: () => "secret" },
+					],
+				},
+			],
+			load: (match) => {
+				if (match.pathname === "/private") throw new Error("sign in");
+			},
+			error: (p) => `error: ${(p.error as Error).message}`,
+			fallback: () => "not found",
+		});
+		await router.navigate("/private");
+		expect(text(router.Outlet())).toBe("<shell>error: sign in</shell>");
+		await router.navigate("/missing");
+		expect(text(router.Outlet())).toBe("<shell>not found</shell>");
 	});
 });
 

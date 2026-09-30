@@ -83,7 +83,16 @@ export interface Core {
 		meta?: RequestMeta,
 		data?: Record<string, unknown>,
 	) => Promise<void>;
-	mail: (kind: AuthMailKind, to: string, ctx: Omit<MailContext, "appName">) => Promise<void>;
+	/**
+	 * Send an auth mail. Failures are logged and recorded as `mail.failed`
+	 * events instead of failing the action, unless `required` is set.
+	 */
+	mail: (
+		kind: AuthMailKind,
+		to: string,
+		ctx: Omit<MailContext, "appName">,
+		options?: { required?: boolean },
+	) => Promise<void>;
 	link: (kind: "verifyEmail" | "resetPassword" | "confirmEmail", token: string) => string;
 	acl: () => Acl;
 	reloadAcl: () => Promise<void>;
@@ -237,10 +246,16 @@ export function createCore(options: AuthOptions): Core {
 			await db.insert(tables.events).values(event);
 			options.onEvent?.(event);
 		},
-		async mail(kind, to, ctx) {
+		async mail(kind, to, ctx, mailOptions = {}) {
 			if (!options.mailer) throw new Error(`auth: a mailer is required to send ${kind} mail`);
 			const template = options.templates?.[kind] ?? defaultTemplates[kind];
-			await options.mailer.send({ to, ...template({ appName, ...ctx }) });
+			try {
+				await options.mailer.send({ to, ...template({ appName, ...ctx }) });
+			} catch (error) {
+				if (mailOptions.required) throw error;
+				console.error(`[auth] ${kind} mail to ${to} failed:`, (error as Error).message);
+				await core.emit("mail.failed", null, {}, { kind, error: (error as Error).message });
+			}
 		},
 		link(kind, token) {
 			const paths = {

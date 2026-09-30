@@ -30,9 +30,12 @@ export {
 	type ErrorProps,
 	type HeadContext,
 	type LazyComponent,
+	listRoutes,
 	type MatchedRoute,
 	type RouteComponent,
 	type RouteDefinition,
+	type RouteEntry,
 	type RouteProps,
 	type Router,
+	withRouter,
 } from "./router.ts";

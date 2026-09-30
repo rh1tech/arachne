@@ -1,0 +1,24 @@
+{
+	"name": "arachne-server-app",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "arachne dev",
+		"build": "arachne build",
+		"start": "arachne start",
+		"migrate": "arachne migrate"
+	},
+	"dependencies": {
+		"@arachne/acl": "workspace:*",
+		"@arachne/auth": "workspace:*",
+		"@arachne/db": "workspace:*",
+		"@arachne/db-sqlite": "workspace:*",
+		"@arachne/kit": "workspace:*",
+		"@arachne/mailer": "workspace:*",
+		"@arachne/render": "workspace:*",
+		"@arachne/router": "workspace:*",
+		"@arachne/schema": "workspace:*",
+		"@arachne/server": "workspace:*",
+		"@arachne/signals": "workspace:*"
+	}
+}

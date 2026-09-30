@@ -80,6 +80,18 @@ describe("registration and verification", () => {
 		).rejects.toThrow("too common");
 	});
 
+	test("a failing mailer doesn't fail sign-up; the failure is recorded", async () => {
+		const events: string[] = [];
+		const ctx = await setup({
+			mailer: { send: async () => Promise.reject(new Error("SMTP down")) },
+			onEvent: (event) => events.push(event.type),
+		});
+		const { user } = await ctx.auth.register({ email: "ada@example.com", password: PASSWORD });
+		expect(user?.email).toBe("ada@example.com");
+		expect(events).toContain("mail.failed");
+		await ctx.auth.requestPasswordReset("ada@example.com"); // generic success even when mail fails
+	});
+
 	test("closed registration refuses sign-ups", async () => {
 		const ctx = await setup({ registration: "closed" });
 		await expect(ctx.auth.register({ email: "a@b.co", password: PASSWORD })).rejects.toMatchObject({

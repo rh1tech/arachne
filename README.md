@@ -2,7 +2,16 @@
 
 Universal, modular, high-performance web framework for TypeScript / Bun.
 
-> Status: **Phase 0** — foundations. Not production-ready.
+> Status: **pre-release** (0.0.x). Static, server and API apps work end to
+> end; see [docs/framework/PROGRESS.md](docs/framework/PROGRESS.md).
+
+```bash
+bunx arachne create my-app --template server   # static | server | api
+cd my-app && bun install && bun run dev         # hot reload
+bun run build && bun run start                  # production
+```
+
+Start with the [framework guide](docs/framework/README.md).
 
 ## Principles
 
@@ -16,7 +25,8 @@ Universal, modular, high-performance web framework for TypeScript / Bun.
 
 ```bash
 bun install
-bun run ci          # lint + boundaries + typecheck + test
+bun run ci          # lint + boundaries + docs + MCP + typecheck + test
+(cd packages/kit && bun run e2e)   # real-browser journeys (Playwright Chromium)
 bun run playground  # http://localhost:3920 — live Show/For demo
 bun run mcp         # stdio MCP server (all package modules)
 bun run mcp:http    # Streamable HTTP on :3921/mcp
@@ -25,6 +35,9 @@ bun run mcp:http    # Streamable HTTP on :3921/mcp
 Cursor: see [`.cursor/mcp.json`](.cursor/mcp.json). Every `@arachne/*` package
 exports `./mcp` ([ADR 0007](docs/adr/0007-mcp-everywhere.md)).
 
+App kit and CLI: [`@arachne/kit`](packages/kit) ([ADR 0015](docs/adr/0015-universal-framework.md)).
+Accounts and permissions: [`@arachne/auth`](packages/auth) + [`@arachne/acl`](packages/acl).
+Mail, files, migrations: [`@arachne/mailer`](packages/mailer), [`@arachne/storage`](packages/storage), [`@arachne/migrate`](packages/migrate).
 Domain schemas: [`@arachne/schema`](packages/schema) ([ADR 0008](docs/adr/0008-schema-dsl.md)).
 Boot config stays on [`@arachne/config`](packages/config).
 HTTP: [`@arachne/server`](packages/server) + [`@arachne/router`](packages/router).

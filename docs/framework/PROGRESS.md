@@ -24,6 +24,9 @@ logout, email verification, password reset, email sending, access levels
 - [~] partially done (see notes)
 - [ ] not started
 
+Guide for users: [README.md](README.md). Resume here: check "Known gaps /
+next steps" at the bottom, run `bun run ci` and `(cd packages/kit && bun run e2e)`.
+
 ## Milestones
 
 | # | Milestone | Package(s) | Status |
@@ -38,13 +41,13 @@ logout, email verification, password reset, email sending, access levels
 | 8 | File storage (disk, memory, S3) | `@arachne/storage` | [x] |
 | 9 | Auth: users, sessions, tokens, registration, verification, reset, blocking, groups, throttling, CSRF, HTTP routes | `@arachne/auth` | [x] |
 | 10 | Router: `Link`, click interception, lazy routes, layouts, head | `@arachne/router` | [x] |
-| 11 | Kit: `defineApp`, SSR pages, static prerender build, dev server with hot reload, `arachne` CLI | `@arachne/kit` | [ ] |
-| 12 | Examples: static site, full-stack, API-only | `apps/examples/*` | [ ] |
+| 11 | Kit: config, SSR pages, static prerender build, dev server with hot reload, `arachne` CLI | `@arachne/kit` | [x] |
+| 12 | Examples: static site, full-stack, API-only | `packages/kit/templates/*` | [x] |
 | 12b | Typed API client inferred from routes | `@arachne/server` (`/client`) | [x] |
 | 12c | Optional GraphQL adapter over the same schemas | `@arachne/graphql` | [ ] |
-| 12e | MCP-first apps: routes → MCP tools (with auth/ACL), `/mcp` endpoint | `@arachne/server`, `@arachne/kit` | [ ] |
+| 12e | MCP-first apps: routes → MCP tools (with auth/ACL), `/mcp` endpoint | `@arachne/server`, `@arachne/kit` | [x] |
 | 12d | Binary codecs: CBOR in server (content negotiation); protobuf/Connect later | `@arachne/server` | [~] CBOR done |
-| 13 | Docs + README per package, root README update | docs | [ ] |
+| 13 | Docs + README per package, root README update | docs | [x] |
 
 ## Implemented (detail)
 
@@ -202,6 +205,73 @@ logout, email verification, password reset, email sending, access levels
 - Router tsconfig and `tsconfig.tests.json` gained JSX settings.
 - MCP: `arachne_router_resolve`.
 
+### M11 — `@arachne/kit` (2026-09-30)
+
+Project layout: `arachne.config.ts`, `app/routes.tsx` (pages),
+`app/server.ts` (`defineServer`: routes, middleware, loaders, paths, openapi,
+db/tables, dispose), `public/`. Modes: static / server / api.
+
+- `config.ts` (`defineConfig`, `resolveConfig`, `normalizeBase`),
+  `server-def.ts` (`defineServer`, `loadServer`, loaders by route id),
+  `document.ts` (`renderDocument`, `serializeJson` — script-safe JSON).
+- `entries.ts`: generated `.arachne/client.tsx` (hydrate + router +
+  `interceptLinks` + data fetching: `/__arachne/data/*` in server mode,
+  `_data/*.json` in static mode; `initialData` + `initialError` from the boot
+  script) and `.arachne/ssr.tsx` (`render`, `match`, `routeList`, `buildPath`;
+  wraps render in `withRouter` for concurrent requests).
+- `bundle.ts`: `buildClient` (in memory, hashed, split, CSS entries +
+  component CSS), `buildSsr` (fresh file per build, signals external).
+- `handler.ts`: security headers → assets → public → app middleware → API →
+  `/openapi.json`+`/docs` → `/mcp` → data routes → SSR fallback (404/HttpError
+  statuses, boot data, nonce).
+- `prerender.ts` (static: pages, `_data`, `404.html`, `sitemap.xml`),
+  `build.ts` (static; or `dist/client` + `dist/server/index.js` bundling
+  `@arachne/*`, app deps external), `app.ts` (`createAppServer`,
+  `createProductionServer`), `preview.ts`.
+- `dev.ts` (`startDevServer` child: rebuild + WS reload / CSS swap / error
+  overlay; restart via exit code 75 when `app/server.ts`'s import graph —
+  from `Bun.build` metafile — or the config changes; `runDev` supervisor),
+  `cli.ts` (dev, build, start, preview, create, routes, openapi, migrate),
+  `create.ts` (templates, `workspace:*` → `^version`).
+- Tests: `kit.test.ts`, `templates.test.ts` (API template over HTTP;
+  production bundles run as processes; create), `dev.test.ts` (real `arachne
+  dev` process: reload, CSS swap, error overlay + recovery, server restart),
+  `mcp.test.ts`. `scripts/test.ts` runs each file in its own process (Bun
+  gets flaky after many `Bun.build`s in one process — EISDIR/"Unseekable").
+- E2E (`bun run e2e`, Playwright Chromium, also a CI job): static build, SSR,
+  dev server (no hydration-mismatch warnings) and the full-stack template
+  (sign-up → verify → sign-in → notes CRUD → sign-out → 401 page, MCP).
+
+Framework fixes found by these tests: router error/404 pages render inside
+layouts; `initialError` so server-rendered error pages hydrate; dynamic
+`head()` skipped on errors and guarded; `withRouter`/`listRoutes` exported;
+`@arachne/render` gained dev walkers `getFirstChild`/`getNextSibling`
+(dev-mode compiles never worked before; they now warn on hydration
+mismatches); auth mail failures no longer fail the action (`mail.failed`
+event); `db` `update().set()` accepts `undefined` values (PATCH bodies).
+
+### M12 — templates (2026-09-30)
+
+`packages/kit/templates/` (workspaces; `arachne create --template`):
+- `static` — "Field Notes" blog: layout, build-time loaders + `paths`,
+  per-page head/OG, sitemap, favicon, zero-JS option.
+- `server` — "Notebook": SQLite, auth (register/verify/login/reset, console
+  mailer in dev), ACL owner conditions, typed API client in pages, OpenAPI,
+  MCP (`create_note`).
+- `api` — "Projects API": API tokens, CRUD with refine rules, pagination
+  (stable order), tag filter, multipart upload/download via storage, CORS,
+  rate limit, OpenAPI, MCP.
+
+### M12e — MCP-first apps (2026-09-30)
+
+- `@arachne/server` `mcpRoute({ name, version, routes, dispatch })`: stateless
+  MCP Streamable-HTTP JSON-RPC (`initialize`, `tools/list`, `tools/call`,
+  `ping`, notifications → 202), Origin check (DNS rebinding). Routes with
+  `mcp: true | { name, description }` become tools; input schema
+  `{ params, query, body }` from route schemas; calls go through `dispatch`
+  with the caller's `Authorization`, so validation/auth/ACL apply.
+- Kit: `mcp: { name, version, path }` in config mounts it.
+
 ## Known gaps / next steps
 
 - **Docs backlog:** pre-existing packages not yet in `docs-check.json`
@@ -211,6 +281,12 @@ logout, email verification, password reset, email sending, access levels
 - Server: no WebSocket helper yet (Bun.serve `websocket` passthrough); no
   compression middleware (expected at the CDN/proxy); multipart bodies are
   buffered in memory up to `bodyLimit` (no streaming to storage yet).
+- Kit: no streaming SSR (`renderToString` only); no per-route code-split
+  CSS injection (chunk CSS isn't linked); dev reload is full-page (no
+  component-state-preserving HMR); `arachne start` needs `node_modules` for
+  the app's non-Arachne deps; no Node adapter (Bun only).
+- Not started: 12c GraphQL adapter; protobuf/Connect; Postgres/MySQL
+  dialects; OAuth/passkeys; job queue/outbox for mail; i18n.
 - Lint: new code adds ~9 `noExcessiveCognitiveComplexity` warnings (body
   `assign`, cors/security/static middleware, server `fetch`, openapi
   `operation`, client `call`, schema `validateObject`/`string`) — split in

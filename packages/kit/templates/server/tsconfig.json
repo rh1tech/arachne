@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"target": "ES2024",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"lib": ["ES2024", "DOM", "DOM.Iterable"],
+		"types": ["bun"],
+		"strict": true,
+		"jsx": "react-jsx",
+		"jsxImportSource": "@arachne/render",
+		"allowImportingTsExtensions": true,
+		"noEmit": true,
+		"skipLibCheck": true
+	},
+	"include": ["app/**/*", "arachne.config.ts"]
+}

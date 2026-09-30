@@ -133,6 +133,70 @@
         "typescript": "^5.9.2",
       },
     },
+    "packages/kit": {
+      "name": "@arachne/kit",
+      "version": "0.0.1",
+      "bin": {
+        "arachne": "./bin/arachne.ts",
+      },
+      "dependencies": {
+        "@arachne/db": "workspace:*",
+        "@arachne/jsx": "workspace:*",
+        "@arachne/mcp": "workspace:*",
+        "@arachne/migrate": "workspace:*",
+        "@arachne/render": "workspace:*",
+        "@arachne/router": "workspace:*",
+        "@arachne/schema": "workspace:*",
+        "@arachne/server": "workspace:*",
+        "@arachne/signals": "workspace:*",
+        "@arachne/vite": "workspace:*",
+        "zod": "3.25.76",
+      },
+      "devDependencies": {
+        "happy-dom": "^18.0.1",
+        "playwright": "^1.63.0",
+        "typescript": "^5.9.2",
+      },
+    },
+    "packages/kit/templates/api": {
+      "name": "arachne-api",
+      "dependencies": {
+        "@arachne/auth": "workspace:*",
+        "@arachne/db": "workspace:*",
+        "@arachne/db-sqlite": "workspace:*",
+        "@arachne/kit": "workspace:*",
+        "@arachne/mailer": "workspace:*",
+        "@arachne/schema": "workspace:*",
+        "@arachne/server": "workspace:*",
+        "@arachne/storage": "workspace:*",
+      },
+    },
+    "packages/kit/templates/server": {
+      "name": "arachne-server-app",
+      "dependencies": {
+        "@arachne/acl": "workspace:*",
+        "@arachne/auth": "workspace:*",
+        "@arachne/db": "workspace:*",
+        "@arachne/db-sqlite": "workspace:*",
+        "@arachne/kit": "workspace:*",
+        "@arachne/mailer": "workspace:*",
+        "@arachne/render": "workspace:*",
+        "@arachne/router": "workspace:*",
+        "@arachne/schema": "workspace:*",
+        "@arachne/server": "workspace:*",
+        "@arachne/signals": "workspace:*",
+      },
+    },
+    "packages/kit/templates/static": {
+      "name": "arachne-static-site",
+      "dependencies": {
+        "@arachne/kit": "workspace:*",
+        "@arachne/render": "workspace:*",
+        "@arachne/router": "workspace:*",
+        "@arachne/server": "workspace:*",
+        "@arachne/signals": "workspace:*",
+      },
+    },
     "packages/mailer": {
       "name": "@arachne/mailer",
       "version": "0.0.1",
@@ -312,6 +376,8 @@
 
     "@arachne/jsx": ["@arachne/jsx@workspace:packages/jsx"],
 
+    "@arachne/kit": ["@arachne/kit@workspace:packages/kit"],
+
     "@arachne/mailer": ["@arachne/mailer@workspace:packages/mailer"],
 
     "@arachne/mcp": ["@arachne/mcp@workspace:packages/mcp"],
@@ -475,6 +541,12 @@
     "ansi-colors": ["ansi-colors@4.1.3", "", {}, "sha512-/6w/C21Pm1A7aZitlI5Ni/2J6FFQN8i1Cvz3kHABAAbw93v/NlvKdVOqz7CCWz/3iv/JplRSEEZ83XION15ovw=="],
 
     "ansi-regex": ["ansi-regex@5.0.1", "", {}, "sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ=="],
+
+    "arachne-api": ["arachne-api@workspace:packages/kit/templates/api"],
+
+    "arachne-server-app": ["arachne-server-app@workspace:packages/kit/templates/server"],
+
+    "arachne-static-site": ["arachne-static-site@workspace:packages/kit/templates/static"],
 
     "argparse": ["argparse@2.0.1", "", {}, "sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q=="],
 
@@ -699,6 +771,10 @@
     "pify": ["pify@4.0.1", "", {}, "sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g=="],
 
     "pkce-challenge": ["pkce-challenge@5.0.1", "", {}, "sha512-wQ0b/W4Fr01qtpHlqSqspcj3EhBvimsdh0KlHhH8HRZnMsEa0ea2fTULOXOS9ccQr3om+GcGRk4e+isrZWV8qQ=="],
+
+    "playwright": ["playwright@1.63.0", "", { "dependencies": { "playwright-core": "1.63.0" }, "bin": { "playwright": "cli.js" } }, "sha512-+7ziBLidS4NaNCdt57SUDT+wYmmd5fmiQejUic/kb+YsYSCPyOOE9sebzMjNmQrsnNpDJqd4WHvV/8lfKfUDUg=="],
+
+    "playwright-core": ["playwright-core@1.63.0", "", { "bin": { "playwright-core": "cli.js" } }, "sha512-rYCsBF/M5HjUch52bbtVONEFjv6Xu8sm8h72dNlR5bzIE1fvC/bxgspzkjSfU+MweEMmPM8KJebG6nnyxo5mCg=="],
 
     "prettier": ["prettier@2.8.8", "", { "bin": { "prettier": "bin-prettier.js" } }, "sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q=="],
 

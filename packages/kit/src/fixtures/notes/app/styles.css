@@ -1,0 +1,9 @@
+:root {
+	--accent: oklch(60% 0.2 250);
+}
+body {
+	font-family: system-ui, sans-serif;
+}
+nav a.active {
+	color: var(--accent);
+}

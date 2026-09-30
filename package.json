@@ -7,7 +7,8 @@
 	"type": "module",
 	"workspaces": [
 		"packages/*",
-		"apps/*"
+		"apps/*",
+		"packages/kit/templates/*"
 	],
 	"scripts": {
 		"prepare": "git config core.hooksPath .githooks",

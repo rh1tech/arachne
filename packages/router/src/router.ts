@@ -90,6 +90,8 @@ export interface CreateRouterOptions {
 	load?: ((match: MatchedRoute) => unknown) | undefined;
 	/** Data for the first route (from server-rendered HTML), skipping its load. */
 	initialData?: unknown;
+	/** Loader error the server rendered for the first route (hydration of error pages). */
+	initialError?: unknown;
 	/** Path prefix the app is mounted at (`/docs` for `site.com/docs/*`). */
 	base?: string | undefined;
 	/** Title template, e.g. `"%s · Site"`. */
@@ -176,6 +178,28 @@ function flatten(
 	return out;
 }
 
+/** One page route in a route table (as build tools see it). */
+export interface RouteEntry {
+	/** Route id (`id` or the full pattern). */
+	id: string;
+	/** Full pattern, e.g. `/blog/:slug`. */
+	pattern: string;
+	/** Has `:params` or a `*rest`: needs params to build a URL. */
+	dynamic: boolean;
+}
+
+/** Every page route of a table, in match order (for prerendering and tooling). */
+export function listRoutes(routes: RouteDefinition[]): RouteEntry[] {
+	return flatten(routes).map((entry) => {
+		const leaf = entry.chain[entry.chain.length - 1] as RouteDefinition;
+		return {
+			id: leaf.id ?? entry.pattern,
+			pattern: entry.pattern,
+			dynamic: /[:*]/.test(entry.pattern),
+		};
+	});
+}
+
 const resolvedLazy = new WeakMap<RouteDefinition, RouteComponent>();
 
 function componentOf(route: RouteDefinition): RouteComponent | undefined {
@@ -191,6 +215,21 @@ let current: Router | undefined;
 /** The most recently created router (used by `Link` when no router prop is given). */
 export function currentRouter(): Router | undefined {
 	return current;
+}
+
+/**
+ * Run `fn` with `router` as the current router, then restore the previous
+ * one. Servers rendering concurrent requests wrap each synchronous render in
+ * it so `Link`s resolve against their own request's router.
+ */
+export function withRouter<T>(router: Router, fn: () => T): T {
+	const previous = current;
+	current = router;
+	try {
+		return fn();
+	} finally {
+		current = previous;
+	}
 }
 
 /**
@@ -340,7 +379,13 @@ export function createRouter(options: CreateRouterOptions): Router {
 	const initialWork = prepare(state().match, !hydrating);
 	const initial = (result: { data: unknown; error: unknown }) =>
 		commit(
-			{ ...state(), ...result, ...(hydrating ? { data: options.initialData } : {}) },
+			{
+				...state(),
+				...result,
+				...(hydrating
+					? { data: options.initialData, error: result.error ?? options.initialError }
+					: {}),
+			},
 			"initial",
 		);
 	const ready = isPromise<{ data: unknown; error: unknown }>(initialWork)
@@ -348,25 +393,54 @@ export function createRouter(options: CreateRouterOptions): Router {
 		: (initial(initialWork), Promise.resolve());
 
 	const head = computed((): Head => {
-		const { match: m, data, location } = state();
-		const inputs = (m?.chain ?? [])
-			.map((route) =>
-				typeof route.head === "function"
-					? route.head({ params: m?.params ?? {}, data, location })
-					: route.head,
-			)
-			.filter((input): input is HeadInput => input !== undefined);
+		const { match: m, data, location, error } = state();
+		const inputs: HeadInput[] = [];
+		for (const route of m?.chain ?? []) {
+			if (typeof route.head !== "function") {
+				if (route.head) inputs.push(route.head);
+				continue;
+			}
+			// A failed load has no data to describe, and a head must never break rendering.
+			if (error !== undefined) continue;
+			try {
+				inputs.push(route.head({ params: m?.params ?? {}, data, location }));
+			} catch (headError) {
+				console.error("[router] head() failed", headError);
+			}
+		}
 		return mergeHeads(inputs, options.titleTemplate);
 	});
 	const stopHead = inBrowser ? effect(() => applyHead(document, head())) : () => {};
 
+	// Layouts wrapping a node, innermost first (skips chain entries without components).
+	const wrap = (node: unknown, layouts: RouteDefinition[], props: Omit<RouteProps, "children">) => {
+		let out = node;
+		for (let i = layouts.length - 1; i >= 0; i -= 1) {
+			const component = componentOf(layouts[i] as RouteDefinition);
+			if (component) out = createComponent(component, { ...props, children: out });
+		}
+		return out;
+	};
+	// Top-level layouts (`/` routes with children) frame the not-found page.
+	const rootLayouts = options.routes.filter(
+		(route) =>
+			(route.path === "/" || route.path === "") &&
+			route.children?.length &&
+			(route.component || route.lazy),
+	);
+
 	const render = (): unknown => {
 		const { match: m, location, data, error } = state();
 		if (error !== undefined && options.error) {
-			return createComponent(options.error, { params: m?.params ?? {}, location, data, error });
+			const props = { params: m?.params ?? {}, location, data };
+			const page = createComponent(options.error, { ...props, error });
+			return wrap(page, m ? m.chain.slice(0, -1) : [], props);
 		}
-		if (!m)
-			return options.fallback ? createComponent(options.fallback, { params: {}, location }) : null;
+		if (!m) {
+			if (!options.fallback) return null;
+			const props = { params: {}, location };
+			return wrap(createComponent(options.fallback, props), rootLayouts, props);
+		}
 		let node: unknown;
 		for (let i = m.chain.length - 1; i >= 0; i -= 1) {
 			const component = componentOf(m.chain[i] as RouteDefinition);

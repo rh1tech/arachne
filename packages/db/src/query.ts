@@ -45,10 +45,15 @@ export interface SelectBuilder<C extends ColumnMap> {
 	count: () => Promise<number>;
 }
 
+/** Values for `update().set()`: any subset of columns; `undefined` values are skipped (PATCH bodies). */
+export type UpdateValues<C extends ColumnMap> = {
+	[K in keyof InferInsert<C>]?: InferInsert<C>[K] | undefined;
+};
+
 /** Update builder. `run()` requires a `where()`. */
 export interface UpdateBuilder<C extends ColumnMap> {
-	/** Values to set (validated per column). */
-	set: (values: Partial<InferInsert<C>>) => UpdateBuilder<C>;
+	/** Values to set (validated per column; `undefined` values are skipped). */
+	set: (values: UpdateValues<C>) => UpdateBuilder<C>;
 	/** Add a filter. */
 	where: (where: Where<C>) => UpdateBuilder<C>;
 	/** Execute; resolves to the number of changed rows. */

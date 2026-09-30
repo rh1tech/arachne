@@ -34,6 +34,20 @@
 		"realtime": ["core", "cache", "mcp"],
 		"observability": ["core", "mcp"],
 		"cli": ["core", "config", "mcp"],
-		"mcp": []
+		"mcp": [],
+		"kit": [
+			"core",
+			"config",
+			"signals",
+			"jsx",
+			"render",
+			"router",
+			"server",
+			"vite",
+			"schema",
+			"db",
+			"migrate",
+			"mcp"
+		]
 	}
 }

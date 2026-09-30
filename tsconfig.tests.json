@@ -17,6 +17,13 @@
 		"packages/auth/src/**/*.ts",
 		"packages/router/src/**/*.ts",
 		"packages/router/src/**/*.tsx",
+		"packages/kit/src/**/*.ts",
+		"packages/kit/bin/**/*.ts",
+		"packages/kit/e2e/**/*.ts",
+		"packages/kit/templates/*/app/**/*.ts",
+		"packages/kit/templates/*/app/**/*.tsx",
+		"packages/kit/templates/*/arachne.config.ts",
 		"scripts/**/*.ts"
-	]
+	],
+	"exclude": ["packages/kit/src/fixtures/dev-*/**"]
 }

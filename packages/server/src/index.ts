@@ -49,6 +49,7 @@ export {
 	type ValidationIssue,
 	validationError,
 } from "./errors.ts";
+export { type McpRouteOptions, mcpRoute, type RouteTool, routeTools } from "./mcp-endpoint.ts";
 export {
 	type ApiDocsOptions,
 	apiDocs,

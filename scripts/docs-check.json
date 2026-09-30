@@ -11,6 +11,7 @@
 		"mailer",
 		"storage",
 		"auth",
-		"router"
+		"router",
+		"kit"
 	]
 }

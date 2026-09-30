@@ -1,6 +1,7 @@
 export type { ForProps, ShowProps, SuspenseProps } from "./control-flow.ts";
 
 export { For, mapArray, Show, Suspense } from "./control-flow.ts";
+export { getFirstChild, getNextSibling } from "./dev-walk.ts";
 export {
 	addEvent,
 	claimElement,
@@ -34,7 +35,6 @@ export {
 	template,
 	untrack,
 } from "./dom.ts";
-
 export {
 	defineIslandElement,
 	type HydrateStrategy,
