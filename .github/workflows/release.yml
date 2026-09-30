@@ -1,13 +1,16 @@
 name: Release
 
-# On master: with pending changesets, open/update the "Version packages" PR;
-# once that PR is merged, publish every @arachnejs/* version not yet on npm.
+# After CI passes on master: with pending changesets, open/update the
+# "Version packages" PR; once that PR is merged, publish every @arachnejs/*
+# version not yet on npm.
 on:
-  push:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
     branches: [master]
 
 concurrency:
-  group: release-${{ github.ref }}
+  group: release
   cancel-in-progress: false
 
 permissions:
@@ -18,10 +21,15 @@ permissions:
 jobs:
   release:
     name: version or publish
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'
+    # GitHub-hosted on purpose: npm provenance and trusted publishing only
+    # accept GitHub-hosted runners. The checks already ran in CI (on rbx1).
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - uses: oven-sh/setup-bun@v2
         with:
@@ -38,9 +46,6 @@ jobs:
 
       - name: Install
         run: bun install --frozen-lockfile
-
-      - name: Checks
-        run: bun run ci
 
       - name: Version PR or publish
         uses: changesets/action@v1

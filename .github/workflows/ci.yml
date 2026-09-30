@@ -12,7 +12,10 @@ concurrency:
 jobs:
   check:
     name: lint · boundaries · mcp · typecheck · test
-    runs-on: ubuntu-latest
+    # Our own runner on rbx1 for pushes and same-repo PRs. Pull requests from
+    # forks never run on it (it shares a host with production sites): they
+    # use GitHub-hosted runners, and need a maintainer's approval first.
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) && 'ubuntu-latest' || fromJSON('["self-hosted", "rbx1", "arachne-ci"]') }}
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -50,7 +53,10 @@ jobs:
 
   e2e:
     name: browser e2e (Chromium)
-    runs-on: ubuntu-latest
+    # Our own runner on rbx1 for pushes and same-repo PRs. Pull requests from
+    # forks never run on it (it shares a host with production sites): they
+    # use GitHub-hosted runners, and need a maintainer's approval first.
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) && 'ubuntu-latest' || fromJSON('["self-hosted", "rbx1", "arachne-ci"]') }}
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
@@ -62,8 +68,9 @@ jobs:
       - name: Install
         run: bun install --frozen-lockfile
 
+      # System libraries are preinstalled on rbx1 (the runner has no sudo).
       - name: Install Chromium
-        run: bunx playwright install --with-deps chromium
+        run: bunx playwright install ${{ runner.environment == 'github-hosted' && '--with-deps' || '' }} chromium
         working-directory: packages/kit
 
       - name: E2E

@@ -176,15 +176,18 @@ if (import.meta.main) {
 			...(dryRun ? ["--dry-run"] : []),
 		];
 		const result = run(args);
-		if (!result.ok) {
-			console.error(result.out);
-			throw new Error(`publishing ${manifest.name}@${manifest.version} failed`);
+		console.info(result.out.trim());
+		if (!result.ok) throw new Error(`publishing ${manifest.name}@${manifest.version} failed`);
+		if (dryRun) {
+			console.info(`would publish ${manifest.name}@${manifest.version}`);
+			continue;
 		}
-		console.info(
-			dryRun
-				? `would publish ${manifest.name}@${manifest.version}`
-				: `New tag: ${manifest.name}@${manifest.version}`,
-		);
+		// changesets/action pushes a tag per "New tag:" line: it must exist locally.
+		const tag = `${manifest.name}@${manifest.version}`;
+		const tagged = run(["git", "tag", tag]);
+		if (!tagged.ok && !tagged.out.includes("already exists"))
+			throw new Error(`git tag ${tag} failed:\n${tagged.out}`);
+		console.info(`New tag: ${tag}`);
 	}
 	rmSync(outDir, { recursive: true, force: true });
 }

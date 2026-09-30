@@ -12,11 +12,13 @@ playground, the kit templates) are never published.
    bunx changeset          # pick packages and bump; any bump moves all of them
    ```
 
-2. On `master`, the **Release** workflow keeps a **"chore: version packages"**
-   pull request up to date: versions, changelogs and `bun.lock`.
-3. Merging that PR runs the checks and `bun run release`, which publishes
-   every `@arachnejs/*` version that isn't on npm yet, in dependency order,
-   with provenance, and tags the release.
+2. When CI passes on `master`, the **Release** workflow keeps a
+   **"chore: version packages"** pull request up to date: versions and
+   changelogs.
+3. Merging that PR runs CI again; when it passes, Release runs
+   `bun run release`, which publishes every `@arachnejs/*` version that isn't
+   on npm yet, in dependency order, with provenance, and tags
+   `<name>@<version>`.
 
 `bun run release --dry-run` packs every package and runs
 `npm publish --dry-run` locally; no npm login needed.
@@ -54,3 +56,16 @@ Once every package exists on npm, switch from the token to OIDC:
 
 The workflow already requests `id-token: write` and uses npm ≥ 11.5.1, so
 no workflow change is needed.
+
+## Where CI runs
+
+- **CI** (lint, typecheck, tests, browser e2e) runs on a self-hosted runner
+  on rbx1 (`rbx1-arachne-ci`, labels `rbx1`, `arachne-ci`): user
+  `arachne-ci` without sudo or docker, systemd service
+  `actions.runner.rh1tech-arachne.rbx1-arachne-ci` with lower CPU/IO
+  priority and `MemoryMax=8G` (drop-in `limits.conf`). Chromium's system
+  libraries are installed on the host; the runner downloads Chromium itself.
+- Pull requests from **forks** run on GitHub-hosted runners, never on rbx1,
+  and outside contributors' workflows need a maintainer's approval.
+- The **Release** publish job runs on GitHub-hosted runners: npm provenance
+  and trusted publishing don't accept self-hosted runners.
