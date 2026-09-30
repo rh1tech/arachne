@@ -34,7 +34,7 @@ logout, email verification, password reset, email sending, access levels
 | 4 | DB: update, operators, order/limit/offset, count, nullable/json columns, indexes, transactions | `@arachne/db`, `@arachne/db-sqlite` | [x] |
 | 5 | Migrations | `@arachne/migrate` | [x] |
 | 6 | Access control (core) | `@arachne/acl` | [x] |
-| 7 | Mail | `@arachne/mailer` | [ ] |
+| 7 | Mail | `@arachne/mailer` | [x] |
 | 8 | File storage (disk, memory, S3) | `@arachne/storage` | [ ] |
 | 9 | Auth: users, sessions, tokens, registration, verification, reset, blocking, groups, throttling, CSRF, HTTP routes | `@arachne/auth` | [ ] |
 | 10 | Router: `Link`, click interception, lazy routes, layouts, head | `@arachne/router` | [ ] |
@@ -144,6 +144,21 @@ logout, email verification, password reset, email sending, access levels
 - Typed permissions when a registry is given (`const P`).
 - MCP: `arachne_acl_check` (with assumed conditions), `arachne_acl_permissions`.
 
+### M7 — `@arachne/mailer` (2026-09-30)
+
+- `message.ts`: `prepareMessage` validates addresses (`"Name <a@b>"`,
+  objects), single-line subject/headers (injection guard), derives `text`.
+- `html.ts`: `mailHtml` (escaping tagged template), `raw`, `SafeHtml`,
+  `escapeHtml`, `htmlToText`.
+- `mailer.ts`: `createMailer({ transport, from, templates, retry })` →
+  `send`, `sendTemplate` (typed data), `defineTemplate`.
+- `transports.ts`: `smtpTransport` (nodemailer 10), `resendTransport`,
+  `memoryTransport` (`last`, `links`, `clear`), `fileTransport` (.eml via
+  nodemailer MailComposer), `consoleTransport`.
+- Tests include a real SMTP exchange against an in-process sink (Bun.listen).
+- MCP: `arachne_mailer_preview`, `arachne_mailer_html_to_text`.
+- Boundary map: `mailer` may use `schema`.
+
 ## Known gaps / next steps
 
 - **Docs backlog:** pre-existing packages not yet in `docs-check.json`
@@ -160,6 +175,8 @@ logout, email verification, password reset, email sending, access levels
 - DB: no joins/aggregates beyond `count` (use `db.query`); no Postgres/MySQL
   driver yet (Dialect has `types`/`autoIncrement` hooks; Postgres needs `?`→`$n`
   and `RETURNING` for generated ids).
+- Mailer: no queue/outbox yet (send is inline with retries); JSX email
+  templates are possible via `renderToString` but not wrapped.
 - Schema: async validators are rejected (sync-only by design); no
   discriminated-union optimisation; `lazy`/recursive schemas not supported.
 

@@ -10,6 +10,7 @@
 		"packages/db-sqlite/src/**/*.ts",
 		"packages/migrate/src/**/*.ts",
 		"packages/acl/src/**/*.ts",
+		"packages/mailer/src/**/*.ts",
 		"scripts/**/*.ts"
 	]
 }

@@ -29,7 +29,7 @@
 		"cache": ["core", "mcp"],
 		"storage": ["core", "mcp"],
 		"notify": ["core", "jobs", "mcp"],
-		"mailer": ["notify", "render", "jsx", "mcp"],
+		"mailer": ["notify", "render", "jsx", "schema", "mcp"],
 		"telegram": ["notify", "core", "mcp"],
 		"realtime": ["core", "cache", "mcp"],
 		"observability": ["core", "mcp"],
