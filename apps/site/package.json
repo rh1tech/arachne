@@ -19,6 +19,7 @@
 		"@arachnejs/server": "workspace:*",
 		"@arachnejs/signals": "workspace:*",
 		"@arachnejs/ui": "workspace:*",
+		"@arachnejs/vite": "workspace:*",
 		"@fontsource/ibm-plex-mono": "^5.3.0",
 		"@fontsource/ibm-plex-sans": "^5.3.0",
 		"shiki": "^4.4.3"

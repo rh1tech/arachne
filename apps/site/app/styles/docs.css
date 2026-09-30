@@ -316,7 +316,8 @@
 	/* Dropdowns paint above the code block that follows. */
 	z-index: 1;
 	padding: 1.9rem 1.35rem 1.5rem;
-	overflow-x: clip;
+	/* No overflow clipping: Safari clips menus and popovers on both axes even
+	 * with overflow-x alone. Examples must fit the frame (checked at 375px). */
 	/* A containing block for position: fixed demos (FAB, banners, bottom nav). */
 	transform: translateZ(0);
 	font-family: var(--a-font, var(--font-sans));

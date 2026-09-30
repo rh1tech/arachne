@@ -466,6 +466,89 @@ describe("compile-run Show/For/Suspense", () => {
 		expect([...root.querySelectorAll("li")].map((li) => li.textContent)).toEqual(["3"]);
 	});
 
+	test("hydrate with a renderId adopts markup rendered with the same renderId", () => {
+		const src = `export function App(props) {
+			return <p class="island"><button type="button" onClick={props.onClick}>{props.name()}</button></p>;
+		}`;
+		const server = compile(src, { filename: "I.tsx", target: "ssr", hydratable: true });
+		const client = compile(src, { filename: "I.tsx", target: "dom", hydratable: true });
+		const { App: ServerApp } = loadCompiled(
+			server.code,
+			"@arachnejs/render/ssr",
+			ssr as unknown as Record<string, unknown>,
+		) as unknown as {
+			App: (p: Record<string, unknown>) => ssr.SSRPayload;
+		};
+		const { App: ClientApp } = loadCompiled(
+			client.code,
+			"@arachnejs/render",
+			render as unknown as Record<string, unknown>,
+		) as unknown as {
+			App: (p: Record<string, unknown>) => Node;
+		};
+		// Two islands inside one page: their keys must not collide with each other
+		// (or with the page's own unprefixed keys).
+		const page = document.createElement("div");
+		const names = { a: signal("first"), b: signal("second") };
+		for (const id of ["a", "b"] as const) {
+			const slot = document.createElement("section");
+			slot.id = id;
+			slot.innerHTML = ssr.renderToString(() => ServerApp({ name: names[id] }), {
+				renderId: `${id}-`,
+			});
+			page.appendChild(slot);
+		}
+		document.body.appendChild(page);
+		expect(page.querySelector("#a [data-hk]")?.getAttribute("data-hk")).toStartWith("a-");
+		const buttons = [...page.querySelectorAll("button")];
+		render.clearDelegatedEvents();
+		render.delegateEvents(["click"]);
+		for (const id of ["a", "b"] as const) {
+			render.hydrate(
+				() => ClientApp({ name: names[id], onClick: () => {} }),
+				page.querySelector(`#${id}`) as Element,
+				{
+					renderId: `${id}-`,
+				},
+			);
+		}
+		// Claimed, not re-created (identity check: toEqual on DOM nodes walks the whole tree).
+		const after = [...page.querySelectorAll("button")];
+		expect(after.length === buttons.length && after.every((b, i) => b === buttons[i])).toBe(true);
+		expect(page.querySelectorAll(".island").length).toBe(2);
+		names.b.set("updated");
+		expect(page.querySelector("#b button")?.textContent).toBe("updated");
+		expect(page.querySelector("#a button")?.textContent).toBe("first");
+	});
+
+	test("hydrating markup whose keys don't match renders fresh instead of hanging", () => {
+		const src = `export function App(props) {
+			return <p class="island"><button type="button">{props.name()}</button></p>;
+		}`;
+		const server = compile(src, { filename: "M.tsx", target: "ssr", hydratable: true });
+		const client = compile(src, { filename: "M.tsx", target: "dom", hydratable: true });
+		const { App: ServerApp } = loadCompiled(
+			server.code,
+			"@arachnejs/render/ssr",
+			ssr as unknown as Record<string, unknown>,
+		) as unknown as {
+			App: (p: Record<string, unknown>) => ssr.SSRPayload;
+		};
+		const { App: ClientApp } = loadCompiled(
+			client.code,
+			"@arachnejs/render",
+			render as unknown as Record<string, unknown>,
+		) as unknown as {
+			App: (p: Record<string, unknown>) => Node;
+		};
+		const slot = document.createElement("section");
+		slot.innerHTML = ssr.renderToString(() => ServerApp({ name: signal("x") }), { renderId: "a-" });
+		document.body.appendChild(slot);
+		render.hydrate(() => ClientApp({ name: signal("x") }), slot); // no renderId: keys "0" vs "a-0"
+		expect(slot.querySelectorAll(".island").length).toBe(1);
+		expect(slot.textContent).toBe("x");
+	});
+
 	test("SSR spread elements keep hydration markers and void tags", () => {
 		const { code } = compile(
 			`export function App(props) {

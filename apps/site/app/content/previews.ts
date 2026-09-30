@@ -75,11 +75,23 @@ export function insertPreviews(markdown: string, previews: ReadonlyMap<string, u
 	return out.join("\n");
 }
 
-/** Replace rendered `@@preview:Name@@` paragraphs with preview placeholders. */
-export function previewSlots(html: string, previews: ReadonlyMap<string, PreviewInfo>): string {
+/**
+ * Replace rendered `@@preview:Name@@` paragraphs with preview slots. With
+ * `render`, a slot holds the example's pre-rendered HTML (`data-ssr`, the
+ * browser hydrates it); otherwise a status line until the browser renders it.
+ */
+export function previewSlots(
+	html: string,
+	previews: ReadonlyMap<string, PreviewInfo>,
+	render?: (name: string, logs: boolean) => string | undefined,
+): string {
 	return html.replace(/<p>@@preview:([\w.-]+)@@<\/p>/g, (_match, name: string) => {
 		const info = previews.get(name);
-		const flags = `${info?.logsActions ? " data-logs" : ""}${info?.interactive ? " data-interactive" : ""}`;
+		const logs = info?.logsActions ?? false;
+		const markup = render?.(name, logs);
+		const flags = `${logs ? " data-logs" : ""}${info?.interactive ? " data-interactive" : ""}`;
+		if (markup !== undefined)
+			return `<div class="ui-preview" data-example="${name}"${flags} data-ssr>${markup}</div>`;
 		return (
 			`<div class="ui-preview" data-example="${name}"${flags}>` +
 			`<p class="ui-preview-status">Loading the live example…</p></div>`

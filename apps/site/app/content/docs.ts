@@ -6,6 +6,7 @@ import { EXAMPLES } from "./examples.ts";
 import { createHighlight } from "./highlight.ts";
 import { escapeHtml, type RenderedDoc, renderMarkdown } from "./markdown.ts";
 import { insertPreviews, PREVIEWS, previewSlots } from "./previews.ts";
+import { exampleRenderer } from "./ssr-examples.ts";
 
 /** Component reference pages: each component gets a live preview. */
 const hasPreviews = (source: string) => /^docs\/ui\/components\/(?!README\.md$)/.test(source);
@@ -24,8 +25,9 @@ function render(source: string): Promise<RenderedDoc> {
 	let doc = rendered.get(source);
 	if (!doc) {
 		highlighter ??= createHighlight();
-		doc = Promise.all([readFile(join(REPO_ROOT, source), "utf8"), highlighter]).then(
-			([markdown, highlight]) => {
+		const examples = hasPreviews(source) ? exampleRenderer() : undefined;
+		doc = Promise.all([readFile(join(REPO_ROOT, source), "utf8"), highlighter, examples]).then(
+			([markdown, highlight, renderExample]) => {
 				const previews = hasPreviews(source);
 				const doc = renderMarkdown(previews ? insertPreviews(markdown, PREVIEWS) : markdown, {
 					from: source,
@@ -34,7 +36,7 @@ function render(source: string): Promise<RenderedDoc> {
 					branch: SITE.branch,
 					highlight,
 				});
-				return previews ? { ...doc, html: previewSlots(doc.html, PREVIEWS) } : doc;
+				return previews ? { ...doc, html: previewSlots(doc.html, PREVIEWS, renderExample) } : doc;
 			},
 		);
 		rendered.set(source, doc);

@@ -18,16 +18,20 @@ bun run e2e        # Chromium: search, navigation, 404, drawer, every live examp
 | `app/content/` | Build-time only: Markdown → HTML (`Bun.markdown`), GitHub-style heading ids, link rewriting, Shiki highlighting, search index. |
 | `app/server.ts` | Loaders for `/` and `/docs/*`, and the list of pages to prerender. |
 | `app/components/`, `app/pages/` | Layout, search dialog, doc and home pages. |
-| `app/ui/previews.tsx` | Live UI examples on component pages: its own chunk (`@arachnejs/ui` + `packages/ui/examples`), loaded on demand; mounts each example as it nears the viewport. |
+| `app/ui/` | Live UI examples: `preview.tsx` (shared markup), `examples-ssr.tsx` (build-time rendering), `previews.tsx` (the on-demand chunk that hydrates them). |
 | `app/styles/` | Tokens (light and dark), base, home, docs. |
 | `scripts/prepare.ts` | Copies the IBM Plex fonts from `@fontsource` and the UI kit stylesheet (`public/ui.css`), and writes `public/search.json`. `dev` and `build` run it first. |
 
 Component pages (`docs/ui/components/*.md`) get a live preview per
 component: the build puts a slot and the example's code right after each
-component's summary (`app/content/previews.ts`, names from the UI catalog),
-and the browser renders the same example the playground uses. Site CSS
-stays out of previews: element defaults are in a layer below the kit's, and
-the Markdown styles use `@scope (.prose) to (.ui-preview)`.
+component's summary (`app/content/previews.ts`, names from the UI catalog)
+and renders the example into it (`app/content/ssr-examples.ts` bundles
+`app/ui/examples-ssr.tsx` for SSR). The page links `/ui.css`; in the browser
+`app/ui/previews.tsx` hydrates each slot as it nears the viewport, with the
+same `Preview` component (`app/ui/preview.tsx`) and a per-example
+hydration key prefix. Site CSS stays out of previews: element defaults are
+in a layer below the kit's (both stylesheets declare the order), and the
+Markdown styles use `@scope (.prose) to (.ui-preview)`.
 
 Relative links in the Markdown are rewritten to site pages. Links to files
 without a page go to the GitHub repository (`SITE.sourceUrl` in

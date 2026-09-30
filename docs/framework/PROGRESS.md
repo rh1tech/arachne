@@ -344,6 +344,17 @@ light and dark. Fixes found on the way:
   publish job on GitHub-hosted runners (provenance/OIDC).
 - Next: npm trusted publishing per package, then delete `NPM_TOKEN`.
 
+### M14c — pre-rendered live examples (2026-09-30)
+
+- The site renders all 332 UI examples to HTML at build time and hydrates
+  them in the browser: no "Loading…" placeholders, styled without JS.
+- render: `hydrate(code, el, { renderId })` matches
+  `renderToString(…, { renderId })`, so several islands hydrate separately
+  inside a page without key collisions.
+- site: previews no longer clip overflow (Safari clipped a SplitButton's
+  menu with `overflow-x: clip` alone); every component page is checked at
+  375px in e2e.
+
 ## Known gaps / next steps
 
 - **Docs backlog:** pre-existing packages not yet in `docs-check.json`

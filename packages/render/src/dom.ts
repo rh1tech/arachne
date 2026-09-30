@@ -563,7 +563,20 @@ export function render(code: () => unknown, element: Element): () => void {
 	};
 }
 
-export function hydrate(code: () => unknown, element: Element): () => void {
+/** Options for {@link hydrate}. */
+export interface HydrateOptions {
+	/**
+	 * Key prefix the markup was rendered with (`renderToString(…, { renderId })`),
+	 * for islands hydrated separately inside a page.
+	 */
+	renderId?: string | undefined;
+}
+
+export function hydrate(
+	code: () => unknown,
+	element: Element,
+	options?: HydrateOptions,
+): () => void {
 	// Claim server elements by the `data-hk` keys `ssrHydrationKey()` emitted.
 	const map = new Map<string, Element>();
 	for (const node of element.querySelectorAll("[data-hk]")) {
@@ -577,7 +590,7 @@ export function hydrate(code: () => unknown, element: Element): () => void {
 		sharedConfig.has = undefined;
 	};
 	sharedConfig.hydrate = true;
-	sharedConfig.context = { id: "", count: 0 };
+	sharedConfig.context = { id: options?.renderId ?? "", count: 0 };
 	sharedConfig.get = (key) => map.get(key);
 	sharedConfig.has = (key) => map.has(key);
 	try {

@@ -38,6 +38,7 @@
         "@arachnejs/server": "workspace:*",
         "@arachnejs/signals": "workspace:*",
         "@arachnejs/ui": "workspace:*",
+        "@arachnejs/vite": "workspace:*",
         "@fontsource/ibm-plex-mono": "^5.3.0",
         "@fontsource/ibm-plex-sans": "^5.3.0",
         "shiki": "^4.4.3",
@@ -49,7 +50,7 @@
     },
     "packages/acl": {
       "name": "@arachnejs/acl",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": {
         "@arachnejs/mcp": "workspace:*",
         "zod": "3.25.76",
@@ -60,7 +61,7 @@
     },
     "packages/auth": {
       "name": "@arachnejs/auth",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": {
         "@arachnejs/acl": "workspace:*",
         "@arachnejs/db": "workspace:*",
@@ -77,7 +78,7 @@
     },
     "packages/config": {
       "name": "@arachnejs/config",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": {
         "@arachnejs/core": "workspace:*",
         "@arachnejs/mcp": "workspace:*",
@@ -89,7 +90,7 @@
     },
     "packages/core": {
       "name": "@arachnejs/core",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": {
         "@arachnejs/mcp": "workspace:*",
         "zod": "3.25.76",
@@ -100,7 +101,7 @@
     },
     "packages/db": {
       "name": "@arachnejs/db",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": {
         "@arachnejs/mcp": "workspace:*",
         "@arachnejs/schema": "workspace:*",
@@ -112,7 +113,7 @@
     },
     "packages/db-sqlite": {
       "name": "@arachnejs/db-sqlite",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": {
         "@arachnejs/db": "workspace:*",
         "@arachnejs/mcp": "workspace:*",
@@ -125,7 +126,7 @@
     },
     "packages/forms": {
       "name": "@arachnejs/forms",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": {
         "@arachnejs/mcp": "workspace:*",
         "@arachnejs/render": "workspace:*",
@@ -142,7 +143,7 @@
     },
     "packages/jsx": {
       "name": "@arachnejs/jsx",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": {
         "@arachnejs/mcp": "workspace:*",
         "@dom-expressions/compiler": "0.50.0-next.25",
@@ -154,7 +155,7 @@
     },
     "packages/kit": {
       "name": "@arachnejs/kit",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "bin": {
         "arachne": "./bin/arachne.ts",
       },
@@ -218,7 +219,7 @@
     },
     "packages/mailer": {
       "name": "@arachnejs/mailer",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": {
         "@arachnejs/mcp": "workspace:*",
         "@arachnejs/schema": "workspace:*",
@@ -232,7 +233,7 @@
     },
     "packages/mcp": {
       "name": "@arachnejs/mcp",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "bin": {
         "arachne-mcp": "./bin/arachne-mcp.ts",
       },
@@ -246,7 +247,7 @@
     },
     "packages/migrate": {
       "name": "@arachnejs/migrate",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": {
         "@arachnejs/db": "workspace:*",
         "@arachnejs/mcp": "workspace:*",
@@ -260,7 +261,7 @@
     },
     "packages/render": {
       "name": "@arachnejs/render",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": {
         "@arachnejs/mcp": "workspace:*",
         "@arachnejs/signals": "workspace:*",
@@ -274,7 +275,7 @@
     },
     "packages/router": {
       "name": "@arachnejs/router",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": {
         "@arachnejs/mcp": "workspace:*",
         "@arachnejs/render": "workspace:*",
@@ -288,7 +289,7 @@
     },
     "packages/schema": {
       "name": "@arachnejs/schema",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": {
         "@arachnejs/mcp": "workspace:*",
         "zod": "3.25.76",
@@ -299,7 +300,7 @@
     },
     "packages/server": {
       "name": "@arachnejs/server",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": {
         "@arachnejs/mcp": "workspace:*",
         "@arachnejs/router": "workspace:*",
@@ -313,7 +314,7 @@
     },
     "packages/signals": {
       "name": "@arachnejs/signals",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": {
         "@arachnejs/mcp": "workspace:*",
         "alien-signals": "^3.2.1",
@@ -325,7 +326,7 @@
     },
     "packages/storage": {
       "name": "@arachnejs/storage",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": {
         "@arachnejs/mcp": "workspace:*",
         "zod": "3.25.76",
@@ -336,7 +337,7 @@
     },
     "packages/testing": {
       "name": "@arachnejs/testing",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": {
         "@arachnejs/core": "workspace:*",
         "@arachnejs/mcp": "workspace:*",
@@ -348,7 +349,7 @@
     },
     "packages/ui": {
       "name": "@arachnejs/ui",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": {
         "@arachnejs/jsx": "workspace:*",
         "@arachnejs/mcp": "workspace:*",
@@ -364,7 +365,7 @@
     },
     "packages/vite": {
       "name": "@arachnejs/vite",
-      "version": "0.0.1",
+      "version": "0.1.0",
       "dependencies": {
         "@arachnejs/jsx": "workspace:*",
         "@arachnejs/mcp": "workspace:*",

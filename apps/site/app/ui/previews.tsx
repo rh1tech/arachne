@@ -1,23 +1,15 @@
 /**
- * Live UI examples on the component reference pages. Loaded on demand (its
- * own chunk, with `@arachnejs/ui` and every example) by the doc page when the
- * page has `.ui-preview[data-example]` placeholders; the UI stylesheet is
- * added the first time.
+ * Live UI examples on the component reference pages. The build renders each
+ * example to HTML in its `.ui-preview` slot (`data-ssr`); this chunk (with
+ * `@arachnejs/ui` and every example), loaded on demand by the doc page,
+ * hydrates each slot as it nears the viewport. Slots the build couldn't
+ * render are rendered here instead. The stylesheet (`/ui.css`) comes with
+ * the page's head.
  */
-import { For, Show } from "@arachnejs/render";
 // The DOM entry, not "@arachnejs/render": the kit's SSR bundle follows the doc
 // page's import() of this module, and the SSR runtime has no `render`.
-import { delegateEvents, render } from "@arachnejs/render/dom";
-import { signal, untrack } from "@arachnejs/signals";
-import { actionLog } from "../../../../packages/ui/examples/actions.ts";
-import { exampleGroups } from "../../../../packages/ui/examples/index.ts";
-
-const examples = new Map(
-	exampleGroups.flatMap((group) => group.examples.map((e) => [e.name, e] as const)),
-);
-
-/** The example the reader touched last: its event log shows the calls. */
-const active = signal<string | undefined>(undefined);
+import { delegateEvents, hydrate, render } from "@arachnejs/render/dom";
+import { examples, Preview, renderIdOf } from "./preview.tsx";
 
 /** Events the UI kit's compiled handlers are delegated for (beyond the kit's client set). */
 const UI_EVENTS = [
@@ -30,26 +22,11 @@ const UI_EVENTS = [
 	"touchend",
 ];
 
-/** Mount examples this far before they scroll into view. */
+/** Hydrate examples this far before they scroll into view. */
 const LOOKAHEAD = "600px 0px";
 
 /** Extra room below a fixed-position demo (FAB, banner, bottom nav). */
 const FIXED_GAP_PX = 16;
-
-let stylesheet: Promise<void> | undefined;
-
-/** Add `/ui.css` once and let the kit follow the OS theme, as the site does. */
-function loadStyles(): Promise<void> {
-	stylesheet ??= new Promise((resolve) => {
-		document.documentElement.dataset["theme"] = "system";
-		const link = document.createElement("link");
-		link.rel = "stylesheet";
-		link.href = "/ui.css";
-		link.onload = link.onerror = () => resolve();
-		document.head.append(link);
-	});
-	return stylesheet;
-}
 
 /**
  * Grow `box` so fixed-position children (bottom bars, floating buttons) fit
@@ -77,45 +54,6 @@ function fitFixedChildren(box: HTMLElement): () => void {
 	};
 }
 
-function EventLog(props: { name: string }) {
-	const mine = () => active() === props.name && actionLog().length > 0;
-	return (
-		<output class="ui-preview-log" aria-live="polite" aria-label={`${props.name} event log`}>
-			<Show
-				when={mine()}
-				fallback={<span>Interact with the example: callbacks show up here.</span>}
-			>
-				<For each={actionLog()}>
-					{(entry) => (
-						<code>
-							{entry.name}({entry.args})
-						</code>
-					)}
-				</For>
-			</Show>
-		</output>
-	);
-}
-
-function Preview(props: { name: string; render: () => unknown; logs: boolean }) {
-	// Built once, untracked: the example's own state patches the DOM in place.
-	const content = untrack(props.render);
-	return (
-		<>
-			<div
-				class="ui-preview-stage"
-				onPointerDown={() => active.set(props.name)}
-				onFocusIn={() => active.set(props.name)}
-			>
-				{content}
-			</div>
-			<Show when={props.logs}>
-				<EventLog name={props.name} />
-			</Show>
-		</>
-	);
-}
-
 function mount(slot: HTMLElement): () => void {
 	const name = slot.dataset["example"] ?? "";
 	const example = examples.get(name);
@@ -131,16 +69,10 @@ function mount(slot: HTMLElement): () => void {
 		return () => {};
 	}
 	try {
-		const stop = render(
-			() => (
-				<Preview
-					name={name}
-					logs={slot.hasAttribute("data-logs")}
-					render={() => (example.demo ? example.demo() : example.render({}))}
-				/>
-			),
-			slot,
-		);
+		const view = () => <Preview name={name} logs={slot.hasAttribute("data-logs")} />;
+		const stop = slot.hasAttribute("data-ssr")
+			? hydrate(view, slot, { renderId: renderIdOf(name) })
+			: render(view, slot);
 		slot.classList.add("is-live");
 		const stage = slot.querySelector<HTMLElement>(".ui-preview-stage");
 		const unfit = stage ? fitFixedChildren(stage) : () => {};
@@ -164,7 +96,6 @@ export function mountPreviews(root: Element): () => void {
 	delegateEvents(UI_EVENTS);
 	const slots = [...root.querySelectorAll<HTMLElement>(".ui-preview[data-example]")];
 	const unmount: (() => void)[] = [];
-	let stopped = false;
 	const observer = new IntersectionObserver(
 		(entries) => {
 			for (const entry of entries) {
@@ -175,12 +106,8 @@ export function mountPreviews(root: Element): () => void {
 		},
 		{ rootMargin: LOOKAHEAD },
 	);
-	void loadStyles().then(() => {
-		if (stopped) return;
-		for (const slot of slots) observer.observe(slot);
-	});
+	for (const slot of slots) observer.observe(slot);
 	return () => {
-		stopped = true;
 		observer.disconnect();
 		for (const stop of unmount) stop();
 	};

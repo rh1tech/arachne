@@ -28,10 +28,16 @@ for (const [name, file] of Object.entries(FONTS)) {
 const license = dirname(Bun.resolveSync("@fontsource/ibm-plex-sans/package.json", import.meta.dir));
 await copyFile(join(license, "LICENSE"), join(publicDir, "fonts", "OFL.txt"));
 
-// The UI kit's stylesheet, loaded by the live examples on component pages.
-await copyFile(
-	join(import.meta.dir, "../../../packages/ui/src/styles.css"),
+// The UI kit's stylesheet for the live examples on component pages. Two
+// changes for the site: it declares the same layer order as the site's own
+// CSS (whichever loads first sets it: site defaults stay below the kit), and
+// its OS-following dark theme applies without <html data-theme="system">.
+const uiCss = await Bun.file(join(import.meta.dir, "../../../packages/ui/src/styles.css")).text();
+const followOs = uiCss.replaceAll(':root[data-theme="system"]', ":root");
+if (followOs === uiCss) throw new Error('ui.css: no :root[data-theme="system"] rules to adapt');
+await Bun.write(
 	join(publicDir, "ui.css"),
+	`@layer site-base, arachne.tokens, arachne.components;\n${followOs}`,
 );
 
 await writeFile(join(publicDir, "search.json"), JSON.stringify(await searchIndex()));

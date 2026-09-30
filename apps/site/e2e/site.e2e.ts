@@ -177,6 +177,25 @@ test("every example on every component page mounts, without console errors", asy
 	await page.close();
 }, 180_000);
 
+test("component pages fit a 375px screen with every example mounted", async () => {
+	// Previews don't clip their content (Safari would clip menus too), so
+	// every example has to fit its frame on a phone.
+	const page = await browser.newPage({ viewport: { width: 375, height: 800 } });
+	const wide: string[] = [];
+	for (const entry of ENTRIES.filter((e) => /^\/docs\/ui\/components\/./.test(e.path))) {
+		await page.goto(`${site.url}${entry.path}`, { waitUntil: "networkidle" });
+		const height = await page.evaluate(() => document.body.scrollHeight);
+		for (let y = 0; y < height + 800; y += 700) {
+			await page.evaluate((top) => scrollTo(0, top), y);
+			await page.waitForTimeout(20);
+		}
+		const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+		if (overflow > 0) wide.push(`${entry.path}: ${overflow}px`);
+	}
+	expect(wide).toEqual([]);
+	await page.close();
+}, 180_000);
+
 test("mobile: the contents drawer opens, navigates and closes", async () => {
 	const context = await browser.newContext({ viewport: { width: 375, height: 800 } });
 	const page = await context.newPage();

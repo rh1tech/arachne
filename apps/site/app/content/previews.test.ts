@@ -84,6 +84,17 @@ describe("previewSlots", () => {
 		);
 		expect(html).not.toContain("@@preview");
 	});
+
+	test("puts pre-rendered HTML in the slot and marks it for hydration", () => {
+		const html = previewSlots(
+			"<p>@@preview:Button@@</p>",
+			known,
+			(name, logs) => `<b>${name}:${logs}</b>`,
+		);
+		expect(html).toBe(
+			'<div class="ui-preview" data-example="Button" data-logs data-ssr><b>Button:true</b></div>',
+		);
+	});
 });
 
 describe("PREVIEWS", () => {

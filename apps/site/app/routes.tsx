@@ -17,7 +17,11 @@ const docHead = ({ data }: { data: unknown }) => {
 			{ property: "og:description", content: doc.summary },
 			{ property: "og:url", content: SITE.url + doc.path },
 		],
-		links: [{ rel: "canonical", href: SITE.url + doc.path }],
+		links: [
+			{ rel: "canonical", href: SITE.url + doc.path },
+			// Component pages: the UI kit's styles for the pre-rendered live examples.
+			...(doc.previews ? [{ rel: "stylesheet", href: "/ui.css" }] : []),
+		],
 	};
 };
 
