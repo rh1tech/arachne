@@ -1,5 +1,13 @@
 # @arachnejs/migrate
 
+## 0.1.1
+
+### Patch Changes
+
+- @arachnejs/db@0.1.1
+- @arachnejs/mcp@0.1.1
+- @arachnejs/schema@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes

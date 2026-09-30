@@ -1,5 +1,22 @@
 # @arachnejs/kit
 
+## 0.1.1
+
+### Patch Changes
+
+- 25609f1: Builds retry (twice) when Bun reports "EISDIR reading file" for a path that is a regular file, an intermittent Bun failure on Linux. Build log entries without a source position now show their message.
+- Updated dependencies [b6e210c]
+  - @arachnejs/render@0.1.1
+  - @arachnejs/router@0.1.1
+  - @arachnejs/vite@0.1.1
+  - @arachnejs/server@0.1.1
+  - @arachnejs/db@0.1.1
+  - @arachnejs/jsx@0.1.1
+  - @arachnejs/mcp@0.1.1
+  - @arachnejs/migrate@0.1.1
+  - @arachnejs/schema@0.1.1
+  - @arachnejs/signals@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes
