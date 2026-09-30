@@ -23,7 +23,7 @@ await storage.url(saved.key, { expiresIn: 300 });           // S3: presigned GET
 await storage.url("incoming/x.bin", { method: "PUT" });     // S3: presigned upload
 ```
 
-| Method | |
+| Method | Description |
 |---|---|
 | `put(key, data, { contentType })` | `data`: Blob/File, bytes, string, stream |
 | `get(key)` | `StoredFile` (`stream()`, `arrayBuffer()`, `text()`) or `undefined` |

@@ -116,7 +116,7 @@ Bearer requests are exempt.
 
 `auth.routes({ prefix: "/auth", admin: true })`:
 
-| Route | |
+| Route | Description |
 |---|---|
 | `POST /register` · `/verify-email` · `/verify-email/resend` | sign-up |
 | `POST /login` · `/mfa/verify` · `/logout` · `GET /me` | sign-in (`/me` returns user, CSRF token, permissions) |

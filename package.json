@@ -12,6 +12,7 @@
 	],
 	"scripts": {
 		"prepare": "git config core.hooksPath .githooks",
+		"arachne": "bun packages/kit/bin/arachne.ts",
 		"build": "turbo run build",
 		"test": "turbo run test",
 		"typecheck": "turbo run typecheck",

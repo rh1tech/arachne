@@ -48,6 +48,7 @@ next steps" at the bottom, run `bun run ci` and `(cd packages/kit && bun run e2e
 | 12e | MCP-first apps: routes → MCP tools (with auth/ACL), `/mcp` endpoint | `@arachne/server`, `@arachne/kit` | [x] |
 | 12d | Binary codecs: CBOR in server (content negotiation); protobuf/Connect later | `@arachne/server` | [~] CBOR done |
 | 13 | Docs + README per package, root README update | docs | [x] |
+| 14 | Website (arachne.rh1.tech), built with Arachne from the repo's Markdown | `apps/site` | [x] |
 
 ## Implemented (detail)
 
@@ -272,6 +273,65 @@ event); `db` `update().set()` accepts `undefined` values (PATCH bodies).
   with the caller's `Authorization`, so validation/auth/ACL apply.
 - Kit: `mcp: { name, version, path }` in config mounts it.
 
+### M14 — website (2026-09-30)
+
+`apps/site` ([README](../../apps/site/README.md)): static Arachne build
+deployed to arachne.rh1.tech. `app/nav.ts` maps repository Markdown to
+pages; `app/content/` renders it at build time (`Bun.markdown`, GitHub-style
+heading ids, link rewriting, Shiki with CSS-variable colours) and builds the
+search index. Getting started (`docs/getting-started.md`) was written by
+building its app step by step. Tests: `bun test app`, `bun run e2e`
+(Chromium: search, navigation, static 404, mobile drawer, axe light/dark).
+
+Framework fixes found while building it (tests included):
+- kit: the dev server restarts when `app/server.ts`/`app/routes.tsx` is
+  created or deleted (the mode changes) — `dev-entries.test.ts`.
+- kit: build errors report `file:line:column` and the source line instead
+  of Bun's bare "Bundle failed" (`bundle()` in `bundle.ts`).
+- kit: CSS `url("/…")` pointing at `public/` files is left as written.
+- kit + router: a static host's `404.html` served at a URL a dynamic route
+  matches hydrated that route with no data and crashed; the boot data now
+  carries `notFound` and the router takes `initialNotFound`.
+- render: `classList={{ … }}` never worked — the compiler emits it as an
+  attribute. DOM `setAttribute` now diffs it as a class list; SSR merges it
+  into the element's `class` attribute.
+- render: SSR rendered `false` boolean attributes as `="false"`
+  (`disabled="false"` disables the button until hydration); they are now
+  omitted, as in the DOM (`aria-*` keep `"true"`/`"false"`).
+- kit: chunk-to-chunk imports 404'd (Bun drops a chunk sub-directory from
+  them); chunks are now flat `assets/chunk-*.js` — `chunks.test.ts`.
+- Docs: `bunx arachne` would run an unrelated npm package; READMEs now use
+  `bun run arachne` from a checkout until the first release. Root script
+  `bun run arachne` added.
+
+### M14b — live UI examples on the site (2026-09-30)
+
+Component pages render every example from `packages/ui/examples` live
+(`apps/site/app/ui/previews.tsx`, a lazy chunk: ~118 KB JS + 32 KB CSS gzipped,
+only on those pages), with the event log for examples that report
+callbacks. All 332 mount without errors; axe is clean on all 21 pages in
+light and dark. Fixes found on the way:
+- ui: titles and default text inside accent/dark `Hero`s kept the dark ink
+  (contrast failure); they now inherit the hero's colour. `Figure` media
+  shrinks to fit. The toast demo's buttons wrap.
+- ui: `DocExample` and `DocPage` take `titleOrder` (heading level; defaults
+  2 and 1) so embedded examples keep the page outline valid.
+- `scripts/gen-ui-docs.ts`: `<` in table cells was escaped inside code spans
+  (showed `&lt;` literally, e.g. ``DataTableColumn&lt;T>[]``) —
+  `scripts/md-cell.ts` + test.
+- kit: version skew — a tab opened before a deploy kept its old JS/CSS and
+  rendered new page data with it (the site's live-example slots showed
+  unstyled "Loading…"). Boot data and every data response now carry a build
+  id (`build-id.ts`, from the hashed entry/style URLs); on a mismatch the
+  client does a full page load. Tested in `kit.test.ts` and the browser e2e.
+- router: every navigation re-created the whole chain, layouts included (the
+  site's sidebar lost its scroll position and open sections, the header was
+  rebuilt). Layouts now stay mounted while the same route definition is at
+  their depth; their props are live getters; pages are still re-created —
+  `layouts-dom.test.ts`.
+- site: the mobile contents drawer didn't scroll (the desktop
+  `align-self: start` shrank the fixed drawer to its content).
+
 ## Known gaps / next steps
 
 - **Docs backlog:** pre-existing packages not yet in `docs-check.json`
@@ -285,6 +345,10 @@ event); `db` `update().set()` accepts `undefined` values (PATCH bodies).
   CSS injection (chunk CSS isn't linked); dev reload is full-page (no
   component-state-preserving HMR); `arachne start` needs `node_modules` for
   the app's non-Arachne deps; no Node adapter (Bun only).
+- Repository: github.com/rh1tech/arachne (public, `origin`). Default branch
+  `master`; the site links repo files without a page to `…/blob/master/<path>`. Nothing is published to npm yet (check that the
+  `@arachne` scope can be claimed); the unscoped `arachne` package belongs
+  to someone else.
 - Not started: 12c GraphQL adapter; protobuf/Connect; Postgres/MySQL
   dialects; OAuth/passkeys; job queue/outbox for mail; i18n.
 - Lint: new code adds ~9 `noExcessiveCognitiveComplexity` warnings (body
