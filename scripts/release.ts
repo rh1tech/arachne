@@ -4,14 +4,15 @@
  *   bun run release              # publish (CI: after the "Version packages" PR is merged)
  *   bun run release --dry-run    # pack and run `npm publish --dry-run` for each
  *
- * Each package is packed with `bun pm pack` (turns `workspace:*` into the
- * real versions; honours `files`), with the repository's licence files
- * copied in, then the tarball is published with `npm publish` so npm's
+ * Each package is packed with `bun pm pack` (honours `files`), with its
+ * `workspace:` ranges replaced by the workspace packages' versions first
+ * (bun would take them from bun.lock, which changesets doesn't update) and
+ * the repository's licence files copied in; the packed manifest is checked, then the tarball is published with `npm publish` so npm's
  * trusted publishing (OIDC) and provenance work. Set `NPM_CONFIG_PROVENANCE=true`
  * in CI for provenance. Prints `New tag: <name>@<version>` lines, which
  * changesets/action turns into git tags and GitHub releases.
  */
-import { copyFileSync, mkdirSync, readdirSync, readFileSync, rmSync } from "node:fs";
+import { copyFileSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 /** The parts of a package manifest the plan needs. */
@@ -55,7 +56,35 @@ export function releasePlan(
 	return ordered.filter((m) => !published(m.name, m.version));
 }
 
+/**
+ * Replace `workspace:` ranges with the versions of the workspace packages:
+ * `workspace:*` → `1.2.3`, `workspace:^` → `^1.2.3`, `workspace:~` → `~1.2.3`.
+ */
+export function resolveWorkspaceRanges(
+	deps: Record<string, string>,
+	versions: ReadonlyMap<string, string>,
+): Record<string, string> {
+	return Object.fromEntries(
+		Object.entries(deps).map(([name, range]) => {
+			if (!range.startsWith("workspace:")) return [name, range];
+			const version = versions.get(name);
+			if (!version) throw new Error(`${name}: workspace dependency with no workspace package`);
+			const spec = range.slice("workspace:".length);
+			return [
+				name,
+				spec === "^" || spec === "~" ? `${spec}${version}` : spec === "*" ? version : spec,
+			];
+		}),
+	);
+}
+
 const ROOT = join(import.meta.dir, "..");
+const DEP_FIELDS = [
+	"dependencies",
+	"peerDependencies",
+	"optionalDependencies",
+	"devDependencies",
+] as const;
 const LICENSES = ["LICENSE-MIT", "LICENSE-APACHE"];
 
 function run(cmd: string[], cwd = ROOT): { ok: boolean; out: string } {
@@ -81,8 +110,16 @@ function readManifests(): Manifest[] {
 	});
 }
 
-function pack(manifest: Manifest, outDir: string): string {
+function pack(manifest: Manifest, outDir: string, versions: ReadonlyMap<string, string>): string {
 	const dir = join(ROOT, manifest.dir);
+	const manifestFile = join(dir, "package.json");
+	const original = readFileSync(manifestFile, "utf8");
+	const pkg = JSON.parse(original) as Record<string, unknown>;
+	for (const field of DEP_FIELDS) {
+		const deps = pkg[field] as Record<string, string> | undefined;
+		if (deps) pkg[field] = resolveWorkspaceRanges(deps, versions);
+	}
+	writeFileSync(manifestFile, `${JSON.stringify(pkg, null, "\t")}\n`);
 	for (const file of LICENSES) copyFileSync(join(ROOT, file), join(dir, file));
 	try {
 		const before = new Set(readdirSync(outDir));
@@ -90,15 +127,37 @@ function pack(manifest: Manifest, outDir: string): string {
 		if (!result.ok) throw new Error(`bun pm pack failed for ${manifest.name}:\n${result.out}`);
 		const tarball = readdirSync(outDir).find((file) => !before.has(file) && file.endsWith(".tgz"));
 		if (!tarball) throw new Error(`bun pm pack wrote no tarball for ${manifest.name}`);
+		checkPacked(join(outDir, tarball), manifest, versions);
 		return join(outDir, tarball);
 	} finally {
+		writeFileSync(manifestFile, original);
 		for (const file of LICENSES) rmSync(join(dir, file), { force: true });
 	}
 }
 
+/** The packed manifest must name this version and the current versions of internal dependencies. */
+function checkPacked(
+	tarball: string,
+	manifest: Manifest,
+	versions: ReadonlyMap<string, string>,
+): void {
+	const result = run(["tar", "-xzOf", tarball, "package/package.json"]);
+	if (!result.ok) throw new Error(`can't read ${tarball}:\n${result.out}`);
+	const packed = JSON.parse(result.out) as Manifest;
+	const wrong = Object.entries(packed.dependencies ?? {}).filter(
+		([name, range]) => versions.has(name) && range.replace(/^[\^~]/, "") !== versions.get(name),
+	);
+	if (packed.version !== manifest.version || wrong.length > 0)
+		throw new Error(
+			`${manifest.name}: packed manifest is off (version ${packed.version}; ${wrong.map(([n, r]) => `${n}@${r}`).join(", ")})`,
+		);
+}
+
 if (import.meta.main) {
 	const dryRun = process.argv.includes("--dry-run");
-	const plan = releasePlan(readManifests(), isPublished);
+	const manifests = readManifests();
+	const versions = new Map(manifests.map((m) => [m.name, m.version] as const));
+	const plan = releasePlan(manifests, isPublished);
 	if (plan.length === 0) {
 		console.info("Nothing to publish: every package version is already on npm.");
 		process.exit(0);
@@ -107,7 +166,7 @@ if (import.meta.main) {
 	rmSync(outDir, { recursive: true, force: true });
 	mkdirSync(outDir, { recursive: true });
 	for (const manifest of plan) {
-		const tarball = pack(manifest, outDir);
+		const tarball = pack(manifest, outDir, versions);
 		const args = [
 			"npm",
 			"publish",

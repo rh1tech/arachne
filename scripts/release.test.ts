@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { type Manifest, releasePlan } from "./release.ts";
+import { type Manifest, releasePlan, resolveWorkspaceRanges } from "./release.ts";
 
 const pkg = (name: string, deps: string[] = [], extra: Partial<Manifest> = {}): Manifest => ({
 	name,
@@ -41,4 +41,20 @@ test("rejects dependency cycles", () => {
 			() => false,
 		),
 	).toThrow("cycle");
+});
+
+test("workspace ranges become the workspace packages' own versions", () => {
+	const versions = new Map([
+		["@arachnejs/signals", "0.1.0"],
+		["@arachnejs/router", "0.1.0"],
+	]);
+	expect(
+		resolveWorkspaceRanges(
+			{ "@arachnejs/signals": "workspace:*", "@arachnejs/router": "workspace:^", zod: "3.25.76" },
+			versions,
+		),
+	).toEqual({ "@arachnejs/signals": "0.1.0", "@arachnejs/router": "^0.1.0", zod: "3.25.76" });
+	expect(() => resolveWorkspaceRanges({ "@arachnejs/nope": "workspace:*" }, versions)).toThrow(
+		"@arachnejs/nope",
+	);
 });
