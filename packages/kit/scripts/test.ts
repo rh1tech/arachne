@@ -4,8 +4,8 @@
  * The kit's tests call `Bun.build` dozens of times; after many builds in one
  * process Bun 1.3 starts failing reads with bogus errors (EISDIR,
  * "Unseekable reading file") on files that exist. One process per file keeps
- * each well under that threshold; a file that still fails is retried once.
- * Extra arguments are passed to `bun test`.
+ * each well under that threshold. (Bun's spurious EISDIR is retried inside
+ * the kit's `bundle()`.) Extra arguments are passed to `bun test`.
  */
 import { readdirSync } from "node:fs";
 import { join } from "node:path";
@@ -22,10 +22,6 @@ const runFile = (file: string) =>
 		cwd: join(import.meta.dir, ".."),
 	}).exitCode === 0;
 for (const file of files) {
-	if (runFile(file)) continue;
-	// The same Bun bug still hits a single file now and then (CI runners):
-	// one retry, announced, so a real failure still fails twice.
-	console.warn(`[kit tests] ${file} failed; retrying once (known Bun.build flake)`);
 	if (!runFile(file)) failed += 1;
 }
 if (failed > 0) {

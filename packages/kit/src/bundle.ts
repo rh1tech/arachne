@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, statSync } from "node:fs";
 import { readdir, rm } from "node:fs/promises";
 import { dirname, join, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -96,7 +96,7 @@ interface BuildLog {
 /** One bundler message as `file:line:column: message` plus the source line. */
 function formatLog(log: unknown): string {
 	const { message, position } = (log ?? {}) as BuildLog;
-	if (!position || !message) return String(log);
+	if (!position) return message ?? String(log);
 	const where = `${position.file}:${position.line}:${position.column}`;
 	return `${where}: ${message}${position.lineText ? `\n    ${position.lineText.trim()}` : ""}`;
 }
@@ -105,24 +105,55 @@ function failure(label: string, logs: readonly unknown[]): Error {
 	return new Error(`${label} build failed:\n${logs.map(formatLog).join("\n")}`);
 }
 
+/** How often a build is retried after Bun's spurious EISDIR (see {@link bundle}). */
+const EISDIR_RETRIES = 2;
+
+/**
+ * Bun on Linux sometimes fails a build with "EISDIR reading file" for a path
+ * that is a regular file (seen in CI and on servers; not reproducible in
+ * isolation). Only that case is retried: the path must exist as a file.
+ */
+function spuriousEisdir(errors: readonly unknown[]): boolean {
+	return (
+		errors.length > 0 &&
+		errors.every((error) => {
+			const path = /EISDIR reading file: "([^"]+)"/.exec(
+				String((error as BuildLog).message ?? error),
+			)?.[1];
+			if (!path) return false;
+			try {
+				return statSync(path).isFile();
+			} catch {
+				return false;
+			}
+		})
+	);
+}
+
 /**
  * `Bun.build` that fails with the bundler's messages (file, line, cause).
  * Bun either resolves with `success: false` or rejects with an
- * `AggregateError` whose own message is only "Bundle failed".
+ * `AggregateError` whose own message is only "Bundle failed". Bun's
+ * spurious EISDIR on a regular file is retried twice.
  */
 export async function bundle(
 	label: string,
 	options: Parameters<typeof Bun.build>[0],
+	build: typeof Bun.build = Bun.build,
 ): Promise<Awaited<ReturnType<typeof Bun.build>>> {
-	let result: Awaited<ReturnType<typeof Bun.build>>;
-	try {
-		result = await Bun.build(options);
-	} catch (error) {
-		if (error instanceof AggregateError) throw failure(label, error.errors);
-		throw error;
+	for (let attempt = 0; ; attempt += 1) {
+		let result: Awaited<ReturnType<typeof Bun.build>>;
+		try {
+			result = await build(options);
+		} catch (error) {
+			if (!(error instanceof AggregateError)) throw error;
+			if (attempt < EISDIR_RETRIES && spuriousEisdir(error.errors)) continue;
+			throw failure(label, error.errors);
+		}
+		if (result.success) return result;
+		if (attempt < EISDIR_RETRIES && spuriousEisdir(result.logs)) continue;
+		throw failure(label, result.logs);
 	}
-	if (!result.success) throw failure(label, result.logs);
-	return result;
 }
 
 /** Absolute input paths listed in a Bun metafile. */

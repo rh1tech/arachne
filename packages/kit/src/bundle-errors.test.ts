@@ -1,6 +1,7 @@
-import { afterAll, expect, test } from "bun:test";
+import { afterAll, describe, expect, test } from "bun:test";
 import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { bundle } from "./bundle.ts";
 import { build } from "./index.ts";
 
 const root = join(import.meta.dir, `fixtures/broken-${Date.now().toString(36)}`);
@@ -61,4 +62,46 @@ test("a CSS url() to a missing absolute path is still an error", async () => {
 		`export default { mode: "static", styles: ["app/styles.css"] };\n`,
 	);
 	await expect(build(site)).rejects.toThrow("nope.png");
+});
+
+describe("Bun's spurious EISDIR", () => {
+	const file = join(import.meta.dir, "index.ts"); // a regular file
+	const eisdir = (path: string) =>
+		new AggregateError(
+			[{ message: `EISDIR reading file: "${path}"`, position: null }],
+			"Bundle failed",
+		);
+	const ok = { success: true, outputs: [], logs: [] } as unknown as Awaited<
+		ReturnType<typeof Bun.build>
+	>;
+
+	test("is retried when the path is a regular file", async () => {
+		let calls = 0;
+		const result = await bundle("client", { entrypoints: [] }, async () => {
+			calls += 1;
+			if (calls < 3) throw eisdir(file);
+			return ok;
+		});
+		expect(result).toBe(ok);
+		expect(calls).toBe(3);
+	});
+
+	test("gives up after two retries, and never retries other errors", async () => {
+		let calls = 0;
+		await expect(
+			bundle("client", { entrypoints: [] }, async () => {
+				calls += 1;
+				throw eisdir(file);
+			}),
+		).rejects.toThrow("EISDIR");
+		expect(calls).toBe(3);
+		calls = 0;
+		await expect(
+			bundle("client", { entrypoints: [] }, async () => {
+				calls += 1;
+				throw eisdir(import.meta.dir); // really a directory: a real error
+			}),
+		).rejects.toThrow("EISDIR");
+		expect(calls).toBe(1);
+	});
 });
