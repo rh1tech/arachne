@@ -1,6 +1,6 @@
 {
 	"name": "@arachnejs/config",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"description": "Typed config loader for Arachne (file + env + CLI)",
 	"license": "MIT OR Apache-2.0",
 	"author": "Mikhail Matveev (https://rh1.tech)",
