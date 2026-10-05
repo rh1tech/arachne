@@ -11,8 +11,8 @@ export function Rh1Mark(props: { size?: number; pauseMs?: number; startOpen?: bo
 			aria-hidden="true"
 			ref={(el: HTMLElement) => {
 				if (typeof document === "undefined") return;
-				if (el.dataset.mounted === "1") return;
-				el.dataset.mounted = "1";
+				if (el.dataset["mounted"] === "1") return;
+				el.dataset["mounted"] = "1";
 				mountRh1Mark(el, { size, pauseMs, id: 1, startOpen });
 			}}
 		/>
