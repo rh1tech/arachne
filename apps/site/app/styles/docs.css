@@ -245,6 +245,39 @@
 		overflow-x: auto;
 		-webkit-overflow-scrolling: touch;
 		overscroll-behavior-x: contain;
+		/* data-scroll from tableScroll.ts: fade the clipped side(s). */
+		--table-fade: 2.25rem;
+	}
+
+	.table-scroll[data-scroll="end"] {
+		-webkit-mask-image: linear-gradient(
+			to right,
+			#000 calc(100% - var(--table-fade)),
+			transparent
+		);
+		mask-image: linear-gradient(to right, #000 calc(100% - var(--table-fade)), transparent);
+	}
+
+	.table-scroll[data-scroll="start"] {
+		-webkit-mask-image: linear-gradient(to right, transparent, #000 var(--table-fade));
+		mask-image: linear-gradient(to right, transparent, #000 var(--table-fade));
+	}
+
+	.table-scroll[data-scroll="both"] {
+		-webkit-mask-image: linear-gradient(
+			to right,
+			transparent,
+			#000 var(--table-fade),
+			#000 calc(100% - var(--table-fade)),
+			transparent
+		);
+		mask-image: linear-gradient(
+			to right,
+			transparent,
+			#000 var(--table-fade),
+			#000 calc(100% - var(--table-fade)),
+			transparent
+		);
 	}
 
 	/* max-content so wide prop tables scroll inside .table-scroll instead of

@@ -2,6 +2,7 @@ import { For, Show } from "@arachnejs/render";
 import { Link, type RouteProps } from "@arachnejs/router";
 import { effect } from "@arachnejs/signals";
 import { copyCode } from "../components/copy.ts";
+import { bindTableScroll } from "../components/tableScroll.ts";
 import type { DocData } from "../site.ts";
 
 /** One documentation page rendered from repository Markdown. */
@@ -9,16 +10,19 @@ export function Doc(props: RouteProps) {
 	const doc = () => props.data as DocData;
 	let prose: HTMLElement | undefined;
 
-	// Component pages: mount the live UI examples (their own chunk) once the
-	// page's HTML is in place; unmount them before it is replaced.
+	// Edge fades on wide tables, and live UI examples when the page has them.
 	effect(() => {
-		if (!doc().previews) return;
+		doc().html;
 		let stopped = false;
-		let unmount: (() => void) | undefined;
+		let unmountTables: (() => void) | undefined;
+		let unmountPreviews: (() => void) | undefined;
 		queueMicrotask(() => {
+			if (stopped || !prose) return;
+			unmountTables = bindTableScroll(prose);
+			if (!doc().previews) return;
 			import("../ui/previews.tsx").then(
 				(module) => {
-					if (!stopped && prose) unmount = module.mountPreviews(prose);
+					if (!stopped && prose) unmountPreviews = module.mountPreviews(prose);
 				},
 				(error: unknown) => {
 					console.error("[site] live examples failed to load", error);
@@ -30,7 +34,8 @@ export function Doc(props: RouteProps) {
 		});
 		return () => {
 			stopped = true;
-			unmount?.();
+			unmountTables?.();
+			unmountPreviews?.();
 		};
 	});
 
