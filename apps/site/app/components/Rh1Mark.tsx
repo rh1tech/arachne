@@ -1,9 +1,7 @@
 import { mountRh1Mark } from "../rh1-origami.ts";
 
 /** Animated RH1 origami mark: unfold → pause → fold → pause → repeat. */
-export function Rh1Mark(
-	props: { size?: number; pauseMs?: number; startOpen?: boolean } = {},
-) {
+export function Rh1Mark(props: { size?: number; pauseMs?: number; startOpen?: boolean } = {}) {
 	const size = props.size ?? 18;
 	const pauseMs = props.pauseMs ?? 3000;
 	const startOpen = props.startOpen ?? false;
