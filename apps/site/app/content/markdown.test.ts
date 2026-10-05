@@ -82,6 +82,8 @@ describe("renderMarkdown", () => {
 
 	test("wraps tables so they scroll on narrow screens", () => {
 		const doc = render("| a | b |\n|---|---|\n| 1 | 2 |\n");
-		expect(doc.html).toMatch(/^<div class="table-scroll"><table>[\s\S]*<\/table><\/div>$/m);
+		expect(doc.html).toMatch(
+			/^<div class="table-scroll" tabindex="0"><table>[\s\S]*<\/table><\/div>$/m,
+		);
 	});
 });

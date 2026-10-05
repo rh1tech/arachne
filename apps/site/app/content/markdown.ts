@@ -122,7 +122,7 @@ export function renderMarkdown(markdown: string, options: RenderOptions): Render
 		},
 	);
 	html = html
-		.replaceAll("<table>", '<div class="table-scroll"><table>')
+		.replaceAll("<table>", '<div class="table-scroll" tabindex="0"><table>')
 		.replaceAll("</table>", "</table></div>");
 
 	const paragraph = /<p>([\s\S]*?)<\/p>/.exec(html);
