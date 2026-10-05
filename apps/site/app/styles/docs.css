@@ -250,11 +250,7 @@
 	}
 
 	.table-scroll[data-scroll="end"] {
-		-webkit-mask-image: linear-gradient(
-			to right,
-			#000 calc(100% - var(--table-fade)),
-			transparent
-		);
+		-webkit-mask-image: linear-gradient(to right, #000 calc(100% - var(--table-fade)), transparent);
 		mask-image: linear-gradient(to right, #000 calc(100% - var(--table-fade)), transparent);
 	}
 
