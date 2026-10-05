@@ -213,8 +213,7 @@
 		border-radius: 3px;
 		background: var(--paper-2);
 		font-size: 0.85em;
-		/* break-word, not anywhere: long identifiers may break, but table
-		 * columns aren't squeezed until words like `boolean` split. */
+		/* break-word, not anywhere: long identifiers may break mid-token. */
 		overflow-wrap: break-word;
 	}
 
@@ -242,11 +241,17 @@
 
 	.table-scroll {
 		margin: 1.25rem 0 1.5rem;
+		max-width: 100%;
 		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		overscroll-behavior-x: contain;
 	}
 
+	/* max-content so wide prop tables scroll inside .table-scroll instead of
+	 * crushing the Description column into a few characters on phones. */
 	table {
-		width: 100%;
+		width: max-content;
+		min-width: 100%;
 		border-collapse: collapse;
 		font-size: 0.9rem;
 		line-height: 1.5;
@@ -266,8 +271,14 @@
 		vertical-align: top;
 	}
 
-	td:first-child code {
+	td code {
 		white-space: nowrap;
+	}
+
+	/* Description (usually last) wraps within a floor width, not a sliver. */
+	td:last-child {
+		min-width: 16rem;
+		max-width: 28rem;
 	}
 }
 

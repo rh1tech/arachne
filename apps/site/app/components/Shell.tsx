@@ -2,6 +2,7 @@ import { currentRouter, Link, type RouteProps } from "@arachnejs/router";
 import kit from "../../../../packages/kit/package.json" with { type: "json" };
 import { SITE } from "../site.ts";
 import { Mark } from "./Mark.tsx";
+import { Rh1Lockup } from "./Rh1Lockup.tsx";
 import { Search } from "./Search.tsx";
 
 /** Header links: label, target, and which paths count as "inside" it. */
@@ -59,10 +60,16 @@ export function Shell(props: RouteProps) {
 				{props.children}
 			</main>
 			<footer class="site-footer">
-				<span>
-					© 2026 Mikhail Matveev,{" "}
-					<a href="https://rh1.tech" target="_blank" rel="external noopener noreferrer">
-						rh1.tech<span class="sr-only"> (opens in a new tab)</span>
+				<span class="footer-credit">
+					<span class="footer-credit-name">© 2026 Mikhail Matveev</span>
+					<a
+						href="https://rh1.tech"
+						target="_blank"
+						rel="external noopener noreferrer"
+						class="footer-rh1"
+					>
+						<Rh1Lockup size={18} pauseMs={3000} />
+						<span class="sr-only">rh1.tech (opens in a new tab)</span>
 					</a>
 				</span>
 				<span>arachne {kit.version} · MIT OR Apache-2.0</span>
