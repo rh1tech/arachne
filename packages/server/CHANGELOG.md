@@ -1,5 +1,14 @@
 # @arachnejs/server
 
+## 0.2.0
+
+### Patch Changes
+
+- Updated dependencies [6486f3e]
+  - @arachnejs/router@0.2.0
+  - @arachnejs/mcp@0.2.0
+  - @arachnejs/schema@0.2.0
+
 ## 0.1.1
 
 ### Patch Changes

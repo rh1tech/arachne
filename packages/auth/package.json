@@ -1,6 +1,6 @@
 {
 	"name": "@arachnejs/auth",
-	"version": "0.1.1",
+	"version": "0.2.0",
 	"description": "Accounts, sessions, API tokens, 2FA, blocking and access control for Arachne",
 	"license": "MIT OR Apache-2.0",
 	"author": "Mikhail Matveev (https://rh1.tech)",

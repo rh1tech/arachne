@@ -1,6 +1,6 @@
 {
 	"name": "@arachnejs/db",
-	"version": "0.1.1",
+	"version": "0.2.0",
 	"description": "Schema-aware database client for Arachne",
 	"license": "MIT OR Apache-2.0",
 	"author": "Mikhail Matveev (https://rh1.tech)",

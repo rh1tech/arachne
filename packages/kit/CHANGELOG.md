@@ -1,5 +1,22 @@
 # @arachnejs/kit
 
+## 0.2.0
+
+### Patch Changes
+
+- 6486f3e: A failed page load no longer renders the page without its data. With no `error` component, the router shows its own `DefaultErrorPage` ("Something went wrong", or "Not found" for a 404) and logs the failure, in the browser and on the server alike. Before, client-side navigation rendered the page with `data` undefined, which crashed pages that read their data. `DefaultErrorPage` is exported for apps that want to wrap it.
+- Updated dependencies [6486f3e]
+  - @arachnejs/router@0.2.0
+  - @arachnejs/server@0.2.0
+  - @arachnejs/db@0.2.0
+  - @arachnejs/jsx@0.2.0
+  - @arachnejs/mcp@0.2.0
+  - @arachnejs/migrate@0.2.0
+  - @arachnejs/render@0.2.0
+  - @arachnejs/schema@0.2.0
+  - @arachnejs/signals@0.2.0
+  - @arachnejs/vite@0.2.0
+
 ## 0.1.1
 
 ### Patch Changes

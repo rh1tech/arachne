@@ -1,5 +1,21 @@
 # @arachnejs/forms
 
+## 0.2.0
+
+### Minor Changes
+
+- 2482d11: `TextInput` (and `TextField` in forms) takes an optional `icon`: a leading adornment drawn inside the field, decorative and `aria-hidden`. `TextField` also forwards `autocomplete`. New icons: `key`, `unlink`, `ban`, `logout`, `smartphone`, `shield`.
+
+### Patch Changes
+
+- Updated dependencies [f0d5ac3]
+- Updated dependencies [2482d11]
+  - @arachnejs/ui@0.2.0
+  - @arachnejs/mcp@0.2.0
+  - @arachnejs/render@0.2.0
+  - @arachnejs/schema@0.2.0
+  - @arachnejs/signals@0.2.0
+
 ## 0.1.1
 
 ### Patch Changes
