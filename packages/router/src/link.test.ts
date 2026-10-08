@@ -38,6 +38,15 @@ test("Link renders a real anchor with the base path and navigates on click", asy
 	const active = Link({ href: "/guide", children: "Guide" }) as HTMLAnchorElement;
 	expect(active.getAttribute("aria-current")).toBe("page");
 	expect(active.getAttribute("class")).toBe("active");
+	// A trailing slash names the same page, on either side.
+	expect(
+		(Link({ href: "/guide/", children: "Guide" }) as HTMLAnchorElement).getAttribute(
+			"aria-current",
+		),
+	).toBe("page");
+	expect(
+		(Link({ href: "/", children: "Home" }) as HTMLAnchorElement).getAttribute("aria-current"),
+	).toBeNull();
 	router.dispose();
 });
 

@@ -47,10 +47,13 @@ export function Link(props: LinkProps) {
 	const active = () => {
 		const r = router();
 		if (!r || !props.href.startsWith("/")) return false;
-		const path = props.href.split(/[?#]/)[0] ?? "/";
-		const current = r.location().pathname;
+		// A trailing slash is not a different page: the router matches "/rules/"
+		// and "/rules" alike, so the link is current for either.
+		const trim = (p: string) => (p.length > 1 ? p.replace(/\/+$/, "") : p);
+		const path = trim(props.href.split(/[?#]/)[0] ?? "/");
+		const current = trim(r.location().pathname);
 		return props.exact === false
-			? current === path || current.startsWith(`${path.replace(/\/$/, "")}/`)
+			? current === path || current.startsWith(`${path === "/" ? "" : path}/`)
 			: current === path;
 	};
 	const onClick = (event: MouseEvent) => {
