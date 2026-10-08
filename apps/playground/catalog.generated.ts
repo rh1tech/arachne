@@ -5099,11 +5099,24 @@ export const catalog: CatalogEntry[] = [
 				"description": "Selected range (controlled)."
 			},
 			{
+				"name": "locale",
+				"type": "string",
+				"required": false,
+				"description": "Locale for the month, weekday names and the dates shown (default: the browser's)."
+			},
+			{
 				"name": "placeholder",
 				"type": "string",
 				"required": false,
 				"defaultValue": "\"Pick date range\"",
 				"description": "Trigger text when nothing is picked."
+			},
+			{
+				"name": "weekStartsOn",
+				"type": "0 | 1 | 2 | 3 | 4 | 5 | 6",
+				"required": false,
+				"defaultValue": "0",
+				"description": "First day of the week: 0 Sunday (default) … 6 Saturday."
 			}
 		],
 		"types": [

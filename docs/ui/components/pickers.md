@@ -50,7 +50,9 @@ Two-step date range picker (start → end).
 | --- | --- | --- | --- | --- |
 | `onChange` | `(range: DateRange) => void` | yes |  | Called after each pick: first with `start` only, then with both ends. |
 | `value` | `DateRange` | yes |  | Selected range (controlled). |
+| `locale` | `string` |  |  | Locale for the month, weekday names and the dates shown (default: the browser's). |
 | `placeholder` | `string` |  | `"Pick date range"` | Trigger text when nothing is picked. |
+| `weekStartsOn` | `0 \| 1 \| 2 \| 3 \| 4 \| 5 \| 6` |  | `0` | First day of the week: 0 Sunday (default) … 6 Saturday. |
 
 **`DateRange`**
 

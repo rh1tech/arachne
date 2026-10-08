@@ -45,6 +45,7 @@ function installDomGlobals(win: Window): void {
 	g["SVGElement"] = win.SVGElement;
 	g["MutationObserver"] = win.MutationObserver;
 	g["customElements"] = win.customElements;
+	g["getComputedStyle"] = win.getComputedStyle.bind(win);
 	g["requestAnimationFrame"] = win.requestAnimationFrame.bind(win);
 	g["cancelAnimationFrame"] = win.cancelAnimationFrame.bind(win);
 }
@@ -80,6 +81,31 @@ describe("advanced widgets", () => {
 		expect(api.get(".a-codeblock")).toBeTruthy();
 		expect(api.get(".a-countdown")).toBeTruthy();
 		expect(api.get(".a-context-host")).toBeTruthy();
+	});
+
+	test("date range picker: weekday row from weekStartsOn, locale dates, full-date day names", () => {
+		const root = document.createElement("div");
+		document.body.appendChild(root);
+		const api = harness.run(root);
+
+		api.click("[data-range-gb] .a-daterange-trigger");
+		const names = [...api.all("[data-range-gb] .a-calendar-weekday")].map((el) => el.textContent);
+		expect(names).toHaveLength(7);
+		expect(names[0]).toBe("Mon");
+		expect(names[6]).toBe("Sun");
+		// 1 Oct 2026 is a Thursday: three blanks before it when weeks start on Monday.
+		const grid = api.get("[data-range-gb] .a-calendar-grid");
+		const lead = [...(grid?.children ?? [])].findIndex(
+			(el) => el.getAttribute("data-date") === "2026-10-01",
+		);
+		expect(lead).toBe(3);
+		expect(api.get('[data-range-gb] [data-date="2026-10-01"]')?.getAttribute("aria-label")).toBe(
+			"Thursday, 1 October 2026",
+		);
+		api.click('[data-range-gb] [data-date="2026-10-08"]');
+		expect(api.get("[data-range-gb] .a-daterange-summary")?.textContent).toBe(
+			"1 Oct 2026 → 8 Oct 2026",
+		);
 	});
 
 	test("spotlight and confirm open from buttons", () => {

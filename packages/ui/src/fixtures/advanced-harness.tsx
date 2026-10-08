@@ -28,6 +28,7 @@ export function run(root: HTMLElement) {
 	const transfer = signal({ left: ["A", "B"], right: ["C"] });
 	const spotlight = signal(false);
 	const confirm = signal(false);
+	const rangeGb = signal<DateRange>({ start: "2026-10-01" });
 
 	render(
 		() => (
@@ -36,6 +37,13 @@ export function run(root: HTMLElement) {
 				<MonthPicker value={month()} onChange={(v) => month.set(v)} />
 				<TimePicker value={time()} onChange={(v) => time.set(v)} />
 				<DateRangePicker value={range()} onChange={(r) => range.set(r)} />
+				<DateRangePicker
+					data-range-gb=""
+					value={rangeGb()}
+					onChange={(r) => rangeGb.set(r)}
+					weekStartsOn={1}
+					locale="en-GB"
+				/>
 				<TransferList
 					left={transfer().left}
 					right={transfer().right}

@@ -101,7 +101,20 @@ export type DateRangePickerProps = SlotProps<DateRangePickerSlot> & {
 	onChange: (range: DateRange) => void;
 	/** Trigger text when nothing is picked. */
 	placeholder?: string | undefined;
+	/** First day of the week: 0 Sunday (default) … 6 Saturday. */
+	weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | undefined;
+	/** Locale for the month, weekday names and the dates shown (default: the browser's). */
+	locale?: string | undefined;
 };
+
+/** 4 Jan 2026 is a Sunday: the base for naming weekdays in a locale. */
+const RANGE_SUNDAY = new Date(2026, 0, 4);
+const isoToDate = (iso: string) => {
+	const [y, m, d] = iso.split("-").map(Number);
+	return new Date(y ?? 1970, (m ?? 1) - 1, d ?? 1);
+};
+const localIso = (date: Date) =>
+	`${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 
 /**
  * Two-step date range picker (start → end).
@@ -112,9 +125,30 @@ export function DateRangePicker(input: DateRangePickerProps) {
 		"DateRangePicker",
 		input,
 		{},
-		["value", "onChange", "placeholder"],
+		["value", "onChange", "placeholder", "weekStartsOn", "locale"],
 		"root" as DateRangePickerSlot,
 	);
+	const weekStart = () => props.weekStartsOn ?? 0;
+	const dayName = (iso: string) =>
+		isoToDate(iso).toLocaleDateString(props.locale, {
+			weekday: "long",
+			day: "numeric",
+			month: "long",
+			year: "numeric",
+		});
+	const shortDate = (iso: string) =>
+		isoToDate(iso).toLocaleDateString(props.locale, {
+			day: "numeric",
+			month: "short",
+			year: "numeric",
+		});
+	const weekdays = () =>
+		Array.from({ length: 7 }, (_, i) => {
+			const day = new Date(RANGE_SUNDAY);
+			day.setDate(RANGE_SUNDAY.getDate() + ((weekStart() + i) % 7));
+			return day.toLocaleDateString(props.locale, { weekday: "short" });
+		});
+	const today = localIso(new Date());
 	const open = signal(false);
 	let root: HTMLElement | undefined;
 	let trigger: HTMLElement | undefined;
@@ -143,11 +177,11 @@ export function DateRangePicker(input: DateRangePickerProps) {
 
 	const year = () => cursor().getFullYear();
 	const month = () => cursor().getMonth();
-	const label = () => cursor().toLocaleString(undefined, { month: "long", year: "numeric" });
+	const label = () => cursor().toLocaleString(props.locale, { month: "long", year: "numeric" });
 
 	const cells = () => {
 		const first = new Date(year(), month(), 1);
-		const startPad = first.getDay();
+		const startPad = (first.getDay() - weekStart() + 7) % 7;
 		const daysInMonth = new Date(year(), month() + 1, 0).getDate();
 		const out: Array<{ day: number | null; iso?: string }> = [];
 		for (let i = 0; i < startPad; i++) out.push({ day: null });
@@ -179,8 +213,9 @@ export function DateRangePicker(input: DateRangePickerProps) {
 
 	const summary = () => {
 		const { start, end } = props.value;
-		if (start && end) return `${start} → ${end}`;
-		if (start) return `${start} → …`;
+		if (start && end)
+			return start === end ? shortDate(start) : `${shortDate(start)} → ${shortDate(end)}`;
+		if (start) return `${shortDate(start)} → …`;
 		return props.placeholder ?? "Pick date range";
 	};
 
@@ -234,6 +269,11 @@ export function DateRangePicker(input: DateRangePickerProps) {
 							<Icon name="chevron-right" size={14} />
 						</ActionIcon>
 					</div>
+					<div class="a-calendar-weekdays" aria-hidden="true">
+						{weekdays().map((name) => (
+							<span class="a-calendar-weekday">{name}</span>
+						))}
+					</div>
 					<div class="a-calendar-grid">
 						{cells().map((cell) =>
 							cell.day == null ? (
@@ -247,8 +287,11 @@ export function DateRangePicker(input: DateRangePickerProps) {
 										(props.value.start === cell.iso || props.value.end === cell.iso) &&
 											"a-calendar-cell-active",
 										cell.iso && inRange(cell.iso) && "a-calendar-cell-range",
+										cell.iso === today && "a-calendar-cell-today",
 									)}
-									aria-label={cell.iso}
+									aria-label={cell.iso ? dayName(cell.iso) : undefined}
+									aria-current={cell.iso === today ? "date" : undefined}
+									data-date={cell.iso}
 									aria-pressed={props.value.start === cell.iso || props.value.end === cell.iso}
 									onClick={() => cell.iso && pick(cell.iso)}
 								>
