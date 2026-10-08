@@ -7516,10 +7516,11 @@
 		background: var(--a-accent);
 	}
 
+	/* Columns wider than the container scroll sideways rather than being cut off. */
 	.a-datatable {
 		border: 1px solid var(--a-line);
 		border-radius: var(--a-radius);
-		overflow: hidden;
+		overflow-x: auto;
 		background: var(--a-surface);
 	}
 
