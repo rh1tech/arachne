@@ -188,9 +188,9 @@ Table data cell.
 
 ### DataTable
 
-Sortable data grid with ARIA table semantics (`rowgroup`s, `aria-sort`, header sort buttons). Sorting is stable; clicking cycles asc → desc → none.
+Sortable data grid with ARIA table semantics (`rowgroup`s, `aria-sort`, header sort buttons). Sorting is stable; clicking cycles asc → desc → none. `sort` + `manualSort` hand sorting to the server; `selectable` adds row checkboxes (`aria-selected` on rows); `rowHref` makes rows links; `stack` turns rows into labelled cards in a narrow container.
 
-**Slots:** `root` `body` `cell` `empty` `head` `header` `row` `sort`
+**Slots:** `root` `body` `cell` `empty` `head` `header` `link` `row` `select` `sort`
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
@@ -199,16 +199,27 @@ Sortable data grid with ARIA table semantics (`rowgroup`s, `aria-sort`, header s
 | `defaultSort` | `DataTableSort` |  |  | Initial sort (read once). |
 | `empty` | `content` |  |  | Shown when there are no rows. |
 | `label` | `string` |  |  | Accessible name for the table. |
-| `onSortChange` | `(sort: DataTableSort \| null) => void` |  |  | Notified after a header click changes the sort. |
+| `manualSort` | `boolean` |  |  | Rows arrive already sorted (server-side): render them as given; header clicks only call `onSortChange`. |
+| `onSelectionChange` | `(ids: string[]) => void` |  |  | Called with the next selected ids. |
+| `onSortChange` | `(sort: DataTableSort \| null) => void` |  |  | Called with the next sort after a header click (asc → desc → none). |
+| `rowHref` | `(row: T) => string` |  |  | Makes the whole row a link: an `<a>` in the first data cell stretched over the row. |
+| `selectable` | `boolean` |  |  | Adds a checkbox column: one per row, plus "Select all" for the rows shown. |
+| `selected` | `string[]` |  |  | Selected row ids (controlled). Ids of rows not shown are kept. |
+| `selectionLabel` | `(row: T) => string` |  |  | Accessible name of a row's checkbox (default "Select row"). |
+| `sort` | `DataTableSort` |  |  | Current sort (controlled; `null` = unsorted). When set it wins over the internal sort. |
+| `stack` | `boolean` |  |  | Below a 40rem table width, rows become cards whose cells carry their column header. |
 
 **`DataTableColumn`**
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `id` | `string` | yes | Column id (used by sorting). |
-| `header` | `string` | yes | Column header text. |
+| `header` | `string` | yes | Column header text; also each cell's label in the stacked layout. |
 | `cell` | `(row: T) => unknown` | yes | Renders a row's cell for this column. |
-| `sortValue` | `(row: T) => string \| number` |  | Value to sort by; the column is sortable when set. |
+| `sortValue` | `(row: T) => string \| number` |  | Value to sort by client-side; the column is sortable when set. |
+| `sortable` | `boolean` |  | Sortable header without `sortValue` (server sorting through `manualSort` and `onSortChange`); `false` hides the sort button even with `sortValue`. |
+| `width` | `string` |  | CSS grid track, e.g. `"9rem"`, `"2fr"`, `"minmax(8rem, 1fr)"` (default `minmax(0, 1fr)`). |
+| `align` | `"start" \| "center" \| "end"` |  | Horizontal alignment of the header and the cells. |
 
 **`DataTableSort`**
 
@@ -218,24 +229,44 @@ Sortable data grid with ARIA table semantics (`rowgroup`s, `aria-sort`, header s
 | `dir` | `"asc" \| "desc"` | yes | Sort direction. |
 
 ```tsx
-<DataTable
-	label="Deploys"
-	rows={[
-		{ id: "128", branch: "main", duration: 102 },
-		{ id: "127", branch: "feat/ui-kit", duration: 88 },
-		{ id: "126", branch: "main", duration: 131 },
-	]}
-	columns={[
-		{ id: "id", header: "Deploy", cell: (r: { id: string }) => `#${r.id}` },
-		{ id: "branch", header: "Branch", cell: (r: { branch: string }) => r.branch },
-		{
-			id: "duration",
-			header: "Duration",
-			cell: (r: { duration: number }) => `${r.duration}s`,
-			sortValue: (r: { duration: number }) => r.duration,
-		},
-	]}
-/>
+function Example() {
+	const selected = signal<string[]>([]);
+	return (
+		<>
+			<DataTable
+				label="Deploys"
+				rows={[
+					{ id: "128", branch: "main", duration: 102 },
+					{ id: "127", branch: "feat/ui-kit", duration: 88 },
+					{ id: "126", branch: "main", duration: 131 },
+				]}
+				columns={[
+					{ id: "id", header: "Deploy", cell: (r: { id: string }) => `#${r.id}`, width: "7rem" },
+					{
+						id: "branch",
+						header: "Branch",
+						cell: (r: { branch: string }) => r.branch,
+						width: "2fr",
+					},
+					{
+						id: "duration",
+						header: "Duration",
+						cell: (r: { duration: number }) => `${r.duration}s`,
+						sortValue: (r: { duration: number }) => r.duration,
+						align: "end",
+					},
+				]}
+				selectable
+				selected={selected()}
+				onSelectionChange={selected.set}
+				selectionLabel={(r: { id: string }) => `Select deploy #${r.id}`}
+				rowHref={(r: { id: string }) => `#deploy-${r.id}`}
+				stack
+			/>
+			<Text muted>Selected: {selected().length ? selected().join(", ") : "none"}</Text>
+		</>
+	);
+}
 ```
 
 Also accepts the [shared props](../customization.md#shared-props): pass-through attributes, `class`, `style`, `classes`, `styles`, `unstyled`.

@@ -281,6 +281,46 @@ function YearPickerExample(p: ExampleProps) {
 	);
 }
 
+function DataTableExample(p: ExampleProps) {
+	const selected = signal<string[]>([]);
+	return (
+		<>
+			<DataTable
+				{...p}
+				label="Deploys"
+				rows={[
+					{ id: "128", branch: "main", duration: 102 },
+					{ id: "127", branch: "feat/ui-kit", duration: 88 },
+					{ id: "126", branch: "main", duration: 131 },
+				]}
+				columns={[
+					{ id: "id", header: "Deploy", cell: (r: { id: string }) => `#${r.id}`, width: "7rem" },
+					{
+						id: "branch",
+						header: "Branch",
+						cell: (r: { branch: string }) => r.branch,
+						width: "2fr",
+					},
+					{
+						id: "duration",
+						header: "Duration",
+						cell: (r: { duration: number }) => `${r.duration}s`,
+						sortValue: (r: { duration: number }) => r.duration,
+						align: "end",
+					},
+				]}
+				selectable
+				selected={selected()}
+				onSelectionChange={selected.set}
+				selectionLabel={(r: { id: string }) => `Select deploy #${r.id}`}
+				rowHref={(r: { id: string }) => `#deploy-${r.id}`}
+				stack
+			/>
+			<Text muted>Selected: {selected().length ? selected().join(", ") : "none"}</Text>
+		</>
+	);
+}
+
 /** The link is invisible until focused: Tab into the box, or use the button. */
 function SkipLinkPreview(p: ExampleProps) {
 	let link: HTMLAnchorElement | undefined;
@@ -750,29 +790,6 @@ export const examples: Example[] = [
 			/>
 		),
 	},
-	{
-		name: "DataTable",
-		render: (p) => (
-			<DataTable
-				{...p}
-				label="Deploys"
-				rows={[
-					{ id: "128", branch: "main", duration: 102 },
-					{ id: "127", branch: "feat/ui-kit", duration: 88 },
-					{ id: "126", branch: "main", duration: 131 },
-				]}
-				columns={[
-					{ id: "id", header: "Deploy", cell: (r: { id: string }) => `#${r.id}` },
-					{ id: "branch", header: "Branch", cell: (r: { branch: string }) => r.branch },
-					{
-						id: "duration",
-						header: "Duration",
-						cell: (r: { duration: number }) => `${r.duration}s`,
-						sortValue: (r: { duration: number }) => r.duration,
-					},
-				]}
-			/>
-		),
-	},
+	{ name: "DataTable", render: (p) => <DataTableExample {...p} /> },
 	{ name: "YearPicker", render: (p) => <YearPickerExample {...p} /> },
 ];

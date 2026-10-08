@@ -10540,7 +10540,7 @@ export const catalog: CatalogEntry[] = [
 		"name": "DataTable",
 		"family": "table",
 		"parts": [],
-		"summary": "Sortable data grid with ARIA table semantics (`rowgroup`s, `aria-sort`, header sort buttons). Sorting is stable; clicking cycles asc → desc → none.",
+		"summary": "Sortable data grid with ARIA table semantics (`rowgroup`s, `aria-sort`, header sort buttons). Sorting is stable; clicking cycles asc → desc → none. `sort` + `manualSort` hand sorting to the server; `selectable` adds row checkboxes (`aria-selected` on rows); `rowHref` makes rows links; `stack` turns rows into labelled cards in a narrow container.",
 		"slots": [
 			"root",
 			"body",
@@ -10548,7 +10548,9 @@ export const catalog: CatalogEntry[] = [
 			"empty",
 			"head",
 			"header",
+			"link",
 			"row",
+			"select",
 			"sort"
 		],
 		"props": [
@@ -10583,10 +10585,58 @@ export const catalog: CatalogEntry[] = [
 				"description": "Accessible name for the table."
 			},
 			{
+				"name": "manualSort",
+				"type": "boolean",
+				"required": false,
+				"description": "Rows arrive already sorted (server-side): render them as given; header clicks only call `onSortChange`."
+			},
+			{
+				"name": "onSelectionChange",
+				"type": "(ids: string[]) => void",
+				"required": false,
+				"description": "Called with the next selected ids."
+			},
+			{
 				"name": "onSortChange",
 				"type": "(sort: DataTableSort | null) => void",
 				"required": false,
-				"description": "Notified after a header click changes the sort."
+				"description": "Called with the next sort after a header click (asc → desc → none)."
+			},
+			{
+				"name": "rowHref",
+				"type": "(row: T) => string",
+				"required": false,
+				"description": "Makes the whole row a link: an `<a>` in the first data cell stretched over the row."
+			},
+			{
+				"name": "selectable",
+				"type": "boolean",
+				"required": false,
+				"description": "Adds a checkbox column: one per row, plus \"Select all\" for the rows shown."
+			},
+			{
+				"name": "selected",
+				"type": "string[]",
+				"required": false,
+				"description": "Selected row ids (controlled). Ids of rows not shown are kept."
+			},
+			{
+				"name": "selectionLabel",
+				"type": "(row: T) => string",
+				"required": false,
+				"description": "Accessible name of a row's checkbox (default \"Select row\")."
+			},
+			{
+				"name": "sort",
+				"type": "DataTableSort",
+				"required": false,
+				"description": "Current sort (controlled; `null` = unsorted). When set it wins over the internal sort."
+			},
+			{
+				"name": "stack",
+				"type": "boolean",
+				"required": false,
+				"description": "Below a 40rem table width, rows become cards whose cells carry their column header."
 			}
 		],
 		"types": [
@@ -10604,7 +10654,7 @@ export const catalog: CatalogEntry[] = [
 						"name": "header",
 						"type": "string",
 						"required": true,
-						"description": "Column header text."
+						"description": "Column header text; also each cell's label in the stacked layout."
 					},
 					{
 						"name": "cell",
@@ -10616,7 +10666,25 @@ export const catalog: CatalogEntry[] = [
 						"name": "sortValue",
 						"type": "(row: T) => string | number",
 						"required": false,
-						"description": "Value to sort by; the column is sortable when set."
+						"description": "Value to sort by client-side; the column is sortable when set."
+					},
+					{
+						"name": "sortable",
+						"type": "boolean",
+						"required": false,
+						"description": "Sortable header without `sortValue` (server sorting through `manualSort` and `onSortChange`); `false` hides the sort button even with `sortValue`."
+					},
+					{
+						"name": "width",
+						"type": "string",
+						"required": false,
+						"description": "CSS grid track, e.g. `\"9rem\"`, `\"2fr\"`, `\"minmax(8rem, 1fr)\"` (default `minmax(0, 1fr)`)."
+					},
+					{
+						"name": "align",
+						"type": "\"start\" | \"center\" | \"end\"",
+						"required": false,
+						"description": "Horizontal alignment of the header and the cells."
 					}
 				]
 			},
@@ -10639,7 +10707,7 @@ export const catalog: CatalogEntry[] = [
 				]
 			}
 		],
-		"code": "<DataTable\n\tlabel=\"Deploys\"\n\trows={[\n\t\t{ id: \"128\", branch: \"main\", duration: 102 },\n\t\t{ id: \"127\", branch: \"feat/ui-kit\", duration: 88 },\n\t\t{ id: \"126\", branch: \"main\", duration: 131 },\n\t]}\n\tcolumns={[\n\t\t{ id: \"id\", header: \"Deploy\", cell: (r: { id: string }) => `#${r.id}` },\n\t\t{ id: \"branch\", header: \"Branch\", cell: (r: { branch: string }) => r.branch },\n\t\t{\n\t\t\tid: \"duration\",\n\t\t\theader: \"Duration\",\n\t\t\tcell: (r: { duration: number }) => `${r.duration}s`,\n\t\t\tsortValue: (r: { duration: number }) => r.duration,\n\t\t},\n\t]}\n/>",
+		"code": "function Example() {\n\tconst selected = signal<string[]>([]);\n\treturn (\n\t\t<>\n\t\t\t<DataTable\n\t\t\t\tlabel=\"Deploys\"\n\t\t\t\trows={[\n\t\t\t\t\t{ id: \"128\", branch: \"main\", duration: 102 },\n\t\t\t\t\t{ id: \"127\", branch: \"feat/ui-kit\", duration: 88 },\n\t\t\t\t\t{ id: \"126\", branch: \"main\", duration: 131 },\n\t\t\t\t]}\n\t\t\t\tcolumns={[\n\t\t\t\t\t{ id: \"id\", header: \"Deploy\", cell: (r: { id: string }) => `#${r.id}`, width: \"7rem\" },\n\t\t\t\t\t{\n\t\t\t\t\t\tid: \"branch\",\n\t\t\t\t\t\theader: \"Branch\",\n\t\t\t\t\t\tcell: (r: { branch: string }) => r.branch,\n\t\t\t\t\t\twidth: \"2fr\",\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\tid: \"duration\",\n\t\t\t\t\t\theader: \"Duration\",\n\t\t\t\t\t\tcell: (r: { duration: number }) => `${r.duration}s`,\n\t\t\t\t\t\tsortValue: (r: { duration: number }) => r.duration,\n\t\t\t\t\t\talign: \"end\",\n\t\t\t\t\t},\n\t\t\t\t]}\n\t\t\t\tselectable\n\t\t\t\tselected={selected()}\n\t\t\t\tonSelectionChange={selected.set}\n\t\t\t\tselectionLabel={(r: { id: string }) => `Select deploy #${r.id}`}\n\t\t\t\trowHref={(r: { id: string }) => `#deploy-${r.id}`}\n\t\t\t\tstack\n\t\t\t/>\n\t\t\t<Text muted>Selected: {selected().length ? selected().join(\", \") : \"none\"}</Text>\n\t\t</>\n\t);\n}",
 		"interactive": false,
 		"logsActions": false
 	},

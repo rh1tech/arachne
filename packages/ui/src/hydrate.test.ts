@@ -38,7 +38,12 @@ beforeAll(async () => {
 	clientPath = await build("hydrate-client.tsx", "dom");
 });
 
-type Api = { dispose: () => void; tab: Signal<string>; clicks: Signal<number> };
+type Api = {
+	dispose: () => void;
+	tab: Signal<string>;
+	clicks: Signal<number>;
+	picked: Signal<string[]>;
+};
 let dom: Dom;
 let api: Api;
 let root: HTMLElement;
@@ -93,5 +98,34 @@ describe("hydration", () => {
 		expect(root.querySelectorAll('[role="tabpanel"]').length).toBe(1);
 		root.querySelector<HTMLElement>(".a-btn")?.click();
 		expect(api.clicks()).toBe(1);
+	});
+
+	test("DataTable server markup carries links, labels, tracks and selection columns", () => {
+		expect(serverHtml).toContain('role="table"');
+		expect(serverHtml).toContain('href="/keys/k1"');
+		expect(serverHtml).toContain('data-label="Seats"');
+		expect(serverHtml).toContain('aria-selected="false"');
+		expect(serverHtml).toContain("grid-template-columns:2.75rem 8rem minmax(0, 1fr)");
+	});
+
+	test("DataTable hydrates in place and stays interactive", () => {
+		expect(root.querySelectorAll('[role="table"]').length).toBe(1);
+		expect(root.querySelectorAll(".a-datatable-row").length).toBe(2);
+		expect(root.querySelectorAll("a.a-datatable-link").length).toBe(2);
+		const boxes = root.querySelectorAll<HTMLInputElement>(
+			'.a-datatable-row input[type="checkbox"]',
+		);
+		expect(boxes.length).toBe(2);
+		boxes[1]?.click();
+		expect(api.picked()).toEqual(["k2"]);
+		const rows = [...root.querySelectorAll<HTMLElement>(".a-datatable-row")];
+		expect(rows.map((r) => r.getAttribute("aria-selected"))).toEqual(["false", "true"]);
+		const all = root.querySelector<HTMLInputElement>('.a-datatable-head input[type="checkbox"]');
+		expect(all?.indeterminate).toBe(true);
+		root.querySelector<HTMLElement>(".a-datatable-sort")?.click();
+		const order = [...root.querySelectorAll<HTMLElement>(".a-datatable-row")].map(
+			(r) => r.dataset["rowId"],
+		);
+		expect(order).toEqual(["k2", "k1"]);
 	});
 });

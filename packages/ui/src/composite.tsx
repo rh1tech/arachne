@@ -1,11 +1,12 @@
 import { For, Show } from "@arachnejs/render";
-import { signal } from "@arachnejs/signals";
+import { computed, effect, signal } from "@arachnejs/signals";
 import { Button } from "./button.tsx";
+import { Checkbox } from "./controls.tsx";
 import type { AlertTone } from "./feedback.tsx";
 import { CloseButton, Icon, type IconName } from "./icons.tsx";
 import { Menu } from "./overlay.tsx";
 import { Avatar } from "./presence.tsx";
-import { type BaseProps, type SlotProps, setup } from "./system.ts";
+import { type BaseProps, dataFlag, type SlotProps, setup } from "./system.ts";
 import { ActionIcon } from "./widgets.tsx";
 
 export type UnstyledButtonProps = BaseProps & {
@@ -990,12 +991,21 @@ export function Splitter(input: SplitterProps) {
 export type DataTableColumn<T> = {
 	/** Column id (used by sorting). */
 	id: string;
-	/** Column header text. */
+	/** Column header text; also each cell's label in the stacked layout. */
 	header: string;
 	/** Renders a row's cell for this column. */
 	cell: (row: T) => unknown;
-	/** Value to sort by; the column is sortable when set. */
+	/** Value to sort by client-side; the column is sortable when set. */
 	sortValue?: ((row: T) => string | number) | undefined;
+	/**
+	 * Sortable header without `sortValue` (server sorting through `manualSort`
+	 * and `onSortChange`); `false` hides the sort button even with `sortValue`.
+	 */
+	sortable?: boolean | undefined;
+	/** CSS grid track, e.g. `"9rem"`, `"2fr"`, `"minmax(8rem, 1fr)"` (default `minmax(0, 1fr)`). */
+	width?: string | undefined;
+	/** Horizontal alignment of the header and the cells. */
+	align?: "start" | "center" | "end" | undefined;
 };
 
 export type DataTableSort = {
@@ -1005,7 +1015,17 @@ export type DataTableSort = {
 	dir: "asc" | "desc";
 };
 
-export type DataTableSlot = "root" | "head" | "header" | "sort" | "body" | "row" | "cell" | "empty";
+export type DataTableSlot =
+	| "root"
+	| "head"
+	| "header"
+	| "sort"
+	| "body"
+	| "row"
+	| "cell"
+	| "select"
+	| "link"
+	| "empty";
 
 export type DataTableProps<T extends { id: string }> = SlotProps<DataTableSlot> & {
 	/** Column definitions, in order. */
@@ -1016,8 +1036,24 @@ export type DataTableProps<T extends { id: string }> = SlotProps<DataTableSlot> 
 	label?: string | undefined;
 	/** Initial sort (read once). */
 	defaultSort?: DataTableSort | undefined;
-	/** Notified after a header click changes the sort. */
+	/** Current sort (controlled; `null` = unsorted). When set it wins over the internal sort. */
+	sort?: DataTableSort | null | undefined;
+	/** Rows arrive already sorted (server-side): render them as given; header clicks only call `onSortChange`. */
+	manualSort?: boolean | undefined;
+	/** Called with the next sort after a header click (asc → desc → none). */
 	onSortChange?: ((sort: DataTableSort | null) => void) | undefined;
+	/** Adds a checkbox column: one per row, plus "Select all" for the rows shown. */
+	selectable?: boolean | undefined;
+	/** Selected row ids (controlled). Ids of rows not shown are kept. */
+	selected?: string[] | undefined;
+	/** Called with the next selected ids. */
+	onSelectionChange?: ((ids: string[]) => void) | undefined;
+	/** Accessible name of a row's checkbox (default "Select row"). */
+	selectionLabel?: ((row: T) => string) | undefined;
+	/** Makes the whole row a link: an `<a>` in the first data cell stretched over the row. */
+	rowHref?: ((row: T) => string | undefined) | undefined;
+	/** Below a 40rem table width, rows become cards whose cells carry their column header. */
+	stack?: boolean | undefined;
 	/** Shown when there are no rows. */
 	empty?: unknown;
 };
@@ -1029,6 +1065,37 @@ function compareKeys(a: string | number, b: string | number): number {
 }
 
 const ARIA_SORT = { asc: "ascending", desc: "descending" } as const;
+const FLEX_TRACK = "minmax(0, 1fr)";
+const SELECT_TRACK = "2.75rem";
+
+function isSortable<T>(col: DataTableColumn<T>): boolean {
+	return col.sortable ?? Boolean(col.sortValue);
+}
+
+/** Header click cycle: another column → asc, asc → desc, desc → none. */
+function nextSort(cur: DataTableSort | null, id: string): DataTableSort | null {
+	if (cur?.id !== id) return { id, dir: "asc" };
+	return cur.dir === "asc" ? { id, dir: "desc" } : null;
+}
+
+/** Shared `grid-template-columns` of the header and every row. */
+function gridTracks<T>(columns: Array<DataTableColumn<T>>, selectable: boolean): string {
+	if (!selectable && columns.every((c) => !c.width)) {
+		return `repeat(${columns.length}, ${FLEX_TRACK})`;
+	}
+	const tracks = columns.map((c) => c.width ?? FLEX_TRACK);
+	return (selectable ? [SELECT_TRACK, ...tracks] : tracks).join(" ");
+}
+
+/** "Select all" over `shown`: clear them when all are selected, else add the missing ones. */
+function toggleAll(selected: string[], shown: string[]): string[] {
+	const has = new Set(selected);
+	if (shown.length > 0 && shown.every((id) => has.has(id))) {
+		const drop = new Set(shown);
+		return selected.filter((id) => !drop.has(id));
+	}
+	return [...selected, ...shown.filter((id) => !has.has(id))];
+}
 
 // DataTable lays each row out as its own CSS grid (shared column template), which
 // native <table>/<tr> display rules don't allow, so it uses the ARIA table
@@ -1038,52 +1105,198 @@ const ARIA_SORT = { asc: "ascending", desc: "descending" } as const;
 /**
  * Sortable data grid with ARIA table semantics (`rowgroup`s, `aria-sort`,
  * header sort buttons). Sorting is stable; clicking cycles asc → desc → none.
- * Slots: `root` `head` `header` `sort` `body` `row` `cell` `empty`.
+ * `sort` + `manualSort` hand sorting to the server; `selectable` adds row
+ * checkboxes (`aria-selected` on rows); `rowHref` makes rows links; `stack`
+ * turns rows into labelled cards in a narrow container.
+ * Slots: `root` `head` `header` `sort` `body` `row` `cell` `select` (checkbox
+ * cells) `link` (row link) `empty`. State: `data-sort`, `data-align`,
+ * `data-selected`, `data-linked`, `data-stack`, `data-selectable`.
  */
 export function DataTable<T extends { id: string }>(input: DataTableProps<T>) {
 	const [props, rest, slot] = setup(
 		"DataTable",
 		input,
 		{},
-		["columns", "rows", "label", "defaultSort", "onSortChange", "empty"],
+		[
+			"columns",
+			"rows",
+			"label",
+			"defaultSort",
+			"sort",
+			"manualSort",
+			"onSortChange",
+			"selectable",
+			"selected",
+			"onSelectionChange",
+			"selectionLabel",
+			"rowHref",
+			"stack",
+			"empty",
+		],
 		"root" as DataTableSlot,
 	);
-	const sort = signal<DataTableSort | null>(props.defaultSort ?? null);
+	const ownSort = signal<DataTableSort | null>(props.defaultSort ?? null);
+	const sort = () => (props.sort !== undefined ? props.sort : ownSort());
+	const ownSelection = signal<string[]>([]);
+	const selection = () => props.selected ?? ownSelection();
+	const selectedSet = computed(() => new Set(selection()));
+	const isSelected = (id: string) => selectedSet().has(id);
+	const shownSelected = () => props.rows.filter((r) => isSelected(r.id)).length;
+	const allSelected = () => props.rows.length > 0 && shownSelected() === props.rows.length;
+	const partlySelected = () => shownSelected() > 0 && shownSelected() < props.rows.length;
+	const selectAll = signal<HTMLInputElement | undefined>(undefined);
+	effect(() => {
+		const el = selectAll();
+		if (el) el.indeterminate = partlySelected();
+	});
 
 	const sorted = () => {
 		const s = sort();
-		if (!s) return props.rows;
-		const col = props.columns.find((c) => c.id === s.id);
-		const key = col?.sortValue;
+		if (!s || props.manualSort) return props.rows;
+		const key = props.columns.find((c) => c.id === s.id)?.sortValue;
 		if (!key) return props.rows;
 		const dir = s.dir === "asc" ? 1 : -1;
 		return [...props.rows].sort((a, b) => dir * compareKeys(key(a), key(b)));
 	};
 
-	const toggle = (id: string) => {
-		const cur = sort();
-		const next: DataTableSort | null =
-			cur?.id !== id ? { id, dir: "asc" } : cur.dir === "asc" ? { id, dir: "desc" } : null;
-		sort.set(next);
+	const toggleSort = (id: string) => {
+		const next = nextSort(sort(), id);
+		if (props.sort === undefined) ownSort.set(next);
 		props.onSortChange?.(next);
 	};
 
+	const select = (next: string[]) => {
+		if (props.selected === undefined) ownSelection.set(next);
+		props.onSelectionChange?.(next);
+	};
+	const toggleRow = (id: string) =>
+		select(isSelected(id) ? selection().filter((x) => x !== id) : [...selection(), id]);
+
 	const ariaSort = (col: DataTableColumn<T>) => {
-		if (!col.sortValue) return undefined;
+		if (!isSortable(col)) return undefined;
 		const s = sort();
 		return s?.id === col.id ? ARIA_SORT[s.dir] : "none";
 	};
 
-	const cols = () => `repeat(${props.columns.length}, minmax(0, 1fr))`;
+	const cols = () => gridTracks(props.columns, Boolean(props.selectable));
+
+	const selectAllCell = () => (
+		<div
+			class={slot.class("select", "a-datatable-select")}
+			style={slot.style("select")}
+			role="columnheader"
+		>
+			<Checkbox
+				label="Select all"
+				classes={{ label: "a-datatable-select-all" }}
+				checked={allSelected()}
+				disabled={props.rows.length === 0}
+				ref={(el: HTMLElement) => selectAll.set(el as HTMLInputElement)}
+				onChange={(e: Event) => {
+					select(
+						toggleAll(
+							selection(),
+							props.rows.map((r) => r.id),
+						),
+					);
+					(e.currentTarget as HTMLInputElement).indeterminate = partlySelected();
+				}}
+			/>
+		</div>
+	);
+
+	const headerCell = (col: DataTableColumn<T>) => (
+		<div
+			class={slot.class("header", "a-datatable-th")}
+			style={slot.style("header")}
+			role="columnheader"
+			aria-sort={ariaSort(col)}
+			data-sort={ariaSort(col)}
+			data-align={col.align}
+		>
+			{isSortable(col) ? (
+				<button
+					type="button"
+					class={slot.class("sort", "a-datatable-sort")}
+					style={slot.style("sort")}
+					onClick={() => toggleSort(col.id)}
+				>
+					{col.header}
+					<Icon
+						name={ariaSort(col) === "descending" ? "chevron-down" : "chevron-up"}
+						size="sm"
+						class={props.unstyled ? undefined : "a-datatable-sort-icon"}
+					/>
+				</button>
+			) : (
+				col.header
+			)}
+		</div>
+	);
+
+	const row = (item: T) => {
+		const href = () => props.rowHref?.(item);
+		const selected = () => (props.selectable ? isSelected(item.id) : undefined);
+		return (
+			<div
+				class={slot.class("row", "a-datatable-row")}
+				role="row"
+				style={slot.style("row", { "grid-template-columns": cols() })}
+				data-row-id={item.id}
+				aria-selected={selected() === undefined ? undefined : String(selected())}
+				data-selected={dataFlag(selected())}
+				data-linked={dataFlag(href())}
+			>
+				<Show when={props.selectable}>
+					<div
+						class={slot.class("select", "a-datatable-select")}
+						style={slot.style("select")}
+						role="cell"
+					>
+						<Checkbox
+							aria-label={props.selectionLabel?.(item) ?? "Select row"}
+							checked={Boolean(selected())}
+							onChange={() => toggleRow(item.id)}
+						/>
+					</div>
+				</Show>
+				<For each={props.columns}>
+					{(col, index) => (
+						<div
+							class={slot.class("cell", "a-datatable-td")}
+							style={slot.style("cell")}
+							role="cell"
+							data-label={props.stack ? col.header : undefined}
+							data-align={col.align}
+						>
+							{index() === 0 && href() ? (
+								<a
+									class={slot.class("link", "a-datatable-link")}
+									style={slot.style("link")}
+									href={href()}
+								>
+									{col.cell(item)}
+								</a>
+							) : (
+								col.cell(item)
+							)}
+						</div>
+					)}
+				</For>
+			</div>
+		);
+	};
 
 	return (
 		<div
 			aria-label={props.label}
 			{...rest}
-			class={slot.class("root", "a-datatable")}
+			class={slot.class("root", "a-datatable", props.stack && "a-datatable-stack")}
 			style={slot.style("root")}
 			role="table"
 			aria-rowcount={props.rows.length + 1}
+			data-stack={dataFlag(props.stack)}
+			data-selectable={dataFlag(props.selectable)}
 		>
 			<div role="rowgroup">
 				<div
@@ -1091,36 +1304,8 @@ export function DataTable<T extends { id: string }>(input: DataTableProps<T>) {
 					role="row"
 					style={slot.style("head", { "grid-template-columns": cols() })}
 				>
-					<For each={props.columns}>
-						{(col) => (
-							<div
-								class={slot.class("header", "a-datatable-th")}
-								style={slot.style("header")}
-								role="columnheader"
-								aria-sort={ariaSort(col)}
-								data-sort={ariaSort(col)}
-							>
-								{col.sortValue ? (
-									<button
-										type="button"
-										class={slot.class("sort", "a-datatable-sort")}
-										onClick={() => toggle(col.id)}
-									>
-										{col.header}
-										<span aria-hidden="true">
-											{ariaSort(col) === "ascending"
-												? " ↑"
-												: ariaSort(col) === "descending"
-													? " ↓"
-													: ""}
-										</span>
-									</button>
-								) : (
-									col.header
-								)}
-							</div>
-						)}
-					</For>
+					<Show when={props.selectable}>{selectAllCell()}</Show>
+					<For each={props.columns}>{(col) => headerCell(col)}</For>
 				</div>
 			</div>
 			<div
@@ -1138,26 +1323,7 @@ export function DataTable<T extends { id: string }>(input: DataTableProps<T>) {
 						</Show>
 					}
 				>
-					{(row) => (
-						<div
-							class={slot.class("row", "a-datatable-row")}
-							role="row"
-							style={slot.style("row", { "grid-template-columns": cols() })}
-							data-row-id={row.id}
-						>
-							<For each={props.columns}>
-								{(col) => (
-									<div
-										class={slot.class("cell", "a-datatable-td")}
-										style={slot.style("cell")}
-										role="cell"
-									>
-										{col.cell(row)}
-									</div>
-								)}
-							</For>
-						</div>
-					)}
+					{(item) => row(item)}
 				</For>
 			</div>
 		</div>
