@@ -80,7 +80,6 @@ import { compilePath, createRouter, listRoutes, memoryHistory, renderHead, withR
 import * as app from ${JSON.stringify(routes)};
 
 const routes = app.routes ?? app.default ?? [];
-const DefaultError = () => "Something went wrong";
 
 /** Every page route: id, pattern and whether it needs params. */
 export function routeList() {
@@ -109,7 +108,7 @@ export async function render(url, options) {
 		titleTemplate: options.titleTemplate,
 		base: options.base,
 		fallback: app.NotFound,
-		error: app.ErrorPage ?? DefaultError,
+		error: app.ErrorPage,
 	});
 	await router.ready;
 	const html = withRouter(router, () => renderToString(() => router.Outlet()));

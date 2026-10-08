@@ -1,5 +1,6 @@
 import { createComponent } from "@arachnejs/render";
 import { computed, effect, signal, untrack } from "@arachnejs/signals";
+import { DefaultErrorPage } from "./default-error.tsx";
 import { applyHead, type Head, type HeadInput, mergeHeads } from "./head.ts";
 import { type HistoryLocation, memoryHistory, type RouterHistory } from "./history.ts";
 import { shouldIntercept } from "./links.ts";
@@ -84,7 +85,10 @@ export interface CreateRouterOptions {
 	history?: RouterHistory | undefined;
 	/** Rendered when no route matches. */
 	fallback?: RouteComponent | undefined;
-	/** Rendered when a loader or lazy import fails. */
+	/**
+	 * Rendered when a loader or lazy import fails. Default: a plain "Something
+	 * went wrong" (the page itself is never rendered without its data).
+	 */
 	error?: ((props: ErrorProps) => unknown) | undefined;
 	/** Load data for a match (server: database; client: fetch JSON). */
 	load?: ((match: MatchedRoute) => unknown) | undefined;
@@ -300,9 +304,13 @@ export function createRouter(options: CreateRouterOptions): Router {
 			if (lazy.length === 0 && !isPromise(data)) return { data, error: undefined };
 			return Promise.all([Promise.all(lazy), data]).then(
 				([, value]) => ({ data: value, error: undefined }),
-				(error: unknown) => ({ data: undefined, error }),
+				(error: unknown) => {
+					if (!options.error) console.error(`[router] could not load ${target.pathname}`, error);
+					return { data: undefined, error };
+				},
 			);
 		} catch (error) {
+			if (!options.error) console.error(`[router] could not load ${target.pathname}`, error);
 			return { data: undefined, error };
 		}
 	};
@@ -433,8 +441,8 @@ export function createRouter(options: CreateRouterOptions): Router {
 	const withComponent = (chain: RouteDefinition[]) => chain.filter((r) => componentOf(r));
 	const frames = computed((): Frames => {
 		const { match: m, location, data, error } = state();
-		if (error !== undefined && options.error) {
-			const errorPage = options.error;
+		if (error !== undefined) {
+			const errorPage = options.error ?? DefaultErrorPage;
 			const props = { params: m?.params ?? {}, location, data };
 			return {
 				layouts: withComponent(m ? m.chain.slice(0, -1) : []),

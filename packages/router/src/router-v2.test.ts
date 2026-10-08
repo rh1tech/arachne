@@ -171,6 +171,42 @@ describe("lazy routes and data", () => {
 		await router.navigate("/broken");
 		expect(text(router.Outlet())).toBe("error: database down");
 	});
+
+	test("without an error component, a failed load shows the default error, never the page without data", async () => {
+		const quiet = console.error;
+		console.error = () => {};
+		let pageRenders = 0;
+		const router = createRouter({
+			history: memoryHistory("/"),
+			routes: [
+				{ path: "/", component: () => "home" },
+				{
+					path: "/keys/:id",
+					component: (p: RouteProps) => {
+						pageRenders++;
+						return `key ${(p.data as { key: string }).key}`;
+					},
+				},
+			],
+			load: (match) => {
+				if (match.pathname === "/keys/1") return Promise.reject(new Error("rate limited"));
+				return { key: "ok" };
+			},
+		});
+		try {
+			await router.navigate("/keys/1");
+			const out = router.Outlet();
+			expect(pageRenders).toBe(0);
+			expect(router.error()).toBeInstanceOf(Error);
+			expect(out).toBeTruthy();
+			// Back on a route that loads, the page renders with its data.
+			await router.navigate("/keys/2");
+			expect(text(router.Outlet())).toBe("key ok");
+		} finally {
+			console.error = quiet;
+			router.dispose();
+		}
+	});
 });
 
 describe("error and not-found pages keep the layout", () => {

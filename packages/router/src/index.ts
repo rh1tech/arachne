@@ -1,3 +1,4 @@
+export { DefaultErrorPage } from "./default-error.tsx";
 export {
 	applyHead,
 	type Head,
