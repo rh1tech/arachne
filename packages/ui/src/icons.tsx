@@ -7,6 +7,8 @@ import {
 	mdiArrowRight,
 	mdiBell,
 	mdiCalendar,
+	mdiCancel,
+	mdiCellphone,
 	mdiCheck,
 	mdiCheckCircleOutline,
 	mdiChevronDown,
@@ -34,10 +36,13 @@ import {
 	mdiHome,
 	mdiImageOutline,
 	mdiInformationOutline,
+	mdiKeyVariant,
+	mdiLinkOff,
 	mdiLinkVariant,
 	mdiLoading,
 	mdiLock,
 	mdiLockOpenVariant,
+	mdiLogout,
 	mdiMagnify,
 	mdiMenu,
 	mdiMinus,
@@ -49,6 +54,7 @@ import {
 	mdiPlus,
 	mdiRefresh,
 	mdiShareVariant,
+	mdiShieldCheckOutline,
 	mdiStar,
 	mdiUpload,
 	mdiWeatherNight,
@@ -112,7 +118,13 @@ export type IconName =
 	| "zap"
 	| "phone"
 	| "git"
-	| "code";
+	| "code"
+	| "key"
+	| "unlink"
+	| "ban"
+	| "logout"
+	| "smartphone"
+	| "shield";
 
 const PATHS: Record<IconName, string> = {
 	check: mdiCheck,
@@ -170,6 +182,12 @@ const PATHS: Record<IconName, string> = {
 	phone: mdiPhone,
 	git: mdiGit,
 	code: mdiCodeTags,
+	key: mdiKeyVariant,
+	unlink: mdiLinkOff,
+	ban: mdiCancel,
+	logout: mdiLogout,
+	smartphone: mdiCellphone,
+	shield: mdiShieldCheckOutline,
 };
 
 export type IconProps = BaseProps & {

@@ -2653,6 +2653,36 @@
 		width: 100%;
 	}
 
+	.a-input-adorned {
+		position: relative;
+		display: block;
+		width: 100%;
+	}
+
+	.a-input-adorned > .a-input {
+		width: 100%;
+		padding-inline-start: 2.4rem;
+	}
+
+	.a-input-icon {
+		position: absolute;
+		inset-inline-start: 0.75rem;
+		top: 50%;
+		transform: translateY(-50%);
+		display: inline-flex;
+		color: var(--a-muted);
+		pointer-events: none;
+		transition: color var(--a-duration) var(--a-ease);
+	}
+
+	.a-input-adorned:focus-within .a-input-icon {
+		color: var(--a-accent);
+	}
+
+	.a-input-adorned[data-invalid] .a-input-icon {
+		color: var(--a-danger);
+	}
+
 	.a-input-group .a-input {
 		border-radius: 0;
 		flex: 1;

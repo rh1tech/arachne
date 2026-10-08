@@ -22,6 +22,11 @@ export type TextInputProps = BaseProps &
 		onKeyDown?: ((e: KeyboardEvent) => void) | undefined;
 		/** Called when the field loses focus. */
 		onBlur?: ((e: FocusEvent) => void) | undefined;
+		/**
+		 * Leading adornment, usually an `<Icon>`: drawn inside the field, before
+		 * the text, and decorative (`aria-hidden`) — the label still names it.
+		 */
+		icon?: unknown;
 	};
 
 /**
@@ -37,15 +42,17 @@ export function resyncValue(
 
 /**
  * Text field. Every other attribute (`id`, `name`, `autocomplete`, `aria-*`, …)
- * lands on the `<input>`. Slots: `root`. State: `data-invalid`.
+ * lands on the `<input>`. Slots: `root`. State: `data-invalid`. With `icon`
+ * the input sits in a `.a-input-adorned` wrapper beside a `.a-input-icon`.
  */
 export function TextInput(input: TextInputProps) {
 	const [props, rest, slot] = setup("TextInput", input, { type: "text" }, [
 		"value",
 		"invalid",
 		"onInput",
+		"icon",
 	]);
-	return (
+	const field = () => (
 		<input
 			{...rest}
 			class={slot.class("root", "a-input", props.invalid && "a-input-invalid")}
@@ -58,6 +65,15 @@ export function TextInput(input: TextInputProps) {
 				if (props.onInput) resyncValue(e.currentTarget as HTMLInputElement, props.value);
 			}}
 		/>
+	);
+	if (!props.icon) return field();
+	return (
+		<span class="a-input-adorned" data-invalid={props.invalid ? "" : undefined}>
+			<span class="a-input-icon" aria-hidden="true">
+				{props.icon}
+			</span>
+			{field()}
+		</span>
 	);
 }
 

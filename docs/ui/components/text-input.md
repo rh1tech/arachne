@@ -12,6 +12,7 @@ Text field. Every other attribute (`id`, `name`, `autocomplete`, `aria-*`, …) 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `disabled` | `boolean` |  |  | Disables the field. |
+| `icon` | `content` |  |  | Leading adornment, usually an `<Icon>`: drawn inside the field, before the text, and decorative (`aria-hidden`) — the label still names it. |
 | `invalid` | `boolean` |  |  | Marks the value invalid (`aria-invalid` and error styling). |
 | `name` | `string` |  |  | Field name submitted with the form. |
 | `onBlur` | `(e: FocusEvent) => void` |  |  | Called when the field loses focus. |

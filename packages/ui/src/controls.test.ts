@@ -81,6 +81,27 @@ describe("form controls", () => {
 		window.close();
 	});
 
+	test("TextInput with an icon wraps the input and keeps it the forwarded element", () => {
+		const root = document.createElement("div");
+		document.body.appendChild(root);
+		const h = harness.run(root);
+		const input = h.get("input.a-input-iconed") as HTMLInputElement;
+		const wrap = input.parentElement as HTMLElement;
+		expect(wrap.classList.contains("a-input-adorned")).toBe(true);
+		expect(wrap.hasAttribute("data-invalid")).toBe(true);
+		const icon = wrap.querySelector(".a-input-icon") as HTMLElement;
+		expect(icon.getAttribute("aria-hidden")).toBe("true");
+		expect(icon.querySelector("svg")).not.toBeNull();
+		h.setInput("input.a-input-iconed", "typed");
+		expect(h.signals["text"]?.()).toBe("typed");
+		// Without an icon the input is still the root, as before.
+		expect(
+			(h.get("input.a-input-text") as HTMLElement).parentElement?.classList.contains(
+				"a-input-adorned",
+			),
+		).toBe(false);
+	});
+
 	test("mounts all controls and exercises interactions", () => {
 		const root = document.createElement("div");
 		document.body.appendChild(root);

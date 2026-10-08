@@ -27,6 +27,10 @@ export type TextFieldProps<T extends Record<string, unknown>> = {
 	placeholder?: string | undefined;
 	help?: string | undefined;
 	horizontal?: boolean | undefined;
+	/** Leading icon inside the field (see `TextInput` `icon`). */
+	icon?: unknown;
+	/** Passed to the input, e.g. `email`, `one-time-code`. */
+	autocomplete?: string | undefined;
 };
 
 export function TextField<T extends Record<string, unknown>>(props: TextFieldProps<T>) {
@@ -44,6 +48,8 @@ export function TextField<T extends Record<string, unknown>>(props: TextFieldPro
 				name={props.name}
 				type={props.type ?? "text"}
 				placeholder={props.placeholder}
+				icon={props.icon}
+				autocomplete={props.autocomplete}
 				value={String(props.form.get(props.name) ?? "")}
 				invalid={Boolean(error())}
 				onInput={(e: InputEvent) => {

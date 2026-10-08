@@ -10,6 +10,7 @@ import {
 	DateInput,
 	Fieldset,
 	FileInput,
+	Icon,
 	JsonInput,
 	MultiSelect,
 	NativeSelect,
@@ -69,6 +70,13 @@ export function run(root: HTMLElement) {
 				<TextInput
 					class="a-input-text"
 					value={text()}
+					onInput={(e: InputEvent) => text.set((e.target as HTMLInputElement).value)}
+				/>
+				<TextInput
+					class="a-input-iconed"
+					icon={<Icon name="key" />}
+					value={text()}
+					invalid
 					onInput={(e: InputEvent) => text.set((e.target as HTMLInputElement).value)}
 				/>
 				<TextArea value={area()} onInput={() => {}} />
@@ -143,6 +151,7 @@ export function run(root: HTMLElement) {
 			el.dispatchEvent(new Event("input", { bubbles: true }));
 		},
 		signals: {
+			text,
 			rating,
 			seg,
 			qty,
