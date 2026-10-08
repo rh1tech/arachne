@@ -1,6 +1,6 @@
 {
 	"name": "@arachnejs/jsx",
-	"version": "0.4.0",
+	"version": "0.4.1",
 	"description": "JSX compiler for Arachne (dom-expressions / oxc)",
 	"license": "MIT OR Apache-2.0",
 	"author": "Mikhail Matveev (https://rh1.tech)",

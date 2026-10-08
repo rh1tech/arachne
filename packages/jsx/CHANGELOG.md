@@ -1,5 +1,11 @@
 # @arachnejs/jsx
 
+## 0.4.1
+
+### Patch Changes
+
+- @arachnejs/mcp@0.4.1
+
 ## 0.4.0
 
 ### Patch Changes

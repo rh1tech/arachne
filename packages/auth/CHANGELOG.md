@@ -1,5 +1,15 @@
 # @arachnejs/auth
 
+## 0.4.1
+
+### Patch Changes
+
+- @arachnejs/server@0.4.1
+- @arachnejs/acl@0.4.1
+- @arachnejs/db@0.4.1
+- @arachnejs/mcp@0.4.1
+- @arachnejs/schema@0.4.1
+
 ## 0.4.0
 
 ### Patch Changes

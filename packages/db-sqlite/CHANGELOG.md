@@ -1,5 +1,13 @@
 # @arachnejs/db-sqlite
 
+## 0.4.1
+
+### Patch Changes
+
+- @arachnejs/db@0.4.1
+- @arachnejs/mcp@0.4.1
+- @arachnejs/schema@0.4.1
+
 ## 0.4.0
 
 ### Patch Changes

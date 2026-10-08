@@ -1,5 +1,15 @@
 # @arachnejs/router
 
+## 0.4.1
+
+### Patch Changes
+
+- 7ce6366: `<Link>` counts as the current page whether or not its href or the location ends in a slash: `/rules/` is active on `/rules`, as the router already matches them alike. Static sites whose URLs end in `/` never highlighted their current link.
+- Updated dependencies [61083ca]
+  - @arachnejs/render@0.4.1
+  - @arachnejs/mcp@0.4.1
+  - @arachnejs/signals@0.4.1
+
 ## 0.4.0
 
 ### Minor Changes
