@@ -1,5 +1,22 @@
 # @arachnejs/kit
 
+## 0.4.1
+
+### Patch Changes
+
+- Updated dependencies [7ce6366]
+- Updated dependencies [61083ca]
+  - @arachnejs/router@0.4.1
+  - @arachnejs/render@0.4.1
+  - @arachnejs/server@0.4.1
+  - @arachnejs/vite@0.4.1
+  - @arachnejs/db@0.4.1
+  - @arachnejs/jsx@0.4.1
+  - @arachnejs/mcp@0.4.1
+  - @arachnejs/migrate@0.4.1
+  - @arachnejs/schema@0.4.1
+  - @arachnejs/signals@0.4.1
+
 ## 0.4.0
 
 ### Minor Changes

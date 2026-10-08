@@ -1,6 +1,6 @@
 {
 	"name": "@arachnejs/testing",
-	"version": "0.4.0",
+	"version": "0.4.1",
 	"description": "Test utilities for Arachne packages",
 	"license": "MIT OR Apache-2.0",
 	"author": "Mikhail Matveev (https://rh1.tech)",
