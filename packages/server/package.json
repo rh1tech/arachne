@@ -1,6 +1,6 @@
 {
 	"name": "@arachnejs/server",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"description": "HTTP server for Arachne: typed validated routes, uploads, OpenAPI, middleware",
 	"license": "MIT OR Apache-2.0",
 	"author": "Mikhail Matveev (https://rh1.tech)",

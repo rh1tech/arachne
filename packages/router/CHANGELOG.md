@@ -1,5 +1,17 @@
 # @arachnejs/router
 
+## 0.4.0
+
+### Minor Changes
+
+- a0ae864: A route's `head` can set `lang`: the page's `<html lang>`, inner routes winning, for sites in more than one language (`/ru/*` saying `lang: "ru"`). The kit renders it in static, server and dev builds, and the browser's `applyHead` updates it on client navigation, going back to the served page's language on a page that sets none.
+
+### Patch Changes
+
+- @arachnejs/mcp@0.4.0
+- @arachnejs/render@0.4.0
+- @arachnejs/signals@0.4.0
+
 ## 0.3.0
 
 ### Patch Changes

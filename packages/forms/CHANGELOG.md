@@ -1,5 +1,15 @@
 # @arachnejs/forms
 
+## 0.4.0
+
+### Patch Changes
+
+- @arachnejs/mcp@0.4.0
+- @arachnejs/render@0.4.0
+- @arachnejs/schema@0.4.0
+- @arachnejs/signals@0.4.0
+- @arachnejs/ui@0.4.0
+
 ## 0.3.0
 
 ### Patch Changes
