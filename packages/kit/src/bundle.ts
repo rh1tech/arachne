@@ -36,6 +36,8 @@ export interface RenderResult {
 	head: string;
 	/** Final title. */
 	title: string | undefined;
+	/** `<html lang>` a route set in its head, if any (else the app's). */
+	lang?: string | undefined;
 	/** Loader data for the page. */
 	data: unknown;
 	/** Matched route id. */

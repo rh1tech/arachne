@@ -26,6 +26,8 @@ export interface HeadInput {
 	meta?: HeadMeta[];
 	/** Link tags (appended). */
 	links?: HeadLink[];
+	/** `<html lang>` for this page (inner routes win). Default: the app's. */
+	lang?: string;
 }
 
 /** The merged head for the current route. */
@@ -36,6 +38,8 @@ export interface Head {
 	meta: HeadMeta[];
 	/** Link tags. */
 	links: HeadLink[];
+	/** `<html lang>`, if any route set one. */
+	lang?: string;
 }
 
 const keyOf = (meta: HeadMeta) =>
@@ -44,10 +48,12 @@ const keyOf = (meta: HeadMeta) =>
 /** Merge head inputs from outer to inner route. */
 export function mergeHeads(inputs: readonly HeadInput[], titleTemplate?: string): Head {
 	let title: string | undefined;
+	let lang: string | undefined;
 	const meta = new Map<string, HeadMeta>();
 	const links: HeadLink[] = [];
 	for (const input of inputs) {
 		if (input.title !== undefined) title = input.title;
+		if (input.lang !== undefined) lang = input.lang;
 		for (const tag of input.meta ?? []) {
 			const key = keyOf(tag);
 			meta.delete(key);
@@ -57,6 +63,7 @@ export function mergeHeads(inputs: readonly HeadInput[], titleTemplate?: string)
 	}
 	const head: Head = { meta: [...meta.values()], links };
 	if (title !== undefined) head.title = titleTemplate ? titleTemplate.replace("%s", title) : title;
+	if (lang !== undefined) head.lang = lang;
 	return head;
 }
 
@@ -88,6 +95,12 @@ export function renderHead(head: Head): string {
 /** Apply a head to the live document (title, managed meta and link tags). */
 export function applyHead(doc: Document, head: Head): void {
 	if (head.title !== undefined) doc.title = head.title;
+	// The served page's own lang is the default: a page that sets none (an
+	// English page after a Russian one) goes back to it.
+	const root = doc.documentElement;
+	root.dataset["arachneLang"] ??= root.lang;
+	const lang = head.lang ?? root.dataset["arachneLang"];
+	if (lang && root.lang !== lang) root.lang = lang;
 	for (const old of doc.head.querySelectorAll("[data-arachne-head]")) old.remove();
 	for (const tag of head.meta) {
 		const selector = tag.name ? `meta[name="${tag.name}"]` : `meta[property="${tag.property}"]`;

@@ -121,6 +121,7 @@ export async function render(url, options) {
 		html,
 		head: renderHead(head),
 		title: head.title,
+		lang: head.lang,
 		data: router.data(),
 		routeId: matched?.id ?? null,
 		matched: matched !== null,

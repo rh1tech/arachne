@@ -100,7 +100,7 @@ export function createHandler(parts: () => HandlerParts): ArachneServer {
 		const entry = client?.kind === "memory" ? client.build.entry : client?.entry;
 		const styles = client?.kind === "memory" ? client.build.styles : (client?.styles ?? []);
 		const page = (config.document ?? renderDocument)({
-			lang: config.lang,
+			lang: result.lang ?? config.lang,
 			head: result.head + config.head,
 			styles,
 			scripts: entry ? [entry] : [],

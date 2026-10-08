@@ -52,9 +52,11 @@ render(() => <>{router.Outlet()}</>, document.getElementById("app")!);
 - **Data**: `load(match)` runs for every navigation; the URL and view switch
   together when it resolves, `router.pending()` is true meanwhile, and stale
   navigations are dropped. Errors render `error` with `props.error`.
-- **Head**: static or `({ params, data, location }) => ({ title, meta, links })`,
+- **Head**: static or `({ params, data, location }) => ({ title, meta, links, lang })`,
   merged outer → inner, applied to `document` on navigation;
   `renderHead(router.head())` produces the server HTML.
+  `lang` sets `<html lang>` for that page (a bilingual site: `/ru/*` routes say
+  `lang: "ru"`); the kit renders it, and `applyHead` keeps it in step on navigation.
 - **Links**: `<Link href="/blog">` renders a real `<a>` (base path applied,
   `aria-current="page"` + `activeClass` when active, prefetch on hover/focus).
   `shouldIntercept` skips modified clicks, `target`, `download`,

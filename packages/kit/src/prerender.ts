@@ -97,7 +97,7 @@ export async function prerender(
 			base,
 		});
 		const html = (config.document ?? renderDocument)({
-			lang: config.lang,
+			lang: result.lang ?? config.lang,
 			head: result.head + config.head,
 			styles: client.styles,
 			scripts: client.entry ? [client.entry] : [],

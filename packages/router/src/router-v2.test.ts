@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import { Window } from "happy-dom";
 import {
+	applyHead,
 	createRouter,
 	memoryHistory,
 	type RouteDefinition,
@@ -273,6 +274,36 @@ describe("head", () => {
 		expect(renderHead(router.head())).toBe(
 			'<title>Post hello · Arachne</title><meta name="description" content="About hello"><meta property="og:type" content="article">',
 		);
+	});
+
+	test("lang: inner routes win; it is not part of the head HTML", () => {
+		const router = createRouter({
+			history: memoryHistory("/ru/rules"),
+			routes: [
+				{
+					path: "/ru",
+					head: { lang: "ru", title: "Главная" },
+					component: (p: RouteProps) => p.children,
+					children: [{ path: "rules", head: { title: "Правила" }, component: () => "rules" }],
+				},
+				{ path: "/rules", component: () => "rules" },
+			],
+		});
+		expect(router.head().lang).toBe("ru");
+		expect(renderHead(router.head())).toBe("<title>Правила</title>");
+		router.navigate("/rules");
+		expect(router.head().lang).toBeUndefined();
+	});
+
+	test("applyHead sets <html lang>, and a page without one goes back to the served page's", () => {
+		const win = new Window({ url: "https://localhost/" });
+		const doc = win.document as unknown as Document;
+		doc.documentElement.lang = "en";
+		applyHead(doc, { meta: [], links: [], lang: "ru" });
+		expect(doc.documentElement.lang).toBe("ru");
+		applyHead(doc, { meta: [], links: [] });
+		expect(doc.documentElement.lang).toBe("en");
+		win.close();
 	});
 
 	test("renderHead escapes values", () => {
