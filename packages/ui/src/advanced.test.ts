@@ -89,10 +89,15 @@ describe("advanced widgets", () => {
 		const api = harness.run(root);
 
 		api.click("[data-range-gb] .a-daterange-trigger");
+		// Expected strings come from this machine's Intl: ICU data differs between
+		// systems (macOS writes "Thursday, 1 October 2026", Linux CI no comma).
+		const gb = (y: number, m: number, d: number, o: Intl.DateTimeFormatOptions) =>
+			new Date(y, m - 1, d).toLocaleDateString("en-GB", o);
 		const names = [...api.all("[data-range-gb] .a-calendar-weekday")].map((el) => el.textContent);
 		expect(names).toHaveLength(7);
-		expect(names[0]).toBe("Mon");
-		expect(names[6]).toBe("Sun");
+		// 5 Oct 2026 is a Monday, 11 Oct a Sunday.
+		expect(names[0]).toBe(gb(2026, 10, 5, { weekday: "short" }));
+		expect(names[6]).toBe(gb(2026, 10, 11, { weekday: "short" }));
 		// 1 Oct 2026 is a Thursday: three blanks before it when weeks start on Monday.
 		const grid = api.get("[data-range-gb] .a-calendar-grid");
 		const lead = [...(grid?.children ?? [])].findIndex(
@@ -100,11 +105,12 @@ describe("advanced widgets", () => {
 		);
 		expect(lead).toBe(3);
 		expect(api.get('[data-range-gb] [data-date="2026-10-01"]')?.getAttribute("aria-label")).toBe(
-			"Thursday, 1 October 2026",
+			gb(2026, 10, 1, { weekday: "long", day: "numeric", month: "long", year: "numeric" }),
 		);
 		api.click('[data-range-gb] [data-date="2026-10-08"]');
+		const short = { day: "numeric", month: "short", year: "numeric" } as const;
 		expect(api.get("[data-range-gb] .a-daterange-summary")?.textContent).toBe(
-			"1 Oct 2026 → 8 Oct 2026",
+			`${gb(2026, 10, 1, short)} → ${gb(2026, 10, 8, short)}`,
 		);
 	});
 
