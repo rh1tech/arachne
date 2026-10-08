@@ -1,5 +1,17 @@
 # @arachnejs/forms
 
+## 0.3.0
+
+### Patch Changes
+
+- Updated dependencies [d5444be]
+- Updated dependencies [eb8fb55]
+  - @arachnejs/ui@0.3.0
+  - @arachnejs/mcp@0.3.0
+  - @arachnejs/render@0.3.0
+  - @arachnejs/schema@0.3.0
+  - @arachnejs/signals@0.3.0
+
 ## 0.2.0
 
 ### Minor Changes
