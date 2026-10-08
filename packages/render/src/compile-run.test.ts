@@ -55,7 +55,10 @@ function loadCompiled(
 		.map(({ name, alias }) => `const ${alias} = __rt[${JSON.stringify(name)}];`)
 		.join("\n");
 	const body = code.replace(re, "").replace(/^export\s+/gm, "");
-	const factory = new Function("__rt", `${prelude}\n${body}\nreturn { App };`);
+	const factory = new Function(
+		"__rt",
+		`${prelude}\n${body}\nreturn { App, Page: typeof Page === "undefined" ? undefined : Page };`,
+	);
 	return factory(runtime) as {
 		App: (props: { show: () => boolean; items: () => number[] }) => unknown;
 	};
@@ -464,6 +467,66 @@ describe("compile-run Show/For/Suspense", () => {
 		expect(root.querySelectorAll("i").length).toBe(0);
 		items.set([3]);
 		expect([...root.querySelectorAll("li")].map((li) => li.textContent)).toEqual(["3"]);
+	});
+
+	test("a dynamic child renders in place on the server: keys after it follow document order", () => {
+		// A layout: {props.children} between two <For> lists. The server used to
+		// defer the dynamic child until the template was joined, so the footer's
+		// <li> took keys before the page did, and hydration then handed the page
+		// the footer's elements.
+		const src = `export function App(props) {
+			return (
+				<div>
+					<nav><For each={props.links}>{(l) => <a>{l}</a>}</For></nav>
+					<main>{props.children}</main>
+					<footer><ul><For each={props.links}>{(l) => <li>{l}</li>}</For></ul></footer>
+				</div>
+			);
+		}
+		export function Page(props) {
+			return <ul class="page"><For each={props.items}>{(i) => <li><h3>{i.t}</h3><p>{i.x}</p></li>}</For></ul>;
+		}`;
+		const server = compile(src, { filename: "L.tsx", target: "ssr", hydratable: true });
+		const client = compile(src, { filename: "L.tsx", target: "dom", hydratable: true });
+		const S = loadCompiled(
+			server.code,
+			"@arachnejs/render/ssr",
+			ssr as unknown as Record<string, unknown>,
+		) as unknown as Record<string, (p: unknown) => unknown>;
+		const C = loadCompiled(
+			client.code,
+			"@arachnejs/render",
+			render as unknown as Record<string, unknown>,
+		) as unknown as Record<string, (p: unknown) => unknown>;
+		const links = ["a", "b"];
+		const items = [
+			{ t: "One", x: "first" },
+			{ t: "Two", x: "second" },
+		];
+		const app = (lib: Record<string, (p: unknown) => unknown>) =>
+			lib["App"]?.({
+				links,
+				get children() {
+					return lib["Page"]?.({ items });
+				},
+			});
+
+		const root = document.createElement("div");
+		root.innerHTML = ssr.renderToString(() => app(S) as ssr.SSRPayload);
+		document.body.appendChild(root);
+		const keys = [...root.querySelectorAll("[data-hk]")].map((el) =>
+			Number(el.getAttribute("data-hk")),
+		);
+		expect(keys).toEqual([...keys].sort((a, b) => a - b));
+
+		const pageItem = root.querySelector(".page li");
+		expect(() => render.hydrate(() => app(C) as Node, root)).not.toThrow();
+		expect(root.querySelector(".page li")).toBe(pageItem);
+		expect([...root.querySelectorAll(".page h3")].map((h) => h.textContent)).toEqual([
+			"One",
+			"Two",
+		]);
+		expect(root.querySelectorAll("footer li").length).toBe(2);
 	});
 
 	test("hydrate with a renderId adopts markup rendered with the same renderId", () => {

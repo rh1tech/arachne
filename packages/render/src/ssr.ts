@@ -44,8 +44,15 @@ export function Portal(_props: { mount?: unknown; children?: unknown }): string 
 	return "";
 }
 
-export function scope<T extends () => unknown>(fn: T): T {
-	return fn;
+/**
+ * The compiler wraps a dynamic child (`{props.children}`, `{cond && <X/>}`) in
+ * `scope(() => …)`: run it now, where it stands. Returning the function put it
+ * off until the template was joined, after every eager hole beside it, so a
+ * `<For>` after `{props.children}` took its hydration keys first; the client
+ * renders in document order and then claimed the wrong server elements.
+ */
+export function scope<T extends () => unknown>(fn: T): ReturnType<T> {
+	return fn() as ReturnType<T>;
 }
 
 export function resolveSSRNode(node: unknown): string {
