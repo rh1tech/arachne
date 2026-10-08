@@ -1,5 +1,12 @@
 # @arachnejs/config
 
+## 0.4.0
+
+### Patch Changes
+
+- @arachnejs/core@0.4.0
+- @arachnejs/mcp@0.4.0
+
 ## 0.3.0
 
 ### Patch Changes

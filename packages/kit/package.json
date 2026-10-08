@@ -1,6 +1,6 @@
 {
 	"name": "@arachnejs/kit",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"description": "Arachne app kit: static, server and API apps, SSR, prerendering, dev server with hot reload, CLI",
 	"license": "MIT OR Apache-2.0",
 	"author": "Mikhail Matveev (https://rh1.tech)",
