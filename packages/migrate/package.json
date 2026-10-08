@@ -1,6 +1,6 @@
 {
 	"name": "@arachnejs/migrate",
-	"version": "0.1.1",
+	"version": "0.2.0",
 	"description": "Versioned database migrations and schema diffing for @arachnejs/db",
 	"license": "MIT OR Apache-2.0",
 	"author": "Mikhail Matveev (https://rh1.tech)",
