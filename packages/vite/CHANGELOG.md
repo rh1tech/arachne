@@ -1,5 +1,12 @@
 # @arachnejs/vite
 
+## 0.3.0
+
+### Patch Changes
+
+- @arachnejs/jsx@0.3.0
+- @arachnejs/mcp@0.3.0
+
 ## 0.2.0
 
 ### Patch Changes

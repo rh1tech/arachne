@@ -1,5 +1,19 @@
 # @arachnejs/ui
 
+## 0.3.0
+
+### Minor Changes
+
+- eb8fb55: `DateRangePicker` shows a weekday row, and takes `weekStartsOn` (0 Sunday, the default, … 6) and `locale`. The trigger shows readable dates ("1 Oct 2026 → 8 Oct 2026") instead of ISO strings; each day button is named with its full date, today is marked (`aria-current="date"`), and days carry `data-date`.
+
+### Patch Changes
+
+- d5444be: `DataTable` scrolls sideways when its columns need more width than the container, instead of clipping the last columns out of sight.
+  - @arachnejs/jsx@0.3.0
+  - @arachnejs/mcp@0.3.0
+  - @arachnejs/render@0.3.0
+  - @arachnejs/signals@0.3.0
+
 ## 0.2.0
 
 ### Minor Changes

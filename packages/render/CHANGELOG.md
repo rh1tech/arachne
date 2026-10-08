@@ -1,5 +1,12 @@
 # @arachnejs/render
 
+## 0.3.0
+
+### Patch Changes
+
+- @arachnejs/mcp@0.3.0
+- @arachnejs/signals@0.3.0
+
 ## 0.2.0
 
 ### Patch Changes

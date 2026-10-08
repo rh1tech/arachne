@@ -1,6 +1,6 @@
 {
 	"name": "@arachnejs/render",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "SSR/DOM render runtime and islands for Arachne",
 	"license": "MIT OR Apache-2.0",
 	"author": "Mikhail Matveev (https://rh1.tech)",

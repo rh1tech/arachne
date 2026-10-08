@@ -1,6 +1,6 @@
 {
 	"name": "@arachnejs/vite",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "Bun and Vite plugins for @arachnejs/jsx",
 	"license": "MIT OR Apache-2.0",
 	"author": "Mikhail Matveev (https://rh1.tech)",
